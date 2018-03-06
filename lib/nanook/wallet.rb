@@ -6,10 +6,10 @@ class Nanook
       @rpc = rpc
     end
 
-    def accounts(account=nil)
+    def account(account=nil)
       Nanook::WalletAccounts.new(@wallet, account, @rpc)
     end
-    alias_method :account, :accounts
+    alias_method :accounts, :account
 
     def create
       rpc(:wallet_create)

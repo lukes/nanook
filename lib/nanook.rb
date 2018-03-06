@@ -24,10 +24,10 @@ class Nanook
     @rpc = Nanook::Rpc.new(@http, @request)
   end
 
-  def accounts(account=nil)
+  def account(account=nil)
     Nanook::Accounts.new(account, @rpc)
   end
-  alias_method :account, :accounts
+  alias_method :accounts, :account
 
   def wallet(wallet=nil)
     Nanook::Wallet.new(wallet, @rpc)
