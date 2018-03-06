@@ -134,7 +134,7 @@ account = Nanook.new.wallet(wallet_id).account(account_id)
 account.info
 account.representative
 account.history
-account.history(limit: 10)
+account.history(limit: 1)
 
 account.balance
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
@@ -154,7 +154,7 @@ Nanook.new.account(account_id).balance
 Nanook.new.account(account_id).pending
 Nanook.new.account(account_id).pending(limit: 1)
 Nanook.new.account(account_id).history
-Nanook.new.account(account_id).history(limit: 10)
+Nanook.new.account(account_id).history(limit: 1)
 Nanook.new.account(account_id).key
 Nanook.new.account(account_id).representative
 ```
