@@ -5,6 +5,10 @@ class Nanook
       @wallet = wallet
       @account = account
       @rpc = rpc
+
+      # An object to delegate account methods that don't
+      # expect a wallet param in the RPC call
+      @nanook_account_instance = Nanook::Account.new(account, rpc)
     end
 
     def create
@@ -49,6 +53,15 @@ class Nanook
         _receive_without_block
       else
         _receive_with_block(block)
+      end
+    end
+
+    # Any method of Nanook::Account can be called on this class too
+    def method_missing(m, *args, &block)
+      if @nanook_account_instance.respond_to?(m)
+        @nanook_account_instance.send(m, *args, &block)
+      else
+        super(m, *args, &block)
       end
     end
 

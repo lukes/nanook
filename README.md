@@ -131,10 +131,17 @@ Nanook.new.wallet(wallet_id).account.create
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
 
-account.destroy
+account.info
+account.representative
+account.history
+account.history(limit: 10)
+
+account.balance
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
 account.receive
 account.receive(pending_block_id)
+
+account.destroy
 ```
 
 #### Working with any account (not necessarily in your wallet):
