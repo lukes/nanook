@@ -95,6 +95,19 @@ describe NanoRpc::WalletAccounts do
     @nano.wallet(wallet_id).account(account_id).receive
   end
 
+  it "wallet accounts receive latest pending payment when no payment is pending" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":[]}",
+      headers: {}
+    )
+
+    expect(@nano.wallet(wallet_id).account(account_id).receive).to be false
+  end
+
   it "wallet accounts receive payment with block" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"receive\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\",\"block\":\"#{block_id}\"}",
