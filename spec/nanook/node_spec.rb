@@ -54,4 +54,30 @@ describe Nanook::Node do
     Nanook.new.node.bootstrap(address: "::ffff:138.201.94.249", port: "7075")
   end
 
+  it "should request bootstrap_any correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap_any\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"success\":\"\"}",
+      headers: {}
+    )
+
+    Nanook.new.node.bootstrap_any
+  end
+
+  it "should request representatives correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"representatives\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"representatives\":{\"xrb_1111111111111111111111111111111111111111111111111117353trpda\":\"3822372327060170000000000000000000000\",\"xrb_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"30999999999999999999999999000000\",\"xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"0\"}}",
+      headers: {}
+    )
+
+    Nanook.new.node.representatives
+  end
+
 end

@@ -49,6 +49,8 @@ class Nanook
           else
             v.map{|v| parse_value(v)}
           end
+        elsif v.is_a?(Hash)
+          process_hash(v)
         else
           parse_value(v)
         end

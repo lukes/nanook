@@ -17,6 +17,14 @@ class Nanook
       rpc(:bootstrap, address: address, port: port)
     end
 
+    def bootstrap_any
+      rpc(:bootstrap_any)
+    end
+
+    def representatives
+      rpc(:representatives)
+    end
+
     def rpc(action, params={})
       @rpc.call(action, params)
     end
