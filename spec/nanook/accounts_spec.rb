@@ -11,7 +11,7 @@ describe Nanook::Accounts do
       'Accept'=>'*/*',
       'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
       'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nano-rpc gem'
+      'User-Agent'=>'Ruby nanook gem'
     }
   }
 

@@ -18,7 +18,7 @@ class Nanook
     end
 
     @http = Net::HTTP.new(@uri.host, @uri.port)
-    @request = Net::HTTP::Post.new(@uri.request_uri, {"user-agent" => "Ruby nano-rpc gem"})
+    @request = Net::HTTP::Post.new(@uri.request_uri, {"user-agent" => "Ruby nanook gem"})
     @request.content_type = "application/json"
 
     @rpc = Nanook::Rpc.new(@http, @request)
