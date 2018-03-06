@@ -164,6 +164,17 @@ account.pending
 account.pending(limit: 1)
 ```
 
+### Managing your nano node
+
+```ruby
+node = Nanook.new.node
+
+node.block_count
+node.block_count_type
+node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
+
+```
+
 ## Nanook Metal
 
 You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol) directly through the `rpc` method. The first argument should match the `action` of the RPC call, and then all remaining parameters are passed in as arguments.
