@@ -1,10 +1,6 @@
 # NanoRpc
 
-This is a Ruby library for managing a nano currency node using the [nano RPC protocol](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol).
-
-## What is Nano?
-
-Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It's awesome. See [https://nano.org/](https://nano.org/).
+This is a Ruby library for managing a [nano currency](https://nano.org/) node, including making and receiving payments, using the [nano RPC protocol](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol). Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It's awesome. See [https://nano.org/](https://nano.org/).
 
 ## Installation
 
@@ -30,23 +26,23 @@ Or install it yourself as:
 nano = NanoRpc.new("http://localhost:7076")
 ```
 
-## Working with Wallets
+## Basics
 
-### Basics
+### Working with Wallets and Accounts
 
-Creating a wallet:
+Create a wallet:
 
 ```ruby
 nano.wallet.create
 ```
 
-Creating an account within a wallet:
+Create an account within a wallet:
 
 ```ruby
 nano.wallet(wallet_id).accounts.create
 ```
 
-Listing all accounts within a wallet:
+List accounts within a wallet:
 
 ```ruby
 nano.wallet(wallet_id).accounts.all
@@ -68,7 +64,7 @@ The `id` needs to be unique per payment, and serves an important purpose; it all
 
 The unit of the `amount` is NANO (which is currently technically 1Mnano &mdash; see [What are Nano's Units](https://nano.org/en/faq#what-are-nano-units-)).
 
-Note, there may be a delay due to Proof of Work being done. From the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create):
+Note, there may be a delay in receiving a response due to Proof of Work being done. From the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create):
 
 > Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.
 
@@ -82,7 +78,7 @@ account = wallet.accounts(account_id)
 account.receive
 ```
 
-The `receive` method when called without any arguments, as above, will receive the latest pending block for an account in a wallet. You'll either receive a RPC response containing the block if a payment was received, or `false` if there were no pending payments to receive.
+The `receive` method when called without any arguments, as above, will receive the latest pending block for an account in a wallet. It will either return a RPC response containing the block if a payment was received, or `false` if there were no pending payments to receive.
 
 You can also receive a specific pending block if you know it (you may have discovered it through calling `account.pending` for example):
 
