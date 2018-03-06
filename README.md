@@ -84,7 +84,7 @@ account = Nanook.new.wallet(wallet_id).account(account_id)
 account.receive
 ```
 
-The `receive` method when called without any arguments, as above, will receive the latest pending block for an account in a wallet. It will either return a RPC response containing the block if a payment was received, or `false` if there were no pending payments to receive.
+The `receive` method when called without any arguments, as above, will receive the latest pending payment for an account in a wallet. It will either return a RPC response containing the block if a payment was received, or `false` if there were no pending payments to receive.
 
 You can also receive a specific pending block if you know it (you may have discovered it through calling `account.pending` for example):
 
@@ -108,7 +108,6 @@ Nanook.new.wallet.create
 ```ruby
 wallet = Nanook.new.wallet(wallet_id)
 
-wallet.destroy
 wallet.export
 wallet.locked?
 wallet.unlock(password)
@@ -116,12 +115,12 @@ wallet.change_password(password)
 
 wallet.accounts.all
 wallet.contains?(account_id)
+
+wallet.destroy
 ```
 ### Accounts
 
 #### Create account:
-
-Accounts are created within a wallet.
 
 ```ruby
 Nanook.new.wallet(wallet_id).account.create
@@ -150,7 +149,7 @@ Nanook.new.account(account_id).representative
 
 You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol) directly through the `rpc` method. The first argument should match the `action` of the RPC call, and then all remaining parameters are passed in as arguments.
 
-E.g.: The [accounts_create command](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create) can be called like this:
+E.g., the [accounts_create command](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create) can be called like this:
 
 ```ruby
 Nano.new.rpc(:accounts_create, wallet: wallet_id, count: 2)
