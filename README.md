@@ -36,7 +36,7 @@ nanook = Nanook.new("http://example.com:7076")
 
 ## Basics
 
-### Working with Wallets and Accounts
+### Working with wallets and accounts
 
 Create a wallet:
 
@@ -136,7 +136,7 @@ account.receive
 account.receive(pending_block_id)
 ```
 
-#### Working with any account (not necessarily in your wallet)
+#### Working with any account (not necessarily in your wallet):
 
 ```ruby
 Nanook.new.account(account_id).history(count: 1000)
@@ -146,10 +146,12 @@ Nanook.new.account(account_id).representative
 
 ## Nanook Metal
 
-You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol) directly through the `nano.rpc` method. The first argument should match the `action` value in the RPC call, and then all remaining parameters are passed in as arguments.
+You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol) directly through the `rpc` method. The first argument should match the `action` of the RPC call, and then all remaining parameters are passed in as arguments.
+
+E.g.: The [accounts_create command](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create) can be called in Nanook like this:
 
 ```ruby
-nano.rpc(:accounts_create, wallet: wallet_id, count: 2)
+Nano.new.rpc(:accounts_create, wallet: wallet_id, count: 2)
 ```
 
 ## Contributing
@@ -165,12 +167,13 @@ To run the test suite:
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 
-## Buy Me a Nano Coffee
+## Buy me a nano coffee
 
-This library is totally free to use, but if you would like to send some Nano to [my wallet](https://www.nanode.co/account/xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j), you can!
+This library is totally free to use, but feel free to send some nano [my way](https://www.nanode.co/account/xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j) if you'd like to!
 
     xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j
 
+![alt xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j](https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png)
 
 
 
