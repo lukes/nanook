@@ -1,8 +1,8 @@
 require 'webmock/rspec'
-require 'nano_rpc'
+require 'nanook'
 WebMock.disable_net_connect!
 
-describe NanoRpc do
+describe Nanook do
 
   let(:uri) { "http://localhost:7076" }
   let(:headers) {
@@ -15,11 +15,11 @@ describe NanoRpc do
   }
 
   before do
-    @nano = NanoRpc.new(uri)
+    @nano = Nanook.new(uri)
   end
 
   it "should raise an error if there is no scheme in the uri" do
-    expect{NanoRpc.new("localhost:7076")}.to raise_error(NanoRpc::Error, "URI must have http or https in it. Was given: localhost:7076")
+    expect{Nanook.new("localhost:7076")}.to raise_error(Nanook::Error, "URI must have http or https in it. Was given: localhost:7076")
   end
 
   it "should return errors for non-200 status codes" do
@@ -32,7 +32,7 @@ describe NanoRpc do
       headers: {}
     )
 
-    expect{@nano.block_count}.to raise_error(NanoRpc::Error, "Encountered net/http error 500: Net::HTTPInternalServerError")
+    expect{@nano.block_count}.to raise_error(Nanook::Error, "Encountered net/http error 500: Net::HTTPInternalServerError")
   end
 
   it "should request block_count correctly" do

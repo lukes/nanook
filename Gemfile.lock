@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nano_rpc (0.1.0)
+    nanook (0.1.0)
       symbolized
 
 GEM
@@ -45,7 +45,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
-  nano_rpc!
+  nanook!
   pry
   rake (~> 10.0)
   rspec (~> 3.2)

@@ -1,4 +1,4 @@
-class NanoRpc
+class Nanook
   class WalletAccounts
 
     def initialize(wallet, account, rpc)
@@ -27,7 +27,7 @@ class NanoRpc
       wallet_required!
       account_required!
 
-      raw = NanoRpc::Util.NANO_to_raw(amount)
+      raw = Nanook::Util.NANO_to_raw(amount)
 
       # account is called source, so don't use the normal rpc method
       p = {

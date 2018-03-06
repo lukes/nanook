@@ -2,9 +2,9 @@ require 'json'
 require 'symbolized'
 require 'pry'
 
-require 'nano_rpc/error'
+require 'nanook/error'
 
-class NanoRpc
+class Nanook
   class Rpc
 
     def initialize(http, request)
@@ -24,7 +24,7 @@ class NanoRpc
         hash = JSON.parse(response.body)
         process_hash(hash)
       else
-        raise NanoRpc::Error.new("Encountered net/http error #{response.code}: #{response.class.name}")
+        raise Nanook::Error.new("Encountered net/http error #{response.code}: #{response.class.name}")
       end
     end
 

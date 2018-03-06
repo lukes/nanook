@@ -1,4 +1,4 @@
-class NanoRpc
+class Nanook
   class Wallet
 
     def initialize(wallet, rpc)
@@ -7,7 +7,7 @@ class NanoRpc
     end
 
     def accounts(account=nil)
-      NanoRpc::WalletAccounts.new(@wallet, account, @rpc)
+      Nanook::WalletAccounts.new(@wallet, account, @rpc)
     end
     alias_method :account, :accounts
 

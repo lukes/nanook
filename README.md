@@ -1,4 +1,4 @@
-# NanoRpc
+# Nanook
 
 This is a Ruby library for managing a [nano currency](https://nano.org/) node, including making and receiving payments, using the [nano RPC protocol](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol). Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It's awesome. See [https://nano.org/](https://nano.org/).
 
@@ -7,7 +7,7 @@ This is a Ruby library for managing a [nano currency](https://nano.org/) node, i
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nano_rpc'
+gem 'nanook'
 ```
 
 And then execute:
@@ -16,14 +16,14 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install nano_rpc
+    $ gem install nanook
 
 # Getting Started
 
 ## Initializing
 
 ```ruby
-nano = NanoRpc.new("http://localhost:7076")
+nano = Nanook.new("http://localhost:7076")
 ```
 
 ## Basics
@@ -53,7 +53,7 @@ nano.wallet(wallet_id).accounts.all
 You send a payment from an account in a wallet.
 
 ```ruby
-account = NanoRpc.new(host).wallet(wallet_id).account(account_id)
+account = Nanook.new(host).wallet(wallet_id).account(account_id)
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
 ```
 
@@ -72,7 +72,7 @@ Note, there may be a delay in receiving a response due to Proof of Work being do
 The simplest way to receive a payment is:
 
 ```ruby
-account = NanoRpc.new(host).wallet(wallet_id).account(account_id)
+account = Nanook.new(host).wallet(wallet_id).account(account_id)
 account.receive
 ```
 
@@ -81,7 +81,7 @@ The `receive` method when called without any arguments, as above, will receive t
 You can also receive a specific pending block if you know it (you may have discovered it through calling `account.pending` for example):
 
 ```ruby
-account = NanoRpc.new(host).wallet(wallet_id).account(account_id)
+account = Nanook.new(host).wallet(wallet_id).account(account_id)
 account.receive(block_id)
 ```
 
@@ -114,7 +114,7 @@ wallet.account.create
 #### Working with a single account within a wallet:
 
 ```ruby
-account = NanoRpc.new(host).wallet(wallet_id).account(account_id)
+account = Nanook.new(host).wallet(wallet_id).account(account_id)
 
 account.destroy
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
@@ -125,14 +125,14 @@ account.receive(pending_block_id) # Receive a known pending payment
 #### Working with any account (not necessarily in your wallet)
 
 ```ruby
-nano = NanoRpc.new(host)
+nano = Nanook.new(host)
 
 nano.account(account_id).history(count: 1000)
 nano.account(account_id).key
 nano.account(account_id).representative
 ```
 
-## NanoRpc Metal
+## Nanook Metal
 
 You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol) directly through the `nano.rpc` method. The first argument should match the `action` value in the RPC call, and then all remaining parameters are passed in as arguments.
 

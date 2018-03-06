@@ -1,17 +1,17 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "nano_rpc/version"
+require "nanook/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "nano_rpc"
-  spec.version       = NanoRpc::VERSION
+  spec.name          = "nanook"
+  spec.version       = Nanook::VERSION
   spec.authors       = ["Luke Duncalfe"]
   spec.email         = ["lduncalfe@eml.cc"]
 
   spec.summary       = "Ruby library for managing a nano currency node using the RPC protocol"
   spec.description   = "Ruby library for managing a nano currency node using the RPC protocol"
-  spec.homepage      = "https://github.com/lukes/nano_rpc"
+  spec.homepage      = "https://github.com/lukes/nanook"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

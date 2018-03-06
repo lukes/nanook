@@ -1,4 +1,4 @@
-class NanoRpc
+class Nanook
   class Accounts
 
     def initialize(account, rpc)

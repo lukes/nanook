@@ -1,4 +1,4 @@
-class NanoRpc
+class Nanook
   class Util
 
     def self.NANO_to_raw(nano)

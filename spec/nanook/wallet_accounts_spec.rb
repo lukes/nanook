@@ -1,8 +1,7 @@
 require 'webmock/rspec'
-require 'nano_rpc'
 WebMock.disable_net_connect!
 
-describe NanoRpc::WalletAccounts do
+describe Nanook::WalletAccounts do
 
   let(:uri) { "http://localhost:7076" }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
@@ -18,7 +17,7 @@ describe NanoRpc::WalletAccounts do
   }
 
   before do
-    @nano = NanoRpc.new(uri)
+    @nano = Nanook.new(uri)
   end
 
   it "wallet accounts all" do

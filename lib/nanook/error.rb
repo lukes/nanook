@@ -1,4 +1,4 @@
-class NanoRpc
+class Nanook
   class Error < StandardError
   end
 end

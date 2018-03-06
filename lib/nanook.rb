@@ -2,35 +2,35 @@ require 'net/http'
 require 'uri'
 require 'pry'
 
-require 'nano_rpc/accounts'
-require 'nano_rpc/rpc'
-require 'nano_rpc/util'
-require 'nano_rpc/wallet'
-require 'nano_rpc/wallet_accounts'
+require 'nanook/accounts'
+require 'nanook/rpc'
+require 'nanook/util'
+require 'nanook/wallet'
+require 'nanook/wallet_accounts'
 
-class NanoRpc
+class Nanook
 
   def initialize(uri)
     @uri = URI(uri)
 
     unless ['http', 'https'].include?(@uri.scheme)
-      raise NanoRpc::Error.new("URI must have http or https in it. Was given: #{uri}")
+      raise Nanook::Error.new("URI must have http or https in it. Was given: #{uri}")
     end
 
     @http = Net::HTTP.new(@uri.host, @uri.port)
     @request = Net::HTTP::Post.new(@uri.request_uri, {"user-agent" => "Ruby nano-rpc gem"})
     @request.content_type = "application/json"
 
-    @rpc = NanoRpc::Rpc.new(@http, @request)
+    @rpc = Nanook::Rpc.new(@http, @request)
   end
 
   def accounts(account=nil)
-    NanoRpc::Accounts.new(account, @rpc)
+    Nanook::Accounts.new(account, @rpc)
   end
   alias_method :account, :accounts
 
   def wallet(wallet=nil)
-    NanoRpc::Wallet.new(wallet, @rpc)
+    Nanook::Wallet.new(wallet, @rpc)
   end
 
   # These could all become dynamic
