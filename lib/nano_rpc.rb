@@ -27,6 +27,7 @@ class NanoRpc
   def accounts(account=nil)
     NanoRpc::Accounts.new(account, @rpc)
   end
+  alias_method :account, :accounts
 
   def wallet(wallet=nil)
     NanoRpc::Wallet.new(wallet, @rpc)

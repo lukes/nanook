@@ -44,7 +44,7 @@ describe NanoRpc::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).accounts.create
+    @nano.wallet(wallet_id).account.create
   end
 
   it "wallet accounts destroy" do
@@ -57,7 +57,7 @@ describe NanoRpc::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).accounts(account_id).destroy
+    @nano.wallet(wallet_id).account(account_id).destroy
   end
 
   it "wallet accounts send payment" do
@@ -70,7 +70,7 @@ describe NanoRpc::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).accounts(account_id).pay(to: account_id, amount: 2, id:"7081e2b8fec9146e")
+    @nano.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, id:"7081e2b8fec9146e")
   end
 
   it "wallet accounts receive latest pending payment" do
@@ -92,7 +92,7 @@ describe NanoRpc::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).accounts(account_id).receive
+    @nano.wallet(wallet_id).account(account_id).receive
   end
 
   it "wallet accounts receive payment with block" do
@@ -105,7 +105,7 @@ describe NanoRpc::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).accounts(account_id).receive(block_id)
+    @nano.wallet(wallet_id).account(account_id).receive(block_id)
   end
 
 end

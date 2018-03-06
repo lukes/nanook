@@ -39,7 +39,7 @@ nano.wallet.create
 Create an account within a wallet:
 
 ```ruby
-nano.wallet(wallet_id).accounts.create
+nano.wallet(wallet_id).account.create
 ```
 
 List accounts within a wallet:
@@ -53,8 +53,7 @@ nano.wallet(wallet_id).accounts.all
 You send a payment from an account in a wallet.
 
 ```ruby
-wallet = nano.wallet(wallet_id)
-account = wallet.accounts(account_id)
+account = NanoRpc.new(host).wallet(wallet_id).account(account_id)
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
 ```
 
@@ -73,8 +72,7 @@ Note, there may be a delay in receiving a response due to Proof of Work being do
 The simplest way to receive a payment is:
 
 ```ruby
-wallet = nano.wallet(wallet_id)
-account = wallet.accounts(account_id)
+account = NanoRpc.new(host).wallet(wallet_id).account(account_id)
 account.receive
 ```
 
@@ -83,8 +81,7 @@ The `receive` method when called without any arguments, as above, will receive t
 You can also receive a specific pending block if you know it (you may have discovered it through calling `account.pending` for example):
 
 ```ruby
-wallet = nano.wallet(wallet_id)
-account = wallet.accounts(account_id)
+account = NanoRpc.new(host).wallet(wallet_id).account(account_id)
 account.receive(block_id)
 ```
 
@@ -112,12 +109,12 @@ wallet.contains?(account_id) # Returns boolean
 #### Working with all accounts within a wallet:
 ```ruby
 wallet.accounts.all
-wallet.accounts.create
+wallet.account.create
 ```
 #### Working with a single account within a wallet:
 
 ```ruby
-account = nano.wallet(wallet_id).accounts(account_id)
+account = NanoRpc.new(host).wallet(wallet_id).account(account_id)
 
 account.destroy
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
@@ -128,9 +125,11 @@ account.receive(pending_block_id) # Receive a known pending payment
 #### Working with any account (not necessarily in your wallet)
 
 ```ruby
-nano.accounts(account_id).history(count: 1000)
-nano.accounts(account_id).key
-nano.accounts(account_id).representative
+nano = NanoRpc.new(host)
+
+nano.account(account_id).history(count: 1000)
+nano.account(account_id).key
+nano.account(account_id).representative
 ```
 
 ## NanoRpc Metal
