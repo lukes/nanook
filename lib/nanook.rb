@@ -9,18 +9,8 @@ require 'nanook/wallet_account'
 
 class Nanook
 
-  def initialize(uri="http://localhost:7076")
-    @uri = URI(uri)
-
-    unless ['http', 'https'].include?(@uri.scheme)
-      raise Nanook::Error.new("URI must have http or https in it. Was given: #{uri}")
-    end
-
-    @http = Net::HTTP.new(@uri.host, @uri.port)
-    @request = Net::HTTP::Post.new(@uri.request_uri, {"user-agent" => "Ruby nanook gem"})
-    @request.content_type = "application/json"
-
-    @rpc = Nanook::Rpc.new(@http, @request)
+  def initialize(uri=nil)
+    @rpc = Nanook::Rpc.new(uri)
   end
 
   def account(account=nil)

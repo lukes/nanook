@@ -32,7 +32,7 @@ describe Nanook do
   end
 
   it "should raise an error if there is no scheme in the uri" do
-    expect{Nanook.new("localhost:7076")}.to raise_error(Nanook::Error, "URI must have http or https in it. Was given: localhost:7076")
+    expect{Nanook.new("localhost:7076")}.to raise_error(ArgumentError, "URI must have http or https in it. Was given: localhost:7076")
   end
 
   it "should return errors for non-200 status codes" do

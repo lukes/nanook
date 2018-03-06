@@ -6,9 +6,20 @@ require 'nanook/error'
 class Nanook
   class Rpc
 
-    def initialize(http, request)
-      @http = http
-      @request = request
+    DEFAULT_URI = "http://localhost:7076"
+
+    def initialize(uri=DEFAULT_URI)
+      uri = DEFAULT_URI if uri.nil?
+
+      rpc_server = URI(uri)
+
+      unless ['http', 'https'].include?(rpc_server.scheme)
+        raise ArgumentError.new("URI must have http or https in it. Was given: #{uri}")
+      end
+
+      @http = Net::HTTP.new(rpc_server.host, rpc_server.port)
+      @request = Net::HTTP::Post.new(rpc_server.request_uri, {"user-agent" => "Ruby nanook gem"})
+      @request.content_type = "application/json"
     end
 
     def call(action, params)
