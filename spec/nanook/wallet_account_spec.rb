@@ -201,4 +201,30 @@ describe Nanook::WalletAccount do
     Nanook.new.wallet(wallet_id).account(account_id).representative
   end
 
+  it "wallet account pending no limit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"10\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":[\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"]}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).account(account_id).pending
+  end
+
+  it "wallet account pending with limit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":[\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"]}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).account(account_id).pending(limit: 1)
+  end
+
 end
