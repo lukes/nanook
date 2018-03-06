@@ -17,7 +17,7 @@ describe Nanook::Wallet do
   }
 
   before do
-    @nano = Nanook.new(uri)
+    @nano = Nanook.new
   end
 
   it "wallet create" do

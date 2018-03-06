@@ -22,8 +22,16 @@ Or install it yourself as:
 
 ## Initializing
 
+Nanook connects to "http://localhost:7076" by default.
+
 ```ruby
-nano = Nanook.new("http://localhost:7076")
+nanook = Nanook.new
+```
+
+To connect to another host instead:
+
+```ruby
+nanook = Nanook.new("http://example.com:7076")
 ```
 
 ## Basics
@@ -33,19 +41,19 @@ nano = Nanook.new("http://localhost:7076")
 Create a wallet:
 
 ```ruby
-nano.wallet.create
+Nanook.new.wallet.create
 ```
 
 Create an account within a wallet:
 
 ```ruby
-nano.wallet(wallet_id).account.create
+Nanook.new.wallet(wallet_id).account.create
 ```
 
 List accounts within a wallet:
 
 ```ruby
-nano.wallet(wallet_id).accounts.all
+Nanook.new.wallet(wallet_id).accounts.all
 ```
 
 ### Sending a payment
@@ -53,7 +61,7 @@ nano.wallet(wallet_id).accounts.all
 You send a payment from an account in a wallet.
 
 ```ruby
-account = Nanook.new(host).wallet(wallet_id).account(account_id)
+account = Nanook.new.wallet(wallet_id).account(account_id)
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
 ```
 
@@ -72,7 +80,7 @@ Note, there may be a delay in receiving a response due to Proof of Work being do
 The simplest way to receive a payment is:
 
 ```ruby
-account = Nanook.new(host).wallet(wallet_id).account(account_id)
+account = Nanook.new.wallet(wallet_id).account(account_id)
 account.receive
 ```
 
@@ -81,55 +89,59 @@ The `receive` method when called without any arguments, as above, will receive t
 You can also receive a specific pending block if you know it (you may have discovered it through calling `account.pending` for example):
 
 ```ruby
-account = Nanook.new(host).wallet(wallet_id).account(account_id)
+account = Nanook.new.wallet(wallet_id).account(account_id)
 account.receive(block_id)
 ```
 
-### All commands
+## All commands
+
+### Wallets
 
 #### Create wallet:
 
 ```ruby
-nano.wallet.create
+Nanook.new.wallet.create
 ```
 
 #### Working with a single wallet:
 
 ```ruby
-wallet = nano.wallet(wallet_id)
+wallet = Nanook.new.wallet(wallet_id)
 
 wallet.destroy
 wallet.export
-wallet.locked  # Returns the RPC response
-wallet.locked? # Returns boolean
-wallet.contains(account_id)  # Returns the RPC response
-wallet.contains?(account_id) # Returns boolean
-```
+wallet.locked?
 
-#### Working with all accounts within a wallet:
-```ruby
 wallet.accounts.all
-wallet.account.create
+wallet.contains?(account_id)
 ```
-#### Working with a single account within a wallet:
+### Accounts
+
+#### Create account:
+
+Accounts are created within a wallet.
 
 ```ruby
-account = Nanook.new(host).wallet(wallet_id).account(account_id)
+Nanook.new.wallet(wallet_id).account.create
+```
+
+#### Working with a single account:
+
+```ruby
+account = Nanook.new.wallet(wallet_id).account(account_id)
 
 account.destroy
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
-account.receive                   # Receive the latest pending payment
-account.receive(pending_block_id) # Receive a known pending payment
+account.receive
+account.receive(pending_block_id)
 ```
 
 #### Working with any account (not necessarily in your wallet)
 
 ```ruby
-nano = Nanook.new(host)
-
-nano.account(account_id).history(count: 1000)
-nano.account(account_id).key
-nano.account(account_id).representative
+Nanook.new.account(account_id).history(count: 1000)
+Nanook.new.account(account_id).key
+Nanook.new.account(account_id).representative
 ```
 
 ## Nanook Metal

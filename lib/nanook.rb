@@ -10,7 +10,7 @@ require 'nanook/wallet_accounts'
 
 class Nanook
 
-  def initialize(uri)
+  def initialize(uri="http://localhost:7076")
     @uri = URI(uri)
 
     unless ['http', 'https'].include?(@uri.scheme)

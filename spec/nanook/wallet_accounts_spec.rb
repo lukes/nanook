@@ -17,7 +17,7 @@ describe Nanook::WalletAccounts do
   }
 
   before do
-    @nano = Nanook.new(uri)
+    @nano = Nanook.new
   end
 
   it "wallet accounts all" do
