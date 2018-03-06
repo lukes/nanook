@@ -1,6 +1,5 @@
 require 'json'
 require 'symbolized'
-require 'pry'
 
 require 'nanook/error'
 

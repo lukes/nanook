@@ -1,6 +1,5 @@
 require 'net/http'
 require 'uri'
-require 'pry'
 
 require 'nanook/account'
 require 'nanook/rpc'
