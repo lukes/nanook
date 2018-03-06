@@ -21,8 +21,24 @@ class Nanook
       rpc(:bootstrap_any)
     end
 
+    def frontier_count
+      rpc(:frontier_count)
+    end
+
+    def peers
+      rpc(:peers)
+    end
+
     def representatives
       rpc(:representatives)
+    end
+
+    def stop
+      rpc(:stop)
+    end
+
+    def version
+      rpc(:version)
     end
 
     def rpc(action, params={})

@@ -80,4 +80,56 @@ describe Nanook::Node do
     Nanook.new.node.representatives
   end
 
+  it "should request peers correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"peers\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"peers\":{\"[::ffff:172.17.0.1]:32841\":\"3\"}}",
+      headers: {}
+    )
+
+    Nanook.new.node.peers
+  end
+
+  it "should request stop correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"stop\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"success\":\"\"}",
+      headers: {}
+    )
+
+    Nanook.new.node.stop
+  end
+
+  it "should request version correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"version\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"rpc_version\":\"1\",\"store_version\":\"2\",\"node_vendor\":\"RaiBlocks 7.5.0\"}",
+      headers: {}
+    )
+
+    Nanook.new.node.version
+  end
+
+  it "should request frontier_count correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"frontier_count\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"count\":\"100\"}",
+      headers: {}
+    )
+
+    Nanook.new.node.frontier_count
+  end
+
 end
