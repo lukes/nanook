@@ -6,9 +6,9 @@ class Nanook
       @rpc = rpc
     end
 
-    def history(count: 1000)
+    def history(limit: 1000)
       account_required!
-      rpc(:account_history, count: count)
+      rpc(:account_history, count: limit)
     end
 
     def key

@@ -56,7 +56,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).history(count: 1)
+    Nanook.new.accounts(account_id).history(limit: 1)
   end
 
   it "accounts key" do
