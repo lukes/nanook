@@ -7,7 +7,7 @@ class Nanook
     end
 
     def account(account=nil)
-      Nanook::WalletAccounts.new(@wallet, account, @rpc)
+      Nanook::WalletAccount.new(@wallet, account, @rpc)
     end
     alias_method :accounts, :account
 

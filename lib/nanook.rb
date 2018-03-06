@@ -2,11 +2,11 @@ require 'net/http'
 require 'uri'
 require 'pry'
 
-require 'nanook/accounts'
+require 'nanook/account'
 require 'nanook/rpc'
 require 'nanook/util'
 require 'nanook/wallet'
-require 'nanook/wallet_accounts'
+require 'nanook/wallet_account'
 
 class Nanook
 
@@ -25,7 +25,7 @@ class Nanook
   end
 
   def account(account=nil)
-    Nanook::Accounts.new(account, @rpc)
+    Nanook::Account.new(account, @rpc)
   end
   alias_method :accounts, :account
 

@@ -14,10 +14,6 @@ describe Nanook do
     }
   }
 
-  before do
-    @nanook = Nanook.new
-  end
-
   it "should allow you to connect to a custom host" do
     custom_uri = "http://example.com:7076"
 
@@ -49,7 +45,7 @@ describe Nanook do
       headers: {}
     )
 
-    expect{@nanook.block_count}.to raise_error(Nanook::Error, "Encountered net/http error 500: Net::HTTPInternalServerError")
+    expect{Nanook.new.block_count}.to raise_error(Nanook::Error, "Encountered net/http error 500: Net::HTTPInternalServerError")
   end
 
   it "should request block_count correctly" do
@@ -62,7 +58,7 @@ describe Nanook do
       headers: {}
     )
 
-    response = @nanook.block_count
+    response = Nanook.new.block_count
     expect(response).to eql({count:1000,unchecked:10})
   end
 
@@ -76,7 +72,7 @@ describe Nanook do
       headers: {}
     )
 
-    response = @nanook.rpc(:some_action, p1: 1, p2: 2)
+    response = Nanook.new.rpc(:some_action, p1: 1, p2: 2)
     expect(response).to eql({true_value:true,false_value:false,number:1,string:"my_string"})
   end
 

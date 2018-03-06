@@ -1,5 +1,5 @@
 class Nanook
-  class Accounts
+  class Account
 
     def initialize(account, rpc)
       @account = account

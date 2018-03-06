@@ -1,5 +1,5 @@
 class Nanook
-  class WalletAccounts
+  class WalletAccount
 
     def initialize(wallet, account, rpc)
       @wallet = wallet

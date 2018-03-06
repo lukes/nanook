@@ -2,7 +2,7 @@ require 'webmock/rspec'
 require 'nanook'
 WebMock.disable_net_connect!
 
-describe Nanook::Accounts do
+describe Nanook::Account do
 
   let(:uri) { "http://localhost:7076" }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
@@ -15,12 +15,8 @@ describe Nanook::Accounts do
     }
   }
 
-  before do
-    @nano = Nanook.new
-  end
-
   it "accounts history requires account" do
-    expect{@nano.accounts(nil).history}.to raise_error(ArgumentError, "Account must be present")
+    expect{Nanook.new.accounts(nil).history}.to raise_error(ArgumentError, "Account must be present")
   end
 
   it "accounts history" do
@@ -40,7 +36,7 @@ describe Nanook::Accounts do
       headers: {}
     )
 
-    @nano.accounts(account_id).history
+    Nanook.new.accounts(account_id).history
   end
 
   it "accounts history without default count" do
@@ -60,7 +56,7 @@ describe Nanook::Accounts do
       headers: {}
     )
 
-    @nano.accounts(account_id).history(count: 1)
+    Nanook.new.accounts(account_id).history(count: 1)
   end
 
   it "accounts key" do
@@ -73,7 +69,7 @@ describe Nanook::Accounts do
       headers: {}
     )
 
-    @nano.accounts(account_id).key
+    Nanook.new.accounts(account_id).key
   end
 
 end

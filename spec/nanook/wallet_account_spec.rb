@@ -1,7 +1,8 @@
 require 'webmock/rspec'
+require 'nanook'
 WebMock.disable_net_connect!
 
-describe Nanook::WalletAccounts do
+describe Nanook::WalletAccount do
 
   let(:uri) { "http://localhost:7076" }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
@@ -16,10 +17,6 @@ describe Nanook::WalletAccounts do
     }
   }
 
-  before do
-    @nano = Nanook.new
-  end
-
   it "wallet accounts all" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_list\",\"wallet\":\"#{wallet_id}\"}",
@@ -30,7 +27,7 @@ describe Nanook::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).accounts.all
+    Nanook.new.wallet(wallet_id).accounts.all
   end
 
   it "wallet accounts create" do
@@ -43,7 +40,7 @@ describe Nanook::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).account.create
+    Nanook.new.wallet(wallet_id).account.create
   end
 
   it "wallet accounts destroy" do
@@ -56,7 +53,7 @@ describe Nanook::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).account(account_id).destroy
+    Nanook.new.wallet(wallet_id).account(account_id).destroy
   end
 
   it "wallet accounts send payment" do
@@ -69,7 +66,7 @@ describe Nanook::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, id:"7081e2b8fec9146e")
+    Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, id:"7081e2b8fec9146e")
   end
 
   it "wallet accounts receive latest pending payment" do
@@ -91,7 +88,7 @@ describe Nanook::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).account(account_id).receive
+    Nanook.new.wallet(wallet_id).account(account_id).receive
   end
 
   it "wallet accounts receive latest pending payment when no payment is pending" do
@@ -104,7 +101,7 @@ describe Nanook::WalletAccounts do
       headers: {}
     )
 
-    expect(@nano.wallet(wallet_id).account(account_id).receive).to be false
+    expect(Nanook.new.wallet(wallet_id).account(account_id).receive).to be false
   end
 
   it "wallet accounts receive payment with block" do
@@ -117,7 +114,7 @@ describe Nanook::WalletAccounts do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).account(account_id).receive(block_id)
+    Nanook.new.wallet(wallet_id).account(account_id).receive(block_id)
   end
 
 end

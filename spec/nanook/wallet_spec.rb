@@ -16,10 +16,6 @@ describe Nanook::Wallet do
     }
   }
 
-  before do
-    @nano = Nanook.new
-  end
-
   it "wallet create" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_create\"}",
@@ -30,7 +26,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    @nano.wallet.create
+    Nanook.new.wallet.create
   end
 
   it "wallet destroy" do
@@ -43,7 +39,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).destroy
+    Nanook.new.wallet(wallet_id).destroy
   end
 
   it "wallet export" do
@@ -56,7 +52,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).export
+    Nanook.new.wallet(wallet_id).export
   end
 
   it "wallet contains" do
@@ -69,7 +65,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).contains(account_id)
+    Nanook.new.wallet(wallet_id).contains(account_id)
   end
 
   it "wallet contains?" do
@@ -82,7 +78,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    expect(@nano.wallet(wallet_id).contains?(account_id)).to be true
+    expect(Nanook.new.wallet(wallet_id).contains?(account_id)).to be true
   end
 
   it "wallet locked" do
@@ -95,7 +91,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    @nano.wallet(wallet_id).locked
+    Nanook.new.wallet(wallet_id).locked
   end
 
   it "wallet locked? when it is not locked" do
@@ -108,7 +104,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    expect(@nano.wallet(wallet_id).locked?).to be false
+    expect(Nanook.new.wallet(wallet_id).locked?).to be false
   end
 
   it "wallet locked? when it is locked" do
@@ -121,7 +117,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    expect(@nano.wallet(wallet_id).locked?).to be true
+    expect(Nanook.new.wallet(wallet_id).locked?).to be true
   end
 
 end
