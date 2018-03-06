@@ -113,6 +113,7 @@ wallet.locked?
 wallet.unlock(password)
 wallet.change_password(password)
 
+wallet.account.create
 wallet.accounts.all
 wallet.contains?(account_id)
 
