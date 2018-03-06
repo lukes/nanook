@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Initializing
 
-Nanook connects to "http://localhost:7076" by default.
+Nanook connects to "http://localhost:7076". If you're using Nanook from the nano node itself this will generally work.
 
 ```ruby
 nanook = Nanook.new
@@ -65,7 +65,7 @@ account = Nanook.new.wallet(wallet_id).account(account_id)
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
 ```
 
-The `id` needs to be unique per payment, and serves an important purpose; it allows you to make this call multiple times with the same `id` and be reassured that you will only ever send that nano payment once. From the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create):
+The `id` can be any string and needs to be unique per payment. It serves an important purpose; it allows you to make this call multiple times with the same `id` and be reassured that you will only ever send that nano payment once. From the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create):
 
 > You can (and should) specify a unique id for each spend to provide idempotency. That means that if you [make the payment call] two times with the same id, the second request won't send any additional Nano.
 
