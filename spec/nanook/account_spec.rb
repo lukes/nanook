@@ -1,10 +1,11 @@
 require 'webmock/rspec'
 require 'nanook'
+require 'nanook/rpc'
 WebMock.disable_net_connect!
 
 describe Nanook::Account do
 
-  let(:uri) { "http://localhost:7076" }
+  let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
   let(:headers) {
     {

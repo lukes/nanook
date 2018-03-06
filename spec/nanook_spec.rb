@@ -1,10 +1,11 @@
 require 'webmock/rspec'
 require 'nanook'
+require 'nanook/rpc'
 WebMock.disable_net_connect!
 
 describe Nanook do
 
-  let(:uri) { "http://localhost:7076" }
+  let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:headers) {
     {
       'Accept'=>'*/*',
@@ -14,66 +15,20 @@ describe Nanook do
     }
   }
 
-  it "should allow you to connect to a custom host" do
-    custom_uri = "http://example.com:7076"
-
-    nanook = Nanook.new(custom_uri)
-
-    stub_request(:post, custom_uri).with(
-      body: "{\"action\":\"block_count\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{}",
-      headers: {}
-    )
-
-    nanook.block_count
+  it "should have a node method" do
+    expect(Nanook.new.node).to be_kind_of(Nanook::Node)
   end
 
-  it "should raise an error if there is no scheme in the uri" do
-    expect{Nanook.new("localhost:7076")}.to raise_error(ArgumentError, "URI must have http or https in it. Was given: localhost:7076")
+  it "should have a wallet method" do
+    expect(Nanook.new.wallet).to be_kind_of(Nanook::Wallet)
   end
 
-  it "should return errors for non-200 status codes" do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"block_count\"}",
-      headers: headers
-    ).to_return(
-      status: 500,
-      body: "{}",
-      headers: {}
-    )
-
-    expect{Nanook.new.block_count}.to raise_error(Nanook::Error, "Encountered net/http error 500: Net::HTTPInternalServerError")
+  it "should have an account method" do
+    expect(Nanook.new.account).to be_kind_of(Nanook::Account)
   end
 
-  it "should request block_count correctly" do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"block_count\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"count\":\"1000\",\"unchecked\":\"10\"}",
-      headers: {}
-    )
-
-    response = Nanook.new.block_count
-    expect(response).to eql({count:1000,unchecked:10})
-  end
-
-  it "should parse the response of the RPC to convert certain strings of primitives to primitives" do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"some_action\",\"p1\":\"1\",\"p2\":\"2\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"true_value\":\"true\",\"false_value\":\"false\",\"number\":\"1\",\"string\":\"my_string\"}",
-      headers: {}
-    )
-
-    response = Nanook.new.rpc(:some_action, p1: 1, p2: 2)
-    expect(response).to eql({true_value:true,false_value:false,number:1,string:"my_string"})
+  it "should alias accounts to account" do
+    expect(Nanook.new.accounts).to be_kind_of(Nanook::Account)
   end
 
 end

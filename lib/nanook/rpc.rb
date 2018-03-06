@@ -22,7 +22,7 @@ class Nanook
       @request.content_type = "application/json"
     end
 
-    def call(action, params)
+    def call(action, params={})
       # Stringify param values
       params = Hash[params.map {|k, v| [k, v.to_s] }]
 
