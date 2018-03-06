@@ -15,11 +15,11 @@ describe Nanook::Account do
     }
   }
 
-  it "accounts history requires account" do
+  it "account history requires account" do
     expect{Nanook.new.accounts(nil).history}.to raise_error(ArgumentError, "Account must be present")
   end
 
-  it "accounts history" do
+  it "account history" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
       headers: headers
@@ -39,7 +39,7 @@ describe Nanook::Account do
     Nanook.new.accounts(account_id).history
   end
 
-  it "accounts history without default count" do
+  it "account history without default count" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
       headers: headers
@@ -59,7 +59,7 @@ describe Nanook::Account do
     Nanook.new.accounts(account_id).history(limit: 1)
   end
 
-  it "accounts key" do
+  it "account key" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_key\",\"account\":\"#{account_id}\"}",
       headers: headers
@@ -70,6 +70,50 @@ describe Nanook::Account do
     )
 
     Nanook.new.accounts(account_id).key
+  end
+
+  it "account balance" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"balance\":\"10000\",\"pending\":\"10000\"}",
+      headers: {}
+    )
+
+    Nanook.new.accounts(account_id).balance
+  end
+
+  it "account representative" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_representative\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"representative\":\"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
+      headers: {}
+    )
+
+    Nanook.new.accounts(account_id).representative
+  end
+
+  it "account info" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
+      \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"balance\":\"235580100176034320859259343606608761791\",
+      \"modified_timestamp\":\"1501793775\",
+      \"block_count\":\"33\"}",
+      headers: {}
+    )
+
+    Nanook.new.accounts(account_id).info
   end
 
 end

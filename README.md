@@ -140,6 +140,9 @@ account.receive(pending_block_id)
 #### Working with any account (not necessarily in your wallet):
 
 ```ruby
+Nanook.new.account(account_id).info
+Nanook.new.account(account_id).balance
+Nanook.new.account(account_id).history
 Nanook.new.account(account_id).history(limit: 10)
 Nanook.new.account(account_id).key
 Nanook.new.account(account_id).representative

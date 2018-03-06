@@ -21,6 +21,16 @@ class Nanook
       rpc(:account_representative)
     end
 
+    def balance
+      account_required!
+      rpc(:account_balance)
+    end
+
+    def info
+      account_required!
+      rpc(:account_info)
+    end
+
     private
 
     def rpc(action, params={})
