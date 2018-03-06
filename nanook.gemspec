@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Luke Duncalfe"]
   spec.email         = ["lduncalfe@eml.cc"]
 
-  spec.summary       = "Ruby library for managing a nano currency node using the RPC protocol"
-  spec.description   = "Ruby library for managing a nano currency node using the RPC protocol"
+  spec.summary       = "Ruby library for managing a nano currency node, including making and receiving payments, using the nano RPC protocol"
+  spec.description   = "Ruby library for managing a nano currency node, including making and receiving payments, using the nano RPC protocol"
   spec.homepage      = "https://github.com/lukes/nanook"
   spec.license       = "MIT"
 
@@ -28,6 +28,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
 
   spec.add_dependency "symbolized"
-  # spec.add_dependency "uri"
-  # spec.add_dependency "json"
 end
