@@ -120,4 +120,30 @@ describe Nanook::Wallet do
     expect(Nanook.new.wallet(wallet_id).locked?).to be true
   end
 
+  it "wallet unlock" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"password_enter\",\"wallet\":\"#{wallet_id}\",\"password\":\"test\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"1\"}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).unlock("test")
+  end
+
+  it "wallet change password" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"password_change\",\"wallet\":\"#{wallet_id}\",\"password\":\"test\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"changed\":\"1\"}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).change_password("test")
+  end
+
 end

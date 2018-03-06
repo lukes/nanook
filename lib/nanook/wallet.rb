@@ -45,6 +45,16 @@ class Nanook
       !response.empty? && response[:locked] != 0
     end
 
+    def unlock(password)
+      wallet_required!
+      rpc(:password_enter, password: password)
+    end
+
+    def change_password(password)
+      wallet_required!
+      rpc(:password_change, password: password)
+    end
+
     def all
       wallet_required!
       rpc(:account_list)

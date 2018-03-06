@@ -111,6 +111,8 @@ wallet = Nanook.new.wallet(wallet_id)
 wallet.destroy
 wallet.export
 wallet.locked?
+wallet.unlock(password)
+wallet.change_password(password)
 
 wallet.accounts.all
 wallet.contains?(account_id)
