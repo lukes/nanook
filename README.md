@@ -47,7 +47,7 @@ Nanook.new.wallet.create
 Create an account within a wallet:
 
 ```ruby
-Nanook.new.wallet(wallet_id).account.create
+Nanook.new.wallet(wallet_id).accounts.create
 ```
 
 List accounts within a wallet:
@@ -113,7 +113,7 @@ wallet.locked?
 wallet.unlock(password)
 wallet.change_password(password)
 
-wallet.account.create
+wallet.accounts.create
 wallet.accounts.all
 wallet.contains?(account_id)
 
@@ -133,9 +133,10 @@ Nanook.new.wallet(wallet_id).account.create
 account = Nanook.new.wallet(wallet_id).account(account_id)
 
 account.info
-account.representative
 account.history
 account.history(limit: 1)
+account.key
+account.representative
 
 account.balance
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
@@ -150,14 +151,17 @@ account.destroy
 #### Working with any account (not necessarily in your wallet):
 
 ```ruby
-Nanook.new.account(account_id).info
-Nanook.new.account(account_id).balance
-Nanook.new.account(account_id).pending
-Nanook.new.account(account_id).pending(limit: 1)
-Nanook.new.account(account_id).history
-Nanook.new.account(account_id).history(limit: 1)
-Nanook.new.account(account_id).key
-Nanook.new.account(account_id).representative
+account = Nanook.new.account(account_id)
+
+account.info
+account.history
+account.history(limit: 1)
+account.key
+account.representative
+
+account.balance
+account.pending
+account.pending(limit: 1)
 ```
 
 ## Nanook Metal
