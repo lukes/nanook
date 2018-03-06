@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Initializing
 
-Nanook connects to "http://localhost:7076". If you're using Nanook from the nano node itself this will generally work.
+Nanook will by default connect to "http://localhost:7076". If you're using Nanook from the nano node itself this will generally work fine.
 
 ```ruby
 nanook = Nanook.new
@@ -150,7 +150,7 @@ Nanook.new.account(account_id).representative
 
 You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol) directly through the `rpc` method. The first argument should match the `action` of the RPC call, and then all remaining parameters are passed in as arguments.
 
-E.g.: The [accounts_create command](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create) can be called in Nanook like this:
+E.g.: The [accounts_create command](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create) can be called like this:
 
 ```ruby
 Nano.new.rpc(:accounts_create, wallet: wallet_id, count: 2)
