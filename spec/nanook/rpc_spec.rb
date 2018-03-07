@@ -52,12 +52,12 @@ describe Nanook::Rpc do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"true_value\":\"true\",\"false_value\":\"false\",\"number\":\"1\",\"string\":\"my_string\"}",
+      body: "{\"true_value\":\"true\",\"false_value\":\"false\",\"number\":\"1\",\"string\":\"my_string\",\"array_of_things\":[\"string\",\"1\",\"true\"],\"hash\":{\"this\":\"that\"}}",
       headers: {}
     )
 
     response = Nanook::Rpc.new.call(:some_action, p1: 1, p2: 2)
-    expect(response).to eql({true_value:true,false_value:false,number:1,string:"my_string"})
+    expect(response).to eql({true_value:true,false_value:false,number:1,string:"my_string",array_of_things:["string",1,true],hash:{this:"that"}})
   end
 
 end
