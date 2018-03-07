@@ -14,6 +14,10 @@ class Nanook
     @rpc = Nanook::Rpc.new(uri)
   end
 
+  def block(block=nil)
+    Nanook::Block.new(block, @rpc)
+  end
+
   def node
     Nanook::Node.new(@rpc)
   end

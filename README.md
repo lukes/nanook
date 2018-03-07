@@ -164,6 +164,31 @@ account.pending
 account.pending(limit: 1)
 ```
 
+### Blocks
+
+```ruby
+block = Nanook.new.block(block_id)
+
+block.info                        # Only works with verified blocks in the ledger
+block.info(allow_unchecked: true) # Work for verified blocks AND unchecked synchronizing blocks
+block.account
+block.chain
+block.chain(limit: 10)
+block.history
+block.history(limit: 10)
+block.republish
+block.republish(sources: 2)
+block.republish(destinations: 2)
+block.pending?
+block.process
+block.successors
+block.successors(limit: 10)
+
+block.generate_work
+block.cancel_work
+block.work_is_valid?(work_id)
+```
+
 ### Managing your nano node
 
 ```ruby
