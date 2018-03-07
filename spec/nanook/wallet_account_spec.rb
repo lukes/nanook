@@ -285,4 +285,46 @@ describe Nanook::WalletAccount do
     Nanook.new.wallet(wallet_id).account(account_id).ledger(limit: 10)
   end
 
+  it "wallet account exists? when exists" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"1\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).account(account_id).exists?).to be true
+  end
+
+  it "wallet account exists? when doesn't exist" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"0\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).account(account_id).exists?).to be false
+  end
+
+  it "wallet account delegators" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"delegators\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"delegators\": {
+        \"xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd\":\"500000000000000000000000000000000000\",
+        \"xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn\":\"961647970820730000000000000000000000\"
+      }}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).account(account_id).delegators
+  end
+
 end

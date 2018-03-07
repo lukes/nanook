@@ -6,6 +6,17 @@ class Nanook
       @rpc = rpc
     end
 
+    def delegators
+      account_required!
+      rpc(:delegators)
+    end
+
+    def exists?
+      account_required!
+      response = rpc(:validate_account_number)
+      !response.empty? && response[:valid] == 1
+    end
+
     def history(limit: 1000)
       account_required!
       rpc(:account_history, count: limit)

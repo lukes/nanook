@@ -154,12 +154,14 @@ Nanook.new.wallet(wallet_id).account.create
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
 
+account.exists?
 account.info
 account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
 account.key
+account.delegators
 account.representative
 account.weight
 
@@ -178,12 +180,14 @@ account.destroy
 ```ruby
 account = Nanook.new.account(account_id)
 
+account.exists?
 account.info
 account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
 account.key
+account.delegators
 account.representative
 account.weight
 
