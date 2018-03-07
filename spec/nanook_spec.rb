@@ -1,6 +1,5 @@
 require 'webmock/rspec'
 require 'nanook'
-require 'nanook/rpc'
 WebMock.disable_net_connect!
 
 describe Nanook do
@@ -33,6 +32,10 @@ describe Nanook do
 
   it "should have an account method" do
     expect(Nanook.new.account).to be_kind_of(Nanook::Account)
+  end
+
+  it "should have a work_peers method" do
+    expect(Nanook.new.work_peers).to be_kind_of(Nanook::WorkPeer)
   end
 
 end

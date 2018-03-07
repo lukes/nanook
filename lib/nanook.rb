@@ -34,4 +34,8 @@ class Nanook
     Nanook::Wallet.new(wallet, @rpc)
   end
 
+  def work_peers
+    Nanook::WorkPeer.new(@rpc)
+  end
+
 end

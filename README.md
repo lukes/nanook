@@ -237,6 +237,16 @@ node.stop
 node.version
 ```
 
+### Work peers
+
+```ruby
+work_peers = Nanook.new.work_peers
+
+work_peers.add(address: "::ffff:172.17.0.1:7076", port: 7076)
+work_peers.clear
+work_peers.list
+```
+
 ### Keys
 
 #### Create private public key pair:
