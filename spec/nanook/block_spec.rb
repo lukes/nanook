@@ -304,7 +304,7 @@ describe Nanook::Block do
     Nanook.new.block(block).successors(limit: 1)
   end
 
-  it "should request work_is_valid? correctly when valid" do
+  it "should request is_valid_work? correctly when valid" do
     work = "2bf29ef00786a6bc"
 
     stub_request(:post, uri).with(
@@ -316,10 +316,10 @@ describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).work_is_valid?(work)).to be true
+    expect(Nanook.new.block(block).is_valid_work?(work)).to be true
   end
 
-  it "should request work_is_valid? correctly when not valid" do
+  it "should request is_valid_work? correctly when not valid" do
     work = "2bf29ef00786a6bc"
 
     stub_request(:post, uri).with(
@@ -331,7 +331,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).work_is_valid?(work)).to be false
+    expect(Nanook.new.block(block).is_valid_work?(work)).to be false
   end
 
 end

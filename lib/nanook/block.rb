@@ -38,6 +38,11 @@ class Nanook
       end
     end
 
+    def is_valid_work?(work)
+      response = rpc(:work_validate, :hash, work: work)
+      !response.empty? && response[:valid] == 1
+    end
+
     def republish(destinations:nil, sources:nil)
       if !destinations.nil? && !sources.nil?
         raise ArgumentError.new("You must provide either destinations or sources but not both")
@@ -63,11 +68,6 @@ class Nanook
 
     def successors(limit: 1000)
       rpc(:successors, :block, count: limit)
-    end
-
-    def work_is_valid?(work)
-      response = rpc(:work_validate, :hash, work: work)
-      !response.empty? && response[:valid] == 1
     end
 
     private

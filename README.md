@@ -208,7 +208,7 @@ block.successors(limit: 10)
 
 block.generate_work
 block.cancel_work
-block.work_is_valid?(work_id)
+block.is_valid_work?(work_id)
 ```
 
 ### Managing your nano node
