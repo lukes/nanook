@@ -89,6 +89,11 @@ The simplest way to receive a payment is:
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
 account.receive
+
+# or:
+
+wallet = Nanook.new.wallet(wallet_id)
+wallet.receive(into: account_id)
 ```
 
 The `receive` method when called without any arguments, as above, will receive the latest pending payment for an account in a wallet. It will either return a RPC response containing the block if a payment was received, or `false` if there were no pending payments to receive.
@@ -98,13 +103,10 @@ You can also receive a specific pending block if you know it (you may have disco
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
 account.receive(block_id)
-```
 
-The `receive` method can also be called from a `wallet` too:
+# or:
 
-```ruby
 wallet = Nanook.new.wallet(wallet_id)
-wallet.receive(into: account_id)
 wallet.receive(block_id, into: account_id)
 ```
 
@@ -129,8 +131,8 @@ wallet.unlock(password)
 wallet.change_password(password)
 
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: unique_id)
-account.receive(into: account_id)
-account.receive(pending_block_id, into: account_id)
+wallet.receive(into: account_id)
+wallet.receive(pending_block_id, into: account_id)
 
 wallet.accounts.create
 wallet.accounts.all
