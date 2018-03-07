@@ -96,7 +96,7 @@ wallet = Nanook.new.wallet(wallet_id)
 wallet.receive(into: account_id)
 ```
 
-The `receive` method when called without any arguments, as above, will receive the latest pending payment for an account in a wallet. It will either return a RPC response containing the block if a payment was received, or `false` if there were no pending payments to receive.
+The `receive` method when called as above will receive the latest pending payment for an account in a wallet. It will either return a RPC response containing the block if a payment was received, or `false` if there were no pending payments to receive.
 
 You can also receive a specific pending block if you know it (you may have discovered it through calling `account.pending` for example):
 
