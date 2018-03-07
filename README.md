@@ -169,8 +169,8 @@ account.pending(limit: 1)
 ```ruby
 block = Nanook.new.block(block_id)
 
-block.info                        # Only finds info for verified blocks in the ledger
-block.info(allow_unchecked: true) # Will find info for verified blocks AND unchecked synchronizing blocks
+block.info                        # Verified blocks in the ledger
+block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing blocks
 block.account
 block.chain
 block.chain(limit: 10)
