@@ -10,7 +10,7 @@ require 'nanook/wallet_account'
 
 class Nanook
 
-  def initialize(uri=nil)
+  def initialize(uri=Nanook::Rpc::DEFAULT_URI)
     @rpc = Nanook::Rpc.new(uri)
   end
 

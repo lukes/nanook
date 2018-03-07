@@ -9,8 +9,6 @@ class Nanook
     DEFAULT_URI = "http://localhost:7076"
 
     def initialize(uri=DEFAULT_URI)
-      uri = DEFAULT_URI if uri.nil?
-
       rpc_server = URI(uri)
 
       unless ['http', 'https'].include?(rpc_server.scheme)
