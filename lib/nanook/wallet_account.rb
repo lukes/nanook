@@ -7,7 +7,8 @@ class Nanook
       @rpc = rpc
 
       # An object to delegate account methods that don't
-      # expect a wallet param in the RPC call
+      # expect a wallet param in the RPC call, to allow this
+      # class to support all methods that can be called on Nanook::Account
       @nanook_account_instance = Nanook::Account.new(account, rpc)
     end
 
