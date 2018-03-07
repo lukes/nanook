@@ -54,8 +54,7 @@ class Nanook
 
     def pending?
       response = rpc(:pending_exists, :hash)
-      return false if response.empty?
-      response[:exists] == 1
+      !response.empty? && response[:exists] == 1
     end
 
     def process
@@ -68,8 +67,7 @@ class Nanook
 
     def work_is_valid?(work)
       response = rpc(:work_validate, :hash, work: work)
-      return false if response.empty?
-      response[:valid] == 1
+      !response.empty? && response[:valid] == 1
     end
 
     private
