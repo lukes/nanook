@@ -239,14 +239,14 @@ node.version
 
 ### Keys
 
-### Create private public key pair:
+#### Create private public key pair:
 
 ```ruby
 Nanook.new.key.create
 Nanook.new.key.create(seed: seed, index: 0)
 ```
 
-### Working with a single key
+#### Working with a single key
 
 ```ruby
 key = Nanook.new.key(private_key)
