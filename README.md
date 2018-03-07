@@ -47,13 +47,13 @@ Nanook.new.wallet.create
 Create an account within a wallet:
 
 ```ruby
-Nanook.new.wallet(wallet_id).accounts.create
+Nanook.new.wallet(wallet_id).account.create
 ```
 
 List accounts within a wallet:
 
 ```ruby
-Nanook.new.wallet(wallet_id).accounts.all
+Nanook.new.wallet(wallet_id).accounts
 ```
 
 ### Sending a payment
@@ -134,8 +134,8 @@ wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: uni
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
 
-wallet.accounts.create
-wallet.accounts.all
+wallet.account.create
+wallet.accounts
 wallet.contains?(account_id)
 
 wallet.destroy

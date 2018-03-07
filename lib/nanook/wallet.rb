@@ -9,7 +9,11 @@ class Nanook
     def account(account=nil)
       Nanook::WalletAccount.new(@wallet, account, @rpc)
     end
-    alias_method :accounts, :account
+
+    def accounts
+      wallet_required!
+      rpc(:account_list)
+    end
 
     def create
       rpc(:wallet_create)

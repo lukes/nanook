@@ -17,7 +17,7 @@ describe Nanook::Account do
   }
 
   it "account history requires account" do
-    expect{Nanook.new.accounts(nil).history}.to raise_error(ArgumentError, "Account must be present")
+    expect{Nanook.new.account(nil).history}.to raise_error(ArgumentError, "Account must be present")
   end
 
   it "account history" do
@@ -37,7 +37,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).history
+    Nanook.new.account(account_id).history
   end
 
   it "account history without default count" do
@@ -57,7 +57,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).history(limit: 1)
+    Nanook.new.account(account_id).history(limit: 1)
   end
 
   it "account key" do
@@ -70,7 +70,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).key
+    Nanook.new.account(account_id).key
   end
 
   it "account balance" do
@@ -83,7 +83,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).balance
+    Nanook.new.account(account_id).balance
   end
 
   it "account representative" do
@@ -96,7 +96,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).representative
+    Nanook.new.account(account_id).representative
   end
 
   it "account info" do
@@ -114,7 +114,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).info
+    Nanook.new.account(account_id).info
   end
 
   it "account pending no limit" do
@@ -127,7 +127,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).pending
+    Nanook.new.account(account_id).pending
   end
 
   it "account pending with limit" do
@@ -140,7 +140,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.accounts(account_id).pending(limit: 1)
+    Nanook.new.account(account_id).pending(limit: 1)
   end
 
 end

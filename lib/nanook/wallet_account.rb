@@ -17,11 +17,6 @@ class Nanook
       rpc(:account_create)
     end
 
-    def all
-      wallet_required!
-      rpc(:account_list)
-    end
-
     def destroy
       wallet_required!
       account_required!

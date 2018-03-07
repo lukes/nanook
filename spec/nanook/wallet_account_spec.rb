@@ -18,7 +18,7 @@ describe Nanook::WalletAccount do
     }
   }
 
-  it "wallet account all" do
+  it "wallet accounts" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_list\",\"wallet\":\"#{wallet_id}\"}",
       headers: headers
@@ -28,7 +28,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).accounts.all
+    Nanook.new.wallet(wallet_id).accounts
   end
 
   it "wallet account create" do

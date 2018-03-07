@@ -25,7 +25,6 @@ class Nanook
   def account(account=nil)
     Nanook::Account.new(account, @rpc)
   end
-  alias_method :accounts, :account
 
   def wallet(wallet=nil)
     Nanook::Wallet.new(wallet, @rpc)

@@ -27,8 +27,4 @@ describe Nanook do
     expect(Nanook.new.account).to be_kind_of(Nanook::Account)
   end
 
-  it "should alias accounts to account" do
-    expect(Nanook.new.accounts).to be_kind_of(Nanook::Account)
-  end
-
 end
