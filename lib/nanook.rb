@@ -14,16 +14,20 @@ class Nanook
     @rpc = Nanook::Rpc.new(uri)
   end
 
-  def node
-    Nanook::Node.new(@rpc)
+  def account(account=nil)
+    Nanook::Account.new(account, @rpc)
   end
 
   def block(block=nil)
     Nanook::Block.new(block, @rpc)
   end
 
-  def account(account=nil)
-    Nanook::Account.new(account, @rpc)
+  def key(key=nil)
+    Nanook::Key.new(key, @rpc)
+  end
+
+  def node
+    Nanook::Node.new(@rpc)
   end
 
   def wallet(wallet=nil)

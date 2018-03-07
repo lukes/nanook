@@ -237,6 +237,23 @@ node.stop
 node.version
 ```
 
+### Keys
+
+### Create private public key pair:
+
+```ruby
+Nanook.new.key.create
+Nanook.new.key.create(seed: seed, index: 0)
+```
+
+### Working with a single key
+
+```ruby
+key = Nanook.new.key(private_key)
+
+key.info
+```
+
 ## Nanook Metal
 
 You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol) directly through the `rpc` method. The first argument should match the `action` of the RPC call, and then all remaining parameters are passed in as arguments.

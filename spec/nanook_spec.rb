@@ -19,6 +19,10 @@ describe Nanook do
     expect(Nanook.new.block("some_block")).to be_kind_of(Nanook::Block)
   end
 
+  it "should have a key method" do
+    expect(Nanook.new.key).to be_kind_of(Nanook::Key)
+  end
+
   it "should have a node method" do
     expect(Nanook.new.node).to be_kind_of(Nanook::Node)
   end
