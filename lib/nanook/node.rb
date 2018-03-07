@@ -41,6 +41,8 @@ class Nanook
       rpc(:version)
     end
 
+    private
+
     def rpc(action, params={})
       @rpc.call(action, params)
     end
