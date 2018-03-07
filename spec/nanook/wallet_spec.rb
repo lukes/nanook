@@ -196,4 +196,22 @@ describe Nanook::Wallet do
     Nanook.new.wallet(wallet_id).receive(block_id, into: account_id)
   end
 
+  it "wallet balance" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_balances\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"balances\":{
+        \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\":{
+          \"balance\":\"10000\",
+          \"pending\":\"10000\"
+        }
+      }}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).balance
+  end
+
 end

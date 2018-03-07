@@ -15,6 +15,11 @@ class Nanook
       rpc(:account_list)
     end
 
+    def balance
+      wallet_required!
+      rpc(:wallet_balances)
+    end
+
     def create
       rpc(:wallet_create)
     end

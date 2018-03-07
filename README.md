@@ -130,6 +130,7 @@ wallet.locked?
 wallet.unlock(password)
 wallet.change_password(password)
 
+wallet.balance
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: unique_id)
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
