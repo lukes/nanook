@@ -155,10 +155,13 @@ Nanook.new.wallet(wallet_id).account.create
 account = Nanook.new.wallet(wallet_id).account(account_id)
 
 account.info
+account.ledger
+account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
 account.key
 account.representative
+account.weight
 
 account.balance
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
@@ -176,10 +179,13 @@ account.destroy
 account = Nanook.new.account(account_id)
 
 account.info
+account.ledger
+account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
 account.key
 account.representative
+account.weight
 
 account.balance
 account.pending

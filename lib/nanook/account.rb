@@ -31,9 +31,19 @@ class Nanook
       rpc(:account_info)
     end
 
+    def ledger(limit: 1)
+      account_required!
+      rpc(:ledger, count: limit)
+    end
+
     def pending(limit: 1000)
       account_required!
       rpc(:pending, count: limit)
+    end
+
+    def weight
+      account_required!
+      rpc(:account_weight)
     end
 
     private
