@@ -1,6 +1,5 @@
 require 'webmock/rspec'
 require 'nanook/block'
-require 'nanook/rpc'
 WebMock.disable_net_connect!
 
 describe Nanook::Block do

@@ -1,6 +1,6 @@
 require 'webmock/rspec'
 require 'nanook'
-require 'nanook/rpc'
+require 'nanook/wallet'
 WebMock.disable_net_connect!
 
 describe Nanook::Wallet do
