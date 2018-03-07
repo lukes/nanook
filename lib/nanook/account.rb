@@ -31,7 +31,7 @@ class Nanook
       rpc(:account_info)
     end
 
-    def pending(limit: 10)
+    def pending(limit: 1000)
       account_required!
       rpc(:pending, count: limit)
     end

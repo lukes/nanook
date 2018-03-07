@@ -119,7 +119,7 @@ describe Nanook::Account do
 
   it "account pending no limit" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"10\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
       headers: headers
     ).to_return(
       status: 200,
