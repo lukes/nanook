@@ -8,6 +8,7 @@ describe Nanook::Wallet do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
   let(:wallet_id) { "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F" }
+  let(:block_id) { "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F" }
   let(:headers) {
     {
       'Accept'=>'*/*',
@@ -132,6 +133,67 @@ describe Nanook::Wallet do
     )
 
     Nanook.new.wallet(wallet_id).change_password("test")
+  end
+
+  it "wallet send payment" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"send\",\"wallet\":\"#{wallet_id}\",\"source\":\"#{account_id}\",\"destination\":\"#{account_id}\",\"amount\":\"2000000000000000000000000000000\",\"id\":\"7081e2b8fec9146e\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"block\":\"#{block_id}\"}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).pay(from: account_id, to: account_id, amount: 2, id:"7081e2b8fec9146e")
+  end
+
+  it "wallet account receive latest pending payment" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":[\"#{block_id}\"]}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"receive\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\",\"block\":\"#{block_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"block\":\"#{block_id}\"}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).receive(into: account_id)
+  end
+
+  it "wallet account receive latest pending payment when no payment is pending" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":[]}",
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).receive(into: account_id)).to be false
+  end
+
+  it "wallet account receive payment with block" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"receive\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\",\"block\":\"#{block_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"block\":\"#{block_id}\"}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).receive(block_id, into: account_id)
   end
 
 end

@@ -31,6 +31,16 @@ class Nanook
       !response.empty? && response[:exists] == 1
     end
 
+    def pay(from:, to:, amount:, id:)
+      wallet_required!
+      account(from).pay(to: to, amount: amount, id: id)
+    end
+
+    def receive(block=nil, into:)
+      wallet_required!
+      account(into).receive(block)
+    end
+
     def locked?
       wallet_required!
       response = rpc(:wallet_locked)

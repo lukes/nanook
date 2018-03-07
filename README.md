@@ -58,11 +58,18 @@ Nanook.new.wallet(wallet_id).accounts.all
 
 ### Sending a payment
 
-You send a payment from an account in a wallet.
+You can send a payment from an account in a wallet:
 
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
+```
+
+Or, a wallet:
+
+```ruby
+wallet = Nanook.new.wallet(wallet_id)
+wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: unique_id)
 ```
 
 The `id` can be any string and needs to be unique per payment. It serves an important purpose; it allows you to make this call multiple times with the same `id` and be reassured that you will only ever send that nano payment once. From the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create):
@@ -93,6 +100,14 @@ account = Nanook.new.wallet(wallet_id).account(account_id)
 account.receive(block_id)
 ```
 
+The `receive` method can also be called from a `wallet` too:
+
+```ruby
+wallet = Nanook.new.wallet(wallet_id)
+wallet.receive(into: account_id)
+wallet.receive(block_id, into: account_id)
+```
+
 ## All commands
 
 ### Wallets
@@ -112,6 +127,10 @@ wallet.export
 wallet.locked?
 wallet.unlock(password)
 wallet.change_password(password)
+
+wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: unique_id)
+account.receive(into: account_id)
+account.receive(pending_block_id, into: account_id)
 
 wallet.accounts.create
 wallet.accounts.all
