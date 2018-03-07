@@ -25,23 +25,15 @@ class Nanook
       rpc(:wallet_export)
     end
 
-    def contains(account)
-      wallet_required!
-      rpc(:wallet_contains, account: account)
-    end
-
     def contains?(account)
-      response = contains(account)
+      wallet_required!
+      response = rpc(:wallet_contains, account: account)
       !response.empty? && response[:exists] == 1
     end
 
-    def locked
-      wallet_required!
-      rpc(:wallet_locked)
-    end
-
     def locked?
-      response = locked
+      wallet_required!
+      response = rpc(:wallet_locked)
       !response.empty? && response[:locked] != 0
     end
 

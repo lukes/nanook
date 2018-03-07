@@ -56,20 +56,7 @@ describe Nanook::Wallet do
     Nanook.new.wallet(wallet_id).export
   end
 
-  it "wallet contains" do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"exists\":\"1\"}",
-      headers: {}
-    )
-
-    Nanook.new.wallet(wallet_id).contains(account_id)
-  end
-
-  it "wallet contains?" do
+  it "wallet contains? when true" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\"}",
       headers: headers
@@ -82,17 +69,17 @@ describe Nanook::Wallet do
     expect(Nanook.new.wallet(wallet_id).contains?(account_id)).to be true
   end
 
-  it "wallet locked" do
+  it "wallet contains? when false" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_locked\",\"wallet\":\"#{wallet_id}\"}",
+      body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"locked\":\"0\"}",
+      body: "{\"exists\":\"0\"}",
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).locked
+    expect(Nanook.new.wallet(wallet_id).contains?(account_id)).to be false
   end
 
   it "wallet locked? when it is not locked" do
