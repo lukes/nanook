@@ -3,7 +3,7 @@
 This is a Ruby library for managing a [nano currency](https://nano.org/) node, including making and receiving payments, using the [nano RPC protocol](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol). Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It's awesome. See [https://nano.org/](https://nano.org/).
 
 [![Gem Version](https://badge.fury.io/rb/nanook.svg)](https://badge.fury.io/rb/nanook)
-[![CircleCI](https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shielf)](https://circleci.com/gh/lukes/nanook/tree/master)
+[![CircleCI](https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield)](https://circleci.com/gh/lukes/nanook/tree/master)
 
 
 ## Installation
