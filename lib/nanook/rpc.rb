@@ -7,8 +7,9 @@ class Nanook
   class Rpc
 
     DEFAULT_URI = "http://localhost:7076"
+    DEFAULT_TIMEOUT = 500 # seconds
 
-    def initialize(uri=DEFAULT_URI)
+    def initialize(uri=DEFAULT_URI, timeout:DEFAULT_TIMEOUT)
       rpc_server = URI(uri)
 
       unless ['http', 'https'].include?(rpc_server.scheme)
@@ -16,6 +17,7 @@ class Nanook
       end
 
       @http = Net::HTTP.new(rpc_server.host, rpc_server.port)
+      @http.read_timeout = timeout
       @request = Net::HTTP::Post.new(rpc_server.request_uri, {"user-agent" => "Ruby nanook gem"})
       @request.content_type = "application/json"
     end

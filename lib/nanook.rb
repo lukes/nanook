@@ -15,8 +15,8 @@ require 'nanook/work_peer'
 
 class Nanook
 
-  def initialize(uri=Nanook::Rpc::DEFAULT_URI)
-    @rpc = Nanook::Rpc.new(uri)
+  def initialize(uri=Nanook::Rpc::DEFAULT_URI, timeout:Nanook::Rpc::DEFAULT_URI)
+    @rpc = Nanook::Rpc.new(uri, timeout: timeout)
   end
 
   def account(account=nil)
