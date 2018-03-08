@@ -1,8 +1,3 @@
-require 'webmock/rspec'
-require 'nanook'
-require 'nanook/wallet_account'
-WebMock.disable_net_connect!
-
 describe Nanook::WalletAccount do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }

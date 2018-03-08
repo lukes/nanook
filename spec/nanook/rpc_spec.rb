@@ -1,7 +1,3 @@
-require 'webmock/rspec'
-require 'nanook/rpc'
-WebMock.disable_net_connect!
-
 describe Nanook::Rpc do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
