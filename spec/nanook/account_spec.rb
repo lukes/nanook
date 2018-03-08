@@ -70,7 +70,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).key
+    Nanook.new.account(account_id).public_key
   end
 
   it "account balance" do

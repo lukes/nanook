@@ -6,7 +6,7 @@ class Nanook
       @rpc = rpc
     end
 
-    def create(seed: nil, index: nil)
+    def generate(seed: nil, index: nil)
       if seed.nil? && index.nil?
         rpc(:key_create)
       elsif !seed.nil? && !index.nil?

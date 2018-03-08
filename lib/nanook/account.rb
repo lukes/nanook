@@ -22,7 +22,7 @@ class Nanook
       rpc(:account_history, count: limit)
     end
 
-    def key
+    def public_key
       account_required!
       rpc(:account_key)
     end

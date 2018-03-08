@@ -42,7 +42,7 @@ describe Nanook::Key do
       headers: {}
     )
 
-    Nanook.new.key.create
+    Nanook.new.key.generate
   end
 
   it "should create a key with seed and index correctly" do
@@ -59,12 +59,12 @@ describe Nanook::Key do
       headers: {}
     )
 
-    Nanook.new.key.create(seed: seed, index: 0)
+    Nanook.new.key.generate(seed: seed, index: 0)
   end
 
   it "should raise an exception if seed or index is provided but not both" do
-    expect{Nanook.new.key.create(seed: "seed")}.to raise_error(ArgumentError)
-    expect{Nanook.new.key.create(index: 1)}.to raise_error(ArgumentError)
+    expect{Nanook.new.key.generate(seed: "seed")}.to raise_error(ArgumentError)
+    expect{Nanook.new.key.generate(index: 1)}.to raise_error(ArgumentError)
   end
 
 

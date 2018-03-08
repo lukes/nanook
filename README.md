@@ -165,7 +165,7 @@ account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
-account.key
+account.public_key
 account.delegators
 account.representative
 account.weight
@@ -191,7 +191,7 @@ account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
-account.key
+account.public_key
 account.delegators
 account.representative
 account.weight
@@ -257,8 +257,8 @@ work_peers.list
 #### Create private public key pair:
 
 ```ruby
-Nanook.new.key.create
-Nanook.new.key.create(seed: seed, index: 0)
+Nanook.new.key.generate
+Nanook.new.key.generate(seed: seed, index: 0)
 ```
 
 #### Working with a single key
