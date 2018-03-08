@@ -31,11 +31,18 @@ class Nanook
       if allow_unchecked
         # TODO not actually sure what this response looks like when it's not an unchecked block, assuming its blank
         response = rpc(:unchecked_get, :hash)
-        return response unless response.empty?
-        rpc(:block, :hash)
-      else
-        rpc(:block, :hash)
+        return response unless response[:error] == "Block not found"
+        # Continue on falling backto checked block
       end
+
+      response = rpc(:block, :hash)
+
+      # The contents is a stringified JSON
+      if response[:contents]
+        response[:contents] = JSON.parse(response[:contents])
+      end
+
+      response
     end
 
     def is_valid_work?(work)
