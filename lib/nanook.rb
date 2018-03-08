@@ -5,7 +5,7 @@ Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each {|file| require file }
 
 class Nanook
 
-  def initialize(uri=Nanook::Rpc::DEFAULT_URI, timeout:Nanook::Rpc::DEFAULT_URI)
+  def initialize(uri=Nanook::Rpc::DEFAULT_URI, timeout:Nanook::Rpc::DEFAULT_TIMEOUT)
     @rpc = Nanook::Rpc.new(uri, timeout: timeout)
   end
 
