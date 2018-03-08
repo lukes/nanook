@@ -15,6 +15,8 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'webmock/rspec'
+require 'rspec/collection_matchers'
+require 'pry'
 require 'nanook'
 WebMock.disable_net_connect!
 
