@@ -15,9 +15,13 @@ class Nanook
       rpc(:account_list)
     end
 
-    def balance
+    def balance(account_break_down: false)
       wallet_required!
-      rpc(:wallet_balances)
+      if account_break_down
+        rpc(:wallet_balances)
+      else
+        rpc(:wallet_balance_total)
+      end
     end
 
     def create

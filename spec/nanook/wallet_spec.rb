@@ -196,7 +196,7 @@ describe Nanook::Wallet do
     Nanook.new.wallet(wallet_id).receive(block_id, into: account_id)
   end
 
-  it "wallet balance" do
+  it "wallet balance with account break down" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_balances\",\"wallet\":\"#{wallet_id}\"}",
       headers: headers
@@ -208,6 +208,19 @@ describe Nanook::Wallet do
           \"pending\":\"10000\"
         }
       }}",
+      headers: {}
+    )
+
+    Nanook.new.wallet(wallet_id).balance(account_break_down: true)
+  end
+
+  it "wallet balance with no account break down" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_balance_total\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"balance\":\"10000\",\"pending\":\"10000\"}",
       headers: {}
     )
 
