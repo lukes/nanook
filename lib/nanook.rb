@@ -1,17 +1,7 @@
 require 'net/http'
 require 'uri'
 
-require 'nanook/account'
-require 'nanook/block'
-require 'nanook/error'
-require 'nanook/key'
-require 'nanook/node'
-require 'nanook/rpc'
-require 'nanook/util'
-require 'nanook/version'
-require 'nanook/wallet_account'
-require 'nanook/wallet'
-require 'nanook/work_peer'
+Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each {|file| require file }
 
 class Nanook
 

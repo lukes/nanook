@@ -1,8 +1,6 @@
 require 'json'
 require 'symbolized'
 
-require 'nanook/error'
-
 class Nanook
   class Rpc
 
