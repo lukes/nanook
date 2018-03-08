@@ -46,10 +46,7 @@ jobs:
           command: |
             mkdir /tmp/test-results
 
-            bundle exec rspec spec --format progress \
-                            --format RspecJunitFormatter \
-                            --out /tmp/test-results/rspec.xml \
-                            --format progress
+            bundle exec rspec spec --format progress --out /tmp/test-results/rspec.xml
 
       # collect reports
       - store_test_results:
