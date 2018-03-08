@@ -23,7 +23,21 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).accounts
+    expect(Nanook.new.wallet(wallet_id).accounts).to have(1).item
+  end
+
+  it "wallet accounts when blank" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_list\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\":\"\"}",
+      headers: {}
+    )
+      puts Nanook.new.wallet(wallet_id).accounts
+
+    expect(Nanook.new.wallet(wallet_id).accounts).to eq []
   end
 
   it "wallet account create" do
@@ -36,7 +50,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account.create
+    expect(Nanook.new.wallet(wallet_id).account.create).to eq("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
   end
 
   it "wallet account destroy" do
@@ -49,7 +63,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).destroy
+    expect(Nanook.new.wallet(wallet_id).account(account_id).destroy).to be true
   end
 
   it "wallet account send payment" do
@@ -62,7 +76,8 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, id:"7081e2b8fec9146e")
+    response = Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, id:"7081e2b8fec9146e")
+    expect(response).to eq block_id
   end
 
   it "wallet account receive latest pending payment" do
@@ -84,7 +99,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).receive
+    expect(Nanook.new.wallet(wallet_id).account(account_id).receive).to eq block_id
   end
 
   it "wallet account receive latest pending payment when no payment is pending" do
@@ -110,7 +125,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).receive(block_id)
+    expect(Nanook.new.wallet(wallet_id).account(account_id).receive(block_id)).to eq block_id
   end
 
   it "wallet account balance" do
@@ -123,7 +138,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).balance
+    expect(Nanook.new.wallet(wallet_id).account(account_id).balance).to have_key(:balance)
   end
 
   it "wallet account info" do
@@ -141,7 +156,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).info
+    expect(Nanook.new.wallet(wallet_id).account(account_id).info).to have_key(:frontier)
   end
 
   it "wallet account history" do
@@ -161,7 +176,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).history
+    expect(Nanook.new.wallet(wallet_id).account(account_id).history).to have(1).item
   end
 
   it "wallet account history without default count" do
@@ -181,7 +196,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).history(limit: 1)
+    expect(Nanook.new.wallet(wallet_id).account(account_id).history(limit: 1)).to have(1).item
   end
 
   it "wallet account representative" do
@@ -194,7 +209,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).representative
+    expect(Nanook.new.wallet(wallet_id).account(account_id).representative).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
   end
 
   it "wallet account pending no limit" do
@@ -207,7 +222,20 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).pending
+    expect(Nanook.new.wallet(wallet_id).account(account_id).pending).to have(1).item
+  end
+
+  it "wallet account pending when none are pending" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":\"\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).account(account_id).pending).to eq []
   end
 
   it "wallet account pending with limit" do
@@ -220,7 +248,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).pending(limit: 1)
+    expect(Nanook.new.wallet(wallet_id).account(account_id).pending(limit: 1)).to have(1).item
   end
 
   it "wallet account weight" do
@@ -233,7 +261,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).weight
+    expect(Nanook.new.wallet(wallet_id).account(account_id).weight).to eq 10000
   end
 
   it "wallet account ledger" do
@@ -255,7 +283,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).ledger
+    expect(Nanook.new.wallet(wallet_id).account(account_id).ledger).to have_key :xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n
   end
 
   it "wallet account ledger with limit" do
@@ -277,7 +305,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).ledger(limit: 10)
+    expect(Nanook.new.wallet(wallet_id).account(account_id).ledger(limit: 10)).to have_key :xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n
   end
 
   it "wallet account exists? when exists" do
@@ -319,7 +347,7 @@ describe Nanook::WalletAccount do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).account(account_id).delegators
+    expect(Nanook.new.wallet(wallet_id).account(account_id).delegators).to have_key :xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd
   end
 
 end

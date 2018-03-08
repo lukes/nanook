@@ -32,7 +32,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).history
+    expect(Nanook.new.account(account_id).history.length).to be 1
   end
 
   it "account history without default count" do
@@ -52,7 +52,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).history(limit: 1)
+    expect(Nanook.new.account(account_id).history(limit: 1)).to have(1).item
   end
 
   it "account key" do
@@ -65,7 +65,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).public_key
+    expect(Nanook.new.account(account_id).public_key).to eq "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
   end
 
   it "account balance" do
@@ -78,7 +78,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).balance
+    expect(Nanook.new.account(account_id).balance).to have_key(:balance)
   end
 
   it "account representative" do
@@ -91,7 +91,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).representative
+    expect(Nanook.new.account(account_id).representative).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
   end
 
   it "account info" do
@@ -109,7 +109,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).info
+    expect(Nanook.new.account(account_id).info).to have_key(:frontier)
   end
 
   it "account pending no limit" do
@@ -122,7 +122,20 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).pending
+    expect(Nanook.new.account(account_id).pending).to have(1).item
+  end
+
+  it "account pending with no blocks (empty string response) to be empty" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":\"\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).pending).to eq []
   end
 
   it "account pending with limit" do
@@ -135,7 +148,38 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).pending(limit: 1)
+    expect(Nanook.new.account(account_id).pending(limit: 1)).to have(1).item
+  end
+
+  it "account pending detailed" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":{
+        \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\": {
+             \"amount\": \"6000000000000000000000000000000\",
+             \"source\": \"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr\"
+        }
+    }}",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).pending(detailed: true)).to have_key("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
+  end
+
+  it "account pending detailed with no blocks (empty string response)" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":\"\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).pending(detailed: true)).to eq({})
   end
 
   it "account weight" do
@@ -148,7 +192,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).weight
+    expect(Nanook.new.account(account_id).weight).to eq 10000
   end
 
   it "account ledger" do
@@ -170,7 +214,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).ledger
+    expect(Nanook.new.account(account_id).ledger).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
   end
 
   it "account ledger with limit" do
@@ -192,7 +236,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).ledger(limit: 10)
+    expect(Nanook.new.account(account_id).ledger(limit: 10)).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
   end
 
   it "account exists? when exists" do
@@ -234,7 +278,7 @@ describe Nanook::Account do
       headers: {}
     )
 
-    Nanook.new.account(account_id).delegators
+    expect(Nanook.new.account(account_id).delegators).to have_key(:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
   end
 
 end

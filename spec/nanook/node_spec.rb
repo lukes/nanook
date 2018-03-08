@@ -20,7 +20,7 @@ describe Nanook::Node do
       headers: {}
     )
 
-    Nanook.new.node.block_count
+    expect(Nanook.new.node.block_count).to have_key(:count)
   end
 
   it "should request block_count_type correctly" do
@@ -33,7 +33,7 @@ describe Nanook::Node do
       headers: {}
     )
 
-    Nanook.new.node.block_count_type
+    expect(Nanook.new.node.block_count_type).to have_key(:send)
   end
 
   it "should request bootstrap correctly" do
@@ -42,11 +42,24 @@ describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"send\":\"1000\",\"receive\":\"900\",\"open\":\"100\",\"change\":\"50\"}",
+      body: "{\"success\":\"\"}",
       headers: {}
     )
 
-    Nanook.new.node.bootstrap(address: "::ffff:138.201.94.249", port: "7075")
+    expect(Nanook.new.node.bootstrap(address: "::ffff:138.201.94.249", port: "7075")).to be true
+  end
+
+  it "should request bootstrap correctly when error" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap\",\"address\":\"::ffff:138.201.94.249\",\"port\":\"7075\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"error\":\"\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.bootstrap(address: "::ffff:138.201.94.249", port: "7075")).to be false
   end
 
   it "should request bootstrap_any correctly" do
@@ -59,7 +72,20 @@ describe Nanook::Node do
       headers: {}
     )
 
-    Nanook.new.node.bootstrap_any
+    expect(Nanook.new.node.bootstrap_any).to be true
+  end
+
+  it "should request bootstrap_any correctly when error" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap_any\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"error\":\"\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.bootstrap_any).to be false
   end
 
   it "should request representatives correctly" do
@@ -72,7 +98,7 @@ describe Nanook::Node do
       headers: {}
     )
 
-    Nanook.new.node.representatives
+    expect(Nanook.new.node.representatives).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
   end
 
   it "should request peers correctly" do
@@ -85,7 +111,7 @@ describe Nanook::Node do
       headers: {}
     )
 
-    Nanook.new.node.peers
+    expect(Nanook.new.node.peers).to have_key("[::ffff:172.17.0.1]:32841")
   end
 
   it "should request stop correctly" do
@@ -98,7 +124,7 @@ describe Nanook::Node do
       headers: {}
     )
 
-    Nanook.new.node.stop
+    expect(Nanook.new.node.stop).to be true
   end
 
   it "should request version correctly" do
@@ -111,7 +137,7 @@ describe Nanook::Node do
       headers: {}
     )
 
-    Nanook.new.node.version
+    expect(Nanook.new.node.version).to have_key(:rpc_version)
   end
 
   it "should request frontier_count correctly" do
@@ -124,7 +150,7 @@ describe Nanook::Node do
       headers: {}
     )
 
-    Nanook.new.node.frontier_count
+    expect(Nanook.new.node.frontier_count).to eq 100
   end
 
   it "should show block_count progress as a percentage with sync_process" do

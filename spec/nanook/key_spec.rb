@@ -23,7 +23,7 @@ describe Nanook::Key do
       headers: {}
     )
 
-    Nanook.new.key(key).info
+    expect(Nanook.new.key(key).info).to have_key(:private)
   end
 
   it "should create a key correctly" do
@@ -38,7 +38,7 @@ describe Nanook::Key do
       headers: {}
     )
 
-    Nanook.new.key.generate
+    expect(Nanook.new.key.generate).to have_key(:private)
   end
 
   it "should create a key with seed and index correctly" do
@@ -55,7 +55,7 @@ describe Nanook::Key do
       headers: {}
     )
 
-    Nanook.new.key.generate(seed: seed, index: 0)
+    expect(Nanook.new.key.generate(seed: seed, index: 0)).to have_key(:private)
   end
 
   it "should raise an exception if seed or index is provided but not both" do

@@ -8,7 +8,7 @@ class Nanook
 
     def delegators
       account_required!
-      rpc(:delegators)
+      rpc(:delegators)[:delegators]
     end
 
     def exists?
@@ -19,17 +19,17 @@ class Nanook
 
     def history(limit: 1000)
       account_required!
-      rpc(:account_history, count: limit)
+      rpc(:account_history, count: limit)[:history]
     end
 
     def public_key
       account_required!
-      rpc(:account_key)
+      rpc(:account_key)[:key]
     end
 
     def representative
       account_required!
-      rpc(:account_representative)
+      rpc(:account_representative)[:representative]
     end
 
     def balance
@@ -44,17 +44,24 @@ class Nanook
 
     def ledger(limit: 1)
       account_required!
-      rpc(:ledger, count: limit)
+      rpc(:ledger, count: limit)[:accounts]
     end
 
-    def pending(limit: 1000)
+    # Returns Array of block hashes
+    # Or, with detailed: true, returns Hashes
+    def pending(limit: 1000, detailed: false)
       account_required!
-      rpc(:pending, count: limit)
+
+      args = { count: limit }
+      args[:source] = true if detailed
+
+      response = rpc(:pending, args)[:blocks]
+      Nanook::Util.coerce_empty_string_to_type(response, (detailed ? Hash : Array))
     end
 
     def weight
       account_required!
-      rpc(:account_weight)
+      rpc(:account_weight)[:weight]
     end
 
     private

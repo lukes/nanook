@@ -6,15 +6,15 @@ class Nanook
     end
 
     def add(address:, port:)
-      rpc(:work_peer_add, address: address, port: port)
+      rpc(:work_peer_add, address: address, port: port).has_key?(:success)
     end
 
     def clear
-      rpc(:work_peers_clear)
+      rpc(:work_peers_clear).has_key?(:success)
     end
 
     def list
-      rpc(:work_peers)
+      rpc(:work_peers)[:work_peers]
     end
 
     private

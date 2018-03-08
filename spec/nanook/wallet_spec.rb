@@ -23,7 +23,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet.create
+    expect(Nanook.new.wallet.create).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
   end
 
   it "wallet destroy" do
@@ -36,7 +36,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).destroy
+    expect(Nanook.new.wallet(wallet_id).destroy).to be true
   end
 
   it "wallet export" do
@@ -49,7 +49,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).export
+    expect(Nanook.new.wallet(wallet_id).export).to eq '{"0000000000000000000000000000000000000000000000000000000000000000": "0000000000000000000000000000000000000000000000000000000000000001"}'
   end
 
   it "wallet contains? when true" do
@@ -114,7 +114,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).unlock("test")
+    expect(Nanook.new.wallet(wallet_id).unlock("test")).to be true
   end
 
   it "wallet change password" do
@@ -127,7 +127,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).change_password("test")
+    expect(Nanook.new.wallet(wallet_id).change_password("test")).to be true
   end
 
   it "wallet send payment" do
@@ -140,7 +140,8 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).pay(from: account_id, to: account_id, amount: 2, id:"7081e2b8fec9146e")
+    response = Nanook.new.wallet(wallet_id).pay(from: account_id, to: account_id, amount: 2, id:"7081e2b8fec9146e")
+    expect(response).to eq block_id
   end
 
   it "wallet account receive latest pending payment" do
@@ -162,7 +163,8 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).receive(into: account_id)
+    response = Nanook.new.wallet(wallet_id).receive(into: account_id)
+    expect(response).to eq block_id
   end
 
   it "wallet account receive latest pending payment when no payment is pending" do
@@ -171,7 +173,7 @@ describe Nanook::Wallet do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"blocks\":[]}",
+      body: "{\"blocks\":\"\"}",
       headers: {}
     )
 
@@ -188,7 +190,8 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).receive(block_id, into: account_id)
+    response = Nanook.new.wallet(wallet_id).receive(block_id, into: account_id)
+    expect(response).to eq block_id
   end
 
   it "wallet balance with account break down" do
@@ -206,7 +209,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).balance(account_break_down: true)
+    expect(Nanook.new.wallet(wallet_id).balance(account_break_down: true)).to have_key :xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
   end
 
   it "wallet balance with no account break down" do
@@ -219,7 +222,7 @@ describe Nanook::Wallet do
       headers: {}
     )
 
-    Nanook.new.wallet(wallet_id).balance
+    expect(Nanook.new.wallet(wallet_id).balance).to have_key :balance
   end
 
 end

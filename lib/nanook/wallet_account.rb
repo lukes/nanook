@@ -14,13 +14,13 @@ class Nanook
 
     def create
       wallet_required!
-      rpc(:account_create)
+      rpc(:account_create)[:account]
     end
 
     def destroy
       wallet_required!
       account_required!
-      rpc(:account_remove)
+      rpc(:account_remove)[:removed] == 1
     end
 
     def pay(to:, amount:, id:)
@@ -38,9 +38,10 @@ class Nanook
         id: id
       }
 
-      @rpc.call(:send, p)
+      @rpc.call(:send, p)[:block]
     end
 
+    # Returns false if no block to receive
     def receive(block=nil)
       wallet_required!
       account_required!
@@ -76,8 +77,10 @@ class Nanook
       _receive_with_block(block)
     end
 
+    # Returns block if successful, otherwise false
     def _receive_with_block(block)
-      rpc(:receive, block: block)
+      response = rpc(:receive, block: block)[:block]
+      response.nil? ? false : response
     end
 
     def rpc(action, params={})

@@ -21,7 +21,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).account
+    expect(Nanook.new.block(block).account).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
   end
 
   it "should request cancel_work correctly" do
@@ -34,7 +34,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).cancel_work
+    expect(Nanook.new.block(block).cancel_work).to be true
   end
 
   it "should request chain correctly" do
@@ -43,11 +43,24 @@ describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{}",
+      body: "{\"blocks\":[\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"]}",
       headers: {}
     )
 
-    Nanook.new.block(block).chain
+    expect(Nanook.new.block(block).chain).to have(1).item
+  end
+
+  it "should request chain and when no blocks (empty string response) return an array" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":\"\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).chain).to eq []
   end
 
   it "should request chain with a limit correctly" do
@@ -56,11 +69,11 @@ describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{}",
+      body: "{\"blocks\":[\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"]}",
       headers: {}
     )
 
-    Nanook.new.block(block).chain(limit: 1)
+    expect(Nanook.new.block(block).chain(limit: 1)).to have(1).item
   end
 
   it "should request generate_work correctly" do
@@ -73,7 +86,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).generate_work
+    expect(Nanook.new.block(block).generate_work).to eq "2bf29ef00786a6bc"
   end
 
   it "should request history correctly" do
@@ -91,7 +104,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).history
+    expect(Nanook.new.block(block).history).to have(1).item
   end
 
   it "should request history with a limit correctly" do
@@ -109,7 +122,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).history(limit: 1)
+    expect(Nanook.new.block(block).history(limit: 1)).to have(1).item
   end
 
   it "should request info correctly" do
@@ -122,7 +135,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).info
+    expect(Nanook.new.block(block).info).to have_key(:type)
   end
 
   it "should return block not found correctly on info" do
@@ -135,7 +148,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).info
+    expect(Nanook.new.block(block).info).to have_key(:error)
   end
 
   it "should request info allowing_unchecked when block is unchecked correctly" do
@@ -148,7 +161,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).info(allow_unchecked: true)
+    expect(Nanook.new.block(block).info(allow_unchecked: true)).to have_key(:type)
   end
 
   it "should request info allowing_unchecked when block is not unchecked correctly" do
@@ -170,8 +183,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    response = Nanook.new.block(block).info(allow_unchecked: true)
-    expect(response[:contents][:work]).to eql("633cdda00b9f7265")
+    expect(Nanook.new.block(block).info(allow_unchecked: true)).to have_key(:work)
   end
 
   it "should request republish correctly" do
@@ -187,7 +199,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).republish
+    expect(Nanook.new.block(block).republish).to have(2).items
   end
 
   it "should raise execption if both sources and destinations arguments passed to republish" do
@@ -207,7 +219,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).republish(sources: 2)
+    expect(Nanook.new.block(block).republish(sources: 2)).to have(2).items
   end
 
   it "should request republish with destinations correctly" do
@@ -275,7 +287,7 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).successors
+    expect(Nanook.new.block(block).successors).to have(1).item
   end
 
   it "should request successors with limit correctly" do
@@ -288,7 +300,20 @@ describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).successors(limit: 1)
+    expect(Nanook.new.block(block).successors(limit: 1)).to have(1).item
+  end
+
+  it "should request successors when there are none (empty string response) and return blank array" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":\"\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).successors(limit: 1000)).to be_empty
   end
 
   it "should request is_valid_work? correctly when valid" do

@@ -14,27 +14,27 @@ class Nanook
     end
 
     def bootstrap(address:, port:)
-      rpc(:bootstrap, address: address, port: port)
+      rpc(:bootstrap, address: address, port: port).has_key?(:success)
     end
 
     def bootstrap_any
-      rpc(:bootstrap_any)
+      rpc(:bootstrap_any).has_key?(:success)
     end
 
     def frontier_count
-      rpc(:frontier_count)
+      rpc(:frontier_count)[:count]
     end
 
     def peers
-      rpc(:peers)
+      rpc(:peers)[:peers]
     end
 
     def representatives
-      rpc(:representatives)
+      rpc(:representatives)[:representatives]
     end
 
     def stop
-      rpc(:stop)
+      rpc(:stop).has_key?(:success)
     end
 
     def sync_progress

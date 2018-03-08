@@ -8,23 +8,24 @@ class Nanook
     end
 
     def account
-      rpc(:block_account, :hash)
+      rpc(:block_account, :hash)[:account]
     end
 
     def cancel_work
-      rpc(:work_cancel, :hash)
+      rpc(:work_cancel, :hash).empty?
     end
 
     def chain(limit: 1000)
-      rpc(:chain, :block, count: limit)
+      response = rpc(:chain, :block, count: limit)[:blocks]
+      Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
     def generate_work
-      rpc(:work_generate, :hash)
+      rpc(:work_generate, :hash)[:work]
     end
 
     def history(limit: 1000)
-      rpc(:history, :hash, count: limit)
+      rpc(:history, :hash, count: limit)[:history]
     end
 
     def info(allow_unchecked: false)
@@ -57,7 +58,7 @@ class Nanook
       params[:sources] = sources unless sources.nil?
       params[:count] = 1 unless params.empty?
 
-      rpc(:republish, :hash, params)
+      rpc(:republish, :hash, params)[:blocks]
     end
 
     def pending?
@@ -66,11 +67,12 @@ class Nanook
     end
 
     def process
-      rpc(:process, :block)
+      rpc(:process, :block)[:hash]
     end
 
     def successors(limit: 1000)
-      rpc(:successors, :block, count: limit)
+      response = rpc(:successors, :block, count: limit)[:blocks]
+      Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
     private
@@ -92,8 +94,9 @@ class Nanook
     def _parse_info_response(response)
       # The contents is a stringified JSON
       if response[:contents]
-        response[:contents] = JSON.parse(response[:contents])
+        return JSON.parse(response[:contents]).to_symbolized_hash
       end
+
       response
     end
 
