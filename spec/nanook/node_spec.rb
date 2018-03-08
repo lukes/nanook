@@ -131,4 +131,43 @@ describe Nanook::Node do
     Nanook.new.node.frontier_count
   end
 
+  it "should show block_count progress as a percentage with sync_process" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_count\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"count\":\"1000\",\"unchecked\":\"5\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.sync_progress).to eq 99.50248756218906
+  end
+
+  it "should synced? when true" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_count\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"count\":\"1000\",\"unchecked\":\"0\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.synced?).to be true
+  end
+
+  it "should synced? when false" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_count\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"count\":\"1000\",\"unchecked\":\"5\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.synced?).to be false
+  end
+
 end

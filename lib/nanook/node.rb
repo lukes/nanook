@@ -37,6 +37,20 @@ class Nanook
       rpc(:stop)
     end
 
+    def sync_progress
+      response = rpc(:block_count)
+
+      count = response[:count]
+      unchecked = response[:unchecked]
+      total =  count + unchecked
+
+      count.to_f * 100 / total.to_f
+    end
+
+    def synced?
+      rpc(:block_count)[:unchecked] == 0
+    end
+
     def version
       rpc(:version)
     end
