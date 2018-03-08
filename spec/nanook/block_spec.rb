@@ -122,14 +122,20 @@ describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"contents\":{
-        \"type\":\"open\",
-        \"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"representative\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"source\":\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\",
-        \"work\":\"0000000000000000\",
-        \"signature\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"
-    }}",
+      body: "{\"contents\":\"{\\n    \\\"type\\\": \\\"receive\\\",\\n    \\\"previous\\\": \\\"1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688\\\",\\n    \\\"source\\\": \\\"F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C\\\",\\n    \\\"work\\\": \\\"633cdda00b9f7265\\\",\\n    \\\"signature\\\": \\\"4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06\\\"\\n}\\n\"}",
+      headers: {}
+    )
+
+    Nanook.new.block(block).info
+  end
+
+  it "should return block not found correctly on info" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block\",\"hash\":\"#{block}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"error\":\"Block not found\"}",
       headers: {}
     )
 
@@ -142,14 +148,7 @@ describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"contents\":{
-        \"type\":\"open\",
-        \"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"representative\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"source\":\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\",
-        \"work\":\"0000000000000000\",
-        \"signature\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"
-    }}",
+      body: "{\"contents\":\"{\\n    \\\"type\\\": \\\"receive\\\",\\n    \\\"previous\\\": \\\"1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688\\\",\\n    \\\"source\\\": \\\"F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C\\\",\\n    \\\"work\\\": \\\"633cdda00b9f7265\\\",\\n    \\\"signature\\\": \\\"4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06\\\"\\n}\\n\"}",
       headers: {}
     )
 
@@ -162,7 +161,7 @@ describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{}",
+      body: "{\"error\":\"Block not found\"}",
       headers: {}
     )
 
@@ -171,19 +170,12 @@ describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"contents\":{
-        \"type\":\"open\",
-        \"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"representative\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"source\":\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\",
-        \"work\":\"0000000000000000\",
-        \"signature\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"
-    }}",
+      body: "{\"contents\":\"{\\n    \\\"type\\\": \\\"receive\\\",\\n    \\\"previous\\\": \\\"1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688\\\",\\n    \\\"source\\\": \\\"F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C\\\",\\n    \\\"work\\\": \\\"633cdda00b9f7265\\\",\\n    \\\"signature\\\": \\\"4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06\\\"\\n}\\n\"}",
       headers: {}
     )
 
     response = Nanook.new.block(block).info(allow_unchecked: true)
-    expect(response[:contents][:account]).to eql("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
+    expect(response[:contents][:work]).to eql("633cdda00b9f7265")
   end
 
   it "should request republish correctly" do
