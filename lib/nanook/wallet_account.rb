@@ -46,7 +46,13 @@ class Nanook
         id: id
       }
 
-      @rpc.call(:send, p)[:block]
+      response = @rpc.call(:send, p)
+
+      if response[:error]
+        response
+      else
+        response[:block]
+      end
     end
 
     # Returns false if no block to receive
