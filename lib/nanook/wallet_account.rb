@@ -10,6 +10,14 @@ class Nanook
       # expect a wallet param in the RPC call, to allow this
       # class to support all methods that can be called on Nanook::Account
       @nanook_account_instance = Nanook::Account.new(account, rpc)
+
+      # Wallet instance to call contains? on to check account
+      # is in wallet
+      @nanook_wallet_instance = Nanook::Wallet.new(wallet, rpc)
+
+      # Contains known valid accounts in this wallet so we don't
+      # need to requery
+      @known_valid_accounts = []
     end
 
     def create
@@ -100,6 +108,15 @@ class Nanook
     def account_required!
       if @account.nil?
         raise ArgumentError.new("Account must be present")
+      end
+
+      # validate account is in wallet
+      return if @known_valid_accounts.include?(@account)
+
+      if @nanook_wallet_instance.contains?(@account)
+        @known_valid_accounts << @account
+      else
+        raise ArgumentError.new("Account does not exist in wallet. Account: #{@account}, wallet: #{@wallet}")
       end
     end
 

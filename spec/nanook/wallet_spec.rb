@@ -13,6 +13,19 @@ RSpec.describe Nanook::Wallet do
     }
   }
 
+  def stub_valid_account_check
+    stub_request(:post, "http://localhost:7076/").
+    with(
+      body: "{\"action\":\"wallet_contains\",\"wallet\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: {
+      'Accept'=>'*/*',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Content-Type'=>'application/json',
+      'User-Agent'=>'Ruby nanook gem'
+      }).
+    to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
+  end
+
   it "wallet create" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_create\"}",
@@ -131,6 +144,8 @@ RSpec.describe Nanook::Wallet do
   end
 
   it "wallet send payment" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"send\",\"wallet\":\"#{wallet_id}\",\"source\":\"#{account_id}\",\"destination\":\"#{account_id}\",\"amount\":\"2000000000000000000000000000000\",\"id\":\"7081e2b8fec9146e\"}",
       headers: headers
@@ -145,6 +160,8 @@ RSpec.describe Nanook::Wallet do
   end
 
   it "wallet account receive latest pending payment" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
       headers: headers
@@ -168,6 +185,8 @@ RSpec.describe Nanook::Wallet do
   end
 
   it "wallet account receive latest pending payment when no payment is pending" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
       headers: headers
@@ -181,6 +200,8 @@ RSpec.describe Nanook::Wallet do
   end
 
   it "wallet account receive payment with block" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"receive\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\",\"block\":\"#{block_id}\"}",
       headers: headers

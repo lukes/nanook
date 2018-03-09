@@ -35,6 +35,7 @@ class Nanook
       true
     end
 
+    # Returns string of JSON
     def export
       wallet_required!
       rpc(:wallet_export)[:json]
