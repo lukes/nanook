@@ -14,6 +14,8 @@ class Nanook
       # Wallet instance to call contains? on to check account
       # is in wallet
       @nanook_wallet_instance = Nanook::Wallet.new(@rpc, @wallet)
+
+      @known_valid_accounts = []
     end
 
     def create
@@ -24,7 +26,9 @@ class Nanook
     def destroy
       wallet_required!
       account_required!
-      rpc(:account_remove)[:removed] == 1
+      (rpc(:account_remove)[:removed] == 1).tap do |success|
+        @known_valid_accounts.delete(@account) if success
+      end
     end
 
     def pay(to:, amount:, id:)
@@ -113,7 +117,6 @@ class Nanook
       end
 
       # validate account is in wallet
-      @known_valid_accounts ||= []
       return if @known_valid_accounts.include?(@account)
 
       if @nanook_wallet_instance.contains?(@account)
