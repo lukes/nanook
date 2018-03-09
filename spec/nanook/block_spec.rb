@@ -1,4 +1,4 @@
-describe Nanook::Block do
+RSpec.describe Nanook::Block do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:block) { "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F" }

@@ -1,4 +1,4 @@
-describe Nanook::Key do
+RSpec.describe Nanook::Key do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:headers) {

@@ -1,4 +1,4 @@
-describe Nanook::Account do
+RSpec.describe Nanook::Account do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
