@@ -113,6 +113,7 @@ class Nanook
       end
 
       # validate account is in wallet
+      @known_valid_accounts ||= []
       return if @known_valid_accounts.include?(@account)
 
       if @nanook_wallet_instance.contains?(@account)

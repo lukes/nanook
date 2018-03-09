@@ -49,11 +49,13 @@ class Nanook
 
     def pay(from:, to:, amount:, id:)
       wallet_required!
+      validate_wallet_contains_account!(from)
       account(from).pay(to: to, amount: amount, id: id)
     end
 
     def receive(block=nil, into:)
       wallet_required!
+      validate_wallet_contains_account!(into)
       account(into).receive(block)
     end
 
@@ -88,6 +90,17 @@ class Nanook
     def wallet_required!
       if @wallet.nil?
         raise ArgumentError.new("Wallet must be present")
+      end
+    end
+
+    def validate_wallet_contains_account!(account)
+      @known_valid_accounts ||= []
+      return if @known_valid_accounts.include?(account)
+
+      if contains?(account)
+        @known_valid_accounts << account
+      else
+        raise ArgumentError.new("Account does not exist in wallet. Account: #{account}, wallet: #{@wallet}")
       end
     end
 
