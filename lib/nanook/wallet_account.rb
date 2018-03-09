@@ -1,23 +1,19 @@
 class Nanook
   class WalletAccount
 
-    def initialize(wallet, account, rpc)
+    def initialize(rpc, wallet, account)
+      @rpc = rpc
       @wallet = wallet
       @account = account
-      @rpc = rpc
 
       # An object to delegate account methods that don't
       # expect a wallet param in the RPC call, to allow this
       # class to support all methods that can be called on Nanook::Account
-      @nanook_account_instance = Nanook::Account.new(account, rpc)
+      @nanook_account_instance = Nanook::Account.new(@rpc, @account)
 
       # Wallet instance to call contains? on to check account
       # is in wallet
-      @nanook_wallet_instance = Nanook::Wallet.new(wallet, rpc)
-
-      # Contains known valid accounts in this wallet so we don't
-      # need to requery
-      @known_valid_accounts = []
+      @nanook_wallet_instance = Nanook::Wallet.new(@rpc, @wallet)
     end
 
     def create

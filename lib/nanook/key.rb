@@ -1,9 +1,9 @@
 class Nanook
   class Key
 
-    def initialize(key=nil, rpc)
-      @key = key
+    def initialize(rpc, key=nil)
       @rpc = rpc
+      @key = key
     end
 
     def generate(seed: nil, index: nil)

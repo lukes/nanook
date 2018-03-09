@@ -1,9 +1,9 @@
 class Nanook
   class Block
 
-    def initialize(block, rpc)
-      @block = block
+    def initialize(rpc, block)
       @rpc = rpc
+      @block = block
       block_required! # All methods expect a block
     end
 

@@ -1,13 +1,13 @@
 class Nanook
   class Wallet
 
-    def initialize(wallet, rpc)
-      @wallet = wallet
+    def initialize(rpc, wallet)
       @rpc = rpc
+      @wallet = wallet
     end
 
     def account(account=nil)
-      Nanook::WalletAccount.new(@wallet, account, @rpc)
+      Nanook::WalletAccount.new(@rpc, @wallet, account)
     end
 
     def accounts

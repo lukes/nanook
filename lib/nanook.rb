@@ -10,15 +10,15 @@ class Nanook
   end
 
   def account(account=nil)
-    Nanook::Account.new(account, @rpc)
+    Nanook::Account.new(@rpc, account)
   end
 
   def block(block=nil)
-    Nanook::Block.new(block, @rpc)
+    Nanook::Block.new(@rpc, block)
   end
 
   def key(key=nil)
-    Nanook::Key.new(key, @rpc)
+    Nanook::Key.new(@rpc, key)
   end
 
   def node
@@ -26,7 +26,7 @@ class Nanook
   end
 
   def wallet(wallet=nil)
-    Nanook::Wallet.new(wallet, @rpc)
+    Nanook::Wallet.new(@rpc, wallet)
   end
 
   def work_peers

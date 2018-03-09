@@ -1,9 +1,9 @@
 class Nanook
   class Account
 
-    def initialize(account, rpc)
-      @account = account
+    def initialize(rpc, account)
       @rpc = rpc
+      @account = account
     end
 
     def delegators
