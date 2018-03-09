@@ -19,7 +19,7 @@ class Nanook
     def balance(account_break_down: false)
       wallet_required!
       if account_break_down
-        rpc(:wallet_balances)[:balances]
+        Nanook::Util.coerce_empty_string_to_type(rpc(:wallet_balances)[:balances], Hash)
       else
         rpc(:wallet_balance_total)
       end
