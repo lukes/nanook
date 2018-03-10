@@ -1,6 +1,6 @@
 # Nanook
 
-This is a Ruby library for managing a [nano currency](https://nano.org/) node, including making and receiving payments, using the [nano RPC protocol](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol). Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It's awesome. See [https://nano.org/](https://nano.org/).
+This is a Ruby library for managing a [nano currency](https://nano.org/) node, including making and receiving payments, using the [nano RPC protocol](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol). Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It's awesome. See [https://nano.org](https://nano.org/).
 
 [![Gem Version](https://badge.fury.io/rb/nanook.svg)](https://badge.fury.io/rb/nanook)
 [![CircleCI](https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield)](https://circleci.com/gh/lukes/nanook/tree/master)
@@ -26,7 +26,7 @@ Or install it yourself as:
 
 ## Initializing
 
-Nanook will by default connect to `http://localhost:7076`. If you're using Nanook from the nano node itself this will generally work fine.
+Nanook will by default connect to `http://localhost:7076`.
 
 ```ruby
 nanook = Nanook.new
@@ -35,7 +35,7 @@ nanook = Nanook.new
 To connect to another host instead:
 
 ```ruby
-nanook = Nanook.new("http://example.com:7076")
+nanook = Nanook.new("http://ip6-localhost:7076")
 ```
 
 ## Basics
