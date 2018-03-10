@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nanook::Node</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/github.css" type="text/css" media="screen" />
+<script src="../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="Nanook::Node">
+
+  
+
+    <meta name="keywords" content="Nanook::Node class">
+  
+    <meta name="keywords" content="new, block_count, block_count_type, bootstrap, bootstrap_any, frontier_count, peers, representatives, stop, sync_progress, synced?, version">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            Nanook::Node
+            
+                <span class="parent">&lt;
+                    
+                    Object
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../../files/lib/nanook/node_rb.html">lib/nanook/node.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>B</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-block_count">block_count</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-block_count_type">block_count_type</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-bootstrap">bootstrap</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-bootstrap_any">bootstrap_any</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>F</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-frontier_count">frontier_count</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-new">new</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>P</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-peers">peers</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>R</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-representatives">representatives</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>S</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-stop">stop</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-sync_progress">sync_progress</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-synced-3F">synced?</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>V</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-version">version</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+      <div class="sectiontitle">Class Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-c-new">
+            
+              <b>new</b>(rpc)
+            
+            <a href="../../classes/Nanook/Node.html#method-c-new" name="method-c-new" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-new_source')" id="l_method-c-new_source">show</a>
+                
+              </p>
+              <div id="method-c-new_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 4</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">rpc</span>)
+  <span class="ruby-ivar">@rpc</span> = <span class="ruby-identifier">rpc</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+      <div class="sectiontitle">Instance Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-i-block_count">
+            
+              <b>block_count</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-block_count" name="method-i-block_count" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-block_count_source')" id="l_method-i-block_count_source">show</a>
+                
+              </p>
+              <div id="method-i-block_count_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">block_count</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:block_count</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-block_count_type">
+            
+              <b>block_count_type</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-block_count_type" name="method-i-block_count_type" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-block_count_type_source')" id="l_method-i-block_count_type_source">show</a>
+                
+              </p>
+              <div id="method-i-block_count_type_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">block_count_type</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:block_count_type</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-bootstrap">
+            
+              <b>bootstrap</b>(address:, port:)
+            
+            <a href="../../classes/Nanook/Node.html#method-i-bootstrap" name="method-i-bootstrap" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-bootstrap_source')" id="l_method-i-bootstrap_source">show</a>
+                
+              </p>
+              <div id="method-i-bootstrap_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 16</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">bootstrap</span>(<span class="ruby-value">address:</span>, <span class="ruby-value">port:</span>)
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:bootstrap</span>, <span class="ruby-value">address:</span> <span class="ruby-identifier">address</span>, <span class="ruby-value">port:</span> <span class="ruby-identifier">port</span>).<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:success</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-bootstrap_any">
+            
+              <b>bootstrap_any</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-bootstrap_any" name="method-i-bootstrap_any" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-bootstrap_any_source')" id="l_method-i-bootstrap_any_source">show</a>
+                
+              </p>
+              <div id="method-i-bootstrap_any_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">bootstrap_any</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:bootstrap_any</span>).<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:success</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-frontier_count">
+            
+              <b>frontier_count</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-frontier_count" name="method-i-frontier_count" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-frontier_count_source')" id="l_method-i-frontier_count_source">show</a>
+                
+              </p>
+              <div id="method-i-frontier_count_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">frontier_count</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:frontier_count</span>)[<span class="ruby-value">:count</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-peers">
+            
+              <b>peers</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-peers" name="method-i-peers" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-peers_source')" id="l_method-i-peers_source">show</a>
+                
+              </p>
+              <div id="method-i-peers_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">peers</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:peers</span>)[<span class="ruby-value">:peers</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-representatives">
+            
+              <b>representatives</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-representatives" name="method-i-representatives" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-representatives_source')" id="l_method-i-representatives_source">show</a>
+                
+              </p>
+              <div id="method-i-representatives_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 32</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">representatives</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:representatives</span>)[<span class="ruby-value">:representatives</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-stop">
+            
+              <b>stop</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-stop" name="method-i-stop" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-stop_source')" id="l_method-i-stop_source">show</a>
+                
+              </p>
+              <div id="method-i-stop_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 36</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">stop</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:stop</span>).<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:success</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-sync_progress">
+            
+              <b>sync_progress</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-sync_progress" name="method-i-sync_progress" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-sync_progress_source')" id="l_method-i-sync_progress_source">show</a>
+                
+              </p>
+              <div id="method-i-sync_progress_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sync_progress</span>
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:block_count</span>)
+
+  <span class="ruby-identifier">count</span> = <span class="ruby-identifier">response</span>[<span class="ruby-value">:count</span>]
+  <span class="ruby-identifier">unchecked</span> = <span class="ruby-identifier">response</span>[<span class="ruby-value">:unchecked</span>]
+  <span class="ruby-identifier">total</span> =  <span class="ruby-identifier">count</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">unchecked</span>
+
+  <span class="ruby-identifier">count</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">*</span> <span class="ruby-value">100</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">total</span>.<span class="ruby-identifier">to_f</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-synced-3F">
+            
+              <b>synced?</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-synced-3F" name="method-i-synced-3F" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-synced-3F_source')" id="l_method-i-synced-3F_source">show</a>
+                
+              </p>
+              <div id="method-i-synced-3F_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 50</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">synced?</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:block_count</span>)[<span class="ruby-value">:unchecked</span>] <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-version">
+            
+              <b>version</b>()
+            
+            <a href="../../classes/Nanook/Node.html#method-i-version" name="method-i-version" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-version_source')" id="l_method-i-version_source">show</a>
+                
+              </p>
+              <div id="method-i-version_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/node.rb, line 54</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">version</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:version</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>

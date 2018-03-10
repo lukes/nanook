@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nanook</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
+<script src="../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="Nanook">
+
+  
+    
+    <meta name="description" content="Initializing  Connect to the default RPC host at localhost:7076 and with a timeout of 500 seconds:  nanook = Nanook.new   To connect to another host instead:  nanook = Nanook.">
+    <meta property="og:description" content="Initializing  Connect to the default RPC host at localhost:7076 and with a timeout of 500 seconds:  nanook = Nanook.new   To connect to another host instead:  nanook = Nanook.">
+  
+
+    <meta name="keywords" content="Nanook class">
+  
+    <meta name="keywords" content="new, account, block, key, node, wallet, work_peers">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            Nanook
+            
+                <span class="parent">&lt;
+                    
+                    Object
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../files/lib/nanook_rb.html">lib/nanook.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/account_rb.html">lib/nanook/account.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/block_rb.html">lib/nanook/block.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/error_rb.html">lib/nanook/error.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/key_rb.html">lib/nanook/key.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/node_rb.html">lib/nanook/node.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/rpc_rb.html">lib/nanook/rpc.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/util_rb.html">lib/nanook/util.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/version_rb.html">lib/nanook/version.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/wallet_rb.html">lib/nanook/wallet.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/wallet_account_rb.html">lib/nanook/wallet_account.rb</a></li>
+            
+            <li><a href="../files/lib/nanook/work_peer_rb.html">lib/nanook/work_peer.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+    <div class="description">
+      
+<h4 id="class-Nanook-label-Initializing">Initializing</h4>
+
+<p>Connect to the default RPC host at <a
+href="http://localhost:7076">localhost:7076</a> and with a timeout of 500
+seconds:</p>
+
+<pre><code>nanook = Nanook.new
+</code></pre>
+
+<p>To connect to another host instead:</p>
+
+<pre><code>nanook = Nanook.new(&quot;http://ip6-localhost.com:7076&quot;)
+</code></pre>
+
+<p>To give a specific timeout value:</p>
+
+<pre><code>Nanook.new(timeout: 600)
+Nanook.new(&quot;http://ip6-localhost.com:7076&quot;, timeout: 600)
+</code></pre>
+
+    </div>
+  
+
+
+  
+
+
+  
+  
+
+
+  
+    <!-- Namespace -->
+    <div class="sectiontitle">Namespace</div>
+    <ul>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/Account.html">Nanook::Account</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/Block.html">Nanook::Block</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/Error.html">Nanook::Error</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/Key.html">Nanook::Key</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/Node.html">Nanook::Node</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/Rpc.html">Nanook::Rpc</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/Util.html">Nanook::Util</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/Wallet.html">Nanook::Wallet</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/WalletAccount.html">Nanook::WalletAccount</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="Nanook/WorkPeer.html">Nanook::WorkPeer</a>
+        </li>
+      
+    </ul>
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>A</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-account">account</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>B</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-block">block</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>K</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-key">key</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-new">new</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-node">node</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>W</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-wallet">wallet</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-work_peers">work_peers</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+      <!-- Section constants -->
+      <div class="sectiontitle">Constants</div>
+      <table border='0' cellpadding='5'>
+        
+          <tr valign='top'>
+            <td class="attr-name">VERSION</td>
+            <td>=</td>
+            <td class="attr-value">&quot;0.7.0&quot;</td>
+          </tr>
+          
+            <tr valign='top'>
+              <td>&nbsp;</td>
+              <td colspan="2" class="attr-desc"></td>
+            </tr>
+          
+        
+      </table>
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+      <div class="sectiontitle">Class Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-c-new">
+            
+              <b>new</b>(uri=Nanook::Rpc::DEFAULT_URI, timeout:Nanook::Rpc::DEFAULT_TIMEOUT)
+            
+            <a href="../classes/Nanook.html#method-c-new" name="method-c-new" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <h4 id="method-c-new-label-Arguments">Arguments</h4>
+<ul><li>
+<p><code>uri</code> - RPC host to connect to (default is “<a
+href="http://localhost:7076">localhost:7076</a>”)</p>
+</li><li>
+<p><code>timeout:</code> - Connection timeout in number of seconds (default is
+500)</p>
+</li></ul>
+
+<h4 id="method-c-new-label-Examples">Examples</h4>
+
+<pre><code>Nanook.new # Connect to http://localhost:7076 with 500s timeout
+
+Nanook.new(timeout: 600)
+Nanook.new(&quot;http://ip6-localhost.com:7076&quot;, timeout: 600)
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-new_source')" id="l_method-c-new_source">show</a>
+                
+              </p>
+              <div id="method-c-new_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook.rb, line 33</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">uri</span>=<span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Rpc</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_URI</span>, <span class="ruby-value">timeout:</span><span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Rpc</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_TIMEOUT</span>)
+  <span class="ruby-ivar">@rpc</span> = <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Rpc</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-value">timeout:</span> <span class="ruby-identifier">timeout</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+      <div class="sectiontitle">Instance Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-i-account">
+            
+              <b>account</b>(account=nil)
+            
+            <a href="../classes/Nanook.html#method-i-account" name="method-i-account" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns a <a href="Nanook/Account.html">Nanook::Account</a> instance.</p>
+
+<pre><code>nanook = Nanook.new
+
+account = nanook.account
+account = nanook.account(&quot;xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000&quot;)
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-account_source')" id="l_method-i-account_source">show</a>
+                
+              </p>
+              <div id="method-i-account_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">account</span>(<span class="ruby-identifier">account</span>=<span class="ruby-keyword">nil</span>)
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Account</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>, <span class="ruby-identifier">account</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-block">
+            
+              <b>block</b>(block=nil)
+            
+            <a href="../classes/Nanook.html#method-i-block" name="method-i-block" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-block_source')" id="l_method-i-block_source">show</a>
+                
+              </p>
+              <div id="method-i-block_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook.rb, line 48</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">block</span>(<span class="ruby-identifier">block</span>=<span class="ruby-keyword">nil</span>)
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Block</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>, <span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-key">
+            
+              <b>key</b>(key=nil)
+            
+            <a href="../classes/Nanook.html#method-i-key" name="method-i-key" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-key_source')" id="l_method-i-key_source">show</a>
+                
+              </p>
+              <div id="method-i-key_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook.rb, line 52</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">key</span>(<span class="ruby-identifier">key</span>=<span class="ruby-keyword">nil</span>)
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>, <span class="ruby-identifier">key</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-node">
+            
+              <b>node</b>()
+            
+            <a href="../classes/Nanook.html#method-i-node" name="method-i-node" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-node_source')" id="l_method-i-node_source">show</a>
+                
+              </p>
+              <div id="method-i-node_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">node</span>
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Node</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-wallet">
+            
+              <b>wallet</b>(wallet=nil)
+            
+            <a href="../classes/Nanook.html#method-i-wallet" name="method-i-wallet" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-wallet_source')" id="l_method-i-wallet_source">show</a>
+                
+              </p>
+              <div id="method-i-wallet_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">wallet</span>(<span class="ruby-identifier">wallet</span>=<span class="ruby-keyword">nil</span>)
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Wallet</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>, <span class="ruby-identifier">wallet</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-work_peers">
+            
+              <b>work_peers</b>()
+            
+            <a href="../classes/Nanook.html#method-i-work_peers" name="method-i-work_peers" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-work_peers_source')" id="l_method-i-work_peers_source">show</a>
+                
+              </p>
+              <div id="method-i-work_peers_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">work_peers</span>
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">WorkPeer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>

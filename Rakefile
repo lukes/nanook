@@ -14,7 +14,7 @@ RDoc::Task.new do |rdoc|
   rdoc.title = "Nanook #{Nanook::VERSION} Documentation"
   rdoc.rdoc_files.include("README.md")
   rdoc.rdoc_files.include('lib/**/*.rb')
-  rdoc.rdoc_dir = 'docs' # name of output directory
+  rdoc.rdoc_dir = "docs/#{Nanook::VERSION}" # name of output directory
   rdoc.generator = 'sdoc' # explictly set the sdoc generator
   rdoc.template = 'rails' # template used on api.rubyonrails.org
 end

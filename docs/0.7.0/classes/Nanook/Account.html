@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nanook::Account</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/github.css" type="text/css" media="screen" />
+<script src="../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="Nanook::Account">
+
+  
+    
+    <meta name="description" content="The Nanook::Account class contains methods to discover publicly-available information about accounts on the nano network.">
+    <meta property="og:description" content="The Nanook::Account class contains methods to discover publicly-available information about accounts on the nano network.">
+  
+
+    <meta name="keywords" content="Nanook::Account class">
+  
+    <meta name="keywords" content="new, delegators, exists?, history, public_key, representative, balance, info, ledger, pending, weight">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            Nanook::Account
+            
+                <span class="parent">&lt;
+                    
+                    Object
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../../files/lib/nanook/account_rb.html">lib/nanook/account.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+    <div class="description">
+      
+<p>The <code>Nanook::Account</code> class contains methods to discover
+publicly-available information about accounts on the nano network.</p>
+
+<p>Initialize this class through the convenient <a
+href="../Nanook.html#method-i-account">Nanook#account</a> method:</p>
+
+<pre><code>nanook = Nanook.new
+account = nanook.account(&quot;xrb_...&quot;)
+</code></pre>
+
+<p>Or compose the longhand way like this:</p>
+
+<pre><code>rpc_conn = Nanook::Rpc.new
+account = Nanook::Account.new(rpc_conn, &quot;xrb_...&quot;)
+</code></pre>
+
+    </div>
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>B</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-balance">balance</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>D</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-delegators">delegators</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>E</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-exists-3F">exists?</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>H</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-history">history</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>I</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-info">info</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>L</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-ledger">ledger</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-new">new</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>P</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-pending">pending</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-public_key">public_key</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>R</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-representative">representative</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>W</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-weight">weight</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+      <div class="sectiontitle">Class Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-c-new">
+            
+              <b>new</b>(rpc, account)
+            
+            <a href="../../classes/Nanook/Account.html#method-c-new" name="method-c-new" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-new_source')" id="l_method-c-new_source">show</a>
+                
+              </p>
+              <div id="method-c-new_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">rpc</span>, <span class="ruby-identifier">account</span>)
+  <span class="ruby-ivar">@rpc</span> = <span class="ruby-identifier">rpc</span>
+  <span class="ruby-ivar">@account</span> = <span class="ruby-identifier">account</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+      <div class="sectiontitle">Instance Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-i-balance">
+            
+              <b>balance</b>()
+            
+            <a href="../../classes/Nanook/Account.html#method-i-balance" name="method-i-balance" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns a Hash containing the account&#39;s balance. Units are in <a
+href="https://nano.org/en/faq#what-are-nano-units-">raw</a>.</p>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:balance</code></td><td>
+<p><a href="Account.html">Account</a> balance</p>
+</td></tr><tr><td class='label'><code>:pending</code></td><td>
+<p>Amount pending and not yet received by the account</p>
+</td></tr></tbody></table>
+
+<h5 id="method-i-balance-label-Example+response">Example response</h5>
+
+<pre><code>{
+ &quot;balance&quot;: &quot;10000&quot;,
+ &quot;pending&quot;: &quot;10000&quot;
+}
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-balance_source')" id="l_method-i-balance_source">show</a>
+                
+              </p>
+              <div id="method-i-balance_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 110</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">balance</span>
+  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_balance</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-delegators">
+            
+              <b>delegators</b>()
+            
+            <a href="../../classes/Nanook/Account.html#method-i-delegators" name="method-i-delegators" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <h4 id="method-i-delegators-label-Example+response">Example response</h4>
+
+<pre><code>{
+  &quot;xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd&quot;: &quot;500000000000000000000000000000000000&quot;,
+  &quot;xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn&quot;: &quot;961647970820730000000000000000000000&quot;
+}
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-delegators_source')" id="l_method-i-delegators_source">show</a>
+                
+              </p>
+              <div id="method-i-delegators_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 27</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delegators</span>
+  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:delegators</span>)[<span class="ruby-value">:delegators</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-exists-3F">
+            
+              <b>exists?</b>()
+            
+            <a href="../../classes/Nanook/Account.html#method-i-exists-3F" name="method-i-exists-3F" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns a boolean indicating if account is known. Note, the reliability of
+the check depends on the node host having synchronized itself with most of
+the blocks on the nano network, otherwise you may get a false
+<code>false</code>. You can check if a node&#39;s synchronization is
+particular low using <a
+href="Node.html#method-i-sync_progress">Nanook::Node#sync_progress</a>.</p>
+
+<h4 id="method-i-exists-3F-label-Example+response">Example response</h4>
+
+<pre><code>true
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-exists-3F_source')" id="l_method-i-exists-3F_source">show</a>
+                
+              </p>
+              <div id="method-i-exists-3F_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">exists?</span>
+  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:validate_account_number</span>)
+  <span class="ruby-operator">!</span><span class="ruby-identifier">response</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">:valid</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-history">
+            
+              <b>history</b>(limit: 1000)
+            
+            <a href="../../classes/Nanook/Account.html#method-i-history" name="method-i-history" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns an account&#39;s history of send and receive payments. Amounts are
+in <a href="https://nano.org/en/faq#what-are-nano-units-">raw</a>.</p>
+
+<h4 id="method-i-history-label-Arguments">Arguments</h4>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<p>Integer representing the maximum number of history items to return (default
+is 1000)</p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-history-label-Example">Example</h4>
+
+<pre><code>account.history
+account.history(limit: 1)
+</code></pre>
+
+<h4 id="method-i-history-label-Example+response">Example response</h4>
+
+<pre><code>[
+  {
+   :type=&gt;&quot;send&quot;,
+   :account=&gt;&quot;xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq&quot;,
+   :amount=&gt;200000000000000000000000000000,
+   :hash=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;
+  },
+  {
+   :type=&gt;&quot;receive&quot;,
+   :account=&gt;&quot;xrb_1niabkx3gbxit5j5yyqcpas71dkffggbr6zpd3heui8rpoocm5xqbdwq44oh&quot;,
+   :amount=&gt;7836413000000000000000000000000,
+   :hash=&gt;&quot;16743E8FF52F454E876E68EDD11F23094DCB96795A3B7F32F74F88563ACDDB04&quot;
+  }
+]
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-history_source')" id="l_method-i-history_source">show</a>
+                
+              </p>
+              <div id="method-i-history_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 74</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">history</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
+  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_history</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:history</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-info">
+            
+              <b>info</b>(detailed: false)
+            
+            <a href="../../classes/Nanook/Account.html#method-i-info" name="method-i-info" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns a Hash containing the following information about an account:</p>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:frontier</code></td><td>
+<p>The latest block hash</p>
+</td></tr><tr><td class='label'><code>:open_block</code></td><td>
+<p>The first block in every account&#39;s blockchain. When this block was
+published the account was officially open</p>
+</td></tr><tr><td class='label'><code>:representative_block</code></td><td>
+<p>The block that named the representative for the account</p>
+</td></tr><tr><td class='label'><code>:balance</code></td><td>
+<p>Amount in <a href="https://nano.org/en/faq#what-are-nano-units-">raw</a></p>
+</td></tr><tr><td class='label'><code>:last_modified</code></td><td>
+<p>Unix timestamp</p>
+</td></tr><tr><td class='label'><code>:block_count</code></td><td>
+<p>Number of blocks in the account&#39;s blockchain</p>
+</td></tr></tbody></table>
+
+<p>When <code>detailed: true</code> is passed as an argument, this method
+makes four additional calls to the RPC to return more information about an
+account:</p>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:weight</code></td><td>
+<p>See <a href="Account.html#method-i-weight">weight</a></p>
+</td></tr><tr><td class='label'><code>:pending</code></td><td>
+<p>See <a href="Account.html#method-i-balance">balance</a></p>
+</td></tr><tr><td class='label'><code>:representative</code></td><td>
+<p>See <a href="Account.html#method-i-representative">representative</a></p>
+</td></tr><tr><td class='label'><code>:public_key</code></td><td>
+<p>See <a href="Account.html#method-i-public_key">public_key</a></p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-info-label-Arguments">Arguments</h4>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>detailed:</code></td><td>
+<p>Boolean (default is false). When <code>true</code>, four additional calls
+are made to the RPC to return more information</p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-info-label-Example+1">Example 1</h4>
+
+<pre><code>account.info
+</code></pre>
+
+<h4 id="method-i-info-label-Example+1+response">Example 1 response</h4>
+
+<pre><code>{
+  :balance=&gt;11439597000000000000000000000000,
+  :block_count=&gt;4
+  :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+  :modified_timestamp=&gt;1520500357,
+  :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+}
+</code></pre>
+
+<h4 id="method-i-info-label-Example+2">Example 2</h4>
+
+<pre><code>account.info(detailed: true)
+</code></pre>
+
+<h4 id="method-i-info-label-Example+2+response">Example 2 response</h4>
+
+<pre><code>{
+  :balance=&gt;11439597000000000000000000000000,
+  :block_count=&gt;4,
+  :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+  :modified_timestamp=&gt;1520500357,
+  :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :pending=&gt;0,
+  :public_key=&gt;&quot;A82C906460046D230D7D37C6663723DC3EFCECC4B3254EBF45294B66746F4FEF&quot;,
+  :representative=&gt;&quot;xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh&quot;,
+  :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :weight=&gt;0
+}
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-info_source')" id="l_method-i-info_source">show</a>
+                
+              </p>
+              <div id="method-i-info_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 171</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info</span>(<span class="ruby-value">detailed:</span> <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">account_required!</span>
+
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_info</span>)
+
+  <span class="ruby-comment"># Return the response if we don&#39;t need any more info</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">response</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">detailed</span>
+
+  <span class="ruby-comment"># Otherwise make additional calls</span>
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">merge</span>({
+    <span class="ruby-value">weight:</span> <span class="ruby-identifier">weight</span>,
+    <span class="ruby-value">pending:</span> <span class="ruby-identifier">balance</span>[<span class="ruby-value">:pending</span>],
+    <span class="ruby-value">representative:</span> <span class="ruby-identifier">representative</span>,
+    <span class="ruby-value">public_key:</span> <span class="ruby-identifier">public_key</span>
+  })
+
+  <span class="ruby-comment"># Sort this new hash by keys</span>
+  <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">response</span>.<span class="ruby-identifier">sort</span>].<span class="ruby-identifier">to_symbolized_hash</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-ledger">
+            
+              <b>ledger</b>(limit: 1)
+            
+            <a href="../../classes/Nanook/Account.html#method-i-ledger" name="method-i-ledger" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns information about the given account as well as other accounts up
+the ledger. The number of accounts returned is determined by the
+<code>limit:</code> argument.</p>
+
+<p>The information in each Hash is the same as what the <a
+href="Account.html#method-i-info">info</a>(detailed: false) method returns.</p>
+
+<h4 id="method-i-ledger-label-Arguments">Arguments</h4>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<p>Number of accounts to return in the ledger (default is 1)</p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-ledger-label-Example">Example</h4>
+
+<pre><code>ledger(limit: 2)
+</code></pre>
+
+<h4 id="method-i-ledger-label-Example+response">Example response</h4>
+
+<pre><code> {
+  :xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=&gt;{
+    :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+    :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+    :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+    :balance=&gt;11439597000000000000000000000000,
+    :modified_timestamp=&gt;1520500357,
+    :block_count=&gt;4
+  },
+  :xrb_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=&gt;{ ... }
+}
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-ledger_source')" id="l_method-i-ledger_source">show</a>
+                
+              </p>
+              <div id="method-i-ledger_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 218</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">ledger</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1</span>)
+  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:ledger</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:accounts</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-pending">
+            
+              <b>pending</b>(limit: 1000, detailed: false)
+            
+            <a href="../../classes/Nanook/Account.html#method-i-pending" name="method-i-pending" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns information about pending block hashes that are waiting to be
+received by the account.</p>
+
+<p>The default response is an Array of block hashes. With the
+<code>detailed:</code> argument, the method can return a more complex Hash
+containing the amount in <a
+href="https://nano.org/en/faq#what-are-nano-units-">raw</a> of the pending
+block and the source account that sent it.</p>
+
+<h4 id="method-i-pending-label-Arguments">Arguments</h4>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<p>Number of pending blocks to return (default is 1000)</p>
+</td></tr><tr><td class='label'><code>detailed:</code></td><td>
+<p>Boolean to have this method return a more complex Hash of pending block
+information (default is <code>false</code>)</p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-pending-label-Example+1">Example 1</h4>
+
+<pre><code>pending
+</code></pre>
+
+<h4 id="method-i-pending-label-Example+1+response">Example 1 response</h4>
+
+<pre><code>[&quot;000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F&quot;]
+</code></pre>
+
+<h4 id="method-i-pending-label-Example+2">Example 2</h4>
+
+<pre><code>pending(detailed: true)
+</code></pre>
+
+<h4 id="method-i-pending-label-Example+2+response">Example 2 response</h4>
+
+<pre><code>{
+  &quot;000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F&quot;=&gt;{
+   &quot;amount&quot;=&gt;&quot;6000000000000000000000000000000&quot;,
+   &quot;source&quot;=&gt;&quot;xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr&quot;
+  }
+}
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-pending_source')" id="l_method-i-pending_source">show</a>
+                
+              </p>
+              <div id="method-i-pending_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 259</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pending</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>, <span class="ruby-value">detailed:</span> <span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">account_required!</span>
+
+  <span class="ruby-identifier">args</span> = { <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span> }
+  <span class="ruby-identifier">args</span>[<span class="ruby-value">:source</span>] = <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">detailed</span>
+
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:pending</span>, <span class="ruby-identifier">args</span>)[<span class="ruby-value">:blocks</span>]
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">coerce_empty_string_to_type</span>(<span class="ruby-identifier">response</span>, (<span class="ruby-identifier">detailed</span> <span class="ruby-operator">?</span> <span class="ruby-constant">Hash</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Array</span>))
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-public_key">
+            
+              <b>public_key</b>()
+            
+            <a href="../../classes/Nanook/Account.html#method-i-public_key" name="method-i-public_key" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns the public key belonging to an account.</p>
+
+<h4 id="method-i-public_key-label-Example+response">Example response</h4>
+
+<pre><code>&quot;3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039&quot;
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-public_key_source')" id="l_method-i-public_key_source">show</a>
+                
+              </p>
+              <div id="method-i-public_key_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 83</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">public_key</span>
+  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_key</span>)[<span class="ruby-value">:key</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-representative">
+            
+              <b>representative</b>()
+            
+            <a href="../../classes/Nanook/Account.html#method-i-representative" name="method-i-representative" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns a String of the representative account for the account.
+Representatives are accounts which cast votes in the case of a fork in the
+network.</p>
+
+<h4 id="method-i-representative-label-Example+response">Example response</h4>
+
+<pre><code>&quot;xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh&quot;
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-representative_source')" id="l_method-i-representative_source">show</a>
+                
+              </p>
+              <div id="method-i-representative_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 95</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">representative</span>
+  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_representative</span>)[<span class="ruby-value">:representative</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-weight">
+            
+              <b>weight</b>()
+            
+            <a href="../../classes/Nanook/Account.html#method-i-weight" name="method-i-weight" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <p>Returns the account&#39;s weight. Weight is determined by the account&#39;s
+balance, and represents the voting weight that account has on the network
+if it is a representative.</p>
+
+<h4 id="method-i-weight-label-Example+response">Example response</h4>
+
+<pre><code>1
+</code></pre>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-weight_source')" id="l_method-i-weight_source">show</a>
+                
+              </p>
+              <div id="method-i-weight_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 275</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">weight</span>
+  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_weight</span>)[<span class="ruby-value">:weight</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>
