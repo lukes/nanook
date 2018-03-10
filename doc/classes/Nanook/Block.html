@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nanook::Block</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/github.css" type="text/css" media="screen" />
+<script src="../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="Nanook::Block">
+
+  
+    
+    <meta name="description" content="The Nanook::Block class contains methods to discover publicly-available information about blocks on the nano network.">
+    <meta property="og:description" content="The Nanook::Block class contains methods to discover publicly-available information about blocks on the nano network.">
+  
+
+    <meta name="keywords" content="Nanook::Block class">
+  
+    <meta name="keywords" content="new, account, cancel_work, chain, generate_work, history, info, is_valid_work?, republish, pending?, process, successors">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            Nanook::Block
+            
+                <span class="parent">&lt;
+                    
+                    Object
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../../files/lib/nanook/block_rb.html">lib/nanook/block.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+    <div class="description">
+      
+<p>The <code>Nanook::Block</code> class contains methods to discover
+publicly-available information about blocks on the nano network.</p>
+
+<p>Initialize this class through the convenient <a
+href="../Nanook.html#method-i-block">Nanook#block</a> method:</p>
+
+<pre><code>nanook = Nanook.new
+account = nanook.block(&quot;991CF19...&quot;)
+</code></pre>
+
+<p>Or compose the longhand way like this:</p>
+
+<pre><code>rpc_conn = Nanook::Rpc.new
+block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
+</code></pre>
+
+    </div>
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>A</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-account">account</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>C</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-cancel_work">cancel_work</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-chain">chain</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>G</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-generate_work">generate_work</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>H</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-history">history</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>I</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-info">info</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-is_valid_work-3F">is_valid_work?</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-new">new</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>P</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-pending-3F">pending?</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-process">process</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>R</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-republish">republish</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>S</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-successors">successors</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+      <div class="sectiontitle">Class Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-c-new">
+            
+              <b>new</b>(rpc, block)
+            
+            <a href="../../classes/Nanook/Block.html#method-c-new" name="method-c-new" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-new_source')" id="l_method-c-new_source">show</a>
+                
+              </p>
+              <div id="method-c-new_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">rpc</span>, <span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@rpc</span> = <span class="ruby-identifier">rpc</span>
+  <span class="ruby-ivar">@block</span> = <span class="ruby-identifier">block</span>
+  <span class="ruby-identifier">block_required!</span> <span class="ruby-comment"># All methods expect a block</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+      <div class="sectiontitle">Instance Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-i-account">
+            
+              <b>account</b>()
+            
+            <a href="../../classes/Nanook/Block.html#method-i-account" name="method-i-account" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-account_source')" id="l_method-i-account_source">show</a>
+                
+              </p>
+              <div id="method-i-account_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">account</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:block_account</span>, <span class="ruby-value">:hash</span>)[<span class="ruby-value">:account</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-cancel_work">
+            
+              <b>cancel_work</b>()
+            
+            <a href="../../classes/Nanook/Block.html#method-i-cancel_work" name="method-i-cancel_work" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-cancel_work_source')" id="l_method-i-cancel_work_source">show</a>
+                
+              </p>
+              <div id="method-i-cancel_work_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 27</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cancel_work</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:work_cancel</span>, <span class="ruby-value">:hash</span>).<span class="ruby-identifier">empty?</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-chain">
+            
+              <b>chain</b>(limit: 1000)
+            
+            <a href="../../classes/Nanook/Block.html#method-i-chain" name="method-i-chain" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-chain_source')" id="l_method-i-chain_source">show</a>
+                
+              </p>
+              <div id="method-i-chain_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 31</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:chain</span>, <span class="ruby-value">:block</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:blocks</span>]
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">coerce_empty_string_to_type</span>(<span class="ruby-identifier">response</span>, <span class="ruby-constant">Array</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-generate_work">
+            
+              <b>generate_work</b>()
+            
+            <a href="../../classes/Nanook/Block.html#method-i-generate_work" name="method-i-generate_work" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-generate_work_source')" id="l_method-i-generate_work_source">show</a>
+                
+              </p>
+              <div id="method-i-generate_work_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 36</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">generate_work</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:work_generate</span>, <span class="ruby-value">:hash</span>)[<span class="ruby-value">:work</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-history">
+            
+              <b>history</b>(limit: 1000)
+            
+            <a href="../../classes/Nanook/Block.html#method-i-history" name="method-i-history" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-history_source')" id="l_method-i-history_source">show</a>
+                
+              </p>
+              <div id="method-i-history_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">history</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:history</span>, <span class="ruby-value">:hash</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:history</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-info">
+            
+              <b>info</b>(allow_unchecked: false)
+            
+            <a href="../../classes/Nanook/Block.html#method-i-info" name="method-i-info" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-info_source')" id="l_method-i-info_source">show</a>
+                
+              </p>
+              <div id="method-i-info_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info</span>(<span class="ruby-value">allow_unchecked:</span> <span class="ruby-keyword">false</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">allow_unchecked</span>
+    <span class="ruby-comment"># TODO not actually sure what this response looks like when it&#39;s not an unchecked block, assuming its blank</span>
+    <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:unchecked_get</span>, <span class="ruby-value">:hash</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">:error</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;Block not found&quot;</span>
+      <span class="ruby-keyword">return</span> <span class="ruby-identifier">_parse_info_response</span>(<span class="ruby-identifier">response</span> )
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-comment"># Continue on falling backto checked block</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:block</span>, <span class="ruby-value">:hash</span>)
+  <span class="ruby-identifier">_parse_info_response</span>(<span class="ruby-identifier">response</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-is_valid_work-3F">
+            
+              <b>is_valid_work?</b>(work)
+            
+            <a href="../../classes/Nanook/Block.html#method-i-is_valid_work-3F" name="method-i-is_valid_work-3F" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-is_valid_work-3F_source')" id="l_method-i-is_valid_work-3F_source">show</a>
+                
+              </p>
+              <div id="method-i-is_valid_work-3F_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 58</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">is_valid_work?</span>(<span class="ruby-identifier">work</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:work_validate</span>, <span class="ruby-value">:hash</span>, <span class="ruby-value">work:</span> <span class="ruby-identifier">work</span>)
+  <span class="ruby-operator">!</span><span class="ruby-identifier">response</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">:valid</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-pending-3F">
+            
+              <b>pending?</b>()
+            
+            <a href="../../classes/Nanook/Block.html#method-i-pending-3F" name="method-i-pending-3F" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-pending-3F_source')" id="l_method-i-pending-3F_source">show</a>
+                
+              </p>
+              <div id="method-i-pending-3F_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 77</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pending?</span>
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:pending_exists</span>, <span class="ruby-value">:hash</span>)
+  <span class="ruby-operator">!</span><span class="ruby-identifier">response</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">:exists</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-process">
+            
+              <b>process</b>()
+            
+            <a href="../../classes/Nanook/Block.html#method-i-process" name="method-i-process" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-process_source')" id="l_method-i-process_source">show</a>
+                
+              </p>
+              <div id="method-i-process_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 82</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">process</span>
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:process</span>, <span class="ruby-value">:block</span>)[<span class="ruby-value">:hash</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-republish">
+            
+              <b>republish</b>(destinations:nil, sources:nil)
+            
+            <a href="../../classes/Nanook/Block.html#method-i-republish" name="method-i-republish" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-republish_source')" id="l_method-i-republish_source">show</a>
+                
+              </p>
+              <div id="method-i-republish_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 63</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">republish</span>(<span class="ruby-value">destinations:</span><span class="ruby-keyword">nil</span>, <span class="ruby-value">sources:</span><span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">destinations</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">sources</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;You must provide either destinations or sources but not both&quot;</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># Add in optional arguments</span>
+  <span class="ruby-identifier">params</span> = {}
+  <span class="ruby-identifier">params</span>[<span class="ruby-value">:destinations</span>] = <span class="ruby-identifier">destinations</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">destinations</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">params</span>[<span class="ruby-value">:sources</span>] = <span class="ruby-identifier">sources</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">sources</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">params</span>[<span class="ruby-value">:count</span>] = <span class="ruby-value">1</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>.<span class="ruby-identifier">empty?</span>
+
+  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:republish</span>, <span class="ruby-value">:hash</span>, <span class="ruby-identifier">params</span>)[<span class="ruby-value">:blocks</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-successors">
+            
+              <b>successors</b>(limit: 1000)
+            
+            <a href="../../classes/Nanook/Block.html#method-i-successors" name="method-i-successors" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-successors_source')" id="l_method-i-successors_source">show</a>
+                
+              </p>
+              <div id="method-i-successors_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 86</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">successors</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:successors</span>, <span class="ruby-value">:block</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:blocks</span>]
+  <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">coerce_empty_string_to_type</span>(<span class="ruby-identifier">response</span>, <span class="ruby-constant">Array</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nanook::Rpc</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/github.css" type="text/css" media="screen" />
+<script src="../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="Nanook::Rpc">
+
+  
+
+    <meta name="keywords" content="Nanook::Rpc class">
+  
+    <meta name="keywords" content="new, call">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            Nanook::Rpc
+            
+                <span class="parent">&lt;
+                    
+                    Object
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../../files/lib/nanook/rpc_rb.html">lib/nanook/rpc.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>C</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-call">call</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-new">new</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+      <!-- Section constants -->
+      <div class="sectiontitle">Constants</div>
+      <table border='0' cellpadding='5'>
+        
+          <tr valign='top'>
+            <td class="attr-name">DEFAULT_TIMEOUT</td>
+            <td>=</td>
+            <td class="attr-value">500</td>
+          </tr>
+          
+            <tr valign='top'>
+              <td>&nbsp;</td>
+              <td colspan="2" class="attr-desc"></td>
+            </tr>
+          
+        
+          <tr valign='top'>
+            <td class="attr-name">DEFAULT_URI</td>
+            <td>=</td>
+            <td class="attr-value">&quot;http://localhost:7076&quot;</td>
+          </tr>
+          
+            <tr valign='top'>
+              <td>&nbsp;</td>
+              <td colspan="2" class="attr-desc"></td>
+            </tr>
+          
+        
+      </table>
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+      <div class="sectiontitle">Class Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-c-new">
+            
+              <b>new</b>(uri=DEFAULT_URI, timeout:DEFAULT_TIMEOUT)
+            
+            <a href="../../classes/Nanook/Rpc.html#method-c-new" name="method-c-new" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-new_source')" id="l_method-c-new_source">show</a>
+                
+              </p>
+              <div id="method-c-new_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/rpc.rb, line 10</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">uri</span>=<span class="ruby-constant">DEFAULT_URI</span>, <span class="ruby-value">timeout:</span><span class="ruby-constant">DEFAULT_TIMEOUT</span>)
+  <span class="ruby-identifier">rpc_server</span> = <span class="ruby-constant">URI</span>(<span class="ruby-identifier">uri</span>)
+
+  <span class="ruby-keyword">unless</span> [<span class="ruby-string">&#39;http&#39;</span>, <span class="ruby-string">&#39;https&#39;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">rpc_server</span>.<span class="ruby-identifier">scheme</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;URI must have http or https in it. Was given: #{uri}&quot;</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@http</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rpc_server</span>.<span class="ruby-identifier">host</span>, <span class="ruby-identifier">rpc_server</span>.<span class="ruby-identifier">port</span>)
+  <span class="ruby-ivar">@http</span>.<span class="ruby-identifier">read_timeout</span> = <span class="ruby-identifier">timeout</span>
+  <span class="ruby-ivar">@request</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span><span class="ruby-operator">::</span><span class="ruby-constant">Post</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rpc_server</span>.<span class="ruby-identifier">request_uri</span>, {<span class="ruby-string">&quot;user-agent&quot;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&quot;Ruby nanook gem&quot;</span>})
+  <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">content_type</span> = <span class="ruby-string">&quot;application/json&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+      <div class="sectiontitle">Instance Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-i-call">
+            
+              <b>call</b>(action, params={})
+            
+            <a href="../../classes/Nanook/Rpc.html#method-i-call" name="method-i-call" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-call_source')" id="l_method-i-call_source">show</a>
+                
+              </p>
+              <div id="method-i-call_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/rpc.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">params</span>={})
+  <span class="ruby-comment"># Stringify param values</span>
+  <span class="ruby-identifier">params</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">params</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span>.<span class="ruby-identifier">to_s</span>] }]
+
+  <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">body</span> = { <span class="ruby-value">action:</span> <span class="ruby-identifier">action</span> }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">params</span>).<span class="ruby-identifier">to_json</span>
+
+  <span class="ruby-identifier">response</span> = <span class="ruby-ivar">@http</span>.<span class="ruby-identifier">request</span>(<span class="ruby-ivar">@request</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPSuccess</span>)
+    <span class="ruby-identifier">hash</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>)
+    <span class="ruby-identifier">process_hash</span>(<span class="ruby-identifier">hash</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Encountered net/http error #{response.code}: #{response.class.name}&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>

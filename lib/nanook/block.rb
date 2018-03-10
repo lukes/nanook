@@ -1,4 +1,19 @@
 class Nanook
+
+  # The <tt>Nanook::Block</tt> class contains methods to discover
+  # publicly-available information about blocks on the nano network.
+  #
+  # A block is represented by a unique hash
+  #
+  # Initialize this class through the convenient Nanook#block method:
+  #
+  #   nanook = Nanook.new
+  #   account = nanook.block("991CF19...")
+  #
+  # Or compose the longhand way like this:
+  #
+  #   rpc_conn = Nanook::Rpc.new
+  #   block = Nanook::Block.new(rpc_conn, "991CF19...")
   class Block
 
     def initialize(rpc, block)

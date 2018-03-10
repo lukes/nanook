@@ -1,4 +1,17 @@
 class Nanook
+
+  # The <tt>Nanook::Account</tt> class contains methods to discover
+  # publicly-available information about accounts on the nano network.
+  #
+  # Initialize this class through the convenient Nanook#account method:
+  #
+  #   nanook = Nanook.new
+  #   account = nanook.account("xrb_...")
+  #
+  # Or compose the longhand way like this:
+  #
+  #   rpc_conn = Nanook::Rpc.new
+  #   account = Nanook::Account.new(rpc_conn, "xrb_...")
   class Account
 
     def initialize(rpc, account)
@@ -6,11 +19,17 @@ class Nanook
       @account = account
     end
 
+    # ===== Example response
+    #   {
+    #     "xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd": "500000000000000000000000000000000000",
+    #     "xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn": "961647970820730000000000000000000000"
+    #   }
     def delegators
       account_required!
       rpc(:delegators)[:delegators]
     end
 
+    # Return boolean indicating if account is valid
     def exists?
       account_required!
       response = rpc(:validate_account_number)
@@ -32,6 +51,17 @@ class Nanook
       rpc(:account_representative)[:representative]
     end
 
+    # Returns a Hash containing two keys:
+    #
+    # * +:balance+ - Amount of {raw}[https://nano.org/en/faq#what-are-nano-units-]
+    #   in the account
+    # * +:pending+ - Amount of {raw}[https://nano.org/en/faq#what-are-nano-units-]
+    #   pending and not yet received by the account
+    # ===== Example response
+    #   {
+    #    "balance": "10000",
+    #    "pending": "10000"
+    #   }
     def balance
       account_required!
       rpc(:account_balance)
