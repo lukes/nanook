@@ -319,7 +319,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-balance_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 65</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 111</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">balance</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_balance</span>)
@@ -339,7 +339,7 @@ yet received by the account</p>
 
           
             <div class="description">
-              <h5 id="method-i-delegators-label-Example+response">Example response</h5>
+              <h4 id="method-i-delegators-label-Example+response">Example response</h4>
 
 <pre><code>{
   &quot;xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd&quot;: &quot;500000000000000000000000000000000000&quot;,
@@ -383,7 +383,17 @@ yet received by the account</p>
 
           
             <div class="description">
-              <p>Return boolean indicating if account is valid</p>
+              <p>Returns a boolean indicating if account is known. Note, the reliability of
+the check depends on the node host having synchronized itself with most of
+the blocks on the nano network, otherwise you may get a false
+<code>false</code>. You can check if a node&#39;s synchronization is
+particular low using <a
+href="Node.html#method-i-sync_progress">Nanook::Node#sync_progress</a>.</p>
+
+<h4 id="method-i-exists-3F-label-Example+response">Example response</h4>
+
+<pre><code>true
+</code></pre>
             </div>
           
 
@@ -401,7 +411,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-exists-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 33</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">exists?</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:validate_account_number</span>)
@@ -422,7 +432,38 @@ yet received by the account</p>
 
           
             <div class="description">
-              
+              <p>Returns an account&#39;s history of send and receive payments. Amounts are
+in <a href="https://nano.org/en/faq#what-are-nano-units-">raw</a>.</p>
+
+<h4 id="method-i-history-label-Arguments">Arguments</h4>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<p>Integer representing the maximum number of history items to return (default
+is 1000)</p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-history-label-Example">Example</h4>
+
+<pre><code>account.history
+account.history(limit: 1)
+</code></pre>
+
+<h4 id="method-i-history-label-Example+response">Example response</h4>
+
+<pre><code>[
+  {
+   :type=&gt;&quot;send&quot;,
+   :account=&gt;&quot;xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq&quot;,
+   :amount=&gt;200000000000000000000000000000,
+   :hash=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;
+  },
+  {
+   :type=&gt;&quot;receive&quot;,
+   :account=&gt;&quot;xrb_1niabkx3gbxit5j5yyqcpas71dkffggbr6zpd3heui8rpoocm5xqbdwq44oh&quot;,
+   :amount=&gt;7836413000000000000000000000000,
+   :hash=&gt;&quot;16743E8FF52F454E876E68EDD11F23094DCB96795A3B7F32F74F88563ACDDB04&quot;
+  }
+]
+</code></pre>
             </div>
           
 
@@ -440,7 +481,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-history_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 39</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 74</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">history</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_history</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:history</span>]
@@ -460,7 +501,36 @@ yet received by the account</p>
 
           
             <div class="description">
-              
+              <p>Returns a Hash containing the following information about an account:</p>
+<ul><li>
+<p><code>:frontier</code> - The latest block hash</p>
+</li><li>
+<p><code>:open_block</code> - The first block in every account&#39;s
+blockchain. When this block was published the account was officially open</p>
+</li><li>
+<p><code>:representative_block</code> - The block that named the
+representative for the account</p>
+</li><li>
+<p><code>:balance</code> - Amount of <a
+href="https://nano.org/en/faq#what-are-nano-units-">raw</a></p>
+</li><li>
+<p><code>:last_modified</code> - Unix timestamp</p>
+</li><li>
+<p><code>:block_count</code> - Number of blocks in the account&#39;s
+blockchain</p>
+</li></ul>
+
+<h4 id="method-i-info-label-Example+response">Example response</h4>
+
+<pre><code>{
+ :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+ :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+ :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+ :balance=&gt;11439597000000000000000000000000,
+ :modified_timestamp=&gt;1520500357,
+ :block_count=&gt;4
+}
+</code></pre>
             </div>
           
 
@@ -478,7 +548,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-info_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 70</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 135</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_info</span>)
@@ -516,7 +586,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-ledger_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 75</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 140</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">ledger</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1</span>)
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:ledger</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:accounts</span>]
@@ -554,7 +624,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-pending_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 82</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 147</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pending</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>, <span class="ruby-value">detailed:</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">account_required!</span>
 
@@ -579,7 +649,12 @@ yet received by the account</p>
 
           
             <div class="description">
-              
+              <p>Returns the public key belonging to an account.</p>
+
+<h4 id="method-i-public_key-label-Example+response">Example response</h4>
+
+<pre><code>&quot;3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039&quot;
+</code></pre>
             </div>
           
 
@@ -597,7 +672,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-public_key_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 44</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">public_key</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_key</span>)[<span class="ruby-value">:key</span>]
@@ -617,7 +692,14 @@ yet received by the account</p>
 
           
             <div class="description">
-              
+              <p>Returns a String of the representative account for the account.
+Representatives are accounts which cast votes in the case of a fork in the
+network.</p>
+
+<h4 id="method-i-representative-label-Example+response">Example response</h4>
+
+<pre><code>&quot;xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh&quot;
+</code></pre>
             </div>
           
 
@@ -635,7 +717,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-representative_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 49</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 95</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">representative</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_representative</span>)[<span class="ruby-value">:representative</span>]
@@ -655,7 +737,14 @@ yet received by the account</p>
 
           
             <div class="description">
-              
+              <p>Returns the account&#39;s weight. Weight is determined by the account&#39;s
+balance, and represents the voting weight that account has on the network
+if it is a representative.</p>
+
+<h4 id="method-i-weight-label-Example+response">Example response</h4>
+
+<pre><code>1
+</code></pre>
             </div>
           
 
@@ -673,7 +762,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-weight_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 92</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 163</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">weight</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_weight</span>)[<span class="ruby-value">:weight</span>]

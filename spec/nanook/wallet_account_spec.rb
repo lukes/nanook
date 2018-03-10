@@ -84,6 +84,17 @@ RSpec.describe Nanook::WalletAccount do
   it "wallet account send payment" do
     stub_valid_account_check
 
+    stub_request(:post, "http://localhost:7076/").
+    with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: {
+      'Accept'=>'*/*',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Content-Type'=>'application/json',
+      'User-Agent'=>'Ruby nanook gem'
+      }).
+    to_return(status: 200, body: "{\"valid\":\"1\"}", headers: {})
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"send\",\"wallet\":\"#{wallet_id}\",\"source\":\"#{account_id}\",\"destination\":\"#{account_id}\",\"amount\":\"2000000000000000000000000000000\",\"id\":\"7081e2b8fec9146e\"}",
       headers: headers

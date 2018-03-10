@@ -3,8 +3,6 @@ require 'uri'
 
 Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each {|file| require file }
 
-# The +Nanook+ class allow
-#
 # ==== Initializing
 #
 # Connect to the default RPC host at http://localhost:7076 and with a timeout of 500 seconds:

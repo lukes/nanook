@@ -35,6 +35,11 @@ class Nanook
       wallet_required!
       account_must_belong_to_wallet!
 
+      # Check that to: account is valid
+      unless Nanook::Account.new(@rpc, to).exists?
+        raise ArgumentError.new("To account does not exist (#{to})")
+      end
+
       raw = Nanook::Util.NANO_to_raw(amount)
 
       # account is called source, so don't use the normal rpc method

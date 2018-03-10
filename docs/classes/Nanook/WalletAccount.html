@@ -279,7 +279,7 @@
                 <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 26</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">destroy</span>
   <span class="ruby-identifier">wallet_required!</span>
-  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">account_must_belong_to_wallet!</span>
   (<span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_remove</span>)[<span class="ruby-value">:removed</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">tap</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">success</span><span class="ruby-operator">|</span>
     <span class="ruby-ivar">@known_valid_accounts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-ivar">@account</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">success</span>
   <span class="ruby-keyword">end</span>
@@ -362,11 +362,11 @@ this class too</p>
                 <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pay</span>(<span class="ruby-value">to:</span>, <span class="ruby-value">amount:</span>, <span class="ruby-value">id:</span>)
   <span class="ruby-identifier">wallet_required!</span>
-  <span class="ruby-identifier">account_required!</span>
-  <span class="ruby-comment"># Check that to: account is valid</span>
-  <span class="ruby-comment"># Note this could be slow? May</span>
-  <span class="ruby-keyword">unless</span> <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Account</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>, <span class="ruby-identifier">to</span>).<span class="ruby-identifier">exists?</span>
+  <span class="ruby-identifier">account_must_belong_to_wallet!</span>
 
+  <span class="ruby-comment"># Check that to: account is valid</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Account</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>, <span class="ruby-identifier">to</span>).<span class="ruby-identifier">exists?</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;To account does not exist (#{to})&quot;</span>)
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-identifier">raw</span> = <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-constant">NANO_to_raw</span>(<span class="ruby-identifier">amount</span>)
@@ -424,7 +424,7 @@ this class too</p>
                 <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 64</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">receive</span>(<span class="ruby-identifier">block</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">wallet_required!</span>
-  <span class="ruby-identifier">account_required!</span>
+  <span class="ruby-identifier">account_must_belong_to_wallet!</span>
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-identifier">_receive_without_block</span>
