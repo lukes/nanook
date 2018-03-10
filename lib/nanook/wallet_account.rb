@@ -25,7 +25,7 @@ class Nanook
 
     def destroy
       wallet_required!
-      account_required!
+      account_must_belong_to_wallet!
       (rpc(:account_remove)[:removed] == 1).tap do |success|
         @known_valid_accounts.delete(@account) if success
       end
@@ -33,7 +33,7 @@ class Nanook
 
     def pay(to:, amount:, id:)
       wallet_required!
-      account_required!
+      account_must_belong_to_wallet!
 
       raw = Nanook::Util.NANO_to_raw(amount)
 
@@ -58,7 +58,7 @@ class Nanook
     # Returns false if no block to receive
     def receive(block=nil)
       wallet_required!
-      account_required!
+      account_must_belong_to_wallet!
 
       if block.nil?
         _receive_without_block
@@ -111,7 +111,7 @@ class Nanook
       end
     end
 
-    def account_required!
+    def account_must_belong_to_wallet!
       if @account.nil?
         raise ArgumentError.new("Account must be present")
       end
