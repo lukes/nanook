@@ -6,3 +6,4 @@
 /spec/reports/
 /spec/examples.txt
 /tmp/
+.ruby-version
