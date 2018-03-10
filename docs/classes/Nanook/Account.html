@@ -494,7 +494,7 @@ account.history(limit: 1)
         <div class="method">
           <div class="title method-title" id="method-i-info">
             
-              <b>info</b>()
+              <b>info</b>(detailed: false)
             
             <a href="../../classes/Nanook/Account.html#method-i-info" name="method-i-info" class="permalink">Link</a>
           </div>
@@ -502,33 +502,75 @@ account.history(limit: 1)
           
             <div class="description">
               <p>Returns a Hash containing the following information about an account:</p>
-<ul><li>
-<p><code>:frontier</code> - The latest block hash</p>
-</li><li>
-<p><code>:open_block</code> - The first block in every account&#39;s
-blockchain. When this block was published the account was officially open</p>
-</li><li>
-<p><code>:representative_block</code> - The block that named the
-representative for the account</p>
-</li><li>
-<p><code>:balance</code> - Amount of <a
-href="https://nano.org/en/faq#what-are-nano-units-">raw</a></p>
-</li><li>
-<p><code>:last_modified</code> - Unix timestamp</p>
-</li><li>
-<p><code>:block_count</code> - Number of blocks in the account&#39;s
-blockchain</p>
-</li></ul>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:frontier</code></td><td>
+<p>The latest block hash</p>
+</td></tr><tr><td class='label'><code>:open_block</code></td><td>
+<p>The first block in every account&#39;s blockchain. When this block was
+published the account was officially open</p>
+</td></tr><tr><td class='label'><code>:representative_block</code></td><td>
+<p>The block that named the representative for the account</p>
+</td></tr><tr><td class='label'><code>:balance</code></td><td>
+<p>Amount in <a href="https://nano.org/en/faq#what-are-nano-units-">raw</a></p>
+</td></tr><tr><td class='label'><code>:last_modified</code></td><td>
+<p>Unix timestamp</p>
+</td></tr><tr><td class='label'><code>:block_count</code></td><td>
+<p>Number of blocks in the account&#39;s blockchain</p>
+</td></tr></tbody></table>
 
-<h4 id="method-i-info-label-Example+response">Example response</h4>
+<p>When <code>detailed: true</code> is passed as an argument, this method
+makes four additional calls to the RPC to return more information about an
+account:</p>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:weight</code></td><td>
+<p>See <a href="Account.html#method-i-weight">weight</a></p>
+</td></tr><tr><td class='label'><code>:pending</code></td><td>
+<p>See <a href="Account.html#method-i-balance">balance</a></p>
+</td></tr><tr><td class='label'><code>:representative</code></td><td>
+<p>See <a href="Account.html#method-i-representative">representative</a></p>
+</td></tr><tr><td class='label'><code>:public_key</code></td><td>
+<p>See <a href="Account.html#method-i-public_key">public_key</a></p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-info-label-Arguments">Arguments</h4>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>detailed:</code></td><td>
+<p>Boolean (default is false). When <code>true</code>, four additional calls
+are made to the RPC to return more information</p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-info-label-Example+1">Example 1</h4>
+
+<pre><code>account.info
+</code></pre>
+
+<h4 id="method-i-info-label-Example+1+response">Example 1 response</h4>
 
 <pre><code>{
- :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
- :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
- :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
- :balance=&gt;11439597000000000000000000000000,
- :modified_timestamp=&gt;1520500357,
- :block_count=&gt;4
+  :balance=&gt;11439597000000000000000000000000,
+  :block_count=&gt;4
+  :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+  :modified_timestamp=&gt;1520500357,
+  :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+}
+</code></pre>
+
+<h4 id="method-i-info-label-Example+2">Example 2</h4>
+
+<pre><code>account.info(detailed: true)
+</code></pre>
+
+<h4 id="method-i-info-label-Example+2+response">Example 2 response</h4>
+
+<pre><code>{
+  :balance=&gt;11439597000000000000000000000000,
+  :block_count=&gt;4,
+  :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+  :modified_timestamp=&gt;1520500357,
+  :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :pending=&gt;0,
+  :public_key=&gt;&quot;A82C906460046D230D7D37C6663723DC3EFCECC4B3254EBF45294B66746F4FEF&quot;,
+  :representative=&gt;&quot;xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh&quot;,
+  :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :weight=&gt;0
 }
 </code></pre>
             </div>
@@ -548,10 +590,25 @@ blockchain</p>
                 
               </p>
               <div id="method-i-info_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 135</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 171</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info</span>(<span class="ruby-value">detailed:</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">account_required!</span>
-  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_info</span>)
+
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_info</span>)
+
+  <span class="ruby-comment"># Return the response if we don&#39;t need any more info</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">response</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">detailed</span>
+
+  <span class="ruby-comment"># Otherwise make additional calls</span>
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">merge</span>({
+    <span class="ruby-value">weight:</span> <span class="ruby-identifier">weight</span>,
+    <span class="ruby-value">pending:</span> <span class="ruby-identifier">balance</span>[<span class="ruby-value">:pending</span>],
+    <span class="ruby-value">representative:</span> <span class="ruby-identifier">representative</span>,
+    <span class="ruby-value">public_key:</span> <span class="ruby-identifier">public_key</span>
+  })
+
+  <span class="ruby-comment"># Sort this new hash by keys</span>
+  <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">response</span>.<span class="ruby-identifier">sort</span>].<span class="ruby-identifier">to_symbolized_hash</span>
 <span class="ruby-keyword">end</span></pre>
               </div>
             </div>
@@ -568,7 +625,37 @@ blockchain</p>
 
           
             <div class="description">
-              
+              <p>Returns information about the given account as well as other accounts up
+the ledger. The number of accounts returned is determined by the
+<code>limit:</code> argument.</p>
+
+<p>The information in each Hash is the same as what the <a
+href="Account.html#method-i-info">info</a>(detailed: false) method returns.</p>
+
+<h4 id="method-i-ledger-label-Arguments">Arguments</h4>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<p>Number of accounts to return in the ledger (default is 1)</p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-ledger-label-Example">Example</h4>
+
+<pre><code>ledger(limit: 2)
+</code></pre>
+
+<h4 id="method-i-ledger-label-Example+response">Example response</h4>
+
+<pre><code> {
+  :xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=&gt;{
+    :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+    :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+    :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+    :balance=&gt;11439597000000000000000000000000,
+    :modified_timestamp=&gt;1520500357,
+    :block_count=&gt;4
+  },
+  :xrb_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=&gt;{ ... }
+}
+</code></pre>
             </div>
           
 
@@ -586,7 +673,7 @@ blockchain</p>
                 
               </p>
               <div id="method-i-ledger_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 140</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 218</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">ledger</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1</span>)
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:ledger</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:accounts</span>]

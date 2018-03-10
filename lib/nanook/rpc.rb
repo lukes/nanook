@@ -56,7 +56,7 @@ class Nanook
         [k, v]
       end
 
-      Hash[new_hash].to_symbolized_hash
+      Hash[new_hash.sort].to_symbolized_hash
     end
 
     def parse_value(v)

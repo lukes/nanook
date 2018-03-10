@@ -161,6 +161,7 @@ account = Nanook.new.wallet(wallet_id).account(account_id)
 
 account.exists?
 account.info
+account.info(detailed: true)
 account.ledger
 account.ledger(limit: 10)
 account.history
@@ -187,6 +188,7 @@ account = Nanook.new.account(account_id)
 
 account.exists?
 account.info
+account.info(detailed: true)
 account.ledger
 account.ledger(limit: 10)
 account.history
