@@ -285,15 +285,13 @@ account = Nanook::Account.new(rpc_conn, &quot;xrb_...&quot;)
 
           
             <div class="description">
-              <p>Returns a Hash containing two keys:</p>
-<ul><li>
-<p><code>:balance</code> - Amount of <a
-href="https://nano.org/en/faq#what-are-nano-units-">raw</a> in the account</p>
-</li><li>
-<p><code>:pending</code> - Amount of <a
-href="https://nano.org/en/faq#what-are-nano-units-">raw</a> pending and not
-yet received by the account</p>
-</li></ul>
+              <p>Returns a Hash containing the account&#39;s balance. Units are in <a
+href="https://nano.org/en/faq#what-are-nano-units-">raw</a>.</p>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:balance</code></td><td>
+<p><a href="Account.html">Account</a> balance</p>
+</td></tr><tr><td class='label'><code>:pending</code></td><td>
+<p>Amount pending and not yet received by the account</p>
+</td></tr></tbody></table>
 
 <h5 id="method-i-balance-label-Example+response">Example response</h5>
 
@@ -319,7 +317,7 @@ yet received by the account</p>
                 
               </p>
               <div id="method-i-balance_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 111</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 110</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">balance</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_balance</span>)
@@ -693,7 +691,47 @@ href="Account.html#method-i-info">info</a>(detailed: false) method returns.</p>
 
           
             <div class="description">
-              <p>Returns Array of block hashes Or, with detailed: true, returns Hashes</p>
+              <p>Returns information about pending block hashes that are waiting to be
+received by the account.</p>
+
+<p>The default response is an Array of block hashes. With the
+<code>detailed:</code> argument, the method can return a more complex Hash
+containing the amount in <a
+href="https://nano.org/en/faq#what-are-nano-units-">raw</a> of the pending
+block and the source account that sent it.</p>
+
+<h4 id="method-i-pending-label-Arguments">Arguments</h4>
+<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<p>Number of pending blocks to return (default is 1000)</p>
+</td></tr><tr><td class='label'><code>detailed:</code></td><td>
+<p>Boolean to have this method return a more complex Hash of pending block
+information (default is <code>false</code>)</p>
+</td></tr></tbody></table>
+
+<h4 id="method-i-pending-label-Example+1">Example 1</h4>
+
+<pre><code>pending
+</code></pre>
+
+<h4 id="method-i-pending-label-Example+1+response">Example 1 response</h4>
+
+<pre><code>[&quot;000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F&quot;]
+</code></pre>
+
+<h4 id="method-i-pending-label-Example+2">Example 2</h4>
+
+<pre><code>pending(detailed: true)
+</code></pre>
+
+<h4 id="method-i-pending-label-Example+2+response">Example 2 response</h4>
+
+<pre><code>{
+  &quot;000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F&quot;=&gt;{
+   &quot;amount&quot;=&gt;&quot;6000000000000000000000000000000&quot;,
+   &quot;source&quot;=&gt;&quot;xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr&quot;
+  }
+}
+</code></pre>
             </div>
           
 
@@ -711,7 +749,7 @@ href="Account.html#method-i-info">info</a>(detailed: false) method returns.</p>
                 
               </p>
               <div id="method-i-pending_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 147</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 259</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pending</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>, <span class="ruby-value">detailed:</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">account_required!</span>
 
@@ -849,7 +887,7 @@ if it is a representative.</p>
                 
               </p>
               <div id="method-i-weight_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 163</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 275</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">weight</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_weight</span>)[<span class="ruby-value">:weight</span>]
