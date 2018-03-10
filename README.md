@@ -183,6 +183,8 @@ account.destroy
 
 #### Working with any account (not necessarily in your wallet):
 
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/classes/Nanook/Account.html) for a detailed description of each method and example responses.
+
 ```ruby
 account = Nanook.new.account(account_id)
 
