@@ -3,6 +3,8 @@ class Nanook
   # The <tt>Nanook::Account</tt> class contains methods to discover
   # publicly-available information about accounts on the nano network.
   #
+  # === Initializing
+  #
   # Initialize this class through the convenient Nanook#account method:
   #
   #   nanook = Nanook.new

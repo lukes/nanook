@@ -53,6 +53,8 @@
 <p>The <code>Nanook::Account</code> class contains methods to discover
 publicly-available information about accounts on the nano network.</p>
 
+<h3 id="class-Nanook::Account-label-Initializing">Initializing</h3>
+
 <p>Initialize this class through the convenient <a
 href="../Nanook.html#method-i-account">Nanook#account</a> method:</p>
 
@@ -261,7 +263,7 @@ account = Nanook::Account.new(rpc_conn, &quot;xrb_...&quot;)
                 
               </p>
               <div id="method-c-new_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 17</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 19</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">rpc</span>, <span class="ruby-identifier">account</span>)
   <span class="ruby-ivar">@rpc</span> = <span class="ruby-identifier">rpc</span>
   <span class="ruby-ivar">@account</span> = <span class="ruby-identifier">account</span>
@@ -317,7 +319,7 @@ href="https://nano.org/en/faq#what-are-nano-units-">raw</a>.</p>
                 
               </p>
               <div id="method-i-balance_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 110</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 112</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">balance</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_balance</span>)
@@ -361,7 +363,7 @@ href="https://nano.org/en/faq#what-are-nano-units-">raw</a>.</p>
                 
               </p>
               <div id="method-i-delegators_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 27</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 29</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delegators</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:delegators</span>)[<span class="ruby-value">:delegators</span>]
@@ -409,7 +411,7 @@ href="Node.html#method-i-sync_progress">Nanook::Node#sync_progress</a>.</p>
                 
               </p>
               <div id="method-i-exists-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 40</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">exists?</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:validate_account_number</span>)
@@ -479,7 +481,7 @@ account.history(limit: 1)
                 
               </p>
               <div id="method-i-history_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 74</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">history</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_history</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:history</span>]
@@ -588,7 +590,7 @@ are made to the RPC to return more information</p>
                 
               </p>
               <div id="method-i-info_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 171</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 173</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info</span>(<span class="ruby-value">detailed:</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">account_required!</span>
 
@@ -671,7 +673,7 @@ href="Account.html#method-i-info">info</a>(detailed: false) method returns.</p>
                 
               </p>
               <div id="method-i-ledger_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 218</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 220</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">ledger</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1</span>)
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:ledger</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:accounts</span>]
@@ -749,7 +751,7 @@ information (default is <code>false</code>)</p>
                 
               </p>
               <div id="method-i-pending_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 259</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 261</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pending</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>, <span class="ruby-value">detailed:</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">account_required!</span>
 
@@ -797,7 +799,7 @@ information (default is <code>false</code>)</p>
                 
               </p>
               <div id="method-i-public_key_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 83</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 85</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">public_key</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_key</span>)[<span class="ruby-value">:key</span>]
@@ -842,7 +844,7 @@ network.</p>
                 
               </p>
               <div id="method-i-representative_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 95</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 97</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">representative</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_representative</span>)[<span class="ruby-value">:representative</span>]
@@ -887,7 +889,7 @@ if it is a representative.</p>
                 
               </p>
               <div id="method-i-weight_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 275</span>
+                <pre><span class="ruby-comment"># File lib/nanook/account.rb, line 277</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">weight</span>
   <span class="ruby-identifier">account_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_weight</span>)[<span class="ruby-value">:weight</span>]

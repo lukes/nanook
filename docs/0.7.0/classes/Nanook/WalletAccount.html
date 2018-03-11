@@ -199,7 +199,9 @@
   <span class="ruby-comment"># is in wallet</span>
   <span class="ruby-ivar">@nanook_wallet_instance</span> = <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Wallet</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>, <span class="ruby-ivar">@wallet</span>)
 
-  <span class="ruby-ivar">@known_valid_accounts</span> = []
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@account</span>
+    <span class="ruby-identifier">account_must_belong_to_wallet!</span>
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
               </div>
             </div>
@@ -238,7 +240,7 @@
                 
               </p>
               <div id="method-i-create_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 21</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 23</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">create</span>
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_create</span>)[<span class="ruby-value">:account</span>]
@@ -276,10 +278,9 @@
                 
               </p>
               <div id="method-i-destroy_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 26</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">destroy</span>
   <span class="ruby-identifier">wallet_required!</span>
-  <span class="ruby-identifier">account_must_belong_to_wallet!</span>
   (<span class="ruby-identifier">rpc</span>(<span class="ruby-value">:account_remove</span>)[<span class="ruby-value">:removed</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">tap</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">success</span><span class="ruby-operator">|</span>
     <span class="ruby-ivar">@known_valid_accounts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-ivar">@account</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">success</span>
   <span class="ruby-keyword">end</span>
@@ -318,7 +319,7 @@ this class too</p>
                 
               </p>
               <div id="method-i-method_missing_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 76</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">method_missing</span>(<span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@nanook_account_instance</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">m</span>)
     <span class="ruby-ivar">@nanook_account_instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -359,10 +360,9 @@ this class too</p>
                 
               </p>
               <div id="method-i-pay_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 34</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pay</span>(<span class="ruby-value">to:</span>, <span class="ruby-value">amount:</span>, <span class="ruby-value">id:</span>)
   <span class="ruby-identifier">wallet_required!</span>
-  <span class="ruby-identifier">account_must_belong_to_wallet!</span>
 
   <span class="ruby-comment"># Check that to: account is valid</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Account</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@rpc</span>, <span class="ruby-identifier">to</span>).<span class="ruby-identifier">exists?</span>
@@ -383,7 +383,7 @@ this class too</p>
   <span class="ruby-identifier">response</span> = <span class="ruby-ivar">@rpc</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:send</span>, <span class="ruby-identifier">p</span>)
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">:error</span>]
-    <span class="ruby-identifier">response</span>
+    <span class="ruby-identifier">response</span>[<span class="ruby-value">:error</span>]
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">response</span>[<span class="ruby-value">:block</span>]
   <span class="ruby-keyword">end</span>
@@ -424,7 +424,6 @@ this class too</p>
                 <pre><span class="ruby-comment"># File lib/nanook/wallet_account.rb, line 64</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">receive</span>(<span class="ruby-identifier">block</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">wallet_required!</span>
-  <span class="ruby-identifier">account_must_belong_to_wallet!</span>
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-identifier">_receive_without_block</span>
