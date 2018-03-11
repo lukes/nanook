@@ -296,11 +296,6 @@ class Nanook
       rpc(:password_change, password: password)[:changed] == 1
     end
 
-    def all
-      wallet_required!
-      rpc(:account_list)[:accounts]
-    end
-
     private
 
     def rpc(action, params={})
