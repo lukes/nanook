@@ -1,8 +1,7 @@
 class Nanook
 
-  # The <tt>Nanook::Wallet</tt> class contains methods that let you
-  # manage your nano wallets, as well as some methods that allow you to do
-  # some account-specific things like making and receiving payments.
+  # The <tt>Nanook::Wallet</tt> class lets you manage your nano wallets,
+  # as well as some account-specific things like making and receiving payments.
   #
   # Your wallets each have a seed, which is a 32-byte uppercase hex
   # string that looks like this:
@@ -13,7 +12,8 @@ class Nanook
   # The person who knows it can do all read and write actions against
   # the wallet and all accounts inside the wallet from anywhere on the
   # nano network, not just on the node you created the wallet on.
-  # <b>Make sure this key is always secret and safe</b>.
+  # <b>Make sure this key is always secret and safe</b>. Do not commit
+  # your seed into source control.
   #
   # === Initializing
   #
@@ -26,16 +26,6 @@ class Nanook
   #
   #   rpc_conn = Nanook::Rpc.new
   #   wallet = Nanook::Wallet.new(rpc_conn, wallet_seed)
-  #
-  # === Managing accounts in the wallet
-  #
-  # The handy #account method lets you begin working with accounts in
-  # your wallet:
-  #
-  #   wallet.account("xrb_...") #=> Nanook::WalletAccount instance
-  #
-  # See Nanook::WalletAccount for what methods can be called on the
-  # account returned.
   class Wallet
 
     def initialize(rpc, wallet)
