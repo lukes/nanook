@@ -54,7 +54,7 @@ class Nanook
       response = @rpc.call(:send, p)
 
       if response[:error]
-        response
+        response[:error]
       else
         response[:block]
       end
