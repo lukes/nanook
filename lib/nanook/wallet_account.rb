@@ -15,7 +15,9 @@ class Nanook
       # is in wallet
       @nanook_wallet_instance = Nanook::Wallet.new(@rpc, @wallet)
 
-      @known_valid_accounts = []
+      if @account
+        account_must_belong_to_wallet!
+      end
     end
 
     def create
@@ -25,7 +27,6 @@ class Nanook
 
     def destroy
       wallet_required!
-      account_must_belong_to_wallet!
       (rpc(:account_remove)[:removed] == 1).tap do |success|
         @known_valid_accounts.delete(@account) if success
       end
@@ -33,7 +34,6 @@ class Nanook
 
     def pay(to:, amount:, id:)
       wallet_required!
-      account_must_belong_to_wallet!
 
       # Check that to: account is valid
       unless Nanook::Account.new(@rpc, to).exists?
@@ -63,7 +63,6 @@ class Nanook
     # Returns false if no block to receive
     def receive(block=nil)
       wallet_required!
-      account_must_belong_to_wallet!
 
       if block.nil?
         _receive_without_block
@@ -120,6 +119,8 @@ class Nanook
       if @account.nil?
         raise ArgumentError.new("Account must be present")
       end
+
+      @known_valid_accounts ||= []
 
       # validate account is in wallet
       return if @known_valid_accounts.include?(@account)

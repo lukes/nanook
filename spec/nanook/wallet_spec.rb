@@ -26,6 +26,38 @@ RSpec.describe Nanook::Wallet do
     to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
   end
 
+  it "should have an account method" do
+    expect(Nanook.new.wallet(wallet_id).account).to be_kind_of(Nanook::WalletAccount)
+  end
+
+  it "wallet accounts" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_list\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\":[\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"]}",
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).accounts).to have(1).item
+  end
+
+  it "wallet accounts when blank" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_list\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\":\"\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).accounts).to eq []
+  end
+
+
+
   it "wallet create" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_create\"}",

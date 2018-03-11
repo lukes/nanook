@@ -26,33 +26,6 @@ RSpec.describe Nanook::WalletAccount do
     to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
   end
 
-  it "wallet accounts" do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"account_list\",\"wallet\":\"#{wallet_id}\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"accounts\":[\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"]}",
-      headers: {}
-    )
-
-    expect(Nanook.new.wallet(wallet_id).accounts).to have(1).item
-  end
-
-  it "wallet accounts when blank" do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"account_list\",\"wallet\":\"#{wallet_id}\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"accounts\":\"\"}",
-      headers: {}
-    )
-      puts Nanook.new.wallet(wallet_id).accounts
-
-    expect(Nanook.new.wallet(wallet_id).accounts).to eq []
-  end
-
   it "wallet account create" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_create\",\"wallet\":\"#{wallet_id}\"}",
@@ -163,6 +136,8 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it "wallet account balance" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
       headers: headers
@@ -176,6 +151,8 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it "wallet account info" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
       headers: headers
@@ -337,6 +314,8 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it "wallet account ledger with limit" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"10\"}",
       headers: headers
@@ -359,6 +338,8 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it "wallet account exists? when exists" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
       headers: headers
@@ -372,6 +353,8 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it "wallet account exists? when doesn't exist" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
       headers: headers
@@ -385,6 +368,8 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it "wallet account delegators" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"delegators\",\"account\":\"#{account_id}\"}",
       headers: headers
