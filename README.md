@@ -118,6 +118,8 @@ wallet.receive(block_id, into: account_id)
 
 ### Wallets
 
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/0.7.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
+
 #### Create wallet:
 
 ```ruby
@@ -125,8 +127,6 @@ Nanook.new.wallet.create
 ```
 
 #### Working with a single wallet:
-
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/0.7.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 ```ruby
 wallet = Nanook.new.wallet(wallet_id)
