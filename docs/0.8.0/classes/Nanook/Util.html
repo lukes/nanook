@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nanook::Util</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/github.css" type="text/css" media="screen" />
+<script src="../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="Nanook::Util">
+
+  
+
+    <meta name="keywords" content="Nanook::Util class">
+  
+    <meta name="keywords" content="NANO_to_raw, raw_to_NANO, coerce_empty_string_to_type">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            Nanook::Util
+            
+                <span class="parent">&lt;
+                    
+                    Object
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../../files/lib/nanook/util_rb.html">lib/nanook/util.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-NANO_to_raw">NANO_to_raw</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>C</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-coerce_empty_string_to_type">coerce_empty_string_to_type</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>R</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-raw_to_NANO">raw_to_NANO</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+      <!-- Section constants -->
+      <div class="sectiontitle">Constants</div>
+      <table border='0' cellpadding='5'>
+        
+          <tr valign='top'>
+            <td class="attr-name">STEP</td>
+            <td>=</td>
+            <td class="attr-value">BigDecimal.new(&quot;10&quot;)**BigDecimal.new(&quot;30&quot;)</td>
+          </tr>
+          
+            <tr valign='top'>
+              <td>&nbsp;</td>
+              <td colspan="2" class="attr-desc"></td>
+            </tr>
+          
+        
+      </table>
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+      <div class="sectiontitle">Class Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-c-NANO_to_raw">
+            
+              <b>NANO_to_raw</b>(nano)
+            
+            <a href="../../classes/Nanook/Util.html#method-c-NANO_to_raw" name="method-c-NANO_to_raw" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-NANO_to_raw_source')" id="l_method-c-NANO_to_raw_source">show</a>
+                
+              </p>
+              <div id="method-c-NANO_to_raw_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/util.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-constant">NANO_to_raw</span>(<span class="ruby-identifier ruby-title">nano</span>)
+  (<span class="ruby-constant">BigDecimal</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">nano</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-operator">*</span> <span class="ruby-constant">STEP</span>).<span class="ruby-identifier">to_i</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-c-coerce_empty_string_to_type">
+            
+              <b>coerce_empty_string_to_type</b>(response, type)
+            
+            <a href="../../classes/Nanook/Util.html#method-c-coerce_empty_string_to_type" name="method-c-coerce_empty_string_to_type" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-coerce_empty_string_to_type_source')" id="l_method-c-coerce_empty_string_to_type_source">show</a>
+                
+              </p>
+              <div id="method-c-coerce_empty_string_to_type_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/util.rb, line 16</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">coerce_empty_string_to_type</span>(<span class="ruby-identifier">response</span>, <span class="ruby-identifier">type</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;&quot;</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">response</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-c-raw_to_NANO">
+            
+              <b>raw_to_NANO</b>(raw)
+            
+            <a href="../../classes/Nanook/Util.html#method-c-raw_to_NANO" name="method-c-raw_to_NANO" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-raw_to_NANO_source')" id="l_method-c-raw_to_NANO_source">show</a>
+                
+              </p>
+              <div id="method-c-raw_to_NANO_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/util.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">raw_to_NANO</span>(<span class="ruby-identifier">raw</span>)
+  <span class="ruby-identifier">raw</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">/</span> <span class="ruby-constant">STEP</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>

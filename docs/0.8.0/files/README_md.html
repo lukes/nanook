@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>README.md</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
+<script src="../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            README.md
+        </h1>
+        <ul class="files">
+            
+            <li>
+                README.md
+                
+            </li>
+            <li>Last modified: 2018-03-15 09:08:34 +1300</li>
+        </ul>
+    </div>
+
+    <div id="bodyContent">
+        <div id="content">
+  
+    <div class="description">
+      
+<h1 id="label-Nanook"><a href="../classes/Nanook.html">Nanook</a></h1>
+
+<p>This is a Ruby library for managing a <a href="https://nano.org/">nano
+currency</a> node, including making and receiving payments, using the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol">nano RPC
+protocol</a>. Nano is a fee-less, fast, environmentally-friendly
+cryptocurrency. It&#39;s awesome. See <a
+href="https://nano.org/">nano.org</a>.</p>
+
+<p><a href="https://badge.fury.io/rb/nanook"><img
+src="https://badge.fury.io/rb/nanook.svg"></a> <a
+href="https://circleci.com/gh/lukes/nanook/tree/master"><img
+src="https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield"></a></p>
+
+<h2 id="label-Installation">Installation</h2>
+
+<p>Add this line to your application&#39;s Gemfile:</p>
+
+<pre><code>gem &#39;nanook&#39;, &quot;~&gt; 0.7&quot;
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre><code>$ bundle
+</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre><code>$ gem install nanook
+</code></pre>
+
+<h1 id="label-Getting+Started">Getting Started</h1>
+
+<h2 id="label-Initializing">Initializing</h2>
+
+<p><a href="../classes/Nanook.html">Nanook</a> will by default connect to
+<code>http://localhost:7076</code>.</p>
+
+<pre><code>nanook = Nanook.new
+</code></pre>
+
+<p>To connect to another host instead:</p>
+
+<pre><code>nanook = Nanook.new(&quot;http://ip6-localhost:7076&quot;)
+</code></pre>
+
+<h2 id="label-Basics">Basics</h2>
+
+<h3 id="label-Working+with+wallets+and+accounts">Working with wallets and accounts</h3>
+
+<p>Create a wallet:</p>
+
+<pre><code>Nanook.new.wallet.create
+</code></pre>
+
+<p>Create an account within a wallet:</p>
+
+<pre><code>Nanook.new.wallet(wallet_id).account.create
+</code></pre>
+
+<p>List accounts within a wallet:</p>
+
+<pre><code>Nanook.new.wallet(wallet_id).accounts
+</code></pre>
+
+<h3 id="label-Sending+a+payment">Sending a payment</h3>
+
+<p>You can send a payment from an account in a wallet:</p>
+
+<pre><code>account = Nanook.new.wallet(wallet_id).account(account_id)
+account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
+</code></pre>
+
+<p>Or, a wallet:</p>
+
+<pre><code>wallet = Nanook.new.wallet(wallet_id)
+wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: unique_id)
+</code></pre>
+
+<p>The <code>id</code> can be any string and needs to be unique per payment.
+It serves an important purpose; it allows you to make this call multiple
+times with the same <code>id</code> and be reassured that you will only
+ever send that nano payment once. From the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create">Nano
+RPC</a>:</p>
+
+<blockquote>
+<p>You can (and should) specify a unique id for each spend to provide
+idempotency. That means that if you [make the payment call] two times with
+the same id, the second request won&#39;t send any additional Nano.</p>
+</blockquote>
+
+<p>The unit of the <code>amount</code> is NANO (which is currently technically
+1Mnano — see <a href="https://nano.org/en/faq#what-are-nano-units-">What
+are Nano’s Units</a>).</p>
+
+<p>Note, there may be a delay in receiving a response due to Proof of Work
+being done. From the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create">Nano
+RPC</a>:</p>
+
+<blockquote>
+<p>Proof of Work is precomputed for one transaction in the background. If it
+has been a while since your last transaction it will send instantly, the
+next one will need to wait for Proof of Work to be generated.</p>
+</blockquote>
+
+<h3 id="label-Receiving+a+payment">Receiving a payment</h3>
+
+<p>The simplest way to receive a payment is:</p>
+
+<pre><code>account = Nanook.new.wallet(wallet_id).account(account_id)
+account.receive
+
+# or:
+
+wallet = Nanook.new.wallet(wallet_id)
+wallet.receive(into: account_id)
+</code></pre>
+
+<p>The <code>receive</code> method when called as above will receive the
+latest pending payment for an account in a wallet. It will either return a
+block hash if a payment was received, or <code>false</code> if there were
+no pending payments to receive.</p>
+
+<p>You can also receive a specific pending block if you know it (you may have
+discovered it through calling <code>account.pending</code> for example):</p>
+
+<pre><code>account = Nanook.new.wallet(wallet_id).account(account_id)
+account.receive(block_id)
+
+# or:
+
+wallet = Nanook.new.wallet(wallet_id)
+wallet.receive(block_id, into: account_id)
+</code></pre>
+
+<h2 id="label-All+commands">All commands</h2>
+
+<h3 id="label-Wallets">Wallets</h3>
+
+<p>See the <a
+href="https://lukes.github.io/nanook/0.7.0/classes/Nanook/Wallet.html">full
+documentation for Nanook::Wallet</a> for a detailed description of each
+method and example responses.</p>
+
+<h4 id="label-Create+wallet-3A">Create wallet:</h4>
+
+<pre><code>Nanook.new.wallet.create
+</code></pre>
+
+<h4 id="label-Working+with+a+single+wallet-3A">Working with a single wallet:</h4>
+
+<pre><code>wallet = Nanook.new.wallet(wallet_id)
+
+wallet.export
+wallet.locked?
+wallet.unlock(password)
+wallet.change_password(password)
+
+wallet.balance
+wallet.balance(account_break_down: true)
+wallet.balance(unit: :raw)
+wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: unique_id)
+wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
+wallet.receive(into: account_id)
+wallet.receive(pending_block_id, into: account_id)
+
+wallet.account.create
+wallet.accounts
+wallet.contains?(account_id)
+
+wallet.destroy
+</code></pre>
+
+<h3 id="label-Accounts">Accounts</h3>
+
+<h4 id="label-Create+account-3A">Create account:</h4>
+
+<pre><code>Nanook.new.wallet(wallet_id).account.create
+</code></pre>
+
+<h4 id="label-Working+with+a+single+account-3A">Working with a single account:</h4>
+
+<pre><code>account = Nanook.new.wallet(wallet_id).account(account_id)
+
+account.exists?
+account.info
+account.info(detailed: true)
+account.ledger
+account.ledger(limit: 10)
+account.history
+account.history(limit: 1)
+account.public_key
+account.delegators
+account.representative
+account.weight
+
+account.balance
+account.balance(unit: :raw)
+account.pay(to: recipient_account_id, amount: 2, id: unique_id)
+account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
+account.pending
+account.pending(limit: 1)
+account.receive
+account.receive(pending_block_id)
+
+account.destroy
+</code></pre>
+
+<h4 id="label-Working+with+any+account+-28not+necessarily+in+your+wallet-29-3A">Working with any account (not necessarily in your wallet):</h4>
+
+<p>See the <a
+href="https://lukes.github.io/nanook/0.7.0/classes/Nanook/Account.html">full
+documentation for Nanook::Account</a> for a detailed description of each
+method and example responses.</p>
+
+<pre><code>account = Nanook.new.account(account_id)
+
+account.exists?
+account.info
+account.info(detailed: true)
+account.ledger
+account.ledger(limit: 10)
+account.history
+account.history(limit: 1)
+account.public_key
+account.delegators
+account.representative
+account.weight
+
+account.balance
+account.balance(unit: :raw)
+account.pending
+account.pending(limit: 1)
+</code></pre>
+
+<h3 id="label-Blocks">Blocks</h3>
+
+<pre><code>block = Nanook.new.block(block_id)
+
+block.info                        # Verified blocks in the ledger
+block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing blocks
+block.account
+block.chain
+block.chain(limit: 10)
+block.history
+block.history(limit: 10)
+block.republish
+block.republish(sources: 2)
+block.republish(destinations: 2)
+block.pending?
+block.process
+block.successors
+block.successors(limit: 10)
+
+block.generate_work
+block.cancel_work
+block.is_valid_work?(work_id)
+</code></pre>
+
+<h3 id="label-Managing+your+nano+node">Managing your nano node</h3>
+
+<pre><code>node = Nanook.new.node
+
+node.block_count
+node.block_count_type
+node.bootstrap_any
+node.bootstrap(address: &quot;::ffff:138.201.94.249&quot;, port: 7075)
+node.frontier_count
+node.peers
+node.representatives
+node.representatives
+node.sync_progress
+node.synced?
+node.version
+
+node.stop
+</code></pre>
+
+<h3 id="label-Work+peers">Work peers</h3>
+
+<pre><code>work_peers = Nanook.new.work_peers
+
+work_peers.add(address: &quot;::ffff:172.17.0.1:7076&quot;, port: 7076)
+work_peers.clear
+work_peers.list
+</code></pre>
+
+<h3 id="label-Keys">Keys</h3>
+
+<h4 id="label-Create+private+public+key+pair-3A">Create private public key pair:</h4>
+
+<pre><code>Nanook.new.key.generate
+Nanook.new.key.generate(seed: seed, index: 0)
+</code></pre>
+
+<h4 id="label-Working+with+a+single+key">Working with a single key</h4>
+
+<pre><code>key = Nanook.new.key(private_key)
+
+key.info
+</code></pre>
+
+<h2 id="label-Nanook+Metal"><a href="../classes/Nanook.html">Nanook</a> Metal</h2>
+
+<p>You can do any call listed in the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol">Nano
+RPC</a> directly through the <code>rpc</code> method. The first argument
+should match the <code>action</code> of the RPC call, and then all
+remaining parameters are passed in as arguments.</p>
+
+<p>E.g., the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create">accounts_create
+command</a> can be called like this:</p>
+
+<pre><code>Nano.new.rpc(:accounts_create, wallet: wallet_id, count: 2)
+</code></pre>
+
+<h2 id="label-Contributing">Contributing</h2>
+
+<p>Bug reports and pull requests are welcome. Pull requests with passing tests
+are even better.</p>
+
+<p>To run the test suite:</p>
+
+<pre><code>bundle exec rspec spec
+</code></pre>
+
+<h2 id="label-License">License</h2>
+
+<p>The gem is available as open source under the terms of the <a
+href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+
+<h2 id="label-Buy+me+a+nano+coffee">Buy me a nano coffee</h2>
+
+<p>This library is totally free to use, but feel free to send some nano <a
+href="https://www.nanode.co/account/xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j">my
+way</a> if you&#39;d like to!</p>
+
+<pre><code>xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j
+</code></pre>
+
+<p><img
+src="https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png"></p>
+
+    </div>
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+    
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>
