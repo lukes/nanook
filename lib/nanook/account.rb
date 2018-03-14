@@ -213,6 +213,10 @@ class Nanook
       Hash[response.sort].to_symbolized_hash
     end
 
+    def inspect # :nodoc:
+      "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+    end
+
     # Returns information about the given account as well as other
     # accounts up the ledger. The number of accounts returned is determined
     # by the <tt>limit:</tt> argument.

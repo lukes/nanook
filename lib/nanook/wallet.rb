@@ -209,6 +209,10 @@ class Nanook
       !response.empty? && response[:exists] == 1
     end
 
+    def inspect # :nodoc:
+      "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+    end
+
     # Make a payment from an account in your wallet to another account
     # on the nano network. Returns a <i>send</i> block hash if successful,
     # or an error String if unsuccessful.

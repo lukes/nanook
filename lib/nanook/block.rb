@@ -90,6 +90,10 @@ class Nanook
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
+    def inspect # :nodoc:
+      "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+    end
+
     private
 
     # Some RPC calls expect the param that represents the block to be named

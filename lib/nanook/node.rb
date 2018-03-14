@@ -25,6 +25,10 @@ class Nanook
       rpc(:frontier_count)[:count]
     end
 
+    def inspect # :nodoc:
+      "#{self.class.name}(object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+    end
+
     def peers
       rpc(:peers)[:peers]
     end

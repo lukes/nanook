@@ -36,6 +36,10 @@ class Nanook
       end
     end
 
+    def inspect # :nodoc:
+      "#{self.class.name}(host: #{@http.address}, timeout: #{@http.read_timeout} object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+    end
+
     private
 
     # Convert Strings of primitives to primitives

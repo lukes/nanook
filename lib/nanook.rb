@@ -49,6 +49,10 @@ class Nanook
     Nanook::Block.new(@rpc, block)
   end
 
+  def inspect # :nodoc
+    "#{self.class.name}(rpc: #{@rpc.inspect}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+  end
+
   def key(key=nil)
     Nanook::Key.new(@rpc, key)
   end
