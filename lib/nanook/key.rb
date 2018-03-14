@@ -16,6 +16,10 @@ class Nanook
       end
     end
 
+    def id
+      @key
+    end
+
     def info
       key_required!
       rpc(:key_expand)

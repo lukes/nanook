@@ -23,6 +23,10 @@ class Nanook
       end
     end
 
+    def account_id
+      @account
+    end
+
     def create
       wallet_required!
       rpc(:account_create)[:account]
@@ -84,6 +88,10 @@ class Nanook
       else
         _receive_with_block(block)
       end
+    end
+
+    def wallet_id
+      @wallet
     end
 
     # Any method of Nanook::Account can be called on this class too

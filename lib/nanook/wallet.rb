@@ -209,6 +209,10 @@ class Nanook
       !response.empty? && response[:exists] == 1
     end
 
+    def id
+      @wallet
+    end
+
     def inspect # :nodoc:
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end

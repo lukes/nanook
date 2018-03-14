@@ -43,6 +43,10 @@ class Nanook
       rpc(:history, :hash, count: limit)[:history]
     end
 
+    def id
+      @block
+    end
+
     def info(allow_unchecked: false)
       if allow_unchecked
         # TODO not actually sure what this response looks like when it's not an unchecked block, assuming its blank
