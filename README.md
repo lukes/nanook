@@ -120,6 +120,8 @@ wallet.receive(block_id, into: account_id)
 
 ## All commands
 
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/1.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: expand the "**Nanook** < Object" item in the sidebar).
+
 ### Wallets
 
 See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
@@ -135,11 +137,6 @@ Nanook.new.wallet.create
 ```ruby
 wallet = Nanook.new.wallet(wallet_id)
 
-wallet.export
-wallet.locked?
-wallet.unlock(password)
-wallet.change_password(password)
-
 wallet.balance
 wallet.balance(account_break_down: true)
 wallet.balance(unit: :raw)
@@ -151,6 +148,11 @@ wallet.receive(pending_block_id, into: account_id)
 wallet.account.create
 wallet.accounts
 wallet.contains?(account_id)
+
+wallet.export
+wallet.locked?
+wallet.unlock(password)
+wallet.change_password(password)
 
 wallet.destroy
 ```
@@ -167,6 +169,15 @@ Nanook.new.wallet(wallet_id).account.create
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
 
+account.balance
+account.balance(unit: :raw)
+account.pay(to: recipient_account_id, amount: 2, id: unique_id)
+account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
+account.pending
+account.pending(limit: 1)
+account.receive
+account.receive(pending_block_id)
+
 account.exists?
 account.info
 account.info(detailed: true)
@@ -178,15 +189,6 @@ account.public_key
 account.delegators
 account.representative
 account.weight
-
-account.balance
-account.balance(unit: :raw)
-account.pay(to: recipient_account_id, amount: 2, id: unique_id)
-account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
-account.pending
-account.pending(limit: 1)
-account.receive
-account.receive(pending_block_id)
 
 account.destroy
 ```
@@ -198,6 +200,11 @@ See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/
 ```ruby
 account = Nanook.new.account(account_id)
 
+account.balance
+account.balance(unit: :raw)
+account.pending
+account.pending(limit: 1)
+
 account.exists?
 account.info
 account.info(detailed: true)
@@ -209,11 +216,6 @@ account.public_key
 account.delegators
 account.representative
 account.weight
-
-account.balance
-account.balance(unit: :raw)
-account.pending
-account.pending(limit: 1)
 ```
 
 ### Blocks
