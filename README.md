@@ -62,7 +62,7 @@ Nanook.new.wallet(wallet_id).accounts
 
 ### Sending a payment
 
-You can send a payment from an account in a wallet:
+To send a payment from an account in a wallet:
 
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
@@ -80,7 +80,11 @@ The `id` can be any string and needs to be unique per payment. It serves an impo
 
 > You can (and should) specify a unique id for each spend to provide idempotency. That means that if you [make the payment call] two times with the same id, the second request won't send any additional Nano.
 
-The unit of the `amount` is NANO (which is currently technically 1Mnano &mdash; see [What are Nano's Units](https://nano.org/en/faq#what-are-nano-units-)).
+The unit of the `amount` is NANO (which is currently technically 1Mnano &mdash; see [What are Nano's Units](https://nano.org/en/faq#what-are-nano-units-)). You can pass an amount of raw instead by adding the `unit: :raw` argument:
+
+```ruby
+account.pay(to: recipient_account_id, amount: 999, unit: :raw, id: unique_id)
+```
 
 Note, there may be a delay in receiving a response due to Proof of Work being done. From the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create):
 
