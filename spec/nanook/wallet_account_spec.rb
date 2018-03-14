@@ -81,6 +81,33 @@ RSpec.describe Nanook::WalletAccount do
     expect(response).to eq block_id
   end
 
+  it "wallet account send payment in raw" do
+    stub_valid_account_check
+
+    stub_request(:post, "http://localhost:7076/").
+    with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: {
+      'Accept'=>'*/*',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Content-Type'=>'application/json',
+      'User-Agent'=>'Ruby nanook gem'
+      }).
+    to_return(status: 200, body: "{\"valid\":\"1\"}", headers: {})
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"send\",\"wallet\":\"#{wallet_id}\",\"source\":\"#{account_id}\",\"destination\":\"#{account_id}\",\"amount\":\"2\",\"id\":\"7081e2b8fec9146e\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"block\":\"#{block_id}\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, unit: :raw, id:"7081e2b8fec9146e")
+    expect(response).to eq block_id
+  end
+
   it "wallet account receive latest pending payment" do
     stub_valid_account_check
 
@@ -143,11 +170,30 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"balance\":\"10000\",\"pending\":\"10000\"}",
+      body: "{\"balance\":\"2000000000000000000000000000\",\"pending\":\"1000000000000000000000000000\"}",
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).balance).to have_key(:balance)
+    response = Nanook.new.wallet(wallet_id).account(account_id).balance
+    expect(response[:balance]).to eq(0.002)
+    expect(response[:pending]).to eq(0.001)
+  end
+
+  it "wallet account balance raw unit" do
+    stub_valid_account_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"balance\":\"10000\",\"pending\":\"20000\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).account(account_id).balance(unit: :raw)
+    expect(response[:balance]).to eq(10000)
+    expect(response[:pending]).to eq(20000)
   end
 
   it "wallet account info" do

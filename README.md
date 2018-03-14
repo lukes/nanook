@@ -138,7 +138,9 @@ wallet.change_password(password)
 
 wallet.balance
 wallet.balance(account_break_down: true)
-wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: unique_id)
+wallet.balance(unit: :raw)
+wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: unique_id)
+wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
 
@@ -174,7 +176,9 @@ account.representative
 account.weight
 
 account.balance
-account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
+account.balance(unit: :raw)
+account.pay(to: recipient_account_id, amount: 2, id: unique_id)
+account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
 account.pending
 account.pending(limit: 1)
 account.receive
@@ -203,6 +207,7 @@ account.representative
 account.weight
 
 account.balance
+account.balance(unit: :raw)
 account.pending
 account.pending(limit: 1)
 ```

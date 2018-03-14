@@ -75,20 +75,34 @@ class Nanook
     #
     # ==== Arguments
     #
-    # [+account_break_down:+] Boolean (default is false). When +true+
+    # [+account_break_down:+] Boolean (default is +false+). When +true+
     #                         the response will contain balances per
     #                         account.
+    # [+unit:+]   Symbol (default is +:nano+) Represents the unit that
+    #             the balances will be returned in.
+    #             Must be either +:nano+ or +:raw+. (Note: this method
+    #             interprets +:nano+ as NANO, which is technically Mnano
+    #             See {What are Nano's Units}[https://nano.org/en/faq#what-are-nano-units-])
     #
     # ==== Examples
-    # Simple use:
-    #
     #   wallet.balance
     #
     # Example response:
     #
     #   {
-    #     "balance"=>5000000000000000,
-    #     "pending"=>10000000000000
+    #     "balance"=>5,
+    #     "pending"=>0.001
+    #   }
+    #
+    # Asking for the balances to be returned in raw instead of NANO.
+    #
+    #   wallet.balance(unit: :raw)
+    #
+    # Example response:
+    #
+    #   {
+    #     "balance"=>5000000000000000000000000000000,
+    #     "pending"=>1000000000000000000000000000
     #   }
     #
     # Asking for totals to be broken down by account:
@@ -97,29 +111,43 @@ class Nanook
     #
     # Example response:
     #
-    #   {
-    #     "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"=>{
-    #       "balance"=>2500000000000000,
-    #       "pending"=>10000000000000
-    #     },
-    #     "xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx"=>{
-    #       "balance"=>2500000000000000,
-    #       "pending"=>0
-    #     },
-    #   }
-    def balance(account_break_down: false)
+      {
+        "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"=>{
+          "balance"=>2500000000000000,
+          "pending"=>10000000000000
+        },
+        "xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx"=>{
+          "balance"=>2500000000000000,
+          "pending"=>0
+        },
+      }
+    def balance(account_break_down: false, unit: Nanook::WalletAccount::DEFAULT_UNIT)
       wallet_required!
+
+      unless Nanook::WalletAccount::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
       if account_break_down
-        Nanook::Util.coerce_empty_string_to_type(rpc(:wallet_balances)[:balances], Hash)
-      else
-        rpc(:wallet_balance_total)
+        return Nanook::Util.coerce_empty_string_to_type(rpc(:wallet_balances)[:balances], Hash).tap do |r|
+          if unit == :nano
+            r.each do |account, balances|
+              r[account][:balance] = Nanook::Util.raw_to_NANO(r[account][:balance])
+              r[account][:pending] = Nanook::Util.raw_to_NANO(r[account][:balapendingnce])
+            end
+          end
+        end
+      end
+
+      rpc(:wallet_balance_total).tap do |r|
+        if unit == :nano
+          r[:balance] = Nanook::Util.raw_to_NANO(r[:balance])
+          r[:pending] = Nanook::Util.raw_to_NANO(r[:pending])
+        end
       end
     end
 
-    # Creates a new wallet. This is the only method in Nanook::Wallet
-    # that doesn't expect a wallet seed to be passed in as an argument.
-    #
-    # To create a new wallet:
+    # Creates a new wallet.
     #
     #   Nanook.new.wallet.create
     #
@@ -189,9 +217,11 @@ class Nanook
     #
     # [+from:+]   String account id of an account in your wallet
     # [+to:+]     String account id of the recipient of your payment
-    # [+amount:+] Can be either an Integer or Float. Unit is NANO (which
-    #             is currently technically 1Mnano - see
-    #             {What are Nano's Units}[https://nano.org/en/faq#what-are-nano-units-]).
+    # [+amount:+] Can be either an Integer or Float.
+    # [+unit:+]   Symbol (default is +:nano+). Represents the unit that +amount+ is in.
+    #             Must be either +:nano+ or +:raw+. (Note: this method
+    #             interprets +:nano+ as NANO, which is technically Mnano
+    #             See {What are Nano's Units}[https://nano.org/en/faq#what-are-nano-units-])
     # [+id:+]     String. Must be unique per payment. It serves an important
     #             purpose; it allows you to make the same call multiple
     #             times with the same +id+ and be reassured that you will
@@ -201,9 +231,10 @@ class Nanook
     #
     # <i>Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.</i>
     #
-    # ==== Example
+    # ==== Examples
     #
-    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 0.001, id: "myUniqueId123")
+    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 1.1, id: "myUniqueId123")
+    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123")
     #
     # ==== Example responses
     #   "718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"
@@ -211,10 +242,10 @@ class Nanook
     # Or:
     #
     #   "Account not found"
-    def pay(from:, to:, amount:, id:)
+    def pay(from:, to:, amount:, unit: Nanook::WalletAccount::DEFAULT_UNIT, id:)
       wallet_required!
       validate_wallet_contains_account!(from)
-      account(from).pay(to: to, amount: amount, id: id)
+      account(from).pay(to: to, amount: amount, unit: unit, id: id)
     end
 
     # Receives a pending payment into an account in the wallet.

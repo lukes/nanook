@@ -202,6 +202,33 @@ RSpec.describe Nanook::Wallet do
     expect(response).to eq block_id
   end
 
+  it "wallet send payment in raw" do
+    stub_valid_account_check
+
+    stub_request(:post, "http://localhost:7076/").
+    with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: {
+      'Accept'=>'*/*',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Content-Type'=>'application/json',
+      'User-Agent'=>'Ruby nanook gem'
+      }).
+    to_return(status: 200, body: "{\"valid\":\"1\"}", headers: {})
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"send\",\"wallet\":\"#{wallet_id}\",\"source\":\"#{account_id}\",\"destination\":\"#{account_id}\",\"amount\":\"2\",\"id\":\"7081e2b8fec9146e\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"block\":\"#{block_id}\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).pay(from: account_id, to: account_id, amount: 2, unit: :raw, id:"7081e2b8fec9146e")
+    expect(response).to eq block_id
+  end
+
   it "wallet account receive latest pending payment" do
     stub_valid_account_check
 
@@ -276,17 +303,55 @@ RSpec.describe Nanook::Wallet do
     expect(Nanook.new.wallet(wallet_id).balance(account_break_down: true)).to have_key :xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
   end
 
+  it "wallet balance with account break down and unit raw" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_balances\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"balances\":{
+        \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\":{
+          \"balance\":\"10000\",
+          \"pending\":\"20000\"
+        }
+      }}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).balance(account_break_down: true, unit: :raw)
+    expect(response).to have_key :xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
+    expect(response[:xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000][:balance]).to eq(10000)
+    expect(response[:xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000][:pending]).to eq(20000)
+  end
+
   it "wallet balance with no account break down" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_balance_total\",\"wallet\":\"#{wallet_id}\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"balance\":\"10000\",\"pending\":\"10000\"}",
+      body: "{\"balance\":\"1000000000000000000000000000\",\"pending\":\"2000000000000000000000000000\"}",
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).balance).to have_key :balance
+    response = Nanook.new.wallet(wallet_id).balance
+    expect(response[:balance]).to eq(0.001)
+    expect(response[:pending]).to eq(0.002)
+  end
+
+  it "wallet balance with no account break down in raw" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_balance_total\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"balance\":\"1000000000000000000000000000\",\"pending\":\"2000000000000000000000000000\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).balance(unit: :raw)
+    expect(response[:balance]).to eq(1000000000000000000000000000)
+    expect(response[:pending]).to eq(2000000000000000000000000000)
   end
 
 end

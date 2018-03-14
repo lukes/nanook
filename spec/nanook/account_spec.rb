@@ -74,11 +74,28 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"balance\":\"10000\",\"pending\":\"10000\"}",
+      body: "{\"balance\":\"11439597000000000000000000000000\",\"pending\":\"21439597000000000000000000000000\"}",
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).balance).to have_key(:balance)
+    response = Nanook.new.account(account_id).balance
+    expect(response[:balance]).to eq(11.439597000000001)
+    expect(response[:pending]).to eq(21.439597000000001)
+  end
+
+  it "account balance in raw" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"balance\":\"11439597000000000000000000000000\",\"pending\":\"21439597000000000000000000000000\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).balance(unit: :raw)
+    expect(response[:balance]).to eq(11439597000000000000000000000000)
+    expect(response[:pending]).to eq(21439597000000000000000000000000)
   end
 
   it "account representative" do

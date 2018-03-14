@@ -1,6 +1,9 @@
 class Nanook
   class WalletAccount
 
+    UNITS = [:raw, :nano]
+    DEFAULT_UNIT = :nano
+
     def initialize(rpc, wallet, account)
       @rpc = rpc
       @wallet = wallet
@@ -32,15 +35,27 @@ class Nanook
       end
     end
 
-    def pay(to:, amount:, id:)
+    def inspect # :nodoc:
+      "#{self.class.name}(wallet_id: #{wallet_id}, account_id: #{account_id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+    end
+
+    def pay(to:, amount:, unit: DEFAULT_UNIT, id:)
       wallet_required!
+
+      unless UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
 
       # Check that to: account is valid
       unless Nanook::Account.new(@rpc, to).exists?
         raise ArgumentError.new("To account does not exist (#{to})")
       end
 
-      raw = Nanook::Util.NANO_to_raw(amount)
+      raw = if unit.to_sym.eql?(:nano)
+        Nanook::Util.NANO_to_raw(amount)
+      else
+        amount
+      end
 
       # account is called source, so don't use the normal rpc method
       p = {

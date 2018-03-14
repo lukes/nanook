@@ -104,14 +104,37 @@ class Nanook
     #
     # [+:balance+] Account balance
     # [+:pending+] Amount pending and not yet received by the account
+    #
+    # ==== Arguments
+    #
+    # [+unit:+]   Symbol (default is +:nano+) Represents the unit that
+    #             the balances will be returned in.
+    #             Must be either +:nano+ or +:raw+. (Note: this method
+    #             interprets +:nano+ as NANO, which is technically Mnano
+    #             See {What are Nano's Units}[https://nano.org/en/faq#what-are-nano-units-])
+    #
     # ===== Example response
     #   {
-    #    "balance": "10000",
-    #    "pending": "10000"
+    #    "balance": "2",
+    #    "pending": "1"
     #   }
-    def balance
+    def balance(unit: Nanook::WalletAccount::DEFAULT_UNIT)
       account_required!
-      rpc(:account_balance)
+
+      unless Nanook::WalletAccount::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
+      rpc(:account_balance).tap do |r|
+        if unit == :nano
+          r[:balance] = Nanook::Util.raw_to_NANO(r[:balance])
+          r[:pending] = Nanook::Util.raw_to_NANO(r[:pending])
+        end
+      end
+    end
+
+    def id
+      @block
     end
 
     # Returns a Hash containing the following information about an
@@ -120,7 +143,7 @@ class Nanook
     # [+:frontier+] The latest block hash
     # [+:open_block+] The first block in every account's blockchain. When this block was published the account was officially open
     # [+:representative_block+] The block that named the representative for the account
-    # [+:balance+] Amount in {raw}[https://nano.org/en/faq#what-are-nano-units-]
+    # [+:balance+] Amount in {NANO}[https://nano.org/en/faq#what-are-nano-units-]
     # [+:last_modified+] Unix timestamp
     # [+:block_count+] Number of blocks in the account's blockchain
     #
@@ -145,7 +168,7 @@ class Nanook
     #
     # ==== Example 1 response
     #   {
-    #     :balance=>11439597000000000000000000000000,
+    #     :balance=>11.439597000000001,
     #     :block_count=>4
     #     :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
     #     :modified_timestamp=>1520500357,
@@ -159,7 +182,7 @@ class Nanook
     #
     # ==== Example 2 response
     #   {
-    #     :balance=>11439597000000000000000000000000,
+    #     :balance=>11.439597000000001,
     #     :block_count=>4,
     #     :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
     #     :modified_timestamp=>1520500357,
