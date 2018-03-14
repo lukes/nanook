@@ -72,11 +72,11 @@ class Nanook
 
       response = @rpc.call(:send, p)
 
-      if response[:error]
-        response[:error]
-      else
-        response[:block]
+      if response.has_key?(:error)
+        return response[:error]
       end
+
+      response[:block]
     end
 
     # Returns false if no block to receive
