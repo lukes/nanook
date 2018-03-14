@@ -302,6 +302,10 @@ To run the test suite:
 
     bundle exec rspec spec
 
+To update rdoc documentation:
+
+    bundle exec rake rerdoc
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
