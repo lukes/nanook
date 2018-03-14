@@ -294,21 +294,24 @@ account = Nanook::Account.new(rpc_conn, &quot;xrb_...&quot;)
             <div class="description">
               <p>Returns a Hash containing the account&#39;s balance. Units are in <a
 href="https://nano.org/en/faq#what-are-nano-units-">raw</a>.</p>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:balance</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>:balance</code>
+<dd>
 <p><a href="Account.html">Account</a> balance</p>
-</td></tr><tr><td class='label'><code>:pending</code></td><td>
+</dd><dt><code>:pending</code>
+<dd>
 <p>Amount pending and not yet received by the account</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-balance-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>unit:</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>unit:</code>
+<dd>
 <p>Symbol (default is <code>:nano</code>) Represents the unit that the
 balances will be returned in. Must be either <code>:nano</code> or
 <code>:raw</code>. (Note: this method interprets <code>:nano</code> as
 NANO, which is technically Mnano See <a
 href="https://nano.org/en/faq#what-are-nano-units-">What are Nano’s
 Units</a>)</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h5 id="method-i-balance-label-Example+response">Example response</h5>
 
@@ -461,10 +464,11 @@ href="Node.html#method-i-sync_progress">Nanook::Node#sync_progress</a>.</p>
 in <a href="https://nano.org/en/faq#what-are-nano-units-">raw</a>.</p>
 
 <h4 id="method-i-history-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>limit:</code>
+<dd>
 <p>Integer representing the maximum number of history items to return (default
 is 1000)</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-history-label-Example">Example</h4>
 
@@ -564,39 +568,50 @@ account.history(limit: 1)
           
             <div class="description">
               <p>Returns a Hash containing the following information about an account:</p>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:frontier</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>:frontier</code>
+<dd>
 <p>The latest block hash</p>
-</td></tr><tr><td class='label'><code>:open_block</code></td><td>
+</dd><dt><code>:open_block</code>
+<dd>
 <p>The first block in every account&#39;s blockchain. When this block was
 published the account was officially open</p>
-</td></tr><tr><td class='label'><code>:representative_block</code></td><td>
+</dd><dt><code>:representative_block</code>
+<dd>
 <p>The block that named the representative for the account</p>
-</td></tr><tr><td class='label'><code>:balance</code></td><td>
+</dd><dt><code>:balance</code>
+<dd>
 <p>Amount in <a href="https://nano.org/en/faq#what-are-nano-units-">NANO</a></p>
-</td></tr><tr><td class='label'><code>:last_modified</code></td><td>
+</dd><dt><code>:last_modified</code>
+<dd>
 <p>Unix timestamp</p>
-</td></tr><tr><td class='label'><code>:block_count</code></td><td>
+</dd><dt><code>:block_count</code>
+<dd>
 <p>Number of blocks in the account&#39;s blockchain</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <p>When <code>detailed: true</code> is passed as an argument, this method
 makes four additional calls to the RPC to return more information about an
 account:</p>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>:weight</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>:weight</code>
+<dd>
 <p>See <a href="Account.html#method-i-weight">weight</a></p>
-</td></tr><tr><td class='label'><code>:pending</code></td><td>
+</dd><dt><code>:pending</code>
+<dd>
 <p>See <a href="Account.html#method-i-balance">balance</a></p>
-</td></tr><tr><td class='label'><code>:representative</code></td><td>
+</dd><dt><code>:representative</code>
+<dd>
 <p>See <a href="Account.html#method-i-representative">representative</a></p>
-</td></tr><tr><td class='label'><code>:public_key</code></td><td>
+</dd><dt><code>:public_key</code>
+<dd>
 <p>See <a href="Account.html#method-i-public_key">public_key</a></p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-info-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>detailed:</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>detailed:</code>
+<dd>
 <p>Boolean (default is false). When <code>true</code>, four additional calls
 are made to the RPC to return more information</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-info-label-Example+1">Example 1</h4>
 
@@ -695,9 +710,10 @@ the ledger. The number of accounts returned is determined by the
 href="Account.html#method-i-info">info</a>(detailed: false) method returns.</p>
 
 <h4 id="method-i-ledger-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>limit:</code>
+<dd>
 <p>Number of accounts to return in the ledger (default is 1)</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-ledger-label-Example">Example</h4>
 
@@ -765,12 +781,14 @@ href="https://nano.org/en/faq#what-are-nano-units-">raw</a> of the pending
 block and the source account that sent it.</p>
 
 <h4 id="method-i-pending-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>limit:</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>limit:</code>
+<dd>
 <p>Number of pending blocks to return (default is 1000)</p>
-</td></tr><tr><td class='label'><code>detailed:</code></td><td>
+</dd><dt><code>detailed:</code>
+<dd>
 <p>Boolean to have this method return a more complex Hash of pending block
 information (default is <code>false</code>)</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-pending-label-Example+1">Example 1</h4>
 

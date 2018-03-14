@@ -21,7 +21,7 @@
 
     <meta name="keywords" content="Nanook::Wallet class">
   
-    <meta name="keywords" content="new, account, accounts, balance, change_seed, create, destroy, export, contains?, id, pay, receive, locked?, unlock, change_password">
+    <meta name="keywords" content="new, account, accounts, balance, create, destroy, export, contains?, id, pay, receive, locked?, unlock, change_password">
   
 </head>
 
@@ -136,11 +136,6 @@ wallet = Nanook::Wallet.new(rpc_conn, wallet_seed)
               
               <li>
                 <a href="#method-i-change_password">change_password</a>,
-              </li>
-            
-              
-              <li>
-                <a href="#method-i-change_seed">change_seed</a>,
               </li>
             
               
@@ -339,13 +334,14 @@ href="WalletAccount.html">Nanook::WalletAccount</a> on it.</p>
 <p>Will throw an ArgumentError if the wallet does not contain the account.</p>
 
 <h4 id="method-i-account-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>account</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>account</code>
+<dd>
 <p>Optional String of an account (starting with
 <code>&quot;xrb...&quot;</code>) to start working with. Must be an account
 within the wallet. When no account is given, the instance returned only
 allows you to call <code>create</code> on it, to create a new account.
 Otherwise, you must pass an account string for all other methods.</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-account-label-Examples">Examples</h4>
 
@@ -518,47 +514,10 @@ action was successful.</p>
                 
               </p>
               <div id="method-i-change_password_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 329</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 325</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">change_password</span>(<span class="ruby-identifier">password</span>)
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:password_change</span>, <span class="ruby-value">password:</span> <span class="ruby-identifier">password</span>)[<span class="ruby-value">:changed</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
-<span class="ruby-keyword">end</span></pre>
-              </div>
-            </div>
-            
-          </div>
-        
-        <div class="method">
-          <div class="title method-title" id="method-i-change_seed">
-            
-              <b>change_seed</b>(seed)
-            
-            <a href="../../classes/Nanook/Wallet.html#method-i-change_seed" name="method-i-change_seed" class="permalink">Link</a>
-          </div>
-
-          
-            <div class="description">
-              
-            </div>
-          
-
-          
-
-          
-
-          
-            
-            <div class="sourcecode">
-              
-              <p class="source-link">
-                Source:
-                <a href="javascript:toggleSource('method-i-change_seed_source')" id="l_method-i-change_seed_source">show</a>
-                
-              </p>
-              <div id="method-i-change_seed_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 152</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">change_seed</span>(<span class="ruby-identifier">seed</span>)
-  <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:wallet_change_seed</span>).<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:success</span>)
 <span class="ruby-keyword">end</span></pre>
               </div>
             </div>
@@ -578,9 +537,10 @@ action was successful.</p>
               <p>Returns boolean indicating if the wallet contains an account.</p>
 
 <h4 id="method-i-contains-3F-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>account</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>account</code>
+<dd>
 <p>String account id (will start with <code>&quot;xrb_...&quot;</code>)</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-contains-3F-label-Example+response">Example response</h4>
 
@@ -603,7 +563,7 @@ action was successful.</p>
                 
               </p>
               <div id="method-i-contains-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 212</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 208</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">contains?</span>(<span class="ruby-identifier">account</span>)
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:wallet_contains</span>, <span class="ruby-value">account:</span> <span class="ruby-identifier">account</span>)
@@ -665,7 +625,7 @@ hacker, which includes your personal computer.</p>
                 
               </p>
               <div id="method-i-create_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 179</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 175</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">create</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:wallet_create</span>)[<span class="ruby-value">:wallet</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -708,7 +668,7 @@ successful or not.</p>
                 
               </p>
               <div id="method-i-destroy_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 188</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 184</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">destroy</span>
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:wallet_destroy</span>)
@@ -752,7 +712,7 @@ successful or not.</p>
                 
               </p>
               <div id="method-i-export_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 199</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 195</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">export</span>
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:wallet_export</span>)[<span class="ruby-value">:json</span>]
@@ -790,7 +750,7 @@ successful or not.</p>
                 
               </p>
               <div id="method-i-id_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 218</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 214</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">id</span>
   <span class="ruby-ivar">@wallet</span>
 <span class="ruby-keyword">end</span></pre>
@@ -832,7 +792,7 @@ successful or not.</p>
                 
               </p>
               <div id="method-i-locked-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 306</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 302</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">locked?</span>
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:wallet_locked</span>)
@@ -858,25 +818,30 @@ nano network. Returns a <em>send</em> block hash if successful, or an error
 String if unsuccessful.</p>
 
 <h4 id="method-i-pay-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>from:</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>from:</code>
+<dd>
 <p>String account id of an account in your wallet</p>
-</td></tr><tr><td class='label'><code>to:</code></td><td>
+</dd><dt><code>to:</code>
+<dd>
 <p>String account id of the recipient of your payment</p>
-</td></tr><tr><td class='label'><code>amount:</code></td><td>
+</dd><dt><code>amount:</code>
+<dd>
 <p>Can be either an Integer or Float.</p>
-</td></tr><tr><td class='label'><code>unit:</code></td><td>
+</dd><dt><code>unit:</code>
+<dd>
 <p>Symbol (default is <code>:nano</code>). Represents the unit that
 <code>amount</code> is in. Must be either <code>:nano</code> or
 <code>:raw</code>. (Note: this method interprets <code>:nano</code> as
 NANO, which is technically Mnano See <a
 href="https://nano.org/en/faq#what-are-nano-units-">What are Nano’s
 Units</a>)</p>
-</td></tr><tr><td class='label'><code>id:</code></td><td>
+</dd><dt><code>id:</code>
+<dd>
 <p>String. Must be unique per payment. It serves an important purpose; it
 allows you to make the same call multiple times with the same
 <code>id</code> and be reassured that you will only ever send that nano
 payment once.</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <p>Note, there may be a delay in receiving a response due to Proof of Work
 being done. From the <a
@@ -919,7 +884,7 @@ wallet.pay(from: &quot;xrb_...&quot;, to: &quot;xrb_...&quot;, amount: 540000000
                 
               </p>
               <div id="method-i-pay_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 259</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 255</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pay</span>(<span class="ruby-value">from:</span>, <span class="ruby-value">to:</span>, <span class="ruby-value">amount:</span>, <span class="ruby-value">unit:</span> <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">WalletAccount</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_UNIT</span>, <span class="ruby-value">id:</span>)
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">validate_wallet_contains_account!</span>(<span class="ruby-identifier">from</span>)
@@ -952,12 +917,14 @@ for the account will be received.</p>
 block has in as an argument.</p>
 
 <h4 id="method-i-receive-label-Arguments">Arguments</h4>
-<table class="rdoc-list label-list"><tbody><tr><td class='label'><code>block</code></td><td>
+<dl class="rdoc-list label-list"><dt><code>block</code>
+<dd>
 <p>Optional block hash of pending payment. If not provided, the latest pending
 payment will be received</p>
-</td></tr><tr><td class='label'><code>into:</code></td><td>
+</dd><dt><code>into:</code>
+<dd>
 <p>String account id of account in your wallet to receive the payment into</p>
-</td></tr></tbody></table>
+</dd></dl>
 
 <h4 id="method-i-receive-label-Examples">Examples</h4>
 
@@ -991,7 +958,7 @@ wallet.receive(&quot;718CC21...&quot;, into: &quot;xrb...&quot;)
                 
               </p>
               <div id="method-i-receive_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 295</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 291</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">receive</span>(<span class="ruby-identifier">block</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-value">into:</span>)
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">validate_wallet_contains_account!</span>(<span class="ruby-identifier">into</span>)
@@ -1036,7 +1003,7 @@ action was successful.</p>
                 
               </p>
               <div id="method-i-unlock_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 318</span>
+                <pre><span class="ruby-comment"># File lib/nanook/wallet.rb, line 314</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unlock</span>(<span class="ruby-identifier">password</span>)
   <span class="ruby-identifier">wallet_required!</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:password_enter</span>, <span class="ruby-value">password:</span> <span class="ruby-identifier">password</span>)[<span class="ruby-value">:valid</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
