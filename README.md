@@ -11,7 +11,7 @@ This is a Ruby library for managing a [nano currency](https://nano.org/) node, i
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nanook', "~> 0.7"
+gem 'nanook', "~> 1.0"
 ```
 
 And then execute:
@@ -118,7 +118,7 @@ wallet.receive(block_id, into: account_id)
 
 ### Wallets
 
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/0.7.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 #### Create wallet:
 
@@ -189,7 +189,7 @@ account.destroy
 
 #### Working with any account (not necessarily in your wallet):
 
-See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/0.7.0/classes/Nanook/Account.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
 account = Nanook.new.account(account_id)

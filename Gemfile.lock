@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nanook (0.7.0)
+    nanook (0.8.0)
       symbolized (~> 0.0.1)
 
 GEM
@@ -58,4 +58,4 @@ DEPENDENCIES
   webmock (~> 3.3)
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
