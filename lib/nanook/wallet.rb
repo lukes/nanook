@@ -40,6 +40,8 @@ class Nanook
     #
     # See Nanook::WalletAccount.
     #
+    # Will throw an ArgumentError if the wallet does not contain the account.
+    #
     # ==== Arguments
     # [+account+] Optional String of an account (starting with
     #             <tt>"xrb..."</tt>) to start working with. Must be an
@@ -162,8 +164,8 @@ class Nanook
     #
     # If you intend for your wallet to contain funds, then make sure that
     # you consider the seed that is returned as the key to your funds
-    # and store it somewhere secret and safe. Do not transmit
-    # the seed over insecure (non-SSH or SSL) networks or store it where
+    # and store it somewhere secret and safe. Only transmit
+    # the seed over secure (SSH or SSL) networks and do not store it where
     # it is able to be easily comprised by a hacker, which includes your
     # personal computer.
     #
