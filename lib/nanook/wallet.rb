@@ -113,16 +113,16 @@ class Nanook
     #
     # Example response:
     #
-      {
-        "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"=>{
-          "balance"=>2500000000000000,
-          "pending"=>10000000000000
-        },
-        "xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx"=>{
-          "balance"=>2500000000000000,
-          "pending"=>0
-        },
-      }
+    #   {
+    #     "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"=>{
+    #       "balance"=>2.5,
+    #       "pending"=>1
+    #     },
+    #     "xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx"=>{
+    #       "balance"=>51.4,
+    #       "pending"=>0
+    #     },
+    #   }
     def balance(account_break_down: false, unit: Nanook::WalletAccount::DEFAULT_UNIT)
       wallet_required!
 

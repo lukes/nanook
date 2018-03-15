@@ -21,7 +21,7 @@
 
     <meta name="keywords" content="Nanook::Block class">
   
-    <meta name="keywords" content="new, account, cancel_work, chain, generate_work, history, id, info, is_valid_work?, republish, pending?, publish, successors">
+    <meta name="keywords" content="new, account, cancel_work, chain, generate_work, history, id, info, is_valid_work?, republish, pending?, publish, process, successors">
   
 </head>
 
@@ -184,6 +184,11 @@ block = Nanook::Block.new(rpc_conn, &quot;FBF8B0E...&quot;)
               
               <li>
                 <a href="#method-i-pending-3F">pending?</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-process">process</a>,
               </li>
             
               
@@ -723,6 +728,31 @@ can be returned about blocks that are unchecked (unverified).</p>
           </div>
         
         <div class="method">
+          <div class="title method-title" id="method-i-process">
+            
+              <b>process</b>()
+            
+            <a href="../../classes/Nanook/Block.html#method-i-process" name="method-i-process" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+            <div class="aka">
+              Alias for: <a href="Block.html#method-i-publish">publish</a>
+            </div>
+          
+
+          
+          </div>
+        
+        <div class="method">
           <div class="title method-title" id="method-i-publish">
             
               <b>publish</b>()
@@ -744,6 +774,10 @@ href="Block.html#method-i-republish">republish</a> instead.</p>
             </div>
           
 
+          
+            <div class="aka">
+              Also aliased as: <a href="Block.html#method-i-process">process</a>
+            </div>
           
 
           
@@ -875,7 +909,7 @@ is 1000)</p>
                 
               </p>
               <div id="method-i-successors_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 214</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 215</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">successors</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:successors</span>, <span class="ruby-value">:block</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:blocks</span>]
   <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">coerce_empty_string_to_type</span>(<span class="ruby-identifier">response</span>, <span class="ruby-constant">Array</span>)
