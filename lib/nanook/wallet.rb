@@ -135,7 +135,7 @@ class Nanook
           if unit == :nano
             r.each do |account, balances|
               r[account][:balance] = Nanook::Util.raw_to_NANO(r[account][:balance])
-              r[account][:pending] = Nanook::Util.raw_to_NANO(r[account][:balapendingnce])
+              r[account][:pending] = Nanook::Util.raw_to_NANO(r[account][:pending])
             end
           end
         end

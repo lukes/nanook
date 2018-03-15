@@ -293,14 +293,17 @@ RSpec.describe Nanook::Wallet do
       status: 200,
       body: "{\"balances\":{
         \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\":{
-          \"balance\":\"10000\",
-          \"pending\":\"10000\"
+          \"balance\":\"1000000000000000000000000000\",
+          \"pending\":\"2000000000000000000000000000\"
         }
       }}",
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).balance(account_break_down: true)).to have_key :xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
+    response = Nanook.new.wallet(wallet_id).balance(account_break_down: true)
+    expect(response).to have_key :xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
+    expect(response[:xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000][:balance]).to eq(0.001)
+    expect(response[:xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000][:pending]).to eq(0.002)
   end
 
   it "wallet balance with account break down and unit raw" do
@@ -311,8 +314,8 @@ RSpec.describe Nanook::Wallet do
       status: 200,
       body: "{\"balances\":{
         \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\":{
-          \"balance\":\"10000\",
-          \"pending\":\"20000\"
+          \"balance\":\"1000000000000000000000000000\",
+          \"pending\":\"2000000000000000000000000000\"
         }
       }}",
       headers: {}
@@ -320,8 +323,8 @@ RSpec.describe Nanook::Wallet do
 
     response = Nanook.new.wallet(wallet_id).balance(account_break_down: true, unit: :raw)
     expect(response).to have_key :xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
-    expect(response[:xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000][:balance]).to eq(10000)
-    expect(response[:xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000][:pending]).to eq(20000)
+    expect(response[:xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000][:balance]).to eq(1000000000000000000000000000)
+    expect(response[:xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000][:pending]).to eq(2000000000000000000000000000)
   end
 
   it "wallet balance with no account break down" do
