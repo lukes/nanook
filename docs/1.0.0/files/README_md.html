@@ -24,7 +24,7 @@
                 README.md
                 
             </li>
-            <li>Last modified: 2018-03-15 09:39:38 +1300</li>
+            <li>Last modified: 2018-03-15 12:14:16 +1300</li>
         </ul>
     </div>
 
@@ -100,7 +100,7 @@ src="https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield"></a></p>
 
 <h3 id="label-Sending+a+payment">Sending a payment</h3>
 
-<p>You can send a payment from an account in a wallet:</p>
+<p>To send a payment from an account in a wallet:</p>
 
 <pre><code>account = Nanook.new.wallet(wallet_id).account(account_id)
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
@@ -126,8 +126,12 @@ the same id, the second request won&#39;t send any additional Nano.</p>
 </blockquote>
 
 <p>The unit of the <code>amount</code> is NANO (which is currently technically
-1Mnano — see <a href="https://nano.org/en/faq#what-are-nano-units-">What
-are Nano’s Units</a>).</p>
+Mnano — see <a href="https://nano.org/en/faq#what-are-nano-units-">What are
+Nano’s Units</a>). You can pass an amount of raw instead by adding the
+<code>unit: :raw</code> argument:</p>
+
+<pre><code>account.pay(to: recipient_account_id, amount: 999, unit: :raw, id: unique_id)
+</code></pre>
 
 <p>Note, there may be a delay in receiving a response due to Proof of Work
 being done. From the <a
@@ -172,6 +176,12 @@ wallet.receive(block_id, into: account_id)
 
 <h2 id="label-All+commands">All commands</h2>
 
+<p>Below is a quick reference list of commands. See the <a
+href="https://lukes.github.io/nanook/1.0.0/">full Nanook documentation</a>
+for a searchable detailed description of every class and method, what the
+arguments mean, and example responses (Tip: expand the
+“<strong>Nanook</strong> &lt; Object” item in the sidebar).</p>
+
 <h3 id="label-Wallets">Wallets</h3>
 
 <p>See the <a
@@ -188,11 +198,6 @@ method and example responses.</p>
 
 <pre><code>wallet = Nanook.new.wallet(wallet_id)
 
-wallet.export
-wallet.locked?
-wallet.unlock(password)
-wallet.change_password(password)
-
 wallet.balance
 wallet.balance(account_break_down: true)
 wallet.balance(unit: :raw)
@@ -204,6 +209,11 @@ wallet.receive(pending_block_id, into: account_id)
 wallet.account.create
 wallet.accounts
 wallet.contains?(account_id)
+
+wallet.export
+wallet.locked?
+wallet.unlock(password)
+wallet.change_password(password)
 
 wallet.destroy
 </code></pre>
@@ -219,6 +229,15 @@ wallet.destroy
 
 <pre><code>account = Nanook.new.wallet(wallet_id).account(account_id)
 
+account.balance
+account.balance(unit: :raw)
+account.pay(to: recipient_account_id, amount: 2, id: unique_id)
+account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
+account.pending
+account.pending(limit: 1)
+account.receive
+account.receive(pending_block_id)
+
 account.exists?
 account.info
 account.info(detailed: true)
@@ -230,15 +249,6 @@ account.public_key
 account.delegators
 account.representative
 account.weight
-
-account.balance
-account.balance(unit: :raw)
-account.pay(to: recipient_account_id, amount: 2, id: unique_id)
-account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
-account.pending
-account.pending(limit: 1)
-account.receive
-account.receive(pending_block_id)
 
 account.destroy
 </code></pre>
@@ -252,6 +262,11 @@ method and example responses.</p>
 
 <pre><code>account = Nanook.new.account(account_id)
 
+account.balance
+account.balance(unit: :raw)
+account.pending
+account.pending(limit: 1)
+
 account.exists?
 account.info
 account.info(detailed: true)
@@ -263,11 +278,6 @@ account.public_key
 account.delegators
 account.representative
 account.weight
-
-account.balance
-account.balance(unit: :raw)
-account.pending
-account.pending(limit: 1)
 </code></pre>
 
 <h3 id="label-Blocks">Blocks</h3>
@@ -360,6 +370,11 @@ are even better.</p>
 <p>To run the test suite:</p>
 
 <pre><code>bundle exec rspec spec
+</code></pre>
+
+<p>To update rdoc documentation:</p>
+
+<pre><code>bundle exec rake rerdoc
 </code></pre>
 
 <h2 id="label-License">License</h2>

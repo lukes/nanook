@@ -133,6 +133,7 @@ class Nanook
       end
     end
 
+    # Returns the id of the account
     def id
       @block
     end

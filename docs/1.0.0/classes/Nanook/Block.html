@@ -21,7 +21,7 @@
 
     <meta name="keywords" content="Nanook::Block class">
   
-    <meta name="keywords" content="new, account, cancel_work, chain, generate_work, history, id, info, is_valid_work?, republish, pending?, process, successors">
+    <meta name="keywords" content="new, account, cancel_work, chain, generate_work, history, id, info, is_valid_work?, republish, pending?, publish, successors">
   
 </head>
 
@@ -53,19 +53,22 @@
 <p>The <code>Nanook::Block</code> class contains methods to discover
 publicly-available information about blocks on the nano network.</p>
 
-<p>A block is represented by a unique hash</p>
+<p>A block is represented by a unique id like this:</p>
+
+<pre><code>&quot;FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB&quot;
+</code></pre>
 
 <p>Initialize this class through the convenient <a
 href="../Nanook.html#method-i-block">Nanook#block</a> method:</p>
 
 <pre><code>nanook = Nanook.new
-account = nanook.block(&quot;991CF19...&quot;)
+account = nanook.block(&quot;FBF8B0E...&quot;)
 </code></pre>
 
 <p>Or compose the longhand way like this:</p>
 
 <pre><code>rpc_conn = Nanook::Rpc.new
-block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
+block = Nanook::Block.new(rpc_conn, &quot;FBF8B0E...&quot;)
 </code></pre>
 
     </div>
@@ -185,7 +188,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
             
               
               <li>
-                <a href="#method-i-process">process</a>
+                <a href="#method-i-publish">publish</a>
               </li>
             
           </ul>
@@ -266,7 +269,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-c-new_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 19</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 21</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">rpc</span>, <span class="ruby-identifier">block</span>)
   <span class="ruby-ivar">@rpc</span> = <span class="ruby-identifier">rpc</span>
   <span class="ruby-ivar">@block</span> = <span class="ruby-identifier">block</span>
@@ -291,7 +294,12 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Returns a String of the account id of the block.</p>
+
+<h4 id="method-i-account-label-Example">Example</h4>
+
+<pre><code>block.account # =&gt; &quot;xrb_3x7c...&quot;
+</code></pre>
             </div>
           
 
@@ -309,7 +317,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-account_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 25</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">account</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:block_account</span>, <span class="ruby-value">:hash</span>)[<span class="ruby-value">:account</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -328,7 +336,14 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Stop generating work for a block.</p>
+
+<p>Returns boolean signalling if the action was successful.</p>
+
+<h4 id="method-i-cancel_work-label-Example">Example</h4>
+
+<pre><code>block.cancel_work # =&gt; true
+</code></pre>
             </div>
           
 
@@ -346,7 +361,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-cancel_work_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 29</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cancel_work</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:work_cancel</span>, <span class="ruby-value">:hash</span>).<span class="ruby-identifier">empty?</span>
 <span class="ruby-keyword">end</span></pre>
@@ -365,7 +380,29 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Returns an Array of block hashes in the account chain starting at this
+block.</p>
+
+<p>See also <a href="Block.html#method-i-successors">successors</a>.</p>
+
+<h4 id="method-i-chain-label-Arguments">Arguments</h4>
+<dl class="rdoc-list label-list"><dt><code>limit:</code>
+<dd>
+<p>Maximum number of block hashes to return (default is 1000)</p>
+</dd></dl>
+
+<h4 id="method-i-chain-label-Example">Example</h4>
+
+<pre><code>block.chain(limit: 2)
+</code></pre>
+
+<h4 id="method-i-chain-label-Example+reponse">Example reponse</h4>
+
+<pre><code>[
+  &quot;36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E&quot;,
+  &quot;FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB&quot;
+]
+</code></pre>
             </div>
           
 
@@ -383,7 +420,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-chain_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 33</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 66</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:chain</span>, <span class="ruby-value">:block</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:blocks</span>]
   <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">coerce_empty_string_to_type</span>(<span class="ruby-identifier">response</span>, <span class="ruby-constant">Array</span>)
@@ -403,7 +440,12 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Generate work for a block.</p>
+
+<p>Returns the work id of the work completed.</p>
+
+<pre><code>block.generate_work # =&gt; &quot;2bf29ef00786a6bc&quot;
+</code></pre>
             </div>
           
 
@@ -421,7 +463,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-generate_work_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 38</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">generate_work</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:work_generate</span>, <span class="ruby-value">:hash</span>)[<span class="ruby-value">:work</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -440,7 +482,32 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Returns Array of Hashes containing information about a chain of
+send/receive blocks, starting from this block.</p>
+
+<h4 id="method-i-history-label-Arguments">Arguments</h4>
+<dl class="rdoc-list label-list"><dt><code>limit:</code>
+<dd>
+<p>Maximum number of send/receive block hashes to return in the chain (default
+is 1000)</p>
+</dd></dl>
+
+<h4 id="method-i-history-label-Example">Example</h4>
+
+<pre><code>block.history(limit: 1)
+</code></pre>
+
+<h4 id="method-i-history-label-Example+response">Example response</h4>
+
+<pre><code>[
+  {
+    :account=&gt;&quot;xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b&quot;,
+    :amount=&gt;539834279601145558517940224,
+    :hash=&gt;&quot;36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E&quot;,
+    :type=&gt;&quot;send&quot;
+  }
+]
+</code></pre>
             </div>
           
 
@@ -458,7 +525,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-history_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 42</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 102</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">history</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:history</span>, <span class="ruby-value">:hash</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:history</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -477,7 +544,10 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Returns the block hash</p>
+
+<pre><code>block.id #=&gt; &quot;FBF8B0E...&quot;
+</code></pre>
             </div>
           
 
@@ -495,7 +565,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-id_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 46</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 109</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">id</span>
   <span class="ruby-ivar">@block</span>
 <span class="ruby-keyword">end</span></pre>
@@ -514,7 +584,26 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Returns a Hash of information about the block.</p>
+
+<h4 id="method-i-info-label-Arguments">Arguments</h4>
+<dl class="rdoc-list label-list"><dt><code>allow_unchecked:</code>
+<dd>
+<p>Boolean (default is <code>false</code>). If <code>true</code>, information
+can be returned about blocks that are unchecked (unverified).</p>
+</dd></dl>
+
+<h4 id="method-i-info-label-Example+response">Example response</h4>
+
+<pre><code>{
+  :type=&gt;&quot;send&quot;,
+  :previous=&gt;&quot;FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB&quot;,
+  :destination=&gt;&quot;xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b&quot;,
+  :balance=&gt;&quot;00000000000000000000000000000000&quot;,
+  :work=&gt;&quot;44cc24b60705083a&quot;,
+  :signature=&gt;&quot;42ADFEFE7C3FFF188AE92A202F8A5734DE91779C454613E446EEC93D001D6C953E9FD16730AF32C891791BA8EDAECEB059A213E2FE1EEB7ADF9D5D0815464D06&quot;
+}
+</code></pre>
             </div>
           
 
@@ -532,7 +621,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-info_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 50</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 130</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info</span>(<span class="ruby-value">allow_unchecked:</span> <span class="ruby-keyword">false</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">allow_unchecked</span>
     <span class="ruby-comment"># TODO not actually sure what this response looks like when it&#39;s not an unchecked block, assuming its blank</span>
@@ -561,7 +650,10 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Returns boolean signalling if work is valid for the block.</p>
+
+<pre><code>block.is_valid_work?(&quot;2bf29ef00786a6bc&quot;) # =&gt; true
+</code></pre>
             </div>
           
 
@@ -579,7 +671,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-is_valid_work-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 64</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 147</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">is_valid_work?</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:work_validate</span>, <span class="ruby-value">:hash</span>, <span class="ruby-value">work:</span> <span class="ruby-identifier">work</span>)
   <span class="ruby-operator">!</span><span class="ruby-identifier">response</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">:valid</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
@@ -599,7 +691,10 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Returns boolean <code>true</code> if the block is a pending block.</p>
+
+<pre><code>block.pending? #=&gt; false
+</code></pre>
             </div>
           
 
@@ -617,7 +712,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-pending-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 83</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 180</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">pending?</span>
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:pending_exists</span>, <span class="ruby-value">:hash</span>)
   <span class="ruby-operator">!</span><span class="ruby-identifier">response</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">:exists</span>] <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
@@ -628,16 +723,24 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
           </div>
         
         <div class="method">
-          <div class="title method-title" id="method-i-process">
+          <div class="title method-title" id="method-i-publish">
             
-              <b>process</b>()
+              <b>publish</b>()
             
-            <a href="../../classes/Nanook/Block.html#method-i-process" name="method-i-process" class="permalink">Link</a>
+            <a href="../../classes/Nanook/Block.html#method-i-publish" name="method-i-publish" class="permalink">Link</a>
           </div>
 
           
             <div class="description">
-              
+              <p>Publish the block to the nano network.</p>
+
+<p>Note, if block has previously been published, use <a
+href="Block.html#method-i-republish">republish</a> instead.</p>
+
+<p>Returns the block hash, or false.</p>
+
+<pre><code>block.publish # =&gt; &quot;FBF8B0E...&quot;
+</code></pre>
             </div>
           
 
@@ -651,12 +754,13 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
               
               <p class="source-link">
                 Source:
-                <a href="javascript:toggleSource('method-i-process_source')" id="l_method-i-process_source">show</a>
+                <a href="javascript:toggleSource('method-i-publish_source')" id="l_method-i-publish_source">show</a>
                 
               </p>
-              <div id="method-i-process_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 88</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">process</span>
+              <div id="method-i-publish_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 192</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">publish</span>
+  <span class="ruby-comment"># TODO I think this can return false or error or something?</span>
   <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:process</span>, <span class="ruby-value">:block</span>)[<span class="ruby-value">:hash</span>]
 <span class="ruby-keyword">end</span></pre>
               </div>
@@ -674,7 +778,20 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Republish blocks starting at this block up the account chain back to the
+nano network.</p>
+
+<p>Returns an Array of block hashes that were republished.</p>
+
+<h4 id="method-i-republish-label-Example">Example</h4>
+
+<pre><code>block.republish
+</code></pre>
+
+<h4 id="method-i-republish-label-Example+response">Example response</h4>
+
+<pre><code>[&quot;36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E&quot;]
+</code></pre>
             </div>
           
 
@@ -692,7 +809,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-republish_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 69</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 163</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">republish</span>(<span class="ruby-value">destinations:</span><span class="ruby-keyword">nil</span>, <span class="ruby-value">sources:</span><span class="ruby-keyword">nil</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">destinations</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">sources</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;You must provide either destinations or sources but not both&quot;</span>)
@@ -721,7 +838,26 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
 
           
             <div class="description">
-              
+              <p>Returns an Array of block hashes in the account chain ending at this block.</p>
+
+<p>See also <a href="Block.html#method-i-chain">chain</a>.</p>
+
+<h4 id="method-i-successors-label-Arguments">Arguments</h4>
+<dl class="rdoc-list label-list"><dt><code>limit:</code>
+<dd>
+<p>Maximum number of send/receive block hashes to return in the chain (default
+is 1000)</p>
+</dd></dl>
+
+<h4 id="method-i-successors-label-Example">Example</h4>
+
+<pre><code>block.successors
+</code></pre>
+
+<h4 id="method-i-successors-label-Example+response">Example response</h4>
+
+<pre><code>[&quot;36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E&quot;]
+</code></pre>
             </div>
           
 
@@ -739,7 +875,7 @@ block = Nanook::Block.new(rpc_conn, &quot;991CF19...&quot;)
                 
               </p>
               <div id="method-i-successors_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 92</span>
+                <pre><span class="ruby-comment"># File lib/nanook/block.rb, line 214</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">successors</span>(<span class="ruby-value">limit:</span> <span class="ruby-value">1000</span>)
   <span class="ruby-identifier">response</span> = <span class="ruby-identifier">rpc</span>(<span class="ruby-value">:successors</span>, <span class="ruby-value">:block</span>, <span class="ruby-value">count:</span> <span class="ruby-identifier">limit</span>)[<span class="ruby-value">:blocks</span>]
   <span class="ruby-constant">Nanook</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">coerce_empty_string_to_type</span>(<span class="ruby-identifier">response</span>, <span class="ruby-constant">Array</span>)
