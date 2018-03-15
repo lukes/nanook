@@ -236,7 +236,7 @@ block.republish
 block.republish(sources: 2)
 block.republish(destinations: 2)
 block.pending?
-block.process
+block.publish
 block.successors
 block.successors(limit: 10)
 

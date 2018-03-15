@@ -274,7 +274,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    Nanook.new.block(block).process
+    Nanook.new.block(block).publish
   end
 
   it "should request successors correctly" do
