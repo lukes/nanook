@@ -193,6 +193,7 @@ class Nanook
       # TODO I think this can return false or error or something?
       rpc(:process, :block)[:hash]
     end
+    alias_method :process, :publish
 
     # Returns an Array of block hashes in the account chain ending at
     # this block.
