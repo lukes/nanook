@@ -220,6 +220,8 @@ account.weight
 
 ### Blocks
 
+See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Block.html) for a detailed description of each method and example responses.
+
 ```ruby
 block = Nanook.new.block(block_id)
 
