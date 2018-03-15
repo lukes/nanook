@@ -431,7 +431,68 @@ wallet.account(account_id) # Returns a Nanook::WalletAccount for the account
 
           
             <div class="description">
-              
+              <p>Returns a Hash containing the balance of all accounts in the wallet,
+optionally breaking the balances down by account.</p>
+
+<h4 id="method-i-balance-label-Arguments">Arguments</h4>
+<dl class="rdoc-list label-list"><dt><code>account_break_down:</code>
+<dd>
+<p>Boolean (default is <code>false</code>). When <code>true</code> the
+response will contain balances per account.</p>
+</dd><dt><code>unit:</code>
+<dd>
+<p>Symbol (default is <code>:nano</code>) Represents the unit that the
+balances will be returned in. Must be either <code>:nano</code> or
+<code>:raw</code>. (Note: this method interprets <code>:nano</code> as
+NANO, which is technically Mnano See <a
+href="https://nano.org/en/faq#what-are-nano-units-">What are Nano’s
+Units</a>)</p>
+</dd></dl>
+
+<h4 id="method-i-balance-label-Examples">Examples</h4>
+
+<pre><code>wallet.balance
+</code></pre>
+
+<p>Example response:</p>
+
+<pre><code>{
+  &quot;balance&quot;=&gt;5,
+  &quot;pending&quot;=&gt;0.001
+}
+</code></pre>
+
+<p>Asking for the balances to be returned in raw instead of NANO.</p>
+
+<pre><code>wallet.balance(unit: :raw)
+</code></pre>
+
+<p>Example response:</p>
+
+<pre><code>{
+  &quot;balance&quot;=&gt;5000000000000000000000000000000,
+  &quot;pending&quot;=&gt;1000000000000000000000000000
+}
+</code></pre>
+
+<p>Asking for totals to be broken down by account:</p>
+
+<pre><code>wallet.balance(account_break_down: true)
+</code></pre>
+
+<p>Example response:</p>
+
+<pre><code>{
+  &quot;xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000&quot;=&gt;{
+    &quot;balance&quot;=&gt;2.5,
+    &quot;pending&quot;=&gt;1
+  },
+  &quot;xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx&quot;=&gt;{
+    &quot;balance&quot;=&gt;51.4,
+    &quot;pending&quot;=&gt;0
+  },
+}
+</code></pre>
             </div>
           
 
