@@ -27,9 +27,18 @@ class Nanook
       @account
     end
 
-    def create
+    def create(n=1)
+      if n < 1
+        raise ArgumentError.new("number of accounts must be greater than 1")
+      end
+
       wallet_required!
-      rpc(:account_create)[:account]
+
+      if n == 1
+        rpc(:account_create)[:account]
+      else
+        rpc(:accounts_create, count: n)[:accounts]
+      end
     end
 
     def destroy

@@ -39,6 +39,32 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account.create).to eq("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
   end
 
+  it "wallet account create with 0 as argument" do
+    expect{Nanook.new.wallet(wallet_id).account.create(0)}.to raise_error(ArgumentError)
+  end
+
+  it "wallet account create with 5 as argument" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"accounts_create\",\"wallet\":\"#{wallet_id}\",\"count\":\"5\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\": [
+        \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+        \"xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000\",
+        \"xrb_2e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000\",
+        \"xrb_3e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000\",
+        \"xrb_4e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000\"
+      ]}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).account.create(5)
+    expect(response).to have(5).items
+    expect(response[0]).to eq("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
+  end
+
+
   it "wallet account destroy" do
     stub_valid_account_check
 

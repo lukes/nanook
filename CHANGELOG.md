@@ -8,10 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Added ruby version requirement >= 2.0 in gemspec
+- `Nanook::WalletAccount#create` takes an optional argument to signal
+  how many accounts to create.
+- Added ruby version requirement >= 2.0 to gemspec.
 
 ### Changed
 - `Nanook::Rpc#inspect` displays full hostname with scheme and port.
+
 ## 1.0.1
 
 ### Fixed
@@ -39,6 +42,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - All pay methods continue to take NANO as the default unit, but can now
   also take an argument `unit:` which can be set to `:raw` to have the
   `amount` argument be treated as being in raw instead of NANO.
-
-
-### Removed

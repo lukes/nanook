@@ -164,6 +164,12 @@ wallet.destroy
 Nanook.new.wallet(wallet_id).account.create
 ```
 
+#### Create multiple accounts:
+
+```ruby
+Nanook.new.wallet(wallet_id).account.create(5)
+```
+
 #### Working with a single account:
 
 ```ruby
