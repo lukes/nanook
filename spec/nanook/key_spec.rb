@@ -2,14 +2,6 @@ RSpec.describe Nanook::Key do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:key) { "781186FB9EF17DB6E3D1056550D9FAE5D5BBADA6A6BC370E4CBB938B1DC71DA3" }
-  let(:headers) {
-    {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-    }
-  }
 
   it "should request info correctly" do
     stub_request(:post, uri).with(

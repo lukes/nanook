@@ -1,14 +1,6 @@
 RSpec.describe Nanook::Rpc do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
-  let(:headers) {
-    {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-    }
-  }
 
   it "should allow you to connect to a custom host" do
     custom_uri = "http://example.com:7076"

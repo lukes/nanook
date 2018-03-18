@@ -2,14 +2,6 @@ RSpec.describe Nanook::Account do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
-  let(:headers) {
-    {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-    }
-  }
 
   it "account history requires account" do
     expect{Nanook.new.account(nil).history}.to raise_error(ArgumentError, "Account must be present")
@@ -149,12 +141,7 @@ RSpec.describe Nanook::Account do
     stub_request(:post, "http://localhost:7076/").
     with(
       body: "{\"action\":\"account_weight\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
-      headers: {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-      }).
+      headers: headers).
     to_return(status: 200, body: "{\"weight\":\"1\"}", headers: {})
 
     stub_request(:post, uri).with(
