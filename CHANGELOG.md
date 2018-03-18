@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added ruby version requirement >= 2.0 in gemspec
 
+### Changed
+- `Nanook::Rpc#inspect` displays full hostname with scheme and port.
 ## 1.0.1
 
 ### Fixed

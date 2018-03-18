@@ -8,15 +8,15 @@ class Nanook
     DEFAULT_TIMEOUT = 500 # seconds
 
     def initialize(uri=DEFAULT_URI, timeout:DEFAULT_TIMEOUT)
-      rpc_server = URI(uri)
+      @rpc_server = URI(uri)
 
-      unless ['http', 'https'].include?(rpc_server.scheme)
+      unless ['http', 'https'].include?(@rpc_server.scheme)
         raise ArgumentError.new("URI must have http or https in it. Was given: #{uri}")
       end
 
-      @http = Net::HTTP.new(rpc_server.host, rpc_server.port)
+      @http = Net::HTTP.new(@rpc_server.host, @rpc_server.port)
       @http.read_timeout = timeout
-      @request = Net::HTTP::Post.new(rpc_server.request_uri, {"user-agent" => "Ruby nanook gem"})
+      @request = Net::HTTP::Post.new(@rpc_server.request_uri, {"user-agent" => "Ruby nanook gem"})
       @request.content_type = "application/json"
     end
 
@@ -37,7 +37,7 @@ class Nanook
     end
 
     def inspect # :nodoc:
-      "#{self.class.name}(host: #{@http.address}, timeout: #{@http.read_timeout} object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+      "#{self.class.name}(host: \"#{@rpc_server}\", timeout: #{@http.read_timeout} object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
     private
