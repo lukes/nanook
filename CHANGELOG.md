@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   how many accounts to create.
 - New `Nanook::WalletAccount#change_representative` method to change an
   account's representative.
+- New `Nanook::Node#account_count` method to return number of known accounts in ledger
 - Added ruby version requirement >= 2.0 to gemspec.
 
 ### Changed

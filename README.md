@@ -257,6 +257,7 @@ block.is_valid_work?(work_id)
 ```ruby
 node = Nanook.new.node
 
+node.account_count
 node.block_count
 node.block_count_type
 node.bootstrap_any

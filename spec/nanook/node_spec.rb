@@ -2,6 +2,19 @@ RSpec.describe Nanook::Node do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
 
+  it "should request account_count correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"frontier_count\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"count\":\"1000\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.account_count).to eq 1000
+  end
+
   it "should request block_count correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"block_count\"}",

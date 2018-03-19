@@ -5,6 +5,10 @@ class Nanook
       @rpc = rpc
     end
 
+    def account_count
+      rpc(:frontier_count)[:count]
+    end
+
     def block_count
       rpc(:block_count)
     end
