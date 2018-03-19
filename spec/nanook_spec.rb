@@ -34,4 +34,8 @@ RSpec.describe Nanook do
     expect(Nanook.new.work_peers).to be_kind_of(Nanook::WorkPeer)
   end
 
+  it "should have a rpc accessor" do
+    expect(Nanook.new.rpc).to be_kind_of(Nanook::Rpc)
+  end
+
 end

@@ -19,6 +19,8 @@ Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each {|file| require file }
 #   Nanook.new("http://ip6-localhost.com:7076", timeout: 600)
 class Nanook
 
+  attr_reader :rpc
+
   # ==== Arguments
   #
   # * +uri+ - RPC host to connect to (default is "http://localhost:7076")
