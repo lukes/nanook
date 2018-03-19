@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - New `Nanook::WalletAccount#change_representative` method to change an
   account's representative.
 - New `Nanook::Node#account_count` method to return number of known accounts in ledger
+- New `Nanook::Node#synchronizing_blocks` method to return information about "unchecked" synchronizing blocks
 - Added ruby version requirement >= 2.0 to gemspec.
 
 ### Changed

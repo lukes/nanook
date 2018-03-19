@@ -45,6 +45,14 @@ class Nanook
       rpc(:stop).has_key?(:success)
     end
 
+    def synchronizing_blocks(limit: 1000)
+      response = rpc(:unchecked, count: limit)[:blocks]
+      response = response.map do |block, info|
+        [block, JSON.parse(info).to_symbolized_hash]
+      end
+      Hash[response.sort].to_symbolized_hash
+    end
+
     def sync_progress
       response = rpc(:block_count)
 

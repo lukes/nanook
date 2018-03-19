@@ -265,6 +265,8 @@ node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
 node.frontier_count
 node.peers
 node.representatives
+node.synchronizing_blocks
+node.synchronizing_blocks(limit: 1)
 node.sync_progress
 node.synced?
 node.version
