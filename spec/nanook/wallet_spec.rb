@@ -375,4 +375,31 @@ RSpec.describe Nanook::Wallet do
     expect(response["xrb_1111111111111111111111111111111111111111111111111117353trpda"]).to have(2).items
   end
 
+  it "wallet pending with threshold" do
+    skip
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1\",\"threshold\":\"1000000000000000000000000000000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\": {
+        \"xrb_1111111111111111111111111111111111111111111111111117353trpda\": {
+            \"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\": \"6000000000000000000000000000000\",
+            \"242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\": \"34524565367345234523452344356356745674\"
+        },
+        \"xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3\": {
+            \"4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74\": \"106370018000000000000000000000000\"
+        }
+      }",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).pending(limit: 1, threshold: 1)
+    expect(response.keys).to have(1).items
+    expect(response["xrb_1111111111111111111111111111111111111111111111111117353trpda"].keys).to have(1).item
+    expect(response["xrb_1111111111111111111111111111111111111111111111111117353trpda"]["142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D"]).to eql 6
+  end
+
+
+  it "wallet pending with threshold and raw unit"
 end
