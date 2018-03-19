@@ -258,6 +258,29 @@ class Nanook
       account(from).pay(to: to, amount: amount, unit: unit, id: id)
     end
 
+    # Returns a Hash of accounts in this wallet with their pending block hash ids.
+    # A pending block is a payment that has not yet been receieved by an account
+    # in the wallet.
+    #
+    # See also the #receive method of this class for how to receive a pending payment.
+    #
+    # ==== Arguments
+    #
+    # [+limit:+] Number of accounts with pending blocks to return (default is 1000)
+    #
+    # ==== Example
+    #
+    #   wallet.pending
+    #
+    # ==== Example response
+    #   {
+    #     "xrb_1111111111111111111111111111111111111111111111111117353trpda"=>["142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D","718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"],
+    #     "xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3"=>["4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"]
+    #   }
+    def pending(limit: 1000)
+      rpc(:wallet_pending, count: limit)[:blocks]
+    end
+
     # Receives a pending payment into an account in the wallet.
     #
     # When called with no +block+ argument, the latest pending payment

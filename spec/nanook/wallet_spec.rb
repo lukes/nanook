@@ -339,4 +339,40 @@ RSpec.describe Nanook::Wallet do
     expect(response[:pending]).to eq(2000000000000000000000000000)
   end
 
+  it "wallet pending with default limit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\" : {
+        \"xrb_1111111111111111111111111111111111111111111111111117353trpda\": [\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\",\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\"],
+        \"xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3\": [\"4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74\"]
+      }}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).pending
+    expect(response.keys).to have(2).items
+    expect(response["xrb_1111111111111111111111111111111111111111111111111117353trpda"]).to have(2).items
+    expect(response["xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3"]).to have(1).item
+  end
+
+  it "wallet pending with limit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\" : {
+        \"xrb_1111111111111111111111111111111111111111111111111117353trpda\": [\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\",\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\"]
+      }}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).pending(limit: 1)
+    expect(response.keys).to have(1).items
+    expect(response["xrb_1111111111111111111111111111111111111111111111111117353trpda"]).to have(2).items
+  end
+
 end
