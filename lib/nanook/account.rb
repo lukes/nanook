@@ -169,6 +169,7 @@ class Nanook
     #
     # ==== Example 1 response
     #   {
+    #     :id=>"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
     #     :balance=>11.439597000000001,
     #     :block_count=>4
     #     :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
@@ -183,6 +184,7 @@ class Nanook
     #
     # ==== Example 2 response
     #   {
+    #     :id=>"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
     #     :balance=>11.439597000000001,
     #     :block_count=>4,
     #     :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
@@ -198,12 +200,13 @@ class Nanook
       account_required!
 
       response = rpc(:account_info)
+      response.merge!(id: @account)
 
       # Return the response if we don't need any more info
       return response unless detailed
 
       # Otherwise make additional calls
-      response = response.merge({
+      response.merge!({
         weight: weight,
         pending: balance[:pending],
         representative: representative,

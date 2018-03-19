@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - `Nanook::Rpc#inspect` displays full hostname with scheme and port.
+- `Nanook::Account#info` now also returns the `id` of the account
+- `Nanook::Block#info` now also returns the `id` of the block
 
 ## 1.0.1
 

@@ -127,7 +127,14 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).info).to have_key(:type)
+    response = Nanook.new.block(block).info
+
+    expect(response[:id]).to eq block
+    expect(response[:type]).to eq "receive"
+    expect(response[:previous]).to eq "1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688"
+    expect(response[:source]).to eq "F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C"
+    expect(response[:work]).to eq "633cdda00b9f7265"
+    expect(response[:signature]).to eq "4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06"
   end
 
   it "should return block not found correctly on info" do
@@ -153,7 +160,14 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).info(allow_unchecked: true)).to have_key(:type)
+    response = Nanook.new.block(block).info(allow_unchecked: true)
+
+    expect(response[:id]).to eq block
+    expect(response[:type]).to eq "receive"
+    expect(response[:previous]).to eq "1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688"
+    expect(response[:source]).to eq "F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C"
+    expect(response[:work]).to eq "633cdda00b9f7265"
+    expect(response[:signature]).to eq "4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06"
   end
 
   it "should request info allowing_unchecked when block is not unchecked correctly" do
@@ -175,7 +189,14 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).info(allow_unchecked: true)).to have_key(:work)
+    response = Nanook.new.block(block).info(allow_unchecked: true)
+
+    expect(response[:id]).to eq block
+    expect(response[:type]).to eq "receive"
+    expect(response[:previous]).to eq "1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688"
+    expect(response[:source]).to eq "F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C"
+    expect(response[:work]).to eq "633cdda00b9f7265"
+    expect(response[:signature]).to eq "4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06"
   end
 
   it "should request republish correctly" do

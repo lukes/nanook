@@ -112,15 +112,21 @@ RSpec.describe Nanook::Account do
       body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
       \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
       \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
-      \"balance\":\"235580100176034320859259343606608761791\",
+      \"balance\":\"23\",
       \"modified_timestamp\":\"1501793775\",
       \"block_count\":\"33\"}",
       headers: {}
     )
 
     response = Nanook.new.account(account_id).info
-    expect(response).to have_key(:frontier)
-    expect(response).not_to have_key(:weight)
+
+    expect(response[:id]).to eq account_id
+    expect(response[:frontier]).to eq "FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5"
+    expect(response[:open_block]).to eq "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+    expect(response[:representative_block]).to eq "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+    expect(response[:balance]).to eq 23
+    expect(response[:modified_timestamp]).to eq 1501793775
+    expect(response[:block_count]).to eq 33
   end
 
   it "account info with detailed true" do
@@ -132,7 +138,7 @@ RSpec.describe Nanook::Account do
       body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
       \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
       \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
-      \"balance\":\"235580100176034320859259343606608761791\",
+      \"balance\":\"23\",
       \"modified_timestamp\":\"1501793775\",
       \"block_count\":\"33\"}",
       headers: {}
@@ -149,7 +155,7 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"balance\":\"10000\",\"pending\":\"10000\"}",
+      body: "{\"balance\":\"10000\",\"pending\":\"12323434523432343245645645645645\"}",
       headers: {}
     )
 
@@ -172,8 +178,18 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).info(detailed: true)
-    expect(response).to have_key(:frontier)
-    expect(response).to have_key(:weight)
+
+    expect(response[:id]).to eq account_id
+    expect(response[:frontier]).to eq "FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5"
+    expect(response[:open_block]).to eq "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+    expect(response[:representative_block]).to eq "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+    expect(response[:balance]).to eq 23
+    expect(response[:pending]).to eq 12.32343452343234
+    expect(response[:modified_timestamp]).to eq 1501793775
+    expect(response[:block_count]).to eq 33
+    expect(response[:weight]).to eq 1
+    expect(response[:representative]).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
+    expect(response[:public_key]).to eq "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
   end
 
   it "account pending no limit" do
