@@ -194,6 +194,7 @@ account.history(limit: 1)
 account.public_key
 account.delegators
 account.representative
+account.change_representative(new_representative)
 account.weight
 
 account.destroy

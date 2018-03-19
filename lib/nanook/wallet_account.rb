@@ -99,6 +99,41 @@ class Nanook
       end
     end
 
+    # Sets the representative for the account.
+    #
+    # A representative is an account that will vote on your account's
+    # behalf on the nano network if your account is offline and there is
+    # a fork of the network that requires voting on.
+    #
+    # Returns a String of the <em>change block</em> that was
+    # broadcast to the nano network. The block contains the information
+    # about the representative change for your account.
+    #
+    # Will throw an +ArgumentError+ if the representative account does not
+    # exist.
+    #
+    # ==== Arguments
+    # [+representative+] String of a representative account (starting with
+    #                    <tt>"xrb..."</tt>) to set as this account's representative.
+    #
+    # ==== Example
+    #
+    #   account.change_representative("xrb_...")
+    #
+    # ==== Example response
+    #
+    #   "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    def change_representative(representative)
+      wallet_required!
+
+      # Check that representative is valid
+      unless Nanook::Account.new(@rpc, representative).exists?
+        raise ArgumentError.new("Representative account does not exist (#{representative})")
+      end
+
+      rpc(:account_representative_set, representative: representative)[:block]
+    end
+
     def wallet_id
       @wallet
     end

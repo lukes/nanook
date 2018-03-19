@@ -278,6 +278,55 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account(account_id).representative).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
   end
 
+  it "setting the wallet account representative" do
+    stub_valid_account_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"xrb_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"1\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_representative_set\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\",\"representative\":\"xrb_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"block\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).account(account_id).change_representative("xrb_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi")
+    expect(response).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+  end
+
+  it "setting the wallet account representative if representative does not exist" do
+    stub_valid_account_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"xrb_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"0\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_representative_set\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\",\"representative\":\"xrb_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"block\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"}",
+      headers: {}
+    )
+
+    expect{Nanook.new.wallet(wallet_id).account(account_id).change_representative("xrb_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi")}.to raise_error(ArgumentError)
+  end
+
   it "wallet account pending no limit" do
     stub_valid_account_check
 

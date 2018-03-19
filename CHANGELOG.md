@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - `Nanook::WalletAccount#create` takes an optional argument to signal
   how many accounts to create.
+- New `Nanook::WalletAccount#change_representative` method to change an
+  account's representative.
 - Added ruby version requirement >= 2.0 to gemspec.
 
 ### Changed
