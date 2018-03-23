@@ -27,7 +27,6 @@ class Nanook
     #     "xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn": "961647970820730000000000000000000000"
     #   }
     def delegators
-      account_required!
       rpc(:delegators)[:delegators]
     end
 
@@ -40,7 +39,6 @@ class Nanook
     # ==== Example response
     #   true
     def exists?
-      account_required!
       response = rpc(:validate_account_number)
       !response.empty? && response[:valid] == 1
     end
@@ -74,7 +72,6 @@ class Nanook
     #     }
     #   ]
     def history(limit: 1000)
-      account_required!
       rpc(:account_history, count: limit)[:history]
     end
 
@@ -83,7 +80,6 @@ class Nanook
     # ==== Example response
     #   "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
     def public_key
-      account_required!
       rpc(:account_key)[:key]
     end
 
@@ -95,7 +91,6 @@ class Nanook
     #
     #   "xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh"
     def representative
-      account_required!
       rpc(:account_representative)[:representative]
     end
 
@@ -119,8 +114,6 @@ class Nanook
     #    "pending": "1"
     #   }
     def balance(unit: Nanook::WalletAccount::DEFAULT_UNIT)
-      account_required!
-
       unless Nanook::WalletAccount::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
@@ -197,8 +190,6 @@ class Nanook
     #     :weight=>0
     #   }
     def info(detailed: false)
-      account_required!
-
       response = rpc(:account_info)
       response.merge!(id: @account)
 
@@ -249,7 +240,6 @@ class Nanook
     #    :xrb_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=>{ ... }
     #  }
     def ledger(limit: 1)
-      account_required!
       rpc(:ledger, count: limit)[:accounts]
     end
 
@@ -290,8 +280,6 @@ class Nanook
     #     }
     #   }
     def pending(limit: 1000, detailed: false)
-      account_required!
-
       args = { count: limit }
       args[:source] = true if detailed
 
@@ -306,7 +294,6 @@ class Nanook
     # ==== Example response
     #   1
     def weight
-      account_required!
       rpc(:account_weight)[:weight]
     end
 
@@ -315,12 +302,6 @@ class Nanook
     def rpc(action, params={})
       p = @account.nil? ? {} : { account: @account }
       @rpc.call(action, p.merge(params))
-    end
-
-    def account_required!
-      if @account.nil?
-        raise ArgumentError.new("Account must be present")
-      end
     end
 
   end
