@@ -39,8 +39,8 @@ class Nanook
     # ==== Example response
     #   true
     def exists?
-      response = rpc(:validate_account_number)
-      !response.empty? && response[:valid] == 1
+      response = rpc(:account_info)
+      !response.empty? && !response[:open_block].empty?
     end
 
     # Returns an account's history of send and receive payments.
