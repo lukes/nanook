@@ -321,14 +321,13 @@ To run the test suite:
 
     bundle exec rspec spec
 
-To update rdoc documentation:
+To update the yard documentation:
 
-    bundle exec rake rerdoc
+    rake yard
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
 
 ## Buy me a nano coffee
 

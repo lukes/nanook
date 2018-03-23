@@ -12,17 +12,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   how many accounts to create.
 - New `Nanook::WalletAccount#change_representative` method to change an
   account's representative.
-- New `Nanook::Node#account_count` method to return number of known accounts in ledger
-- New `Nanook::Node#synchronizing_blocks` method to return information about "unchecked" synchronizing blocks
+- New `Nanook::Node#account_count` method to return number of known accounts in ledger.
+- New `Nanook::Node#synchronizing_blocks` method to return information about "unchecked" synchronizing blocks.
 - Added ruby version requirement >= 2.0 to gemspec.
 
 ### Changed
 - `Nanook::Rpc#inspect` displays full hostname with scheme and port.
-- `Nanook::Account#info` now also returns the `id` of the account
-- `Nanook::Block#info` now also returns the `id` of the block
+- `Nanook::Account#info` now also returns the `id` of the account.
+- `Nanook::Block#info` now also returns the `id` of the block.
+- Changed documentation generating tool from rdoc to yard.
 
 ### Fixed
-- Missing `Nanook#rpc` accessor
+- Missing `Nanook#rpc` accessor.
 
 ## 1.0.1
 
