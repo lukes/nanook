@@ -128,7 +128,7 @@ class Nanook
 
     # Returns the id of the account
     def id
-      @block
+      @account
     end
 
     # Returns a Hash containing the following information about an
