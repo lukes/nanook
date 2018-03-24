@@ -323,7 +323,7 @@ To run the test suite:
 
 To update the yard documentation:
 
-    rake yard
+    bundle exec rake yard
 
 ## License
 
