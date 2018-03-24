@@ -189,6 +189,7 @@ account.receive(pending_block_id)
 account.exists?
 account.info
 account.info(detailed: true)
+account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
 account.history
@@ -217,6 +218,7 @@ account.pending(limit: 1)
 account.exists?
 account.info
 account.info(detailed: true)
+account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
 account.history

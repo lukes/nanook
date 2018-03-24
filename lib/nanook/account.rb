@@ -81,6 +81,12 @@ class Nanook
       rpc(:account_history, count: limit)[:history]
     end
 
+    # @return [Time] Last modified time of the account in UTC time zone.
+    def last_modified_at
+      response = rpc(:account_info)
+      Time.at(response[:modified_timestamp])
+    end
+
     # Returns the public key belonging to an account.
     #
     # ==== Example response:
