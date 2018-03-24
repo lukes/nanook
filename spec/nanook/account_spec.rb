@@ -3,10 +3,6 @@ RSpec.describe Nanook::Account do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
 
-  it "account history requires account" do
-    expect{Nanook.new.account(nil).history}.to raise_error(ArgumentError, "Account must be present")
-  end
-
   it "account history" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
@@ -321,11 +317,16 @@ RSpec.describe Nanook::Account do
 
   it "account exists? when exists" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"valid\":\"1\"}",
+      body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
+      \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"balance\":\"23\",
+      \"modified_timestamp\":\"1501793775\",
+      \"block_count\":\"33\"}",
       headers: {}
     )
 
@@ -334,11 +335,11 @@ RSpec.describe Nanook::Account do
 
   it "account exists? when doesn't exist" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"valid\":\"0\"}",
+      body: "{\"error\":\"Bad account number\"}",
       headers: {}
     )
 

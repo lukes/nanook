@@ -29,7 +29,6 @@ class Nanook
     #   }
     #
     # @return [Hash{Symbol=>String}] Delegators
-    # @raise ArgumentError If class was initialized without an account
     def delegators
       rpc(:delegators)[:delegators]
     end
@@ -47,10 +46,9 @@ class Nanook
     # using {Nanook::Node#sync_progress}.
     #
     # @return [Boolean] Indicates if this account exists in the nano network
-    # @raise ArgumentError If class was initialized without an account
     def exists?
       response = rpc(:account_info)
-      !response.empty? && !response[:open_block].empty?
+      !response.empty? && !response[:open_block].nil?
     end
 
     # Returns an account's history of send and receive payments.
@@ -106,13 +104,21 @@ class Nanook
       rpc(:account_representative)[:representative]
     end
 
-    # Returns a Hash containing the account's balance. Units are in
-    # {raw}[https://nano.org/en/faq#what-are-nano-units-].
+    # Returns a Hash containing the account's balance.
     #
-    # ===== Example response
+    # ==== Example response:
     #   {
-    #    "balance": "2", # Account balance
-    #    "pending": "1"  # Amount pending and not yet received by the account
+    #    "balance": 2,   # Account balance
+    #    "pending": 1.1  # Amount pending and not yet received by the account
+    #   }
+    #
+    # ==== Example balance returned in raw:
+    #
+    #   account.balance(unit: :raw)
+    #
+    #   {
+    #    "balance": 2000000000000000000000000000000,
+    #    "pending": 1100000000000000000000000000000
     #   }
     #
     # @param unit [Symbol] Default is {Nanook::WalletAccount::DEFAULT_UNIT}.
@@ -142,30 +148,7 @@ class Nanook
       @account
     end
 
-    # Returns a Hash containing the following information about an
-    # account:
-    #
-    # [+:frontier+] The latest block hash
-    # [+:open_block+] The first block in every account's blockchain. When this block was published the account was officially open
-    # [+:representative_block+] The block that named the representative for the account
-    # [+:balance+] Amount in {NANO}[https://nano.org/en/faq#what-are-nano-units-]
-    # [+:last_modified+] Unix timestamp
-    # [+:block_count+] Number of blocks in the account's blockchain
-    #
-    # When <tt>detailed: true</tt> is passed as an argument, this method
-    # makes four additional calls to the RPC to return more information
-    # about an account:
-    #
-    # [+:weight+] See #weight
-    # [+:pending+] See #balance
-    # [+:representative+] See #representative
-    # [+:public_key+] See #public_key
-    #
-    # ==== Arguments
-    #
-    # [+detailed:+] Boolean (default is false). When +true+, four
-    #               additional calls are made to the RPC to return more
-    #               information
+    # Returns a Hash containing information about the account.
     #
     # ==== Example 1
     #
@@ -200,6 +183,26 @@ class Nanook
     #     :representative_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
     #     :weight=>0
     #   }
+    #
+    # @param detailed [Boolean] (default is false). When +true+, four
+    #   additional calls are made to the RPC to return more information
+    # @return [Hash] Information about the account containing:
+    #   [+id] The account id
+    #   [+frontier+] The latest block hash
+    #   [+open_block+] The first block in every account's blockchain. When this block was published the account was officially open
+    #   [+representative_block+] The block that named the representative for the account
+    #   [+balance+] Amount in {NANO}[https://nano.org/en/faq#what-are-nano-units-]
+    #   [+last_modified+] Unix timestamp
+    #   [+block_count+] Number of blocks in the account's blockchain
+    #
+    #   When <tt>detailed: true</tt> is passed as an argument, this method
+    #   makes four additional calls to the RPC to return more information
+    #   about an account:
+    #
+    #   [+weight+] See {#weight}
+    #   [+pending+] See {#balance}
+    #   [+representative+] See {#representative}
+    #   [+public_key+] See {#public_key}
     def info(detailed: false)
       response = rpc(:account_info)
       response.merge!(id: @account)
@@ -298,12 +301,13 @@ class Nanook
       Nanook::Util.coerce_empty_string_to_type(response, (detailed ? Hash : Array))
     end
 
-    # Returns the account's weight. Weight is determined by the
-    # account's balance, and represents the voting weight that account
-    # has on the network if it is a representative.
+    # Returns the account's weight.
     #
-    # ==== Example response
-    #   1
+    # Weight is determined by the account's balance, and represents
+    # the voting weight that account has on the network. Only accounts
+    # with greater than 256 weight can vote.
+    #
+    # @response [Integer] the account's weight
     def weight
       rpc(:account_weight)[:weight]
     end
