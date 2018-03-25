@@ -51,13 +51,13 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.16)
   nanook!
-  pry
+  pry (~> 0)
   rake (~> 10.0)
   rspec (~> 3.2)
   rspec-collection_matchers (~> 1.1)
   rspec_junit_formatter (~> 0.3)
   webmock (~> 3.3)
-  yard
+  yard (~> 0)
 
 BUNDLED WITH
    1.16.1
