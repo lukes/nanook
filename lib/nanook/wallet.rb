@@ -149,6 +149,18 @@ class Nanook
       end
     end
 
+    # Changes a wallet's seed.
+    #
+    # The seed is the wallet's unique identifier.
+    #
+    # @param seed [String] the seed/id to change to.
+    # @return [Boolean] indicating whether the change was successful.
+    def change_id(seed)
+      wallet_required!
+      rpc(:wallet_change_seed, seed: seed).has_key?(:success)
+    end
+    alias_method :change_seed, :change_id
+
     # Creates a new wallet.
     #
     #   Nanook.new.wallet.create
@@ -362,6 +374,26 @@ class Nanook
       wallet_required!
       validate_wallet_contains_account!(into)
       account(into).receive(block)
+    end
+
+    # Restore a previously created wallet on this node.
+    #
+    # @return [String] the new wallet id
+    # @raise Nanook::Error if unsuccessful
+    def restore(seed, accounts:0)
+      @wallet = create
+
+      unless change_id(seed)
+        raise Nanook::Error.new("Unable to set seed for wallet")
+      end
+
+      @wallet = seed
+
+      if accounts > 0
+        account.create(accounts)
+      end
+
+      @wallet
     end
 
     # Returns a boolean to indicate if the wallet is locked.

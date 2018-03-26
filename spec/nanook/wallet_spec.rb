@@ -355,6 +355,65 @@ RSpec.describe Nanook::Wallet do
     expect(response[:pending]).to eq(2000000000000000000000000000)
   end
 
+  it "wallet restore with no accounts" do
+    initial_wallet_id = "000F2BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_create\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"wallet\":\"#{initial_wallet_id}\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_change_seed\",\"wallet\":\"#{initial_wallet_id}\",\"seed\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"success\":\"\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet.restore(wallet_id)
+    expect(response).to eq wallet_id
+  end
+
+  it "wallet restore with 2 accounts" do
+    initial_wallet_id = "000F2BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_create\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"wallet\":\"#{initial_wallet_id}\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_change_seed\",\"wallet\":\"#{initial_wallet_id}\",\"seed\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"success\":\"\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_create\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet.restore(wallet_id)
+    expect(response).to eq wallet_id
+  end
+
   it "wallet pending with default limit" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\"}",
