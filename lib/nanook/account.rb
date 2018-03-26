@@ -313,7 +313,7 @@ class Nanook
     # the voting weight that account has on the network. Only accounts
     # with greater than 256 weight can vote.
     #
-    # @response [Integer] the account's weight
+    # @return [Integer] the account's weight
     def weight
       rpc(:account_weight)[:weight]
     end
