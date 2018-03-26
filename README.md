@@ -205,6 +205,7 @@ account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
+account.history(unit: :raw)
 account.public_key
 account.delegators
 account.representative
@@ -234,6 +235,7 @@ account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
+account.history(unit: :raw)
 account.public_key
 account.delegators
 account.representative

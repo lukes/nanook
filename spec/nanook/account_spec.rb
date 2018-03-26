@@ -20,7 +20,9 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).history.length).to be 1
+    response = Nanook.new.account(account_id).history
+    expect(response.first[:amount]).to eq 100
+    expect(response).to have(1).item
   end
 
   it "account history without default count" do
@@ -40,7 +42,31 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).history(limit: 1)).to have(1).item
+    response = Nanook.new.account(account_id).history(limit: 1)
+    expect(response.first[:amount]).to eq 100
+    expect(response).to have(1).item
+  end
+
+  it "account history with raw unit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"history\": [{
+                \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
+                \"type\": \"receive\",
+                \"account\": \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"amount\": \"100000000000000000000000000000000\"
+        }]
+    }",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).history(unit: :raw)
+    expect(response.first[:amount]).to eq 100000000000000000000000000000000
+    expect(response).to have(1).item
   end
 
   it "account key" do

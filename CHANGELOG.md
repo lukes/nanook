@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Rpc#inspect` displays full hostname with scheme and port.
 - `Nanook::Account#new` `account` param is now required.
 - `Nanook::Account#info` now also returns the `id` of the account.
+- `Nanook::Account#history` now returns `amount` in NANO by default, takes `unit: :raw` argument to return in raw.
 - `Nanook::Block#info` now also returns the `id` of the block.
 - `Nanook::Wallet#seed` alias method of `#id`.
 - `Nanook::Account#exists?` now checks for open block.

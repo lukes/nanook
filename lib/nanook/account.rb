@@ -52,7 +52,6 @@ class Nanook
     end
 
     # Returns an account's history of send and receive payments.
-    # Amounts are in {raw}[https://nano.org/en/faq#what-are-nano-units-].
     #
     # ==== Example:
     #
@@ -64,21 +63,43 @@ class Nanook
     #     {
     #      :type=>"send",
     #      :account=>"xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
-    #      :amount=>200000000000000000000000000000,
+    #      :amount=>2,
     #      :hash=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570"
-    #     },
+    #     }
+    #   ]
+    # ==== Example:
+    #
+    #   account.history
+    #   account.history(unit: :raw)
+    #
+    # ==== Example response:
+    #   [
     #     {
-    #      :type=>"receive",
-    #      :account=>"xrb_1niabkx3gbxit5j5yyqcpas71dkffggbr6zpd3heui8rpoocm5xqbdwq44oh",
-    #      :amount=>7836413000000000000000000000000,
-    #      :hash=>"16743E8FF52F454E876E68EDD11F23094DCB96795A3B7F32F74F88563ACDDB04"
+    #      :type=>"send",
+    #      :account=>"xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
+    #      :amount=>2000000000000000000000000000000,
+    #      :hash=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570"
     #     }
     #   ]
     #
     # @param limit [Integer] Maximum number of history items to return
+    # @param unit (see #balance)
     # @return [Array<Hash{Symbol=>String}>] Send and receive payment history of this account
-    def history(limit: 1000)
-      rpc(:account_history, count: limit)[:history]
+    def history(limit: 1000, unit: Nanook::WalletAccount::DEFAULT_UNIT)
+      unless Nanook::WalletAccount::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
+      response = rpc(:account_history, count: limit)[:history]
+
+      if unit == :raw
+        return response
+      end
+
+      response.map! do |history|
+        history[:amount] = Nanook::Util.raw_to_NANO(history[:amount])
+        history
+      end
     end
 
     # @return [Time] Last modified time of the account in UTC time zone.
