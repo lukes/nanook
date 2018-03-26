@@ -213,6 +213,7 @@ class Nanook
     #
     # @param detailed [Boolean] (default is false). When +true+, four
     #   additional calls are made to the RPC to return more information
+    # @param unit (see #balance)
     # @return [Hash] Information about the account containing:
     #   [+id] The account id
     #   [+frontier+] The latest block hash
@@ -230,9 +231,17 @@ class Nanook
     #   [+pending+] See {#balance}
     #   [+representative+] See {#representative}
     #   [+public_key+] See {#public_key}
-    def info(detailed: false)
+    def info(detailed: false, unit: Nanook::WalletAccount::DEFAULT_UNIT)
+      unless Nanook::WalletAccount::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
       response = rpc(:account_info)
       response.merge!(id: @account)
+
+      if unit == :nano
+        response[:balance] = Nanook::Util.raw_to_NANO(response[:balance])
+      end
 
       # Return the response if we don't need any more info
       return response unless detailed
@@ -240,7 +249,7 @@ class Nanook
       # Otherwise make additional calls
       response.merge!({
         weight: weight,
-        pending: balance[:pending],
+        pending: balance(unit: unit)[:pending],
         representative: representative,
         public_key: public_key
       })
