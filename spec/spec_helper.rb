@@ -105,3 +105,12 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 end
+
+def headers
+  {
+    'Accept'=>'*/*',
+    'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+    'Content-Type'=>'application/json',
+    'User-Agent'=>'Ruby nanook gem'
+  }
+end

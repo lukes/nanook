@@ -27,11 +27,15 @@ RSpec.describe Nanook do
   end
 
   it "should have an account method" do
-    expect(Nanook.new.account).to be_kind_of(Nanook::Account)
+    expect(Nanook.new.account("some_account")).to be_kind_of(Nanook::Account)
   end
 
   it "should have a work_peers method" do
     expect(Nanook.new.work_peers).to be_kind_of(Nanook::WorkPeer)
+  end
+
+  it "should have a rpc accessor" do
+    expect(Nanook.new.rpc).to be_kind_of(Nanook::Rpc)
   end
 
 end

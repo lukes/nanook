@@ -1,14 +1,6 @@
 RSpec.describe Nanook::Key do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
-  let(:headers) {
-    {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-    }
-  }
 
   it "should add a work peer correctly" do
     stub_request(:post, uri).with(

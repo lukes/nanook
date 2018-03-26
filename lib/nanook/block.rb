@@ -120,6 +120,7 @@ class Nanook
     # ==== Example response
     #
     #   {
+    #     :id=>"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
     #     :type=>"send",
     #     :previous=>"FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB",
     #     :destination=>"xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
@@ -240,7 +241,8 @@ class Nanook
     def _parse_info_response(response)
       # The contents is a stringified JSON
       if response[:contents]
-        return JSON.parse(response[:contents]).to_symbolized_hash
+        r = JSON.parse(response[:contents]).to_symbolized_hash
+        return r.merge(id: id)
       end
 
       response

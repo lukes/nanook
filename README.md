@@ -131,6 +131,17 @@ See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/1
 ```ruby
 Nanook.new.wallet.create
 ```
+#### Restoring a wallet from seed/id
+
+If you previously created a wallet somewhere else, or if you rebuilt your node, you can restore the wallet:
+
+```ruby
+Nanook.new.wallet.restore(wallet_id)
+```
+Optionally also restore the wallet's accounts:
+```ruby
+Nanook.new.wallet.restore(wallet_id, accounts: 2)
+```
 
 #### Working with a single wallet:
 
@@ -142,6 +153,8 @@ wallet.balance(account_break_down: true)
 wallet.balance(unit: :raw)
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: unique_id)
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
+wallet.pending
+wallet.pending(limit: 1)
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
 
@@ -164,6 +177,12 @@ wallet.destroy
 Nanook.new.wallet(wallet_id).account.create
 ```
 
+#### Create multiple accounts:
+
+```ruby
+Nanook.new.wallet(wallet_id).account.create(5)
+```
+
 #### Working with a single account:
 
 ```ruby
@@ -181,13 +200,16 @@ account.receive(pending_block_id)
 account.exists?
 account.info
 account.info(detailed: true)
+account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
+account.history(unit: :raw)
 account.public_key
 account.delegators
 account.representative
+account.change_representative(new_representative)
 account.weight
 
 account.destroy
@@ -208,10 +230,12 @@ account.pending(limit: 1)
 account.exists?
 account.info
 account.info(detailed: true)
+account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
+account.history(unit: :raw)
 account.public_key
 account.delegators
 account.representative
@@ -250,6 +274,7 @@ block.is_valid_work?(work_id)
 ```ruby
 node = Nanook.new.node
 
+node.account_count
 node.block_count
 node.block_count_type
 node.bootstrap_any
@@ -257,6 +282,8 @@ node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
 node.frontier_count
 node.peers
 node.representatives
+node.synchronizing_blocks
+node.synchronizing_blocks(limit: 1)
 node.sync_progress
 node.synced?
 node.version
@@ -309,14 +336,13 @@ To run the test suite:
 
     bundle exec rspec spec
 
-To update rdoc documentation:
+To update the yard documentation:
 
-    bundle exec rake rerdoc
+    bundle exec rake yard
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
 
 ## Buy me a nano coffee
 
