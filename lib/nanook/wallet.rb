@@ -226,6 +226,7 @@ class Nanook
     def id
       @wallet
     end
+    alias_method :seed, :id
 
     def inspect # :nodoc:
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
