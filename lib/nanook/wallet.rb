@@ -379,16 +379,23 @@ class Nanook
 
     # Restore a previously created wallet on this node.
     #
+    # ==== Example:
+    #
+    #   Nanook.new.wallet.restore(wallet_id) # => "718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"
+    #
+    # @param wallet [String] the wallet id to restore.
+    # @param accounts [Integer] optionally restore the given number of accounts for the wallet.
+    #
     # @return [String] the new wallet id
     # @raise Nanook::Error if unsuccessful
-    def restore(seed, accounts:0)
+    def restore(wallet, accounts:0)
       @wallet = create
 
-      unless change_id(seed)
-        raise Nanook::Error.new("Unable to set seed for wallet")
+      unless change_id(wallet)
+        raise Nanook::Error.new("Unable to set seed/id for wallet")
       end
 
-      @wallet = seed
+      @wallet = wallet
 
       if accounts > 0
         account.create(accounts)
