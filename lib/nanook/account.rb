@@ -245,7 +245,7 @@ class Nanook
     #
     # ==== Example
     #
-    #   ledger(limit: 2)
+    #   account.ledger(limit: 2)
     #
     # ==== Example response
     #   {
@@ -281,7 +281,7 @@ class Nanook
     #
     # ==== Example 1
     #
-    #   pending
+    #   account.pending
     #
     # ==== Example 1 response
     #
@@ -289,7 +289,7 @@ class Nanook
     #
     # ==== Example 2
     #
-    #   pending(detailed: true)
+    #   account.pending(detailed: true)
     #
     # ==== Example 2 response
     #
@@ -312,6 +312,9 @@ class Nanook
     # Weight is determined by the account's balance, and represents
     # the voting weight that account has on the network. Only accounts
     # with greater than 256 weight can vote.
+    #
+    # ==== Example:
+    #   account.weight # => 0
     #
     # @return [Integer] the account's weight
     def weight
