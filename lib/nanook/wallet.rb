@@ -123,10 +123,10 @@ class Nanook
     #       "pending"=>0
     #     },
     #   }
-    def balance(account_break_down: false, unit: Nanook::WalletAccount::DEFAULT_UNIT)
+    def balance(account_break_down: false, unit: Nanook.default_unit)
       wallet_required!
 
-      unless Nanook::WalletAccount::UNITS.include?(unit)
+      unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
@@ -265,7 +265,7 @@ class Nanook
     # Or:
     #
     #   "Account not found"
-    def pay(from:, to:, amount:, unit: Nanook::WalletAccount::DEFAULT_UNIT, id:)
+    def pay(from:, to:, amount:, unit: Nanook.default_unit, id:)
       wallet_required!
       validate_wallet_contains_account!(from)
       account(from).pay(to: to, amount: amount, unit: unit, id: id)
@@ -312,10 +312,10 @@ class Nanook
     #
     # ==== Example 3 response
     #   TODO
-    def pending(limit: 1000, threshold:nil, unit: Nanook::WalletAccount::DEFAULT_UNIT)
+    def pending(limit: 1000, threshold:nil, unit: Nanook.default_unit)
       wallet_required!
 
-      unless Nanook::WalletAccount::UNITS.include?(unit)
+      unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 

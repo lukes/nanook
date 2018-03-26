@@ -85,8 +85,8 @@ class Nanook
     # @param limit [Integer] Maximum number of history items to return
     # @param unit (see #balance)
     # @return [Array<Hash{Symbol=>String}>] Send and receive payment history of this account
-    def history(limit: 1000, unit: Nanook::WalletAccount::DEFAULT_UNIT)
-      unless Nanook::WalletAccount::UNITS.include?(unit)
+    def history(limit: 1000, unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
@@ -148,16 +148,16 @@ class Nanook
     #    "pending": 1100000000000000000000000000000
     #   }
     #
-    # @param unit [Symbol] Default is {Nanook::WalletAccount::DEFAULT_UNIT}.
-    #   Must be one of {Nanook::WalletAccount::UNITS}.
+    # @param unit [Symbol] Default is {Nanook.default_unit}.
+    #   Must be one of {Nanook::UNITS}.
     #   Represents the unit that the balances will be returned in.
     #   Note: this method interprets
     #   +:nano+ as NANO, which is technically Mnano
     #   See {https://nano.org/en/faq#what-are-nano-units- What are Nano's Units}
     #
     # @raise ArgumentError if an invalid +unit+ was given.
-    def balance(unit: Nanook::WalletAccount::DEFAULT_UNIT)
-      unless Nanook::WalletAccount::UNITS.include?(unit)
+    def balance(unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
@@ -231,8 +231,8 @@ class Nanook
     #   [+pending+] See {#balance}
     #   [+representative+] See {#representative}
     #   [+public_key+] See {#public_key}
-    def info(detailed: false, unit: Nanook::WalletAccount::DEFAULT_UNIT)
-      unless Nanook::WalletAccount::UNITS.include?(unit)
+    def info(detailed: false, unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 

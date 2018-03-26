@@ -17,6 +17,7 @@
 require 'webmock/rspec'
 require 'rspec/collection_matchers'
 require 'pry'
+require 'stringio'
 require 'nanook'
 
 WebMock.disable_net_connect!
@@ -113,4 +114,14 @@ def headers
     'Content-Type'=>'application/json',
     'User-Agent'=>'Ruby nanook gem'
   }
+end
+
+# From http://www.virtuouscode.com/2011/08/25/temporarily-disabling-warnings-in-ruby/
+# For when testing setting Nanook::UNIT
+def silent_warnings
+  old_stderr = $stderr
+  $stderr = StringIO.new
+  yield
+ensure
+  $stderr = old_stderr
 end

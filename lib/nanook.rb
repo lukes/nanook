@@ -19,8 +19,24 @@ Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each {|file| require file }
 #   Nanook.new("http://ip6-localhost.com:7076", timeout: 600)
 class Nanook
 
+  UNITS = [:raw, :nano]
+  DEFAULT_UNIT = :nano
+
   # @return [Nanook::Rpc]
   attr_reader :rpc
+
+  # @return [Symbol] the default unit for amounts to be in.
+  #   will return {DEFAULT_UNIT} unless you define a new constant Nanook::UNIT
+  #   (which must be one of {UNITS})
+  def self.default_unit
+    return DEFAULT_UNIT unless defined?(UNIT)
+
+    unless UNITS.include?(UNIT.to_sym)
+      raise Nanook::Error.new("UNIT #{UNIT} must be one of #{UNITS}")
+    end
+
+    UNIT.to_sym
+  end
 
   # Returns a new instance of {Nanook}.
   #

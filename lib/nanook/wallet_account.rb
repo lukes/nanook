@@ -1,9 +1,6 @@
 class Nanook
   class WalletAccount
 
-    UNITS = [:raw, :nano]
-    DEFAULT_UNIT = :nano
-
     def initialize(rpc, wallet, account)
       @rpc = rpc
       @wallet = wallet
@@ -47,8 +44,8 @@ class Nanook
       "#{self.class.name}(wallet_id: #{wallet_id}, account_id: #{account_id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
-    def pay(to:, amount:, unit: DEFAULT_UNIT, id:)
-      unless UNITS.include?(unit)
+    def pay(to:, amount:, unit: Nanook::default_unit, id:)
+      unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
