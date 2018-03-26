@@ -151,15 +151,12 @@ class Nanook
 
     # Changes a wallet's seed.
     #
-    # The seed is the wallet's unique identifier.
-    #
-    # @param seed [String] the seed/id to change to.
+    # @param seed [String] the seed to change to.
     # @return [Boolean] indicating whether the change was successful.
-    def change_id(seed)
+    def change_seed(seed)
       wallet_required!
       rpc(:wallet_change_seed, seed: seed).has_key?(:success)
     end
-    alias_method :change_seed, :change_id
 
     # Creates a new wallet.
     #
