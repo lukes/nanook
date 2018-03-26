@@ -93,8 +93,8 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).balance
-    expect(response[:balance]).to eq(11.439597000000001)
-    expect(response[:pending]).to eq(21.439597000000001)
+    expect(response[:balance]).to eq(11.439597)
+    expect(response[:pending]).to eq(21.439597)
   end
 
   it "account balance in raw" do
