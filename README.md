@@ -133,7 +133,7 @@ Nanook.new.wallet.create
 ```
 #### Restoring a wallet from seed
 
-If you previously created a wallet somewhere else, or if you rebuilt your node, you can restore a wallet on it:
+If you previously created a wallet somewhere else, or if you rebuilt your node, you can restore the wallet:
 
 ```ruby
 Nanook.new.wallet.restore(wallet_id)
