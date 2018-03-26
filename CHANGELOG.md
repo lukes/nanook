@@ -15,8 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   account's representative.
 - New `Nanook::Node#account_count` method to return number of known accounts in ledger.
 - New `Nanook::Node#synchronizing_blocks` method to return information about "unchecked" synchronizing blocks.
+- New `Nanook::Account#last_modified_at` method.
 - Added ruby version requirement >= 2.0 to gemspec.
-- Added `Nanook::Account#last_modified_at`.
 
 ### Changed
 - `Nanook::Rpc#inspect` displays full hostname with scheme and port.
