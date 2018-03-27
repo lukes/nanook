@@ -39,7 +39,20 @@ RSpec.describe Nanook::WalletAccount do
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account.create).to eq("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
+    stub_request(:post, "http://localhost:7076/").
+    with(
+      body: "{\"action\":\"wallet_contains\",\"wallet\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: {
+      'Accept'=>'*/*',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Content-Type'=>'application/json',
+      'User-Agent'=>'Ruby nanook gem'
+      }).
+    to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
+
+    response = Nanook.new.wallet(wallet_id).account.create
+    expect(response).to be_kind_of Nanook::WalletAccount
+    expect(response.id).to eq("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
   end
 
   it "wallet account create with 0 as argument" do
@@ -47,24 +60,39 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it "wallet account create with 5 as argument" do
+    accounts = [
+      "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000",
+      "xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000",
+      "xrb_2e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000",
+      "xrb_3e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000",
+      "xrb_4e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000"
+    ]
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"accounts_create\",\"wallet\":\"#{wallet_id}\",\"count\":\"5\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"accounts\": [
-        \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000\",
-        \"xrb_2e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000\",
-        \"xrb_3e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000\",
-        \"xrb_4e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000\"
-      ]}",
+      body: "{\"accounts\":#{accounts.to_json}}",
       headers: {}
     )
 
+    accounts.each do |account|
+      stub_request(:post, "http://localhost:7076/").
+      with(
+        body: "{\"action\":\"wallet_contains\",\"wallet\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"account\":\"#{account}\"}",
+        headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type'=>'application/json',
+        'User-Agent'=>'Ruby nanook gem'
+        }).
+      to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
+    end
+
     response = Nanook.new.wallet(wallet_id).account.create(5)
     expect(response).to have(5).items
-    expect(response[0]).to eq("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
+    expect(response[0].id).to eq("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
   end
 
 

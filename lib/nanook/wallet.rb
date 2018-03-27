@@ -185,7 +185,8 @@ class Nanook
     #
     #   "CC2C9846A44DB6F0363F647D12B957794AD937F59498D4E35C172C81E2888650"
     def create
-      rpc(:wallet_create)[:wallet]
+      @wallet = rpc(:wallet_create)[:wallet]
+      self
     end
 
     # Destroy the wallet. Returns a boolean indicating whether the action
@@ -377,31 +378,31 @@ class Nanook
       account(into).receive(block)
     end
 
-    # Restore a previously created wallet on this node.
+    # Creates a new wallet with a specific seed.
+    # This causes any accounts created in this wallet to be the same as the
+    # accounts in the wallet that had the original seed.
     #
     # ==== Example:
     #
-    #   Nanook.new.wallet.restore(wallet_id) # => "718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"
+    #   Nanook.new.wallet.restore(seed) # => Nanook::Wallet
     #
-    # @param wallet [String] the wallet id to restore.
+    # @param seed [String] the wallet seed to restore.
     # @param accounts [Integer] optionally restore the given number of accounts for the wallet.
     #
-    # @return [String] the new wallet id
+    # @return [Nanook::Wallet] a new wallet
     # @raise Nanook::Error if unsuccessful
-    def restore(wallet, accounts:0)
-      @wallet = create
+    def restore(seed, accounts:0)
+      create
 
-      unless change_id(wallet)
+      unless change_id(seed)
         raise Nanook::Error.new("Unable to set seed/id for wallet")
       end
-
-      @wallet = wallet
 
       if accounts > 0
         account.create(accounts)
       end
 
-      @wallet
+      self
     end
 
     # Returns a boolean to indicate if the wallet is locked.

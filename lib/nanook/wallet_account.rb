@@ -24,15 +24,30 @@ class Nanook
       @account
     end
 
+    # Create a new account in this wallet.
+    #
+    # ==== Example:
+    #
+    #   wallet.create    # => Create 1 account, and return the {Nanook::WalletAccount}
+    #   wallet.create(2) # => Create 2 accounts, and return an Array of {Nanook::WalletAccount}
+    #
+    # @param n [Integer] number of accounts to create (default is 1)
+    #
+    # @return [Nanook::WalletAccount] will return a single {Nanook::WalletAccount}
+    #   unless method was called with
+    # @return [Array<Nanook::WalletAccount>] will return an Array of {Nanook::WalletAccount}
+    #   if method was called with
     def create(n=1)
       if n < 1
         raise ArgumentError.new("number of accounts must be greater than 1")
       end
 
       if n == 1
-        rpc(:account_create)[:account]
+        Nanook::WalletAccount.new(@rpc, @wallet, rpc(:account_create)[:account])
       else
-        rpc(:accounts_create, count: n)[:accounts]
+        Array(rpc(:accounts_create, count: n)[:accounts]).map do |account|
+          Nanook::WalletAccount.new(@rpc, @wallet, account)
+        end
       end
     end
 

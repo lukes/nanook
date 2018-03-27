@@ -60,7 +60,9 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    expect(Nanook.new.wallet.create).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    response = Nanook.new.wallet.create
+    expect(response).to be_kind_of Nanook::Wallet
+    expect(response.id).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
   end
 
   it "wallet destroy" do
@@ -356,19 +358,19 @@ RSpec.describe Nanook::Wallet do
   end
 
   it "wallet restore with no accounts" do
-    initial_wallet_id = "000F2BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    seed = "000F2BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
 
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_create\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"wallet\":\"#{initial_wallet_id}\"}",
+      body: "{\"wallet\":\"#{wallet_id}\"}",
       headers: {}
     )
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_change_seed\",\"wallet\":\"#{initial_wallet_id}\",\"seed\":\"#{wallet_id}\"}",
+      body: "{\"action\":\"wallet_change_seed\",\"wallet\":\"#{wallet_id}\",\"seed\":\"#{seed}\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -376,24 +378,25 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    response = Nanook.new.wallet.restore(wallet_id)
-    expect(response).to eq wallet_id
+    response = Nanook.new.wallet.restore(seed)
+    expect(response).to be_kind_of Nanook::Wallet
+    expect(response.id).to eq wallet_id
   end
 
-  it "wallet restore with 2 accounts" do
-    initial_wallet_id = "000F2BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+  it "wallet restore with 1 accounts" do
+    seed = "000F2BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
 
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_create\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"wallet\":\"#{initial_wallet_id}\"}",
+      body: "{\"wallet\":\"#{wallet_id}\"}",
       headers: {}
     )
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_change_seed\",\"wallet\":\"#{initial_wallet_id}\",\"seed\":\"#{wallet_id}\"}",
+      body: "{\"action\":\"wallet_change_seed\",\"wallet\":\"#{wallet_id}\",\"seed\":\"#{seed}\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -410,8 +413,20 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    response = Nanook.new.wallet.restore(wallet_id)
-    expect(response).to eq wallet_id
+    stub_request(:post, "http://localhost:7076/").
+    with(
+      body: "{\"action\":\"wallet_contains\",\"wallet\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: {
+      'Accept'=>'*/*',
+      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Content-Type'=>'application/json',
+      'User-Agent'=>'Ruby nanook gem'
+      }).
+    to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
+
+    response = Nanook.new.wallet.restore(seed, accounts: 1)
+    expect(response).to be_kind_of Nanook::Wallet
+    expect(response.id).to eq wallet_id
   end
 
   it "wallet pending with default limit" do
