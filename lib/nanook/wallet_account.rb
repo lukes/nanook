@@ -55,7 +55,7 @@ class Nanook
       rpc(:account_remove)[:removed] == 1
     end
 
-    def inspect # :nodoc:
+    def inspect
       "#{self.class.name}(wallet_id: #{wallet_id}, account_id: #{account_id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 

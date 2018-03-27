@@ -13,7 +13,7 @@ class Nanook
       rpc(:work_peers_clear).has_key?(:success)
     end
 
-    def inspect # :nodoc:
+    def inspect
       "#{self.class.name}(object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 

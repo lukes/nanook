@@ -229,7 +229,7 @@ class Nanook
     end
     alias_method :seed, :id
 
-    def inspect # :nodoc:
+    def inspect
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
