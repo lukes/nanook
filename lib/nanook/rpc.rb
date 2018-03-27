@@ -36,7 +36,7 @@ class Nanook
       end
     end
 
-    def inspect # :nodoc:
+    def inspect
       "#{self.class.name}(host: \"#{@rpc_server}\", timeout: #{@http.read_timeout} object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 

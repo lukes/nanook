@@ -224,7 +224,7 @@ class Nanook
     end
     alias_method :seed, :id
 
-    def inspect # :nodoc:
+    def inspect
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
@@ -374,24 +374,23 @@ class Nanook
     end
 
     # Restore a previously created wallet by its seed.
-    # A new wallet will be created on your node, and will have its seed
-    # set to the given seed.
+    # A new wallet will be created on your node (with a new wallet id)
+    # and will have its seed set to the given seed.
     #
     # ==== Example:
     #
-    #   Nanook.new.wallet.restore(wallet_seed) # => Nanook::Wallet
+    #   Nanook.new.wallet.restore(seed) # => Nanook::Wallet
     #
     # @param seed [String] the wallet seed to restore.
     # @param accounts [Integer] optionally restore the given number of accounts for the wallet.
     #
-    # @return [Nanook::Wallet]
+    # @return [Nanook::Wallet] a new wallet
     # @raise Nanook::Error if unsuccessful
     def restore(seed, accounts:0)
-      wallet = create
-      @wallet = wallet.id
+      create
 
       unless change_seed(seed)
-        raise Nanook::Error.new("Unable to set seed/id for wallet")
+        raise Nanook::Error.new("Unable to set seed for wallet")
       end
 
       if accounts > 0

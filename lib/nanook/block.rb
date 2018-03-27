@@ -218,7 +218,7 @@ class Nanook
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
-    def inspect # :nodoc:
+    def inspect
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
