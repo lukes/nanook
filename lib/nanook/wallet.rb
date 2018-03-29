@@ -20,12 +20,12 @@ class Nanook
   # Initialize this class through the convenient Nanook#wallet method:
   #
   #   nanook = Nanook.new
-  #   wallet = nanook.wallet(wallet_seed)
+  #   wallet = nanook.wallet(wallet_id)
   #
   # Or compose the longhand way like this:
   #
   #   rpc_conn = Nanook::Rpc.new
-  #   wallet = Nanook::Wallet.new(rpc_conn, wallet_seed)
+  #   wallet = Nanook::Wallet.new(rpc_conn, wallet_id)
   class Wallet
 
     def initialize(rpc, wallet)
@@ -160,23 +160,12 @@ class Nanook
 
     # Creates a new wallet.
     #
-    #   Nanook.new.wallet.create
+    # The wallet will be created only on this node. It's important that
+    # if you intend to add funds to accounts in this wallet that you
+    # backup the wallet *seed* in order to restore the wallet in future.
     #
-    # ==== Very important
-    #
-    # <b>Please read this.</b> The response of this method is a wallet seed. A seed is
-    # a 32-byte uppercase hex string. You can think of this string as your
-    # API key to the nano network. The person who knows it can do all read and write
-    # actions against the wallet and all accounts inside the wallet from
-    # anywhere on the nano network, not just on the node you created the
-    # wallet on.
-    #
-    # If you intend for your wallet to contain funds, then make sure that
-    # you consider the seed that is returned as the key to your funds
-    # and store it somewhere secret and safe. Only transmit
-    # the seed over secure (SSH or SSL) networks and do not store it where
-    # it is able to be easily comprised by a hacker, which includes your
-    # personal computer.
+    # ==== Example:
+    #   Nanook.new.wallet.create # => Nanook::Wallet
     #
     # @return [Nanook::Wallet]
     def create
