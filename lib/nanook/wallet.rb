@@ -385,7 +385,7 @@ class Nanook
     # @param accounts [Integer] optionally restore the given number of accounts for the wallet.
     #
     # @return [Nanook::Wallet] a new wallet
-    # @raise Nanook::Error if unsuccessful
+    # @raise [Nanook::Error] if unsuccessful
     def restore(seed, accounts:0)
       create
 
@@ -411,23 +411,23 @@ class Nanook
       !response.empty? && response[:locked] != 0
     end
 
-    # Unlocks a previously locked wallet. Returns a boolean to indicate
-    # if the action was successful.
+    # Unlocks a previously locked wallet.
     #
-    # ==== Example response
+    # ==== Example:
     #
-    #   true
+    #   wallet.unlock("new_pass") #=> true
+    # @return [Boolean] indicates if the action was successful
     def unlock(password)
       wallet_required!
       rpc(:password_enter, password: password)[:valid] == 1
     end
 
-    # Changes the password for a wallet. Returns a boolean to indicate
-    # if the action was successful.
+    # Changes the password for a wallet.
     #
-    # ==== Example response
+    # ==== Example:
     #
-    #   true
+    #   wallet.change_password("new_pass") #=> true
+    # @return [Boolean] indicates if the action was successful
     def change_password(password)
       wallet_required!
       rpc(:password_change, password: password)[:changed] == 1

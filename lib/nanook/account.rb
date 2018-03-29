@@ -24,8 +24,8 @@ class Nanook
     # Returns information about this account's delegators.
     # === Example response:
     #   {
-    #     xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd: "500000000000000000000000000000000000",
-    #     xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn: "961647970820730000000000000000000000"
+    #     :xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd=>500000000000000000000000000000000000,
+    #     :xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn=>961647970820730000000000000000000000
     #   }
     #
     # @return [Hash{Symbol=>String}] Delegators
@@ -82,9 +82,9 @@ class Nanook
     #     }
     #   ]
     #
-    # @param limit [Integer] Maximum number of history items to return
+    # @param limit [Integer] maximum number of history items to return
     # @param unit (see #balance)
-    # @return [Array<Hash{Symbol=>String}>] Send and receive payment history of this account
+    # @return [Array<Hash{Symbol=>String}>] the history of send and receive payments for this account
     def history(limit: 1000, unit: Nanook.default_unit)
       unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
@@ -102,7 +102,7 @@ class Nanook
       end
     end
 
-    # @return [Time] Last modified time of the account in UTC time zone.
+    # @return [Time] last modified time of the account in UTC time zone.
     def last_modified_at
       response = rpc(:account_info)
       Time.at(response[:modified_timestamp])
@@ -113,7 +113,7 @@ class Nanook
     # ==== Example response:
     #   "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
     #
-    # @return [String] Public key of this account
+    # @return [String] public key of this account
     def public_key
       rpc(:account_key)[:key]
     end
@@ -135,8 +135,8 @@ class Nanook
     #
     # ==== Example response:
     #   {
-    #    "balance": 2,   # Account balance
-    #    "pending": 1.1  # Amount pending and not yet received by the account
+    #     balance=>2,   # Account balance
+    #     pending=>1.1  # Amount pending and not yet received by the account
     #   }
     #
     # ==== Example balance returned in raw:
@@ -144,11 +144,11 @@ class Nanook
     #   account.balance(unit: :raw)
     #
     #   {
-    #    "balance": 2000000000000000000000000000000,
-    #    "pending": 1100000000000000000000000000000
+    #     balance: 2000000000000000000000000000000,
+    #     pending: 1100000000000000000000000000000
     #   }
     #
-    # @param unit [Symbol] Default is {Nanook.default_unit}.
+    # @param unit [Symbol] default is {Nanook.default_unit}.
     #   Must be one of {Nanook::UNITS}.
     #   Represents the unit that the balances will be returned in.
     #   Note: this method interprets
@@ -169,7 +169,7 @@ class Nanook
       end
     end
 
-    # Returns the id of the account
+    # Returns the id of the account.
     # @return [String] the id of the account
     def id
       @account
@@ -214,7 +214,7 @@ class Nanook
     # @param detailed [Boolean] (default is false). When +true+, four
     #   additional calls are made to the RPC to return more information
     # @param unit (see #balance)
-    # @return [Hash] Information about the account containing:
+    # @return [Hash] information about the account containing:
     #   [+id] The account id
     #   [+frontier+] The latest block hash
     #   [+open_block+] The first block in every account's blockchain. When this block was published the account was officially open
