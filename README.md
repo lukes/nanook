@@ -155,6 +155,8 @@ wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: uniqu
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
 wallet.pending
 wallet.pending(limit: 1)
+wallet.pending(detailed: true)
+wallet.pending(unit: :raw)
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
 
@@ -194,6 +196,8 @@ account.pay(to: recipient_account_id, amount: 2, id: unique_id)
 account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
 account.pending
 account.pending(limit: 1)
+account.pending(detailed: true)
+account.pending(unit: :raw)
 account.receive
 account.receive(pending_block_id)
 
@@ -227,6 +231,8 @@ account.balance
 account.balance(unit: :raw)
 account.pending
 account.pending(limit: 1)
+account.pending(detailed: true)
+account.pending(unit: :raw)
 
 account.exists?
 account.info

@@ -265,23 +265,45 @@ class Nanook
     # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
     # @param unit (see Nanook::Account#balance)
     #
-    # ==== Example 1
+    # ==== Example 1:
     #
     #   wallet.pending
     #
-    # ==== Example 1 response
+    # ==== Example 1 response:
     #   {
-    #     "xrb_1111111111111111111111111111111111111111111111111117353trpda"=>["142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D","718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"],
-    #     "xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3"=>["4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"]
+    #     :xrb_1111111111111111111111111111111111111111111111111117353trpda=>[
+    #       "142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D",
+    #       "718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"
+    #     ],
+    #     :xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3=>[
+    #       "4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"
+    #     ]
     #   }
-    # ==== Example 2
+    # ==== Example 2:
     #
     #   wallet.pending(detailed: true)
     #
-    # ==== Example 2 response
+    # ==== Example 2 response:
     #   {
-    #     "xrb_1111111111111111111111111111111111111111111111111117353trpda"=>["142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D","718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"],
-    #     "xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3"=>["4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"]
+    #     :xrb_1111111111111111111111111111111111111111111111111117353trpda=>[
+    #       {
+    #         :amount=>6.0,
+    #         :source=>"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr",
+    #         :block=>:"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D"
+    #       },
+    #       {
+    #         :amount=>12.0,
+    #         :source=>"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr",
+    #         :block=>:"242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D"
+    #       }
+    #     ],
+    #     :xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3=>[
+    #       {
+    #         :amount=>106.370018,
+    #         :source=>"xrb_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo",
+    #         :block=>:"4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"
+    #       }
+    #     ]
     #   }
     def pending(limit:1000, detailed:false, unit:Nanook.default_unit)
       wallet_required!
@@ -298,14 +320,22 @@ class Nanook
 
       return response unless detailed
 
-      response.each_pair do |key, val|
-        binding.pry
-        p = val.merge(block: key.to_s)
-        if unit == :nano
-          p[:amount] = Nanook::Util.raw_to_NANO(p[:amount])
+      # Map the RPC response, which is:
+      # account=>block=>[amount|source] into
+      # account=>[block|amount|source]
+      x = response.map do |account, data|
+        new_data = data.map do |block, amount_and_source|
+          d = amount_and_source.merge(block: block.to_s)
+          if unit == :nano
+            d[:amount] = Nanook::Util.raw_to_NANO(d[:amount])
+          end
+          d
         end
-        response[:key] = p
+
+        [account, new_data]
       end
+
+      Hash[x].to_symbolized_hash
     end
 
     # Receives a pending payment into an account in the wallet.
