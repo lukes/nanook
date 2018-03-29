@@ -267,24 +267,14 @@ class Nanook
       account(from).pay(to: to, amount: amount, unit: unit, id: id)
     end
 
-    # Returns a Hash of accounts in this wallet with their pending block hash ids.
-    # A pending block is a payment that has not yet been receieved by an account
-    # in the wallet.
+    # Returns information about pending blocks (payments) that are waiting
+    # to be received by accounts in this wallet.
     #
     # See also the #receive method of this class for how to receive a pending payment.
     #
-    # ==== Arguments
-    #
-    # [+limit:+]    Number of accounts with pending blocks to return (default is 1000)
-    # [+threshold:+] Only return accounts with pendings blocks greater than this amount
-    #               (default is +nil+). When +nil+ this argument will not apply.
-    #               The unit of +threshold+ is determined by the +unit:+ argument and defaults
-    #               to NANO.
-    # [+unit:+]   Symbol (default is +:nano+) Sets the unit of the +threshold:+ argument, and
-    #             also the unit of the response.
-    #             Must be either +:nano+ or +:raw+. (Note: this method
-    #             interprets +:nano+ as NANO, which is technically Mnano
-    #             See {What are Nano's Units}[https://nano.org/en/faq#what-are-nano-units-])
+    # @param limit [Integer] number of accounts with pending payments to return (default is 1000)
+    # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
+    # @param unit (see Nanook::Account#balance)
     #
     # ==== Example 1
     #
@@ -297,44 +287,36 @@ class Nanook
     #   }
     # ==== Example 2
     #
-    #   wallet.pending(threshold: 1)
+    #   wallet.pending(detailed: true)
     #
     # ==== Example 2 response
-    #   TODO
-    #
-    # ==== Example 3
-    #
-    #   wallet.pending(threshold: 999999999999999999999999, unit: :raw)
-    #
-    # ==== Example 3 response
-    #   TODO
-    def pending(limit: 1000, threshold:nil, unit: Nanook.default_unit)
+    #   {
+    #     "xrb_1111111111111111111111111111111111111111111111111117353trpda"=>["142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D","718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"],
+    #     "xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3"=>["4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"]
+    #   }
+    def pending(limit:1000, detailed:false, unit:Nanook.default_unit)
       wallet_required!
 
       unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
-      if !threshold.nil? && unit.eql?(:nano)
-        threshold = Nanook::Util.NANO_to_raw(threshold)
-      end
-
-      params = {
-        count: limit
-      }
-
-      if !threshold.nil?
-        params.merge!(threshold: threshold)
-      end
+      params = { count: limit }
+      params[:source] = true if detailed
 
       response = rpc(:wallet_pending, params)[:blocks]
+      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
 
-      if !threshold.nil?
-        # response = response.map do |account, blocks|
-        # end
+      return response unless detailed
+
+      response.each_pair do |key, val|
+        binding.pry
+        p = val.merge(block: key.to_s)
+        if unit == :nano
+          p[:amount] = Nanook::Util.raw_to_NANO(p[:amount])
+        end
+        response[:key] = p
       end
-
-      Nanook::Util.coerce_empty_string_to_type(response, Hash)
     end
 
     # Receives a pending payment into an account in the wallet.

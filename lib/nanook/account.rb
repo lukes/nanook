@@ -296,6 +296,8 @@ class Nanook
     # Returns information about pending blocks (payments) that are
     # waiting to be received by the account.
     #
+    # See also the #receive method of this class for how to receive a pending payment.
+    #
     # The default response is an Array of block ids.
     #
     # With the +detailed:+ argument, the method returns an Array of Hashes,
@@ -332,10 +334,10 @@ class Nanook
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
-      args = { count: limit }
-      args[:source] = true if detailed
+      params = { count: limit }
+      params[:source] = true if detailed
 
-      response = rpc(:pending, args)[:blocks]
+      response = rpc(:pending, params)[:blocks]
       response = Nanook::Util.coerce_empty_string_to_type(response, (detailed ? Hash : Array))
 
       return response unless detailed
