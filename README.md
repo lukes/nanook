@@ -131,16 +131,14 @@ See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/1
 ```ruby
 Nanook.new.wallet.create
 ```
-#### Restoring a wallet from seed/id
-
-If you previously created a wallet somewhere else, or if you rebuilt your node, you can restore the wallet:
+#### Restoring a wallet from a seed
 
 ```ruby
-Nanook.new.wallet.restore(wallet_id)
+Nanook.new.wallet.restore(seed)
 ```
 Optionally also restore the wallet's accounts:
 ```ruby
-Nanook.new.wallet.restore(wallet_id, accounts: 2)
+Nanook.new.wallet.restore(seed, accounts: 2)
 ```
 
 #### Working with a single wallet:
