@@ -464,7 +464,7 @@ RSpec.describe Nanook::Wallet do
   end
 
   it "wallet pending with threshold" do
-    skip
+    skip # is the rpc docs correct with its response?
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1\",\"threshold\":\"1000000000000000000000000000000\"}",
       headers: headers

@@ -293,48 +293,62 @@ class Nanook
       rpc(:ledger, count: limit)[:accounts]
     end
 
-
-    # Returns information about pending block hashes that are waiting to
-    # be received by the account.
+    # Returns information about pending blocks (payments) that are
+    # waiting to be received by the account.
     #
-    # The default response is an Array of block hashes.
-    # With the +detailed:+ argument, the method can return a more
-    # complex Hash containing the amount in
-    # {raw}[https://nano.org/en/faq#what-are-nano-units-] of the pending
-    # block and the source account that sent it.
+    # The default response is an Array of block ids.
     #
-    # ==== Arguments
+    # With the +detailed:+ argument, the method returns an Array of Hashes,
+    # which contain the source account id, amount pending and block id.
     #
-    # [+limit:+] Number of pending blocks to return (default is 1000)
-    # [+detailed:+] Boolean to have this method return a more complex
-    #               Hash of pending block information (default is +false+)
+    # ==== Example 1:
     #
-    # ==== Example 1
+    #   account.pending # => ["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]
     #
-    #   account.pending
-    #
-    # ==== Example 1 response
-    #
-    #   ["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]
-    #
-    # ==== Example 2
+    # ==== Example 2:
     #
     #   account.pending(detailed: true)
+    #   # =>
+    #   # [
+    #   #   {
+    #   #     :block=>"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
+    #   #     :amount=>6,
+    #   #     :source=>"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    #   #   },
+    #   #   { ... }
+    #   # ]
     #
-    # ==== Example 2 response
+    # ==== Example 3:
     #
-    #   {
-    #     "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"=>{
-    #      "amount"=>"6000000000000000000000000000000",
-    #      "source"=>"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
-    #     }
-    #   }
-    def pending(limit: 1000, detailed: false)
+    #   account.pending(detailed: true, unit: raw).first[:amount] # => 6000000000000000000000000000000
+    # @param limit [Integer] number of pending blocks to return (default is 1000)
+    # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
+    # @param unit (see #balance)
+    #
+    # @return [Array<String>]
+    # @return [Array<Hash{Symbol=>String|Integer}>]
+    def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
       args = { count: limit }
       args[:source] = true if detailed
 
       response = rpc(:pending, args)[:blocks]
-      Nanook::Util.coerce_empty_string_to_type(response, (detailed ? Hash : Array))
+      response = Nanook::Util.coerce_empty_string_to_type(response, (detailed ? Hash : Array))
+
+      return response unless detailed
+
+      response.map do |key, val|
+        p = val.merge(block: key.to_s)
+
+        if unit == :nano
+          p[:amount] = Nanook::Util.raw_to_NANO(p[:amount])
+        end
+
+        p
+      end
     end
 
     # Returns the account's weight.
