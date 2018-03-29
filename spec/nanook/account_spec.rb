@@ -340,7 +340,34 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).pending(detailed: true)).to have_key("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
+    response = Nanook.new.account(account_id).pending(detailed: true)
+    expect(response).to have(1).item
+    expect(response.first[:source]).to eq "xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    expect(response.first[:amount]).to eq 6
+    expect(response.first[:block]).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+  end
+
+
+  it "account pending detailed with raw unit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":{
+        \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\": {
+             \"amount\": \"6000000000000000000000000000000\",
+             \"source\": \"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr\"
+        }
+    }}",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).pending(detailed: true, unit: :raw)
+    expect(response).to have(1).item
+    expect(response.first[:source]).to eq "xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    expect(response.first[:amount]).to eq 6000000000000000000000000000000
+    expect(response.first[:block]).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
   end
 
   it "account pending detailed with no blocks (empty string response)" do
@@ -353,7 +380,7 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).pending(detailed: true)).to eq({})
+    expect(Nanook.new.account(account_id).pending(detailed: true)).to eq([])
   end
 
   it "account weight" do

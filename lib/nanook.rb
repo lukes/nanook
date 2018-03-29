@@ -48,8 +48,8 @@ class Nanook
   # Connecting to a custom RPC host and setting a timeout:
   #   Nanook.new("http://ip6-localhost.com:7076", timeout: 600)
   #
-  # @param uri [String] Default is {Nanook::Rpc::DEFAULT_URI}. The RPC host to connect to
-  # @param timeout [Integer] Default is {Nanook::Rpc::DEFAULT_TIMEOUT}. Connection timeout in number of seconds
+  # @param uri [String] default is {Nanook::Rpc::DEFAULT_URI}. The RPC host to connect to
+  # @param timeout [Integer] default is {Nanook::Rpc::DEFAULT_TIMEOUT}. Connection timeout in number of seconds
   def initialize(uri=Nanook::Rpc::DEFAULT_URI, timeout:Nanook::Rpc::DEFAULT_TIMEOUT)
     @rpc = Nanook::Rpc.new(uri, timeout: timeout)
   end
