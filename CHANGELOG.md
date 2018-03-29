@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Account#history` now returns `amount` in NANO by default, takes `unit: :raw` argument to return in raw.
 - `Nanook::Account#info` now returns `balance` and `pending` in NANO by default, takes `unit: :raw` argument to return in raw.
 - `Nanook::Account#exists?` now checks for open block.
+- `Nanook::Account#pending` now takes additional arguments `detailed:` and `unit:`.
 - `Nanook::Block#info` now also returns the `id` of the block.
 - `Nanook::Wallet#create` now returns a `Nanook::Wallet` instance.
 - `Nanook::Wallet#seed` alias method of `#id`.
