@@ -10,7 +10,7 @@ class Nanook
   # Initialize this class through the convenient Nanook#block method:
   #
   #   nanook = Nanook.new
-  #   account = nanook.block("FBF8B0E...")
+  #   block = nanook.block("FBF8B0E...")
   #
   # Or compose the longhand way like this:
   #
@@ -36,11 +36,11 @@ class Nanook
 
     # Stop generating work for a block.
     #
-    # Returns boolean signalling if the action was successful.
-    #
-    # ==== Example
+    # ==== Example:
     #
     #   block.cancel_work # => true
+    #
+    # @return [Boolean] signalling if the action was successful
     def cancel_work
       rpc(:work_cancel, :hash).empty?
     end
@@ -50,20 +50,17 @@ class Nanook
     #
     # See also #successors.
     #
-    # ==== Arguments
-    #
-    # [+limit:+] Maximum number of block hashes to return (default is 1000)
-    #
-    # ==== Example
+    # ==== Example:
     #
     #   block.chain(limit: 2)
     #
-    # ==== Example reponse
+    # ==== Example reponse:
     #
     #   [
     #     "36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
     #     "FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB"
     #   ]
+    # @params limit [Integer] maximum number of block hashes to return (default is 1000)
     def chain(limit: 1000)
       response = rpc(:chain, :block, count: limit)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
@@ -71,9 +68,10 @@ class Nanook
 
     # Generate work for a block.
     #
-    # Returns the work id of the work completed.
-    #
+    # ==== Example:
     #   block.generate_work # => "2bf29ef00786a6bc"
+    #
+    # @return [String] the work id of the work completed.
     def generate_work
       rpc(:work_generate, :hash)[:work]
     end
@@ -81,16 +79,11 @@ class Nanook
     # Returns Array of Hashes containing information about a chain of
     # send/receive blocks, starting from this block.
     #
-    # ==== Arguments
-    #
-    # [+limit:+] Maximum number of send/receive block hashes to return
-    #            in the chain (default is 1000)
-    #
-    # ==== Example
+    # ==== Example:
     #
     #   block.history(limit: 1)
     #
-    # ==== Example response
+    # ==== Example response:
     #
     #   [
     #     {
@@ -100,25 +93,32 @@ class Nanook
     #       :type=>"send"
     #     }
     #   ]
+    #
+    # @param limit [Integer] maximum number of send/receive block hashes
+    #   to return in the chain (default is 1000)
     def history(limit: 1000)
       rpc(:history, :hash, count: limit)[:history]
     end
 
-    # Returns the block hash
+    # Returns the block hash id.
+    #
+    # ==== Example:
     #
     #   block.id #=> "FBF8B0E..."
+    #
+    # @return [String] the block hash id
     def id
       @block
     end
 
     # Returns a Hash of information about the block.
     #
-    # ==== Arguments
+    # ==== Examples:
     #
-    # [+allow_unchecked:+] Boolean (default is +false+). If +true+,
-    #                      information can be returned about blocks that
-    #                      are unchecked (unverified).
-    # ==== Example response
+    #   block.info
+    #   block.info(allow_unchecked: true)
+    #
+    # ==== Example response:
     #
     #   {
     #     :id=>"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
@@ -129,6 +129,9 @@ class Nanook
     #     :work=>"44cc24b60705083a",
     #     :signature=>"42ADFEFE7C3FFF188AE92A202F8A5734DE91779C454613E446EEC93D001D6C953E9FD16730AF32C891791BA8EDAECEB059A213E2FE1EEB7ADF9D5D0815464D06"
     #   }
+    #
+    # @param allow_unchecked [Boolean] (default is +false+). If +true+,
+    #   information can be returned about blocks that are unchecked (unverified).
     def info(allow_unchecked: false)
       if allow_unchecked
         # TODO not actually sure what this response looks like when it's not an unchecked block, assuming its blank
@@ -143,7 +146,10 @@ class Nanook
       _parse_info_response(response)
     end
 
-    # Returns boolean signalling if work is valid for the block.
+    # @param work [String] the work id to check is valid
+    # @return [Boolean] signalling if work is valid for the block
+    #
+    # ==== Example:
     #
     #   block.is_valid_work?("2bf29ef00786a6bc") # => true
     def is_valid_work?(work)
@@ -154,13 +160,14 @@ class Nanook
     # Republish blocks starting at this block up the account chain
     # back to the nano network.
     #
-    # Returns an Array of block hashes that were republished.
+    # @return [Array<String>] block hashes that were republished
     #
-    # ==== Example
+    # ==== Example:
     #
     #   block.republish
     #
-    # ==== Example response
+    # ==== Example response:
+    #
     #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
     def republish(destinations:nil, sources:nil)
       if !destinations.nil? && !sources.nil?
@@ -176,7 +183,9 @@ class Nanook
       rpc(:republish, :hash, params)[:blocks]
     end
 
-    # Returns boolean +true+ if the block is a pending block.
+    # @return [Boolean] signalling if the block is a pending block.
+    #
+    # ==== Example:
     #
     #   block.pending? #=> false
     def pending?
@@ -188,9 +197,11 @@ class Nanook
     #
     # Note, if block has previously been published, use #republish instead.
     #
-    # Returns the block hash, or false.
+    # ==== Examples:
     #
     #   block.publish # => "FBF8B0E..."
+    #
+    # @return [String] the block hash, or false.
     def publish
       # TODO I think this can return false or error or something?
       rpc(:process, :block)[:hash]
@@ -202,18 +213,17 @@ class Nanook
     #
     # See also #chain.
     #
-    # ==== Arguments
-    #
-    # [+limit:+] Maximum number of send/receive block hashes to return
-    #            in the chain (default is 1000)
-    #
-    # ==== Example
+    # ==== Example:
     #
     #   block.successors
     #
-    # ==== Example response
+    # ==== Example response:
     #
     #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
+    #
+    # @param limit [Integer] maximum number of send/receive block hashes
+    #    to return in the chain (default is 1000)
+    # @return [Array<String>] block hashes in the account chain ending at this block
     def successors(limit: 1000)
       response = rpc(:successors, :block, count: limit)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
