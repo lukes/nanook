@@ -155,6 +155,7 @@ RSpec.describe Nanook::Node do
       headers: {}
     )
 
+    # frontier_count is an alias of account_count
     expect(Nanook.new.node.frontier_count).to eq 100
   end
 

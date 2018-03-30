@@ -8,6 +8,7 @@ class Nanook
     def account_count
       rpc(:frontier_count)[:count]
     end
+    alias_method :frontier_count, :account_count
 
     def block_count
       rpc(:block_count)
@@ -23,10 +24,6 @@ class Nanook
 
     def bootstrap_any
       rpc(:bootstrap_any).has_key?(:success)
-    end
-
-    def frontier_count
-      rpc(:frontier_count)[:count]
     end
 
     def inspect
