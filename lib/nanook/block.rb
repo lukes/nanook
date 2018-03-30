@@ -202,8 +202,7 @@ class Nanook
     #
     # @return [String] the block hash, or false.
     def publish
-      # TODO I think this can return false or error or something?
-      rpc(:process, :block)[:hash]
+      rpc(:process, :block)[:hash] || false
     end
     alias_method :process, :publish
 
