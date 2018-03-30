@@ -1,14 +1,19 @@
 RSpec.describe Nanook::Node do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
-  let(:headers) {
-    {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-    }
-  }
+
+  it "should request account_count correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"frontier_count\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"count\":\"1000\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.account_count).to eq 1000
+  end
 
   it "should request block_count correctly" do
     stub_request(:post, uri).with(
@@ -150,6 +155,7 @@ RSpec.describe Nanook::Node do
       headers: {}
     )
 
+    # frontier_count is an alias of account_count
     expect(Nanook.new.node.frontier_count).to eq 100
   end
 
@@ -164,6 +170,54 @@ RSpec.describe Nanook::Node do
     )
 
     expect(Nanook.new.node.sync_progress).to eq 99.50248756218906
+  end
+
+  it "should show synchronizing_blocks" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":{\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\":\"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\",\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3C\":\"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\"}}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.synchronizing_blocks
+
+    expect(response).to have(2).items
+
+    block = response["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]
+
+    expect(block[:type]).to eq "open"
+    expect(block[:account]).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(block[:representative]).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(block[:source]).to eq "FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4"
+    expect(block[:work]).to eq "0000000000000000"
+    expect(block[:signature]).to eq "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+  end
+
+  it "should show synchronizing_blocks with limit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\": {\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\": \"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\"}}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.synchronizing_blocks(limit: 1)
+
+    expect(response).to have(1).item
+
+    block = response["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]
+
+    expect(block[:type]).to eq "open"
+    expect(block[:account]).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(block[:representative]).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(block[:source]).to eq "FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4"
+    expect(block[:work]).to eq "0000000000000000"
+    expect(block[:signature]).to eq "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
   end
 
   it "should synced? when true" do

@@ -11,7 +11,7 @@ This is a Ruby library for managing a [nano currency](https://nano.org/) node, i
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nanook', "~> 1.0"
+gem 'nanook', "~> 2.0"
 ```
 
 And then execute:
@@ -120,16 +120,25 @@ wallet.receive(block_id, into: account_id)
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/1.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: expand the "**Nanook** < Object" item in the sidebar).
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: expand the "**Nanook** < Object" item in the sidebar).
 
 ### Wallets
 
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/2.0.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 #### Create wallet:
 
 ```ruby
 Nanook.new.wallet.create
+```
+#### Restoring a wallet from a seed
+
+```ruby
+Nanook.new.wallet.restore(seed)
+```
+Optionally also restore the wallet's accounts:
+```ruby
+Nanook.new.wallet.restore(seed, accounts: 2)
 ```
 
 #### Working with a single wallet:
@@ -142,6 +151,10 @@ wallet.balance(account_break_down: true)
 wallet.balance(unit: :raw)
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: unique_id)
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
+wallet.pending
+wallet.pending(limit: 1)
+wallet.pending(detailed: true)
+wallet.pending(unit: :raw)
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
 
@@ -164,6 +177,12 @@ wallet.destroy
 Nanook.new.wallet(wallet_id).account.create
 ```
 
+#### Create multiple accounts:
+
+```ruby
+Nanook.new.wallet(wallet_id).account.create(5)
+```
+
 #### Working with a single account:
 
 ```ruby
@@ -175,19 +194,25 @@ account.pay(to: recipient_account_id, amount: 2, id: unique_id)
 account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
 account.pending
 account.pending(limit: 1)
+account.pending(detailed: true)
+account.pending(unit: :raw)
 account.receive
 account.receive(pending_block_id)
 
 account.exists?
 account.info
 account.info(detailed: true)
+account.info(unit: :raw)
+account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
+account.history(unit: :raw)
 account.public_key
 account.delegators
 account.representative
+account.change_representative(new_representative)
 account.weight
 
 account.destroy
@@ -195,7 +220,7 @@ account.destroy
 
 #### Working with any account (not necessarily in your wallet):
 
-See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Account.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.0.0/classes/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
 account = Nanook.new.account(account_id)
@@ -204,14 +229,19 @@ account.balance
 account.balance(unit: :raw)
 account.pending
 account.pending(limit: 1)
+account.pending(detailed: true)
+account.pending(unit: :raw)
 
 account.exists?
 account.info
 account.info(detailed: true)
+account.info(unit: :raw)
+account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
 account.history
 account.history(limit: 1)
+account.history(unit: :raw)
 account.public_key
 account.delegators
 account.representative
@@ -220,7 +250,7 @@ account.weight
 
 ### Blocks
 
-See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Block.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.0.0/classes/Nanook/Block.html) for a detailed description of each method and example responses.
 
 ```ruby
 block = Nanook.new.block(block_id)
@@ -250,13 +280,15 @@ block.is_valid_work?(work_id)
 ```ruby
 node = Nanook.new.node
 
+node.account_count
 node.block_count
 node.block_count_type
 node.bootstrap_any
 node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
-node.frontier_count
 node.peers
 node.representatives
+node.synchronizing_blocks
+node.synchronizing_blocks(limit: 1)
 node.sync_progress
 node.synced?
 node.version
@@ -309,14 +341,13 @@ To run the test suite:
 
     bundle exec rspec spec
 
-To update rdoc documentation:
+To update the yard documentation:
 
-    bundle exec rake rerdoc
+    bundle exec rake yard
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
 
 ## Buy me a nano coffee
 

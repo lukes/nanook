@@ -17,6 +17,7 @@
 require 'webmock/rspec'
 require 'rspec/collection_matchers'
 require 'pry'
+require 'stringio'
 require 'nanook'
 
 WebMock.disable_net_connect!
@@ -104,4 +105,23 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+end
+
+def headers
+  {
+    'Accept'=>'*/*',
+    'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+    'Content-Type'=>'application/json',
+    'User-Agent'=>'Ruby nanook gem'
+  }
+end
+
+# From http://www.virtuouscode.com/2011/08/25/temporarily-disabling-warnings-in-ruby/
+# For when testing setting Nanook::UNIT
+def silent_warnings
+  old_stderr = $stderr
+  $stderr = StringIO.new
+  yield
+ensure
+  $stderr = old_stderr
 end

@@ -1,25 +1,22 @@
 class Nanook
   class WalletAccount
 
-    UNITS = [:raw, :nano]
-    DEFAULT_UNIT = :nano
-
     def initialize(rpc, wallet, account)
       @rpc = rpc
       @wallet = wallet
       @account = account
+      @nanook_account_instance = nil
 
-      # An object to delegate account methods that don't
-      # expect a wallet param in the RPC call, to allow this
-      # class to support all methods that can be called on Nanook::Account
-      @nanook_account_instance = Nanook::Account.new(@rpc, @account)
+      unless @account.nil?
+        # Wallet must contain the account
+        unless Nanook::Wallet.new(@rpc, @wallet).contains?(@account)
+          raise ArgumentError.new("Account does not exist in wallet. Account: #{@account}, wallet: #{@wallet}")
+        end
 
-      # Wallet instance to call contains? on to check account
-      # is in wallet
-      @nanook_wallet_instance = Nanook::Wallet.new(@rpc, @wallet)
-
-      if @account
-        account_must_belong_to_wallet!
+        # An object to delegate account methods that don't
+        # expect a wallet param in the RPC call, to allow this
+        # class to support all methods that can be called on Nanook::Account
+        @nanook_account_instance = Nanook::Account.new(@rpc, @account)
       end
     end
 
@@ -27,26 +24,43 @@ class Nanook
       @account
     end
 
-    def create
-      wallet_required!
-      rpc(:account_create)[:account]
-    end
+    # Create a new account in this wallet.
+    #
+    # ==== Example:
+    #
+    #   wallet.create    # => Create 1 account, and return the {Nanook::WalletAccount}
+    #   wallet.create(2) # => Create 2 accounts, and return an Array of {Nanook::WalletAccount}
+    #
+    # @param n [Integer] number of accounts to create (default is 1)
+    #
+    # @return [Nanook::WalletAccount] will return a single {Nanook::WalletAccount}
+    #   unless method was called with
+    # @return [Array<Nanook::WalletAccount>] will return an Array of {Nanook::WalletAccount}
+    #   if method was called with
+    def create(n=1)
+      if n < 1
+        raise ArgumentError.new("number of accounts must be greater than 1")
+      end
 
-    def destroy
-      wallet_required!
-      (rpc(:account_remove)[:removed] == 1).tap do |success|
-        @known_valid_accounts.delete(@account) if success
+      if n == 1
+        Nanook::WalletAccount.new(@rpc, @wallet, rpc(:account_create)[:account])
+      else
+        Array(rpc(:accounts_create, count: n)[:accounts]).map do |account|
+          Nanook::WalletAccount.new(@rpc, @wallet, account)
+        end
       end
     end
 
-    def inspect # :nodoc:
+    def destroy
+      rpc(:account_remove)[:removed] == 1
+    end
+
+    def inspect
       "#{self.class.name}(wallet_id: #{wallet_id}, account_id: #{account_id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
-    def pay(to:, amount:, unit: DEFAULT_UNIT, id:)
-      wallet_required!
-
-      unless UNITS.include?(unit)
+    def pay(to:, amount:, unit: Nanook::default_unit, id:)
+      unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
@@ -81,13 +95,44 @@ class Nanook
 
     # Returns false if no block to receive
     def receive(block=nil)
-      wallet_required!
-
       if block.nil?
         _receive_without_block
       else
         _receive_with_block(block)
       end
+    end
+
+    # Sets the representative for the account.
+    #
+    # A representative is an account that will vote on your account's
+    # behalf on the nano network if your account is offline and there is
+    # a fork of the network that requires voting on.
+    #
+    # Returns a String of the <em>change block</em> that was
+    # broadcast to the nano network. The block contains the information
+    # about the representative change for your account.
+    #
+    # Will throw an +ArgumentError+ if the representative account does not
+    # exist.
+    #
+    # ==== Arguments
+    # [+representative+] String of a representative account (starting with
+    #                    <tt>"xrb..."</tt>) to set as this account's representative.
+    #
+    # ==== Example
+    #
+    #   account.change_representative("xrb_...")
+    #
+    # ==== Example response
+    #
+    #   "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    def change_representative(representative)
+      # Check that representative is valid
+      unless Nanook::Account.new(@rpc, representative).exists?
+        raise ArgumentError.new("Representative account does not exist (#{representative})")
+      end
+
+      rpc(:account_representative_set, representative: representative)[:block]
     end
 
     def wallet_id
@@ -130,29 +175,6 @@ class Nanook
       p[:account] = @account unless @account.nil?
 
       @rpc.call(action, p.merge(params))
-    end
-
-    def wallet_required!
-      if @wallet.nil?
-        raise ArgumentError.new("Wallet must be present")
-      end
-    end
-
-    def account_must_belong_to_wallet!
-      if @account.nil?
-        raise ArgumentError.new("Account must be present")
-      end
-
-      @known_valid_accounts ||= []
-
-      # validate account is in wallet
-      return if @known_valid_accounts.include?(@account)
-
-      if @nanook_wallet_instance.contains?(@account)
-        @known_valid_accounts << @account
-      else
-        raise ArgumentError.new("Account does not exist in wallet. Account: #{@account}, wallet: #{@wallet}")
-      end
     end
 
   end

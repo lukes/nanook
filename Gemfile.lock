@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nanook (1.0.2)
+    nanook (2.0.0)
       symbolized (~> 0.0.1)
 
 GEM
@@ -20,7 +20,6 @@ GEM
       method_source (~> 0.9.0)
     public_suffix (3.0.2)
     rake (10.5.0)
-    rdoc (6.0.1)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -39,13 +38,12 @@ GEM
     rspec_junit_formatter (0.3.0)
       rspec-core (>= 2, < 4, != 2.12.0)
     safe_yaml (1.0.4)
-    sdoc (1.0.0)
-      rdoc (>= 5.0)
     symbolized (0.0.1)
     webmock (3.3.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
+    yard (0.9.12)
 
 PLATFORMS
   ruby
@@ -53,13 +51,13 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.16)
   nanook!
-  pry
+  pry (~> 0)
   rake (~> 10.0)
   rspec (~> 3.2)
   rspec-collection_matchers (~> 1.1)
   rspec_junit_formatter (~> 0.3)
-  sdoc (~> 1.0)
   webmock (~> 3.3)
+  yard (~> 0)
 
 BUNDLED WITH
    1.16.1

@@ -10,6 +10,26 @@ RSpec.describe Nanook do
     }
   }
 
+  it "default_unit class method should return :nano by default" do
+    expect(Nanook.default_unit).to eq(:nano)
+  end
+
+  it "default_unit class method should return Nanook::UNIT if defined" do
+    silent_warnings do
+      Nanook::UNIT = :raw
+      expect(Nanook.default_unit).to eq(:raw)
+      Nanook::UNIT = :nano # reset
+    end
+  end
+
+  it "default_unit class method should raise Nanook::Error if Nanook::UNIT is not one of Nanook::UNITS" do
+    silent_warnings do
+      Nanook::UNIT = :invalid
+      expect{Nanook.default_unit}.to raise_error(Nanook::Error)
+      Nanook::UNIT = :nano # reset
+    end
+  end
+
   it "should have a block method" do
     expect(Nanook.new.block("some_block")).to be_kind_of(Nanook::Block)
   end
@@ -27,11 +47,15 @@ RSpec.describe Nanook do
   end
 
   it "should have an account method" do
-    expect(Nanook.new.account).to be_kind_of(Nanook::Account)
+    expect(Nanook.new.account("some_account")).to be_kind_of(Nanook::Account)
   end
 
   it "should have a work_peers method" do
     expect(Nanook.new.work_peers).to be_kind_of(Nanook::WorkPeer)
+  end
+
+  it "should have a rpc accessor" do
+    expect(Nanook.new.rpc).to be_kind_of(Nanook::Rpc)
   end
 
 end

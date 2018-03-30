@@ -2,18 +2,6 @@ RSpec.describe Nanook::Account do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
-  let(:headers) {
-    {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-    }
-  }
-
-  it "account history requires account" do
-    expect{Nanook.new.account(nil).history}.to raise_error(ArgumentError, "Account must be present")
-  end
 
   it "account history" do
     stub_request(:post, uri).with(
@@ -32,7 +20,9 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).history.length).to be 1
+    response = Nanook.new.account(account_id).history
+    expect(response.first[:amount]).to eq 100
+    expect(response).to have(1).item
   end
 
   it "account history without default count" do
@@ -52,7 +42,31 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).history(limit: 1)).to have(1).item
+    response = Nanook.new.account(account_id).history(limit: 1)
+    expect(response.first[:amount]).to eq 100
+    expect(response).to have(1).item
+  end
+
+  it "account history with raw unit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"history\": [{
+                \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
+                \"type\": \"receive\",
+                \"account\": \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"amount\": \"100000000000000000000000000000000\"
+        }]
+    }",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).history(unit: :raw)
+    expect(response.first[:amount]).to eq 100000000000000000000000000000000
+    expect(response).to have(1).item
   end
 
   it "account key" do
@@ -79,8 +93,8 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).balance
-    expect(response[:balance]).to eq(11.439597000000001)
-    expect(response[:pending]).to eq(21.439597000000001)
+    expect(response[:balance]).to eq(11.439597)
+    expect(response[:pending]).to eq(21.439597)
   end
 
   it "account balance in raw" do
@@ -120,15 +134,40 @@ RSpec.describe Nanook::Account do
       body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
       \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
       \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
-      \"balance\":\"235580100176034320859259343606608761791\",
+      \"balance\":\"23000000000000000000000000000000\",
       \"modified_timestamp\":\"1501793775\",
       \"block_count\":\"33\"}",
       headers: {}
     )
 
     response = Nanook.new.account(account_id).info
-    expect(response).to have_key(:frontier)
-    expect(response).not_to have_key(:weight)
+
+    expect(response[:id]).to eq account_id
+    expect(response[:frontier]).to eq "FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5"
+    expect(response[:open_block]).to eq "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+    expect(response[:representative_block]).to eq "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+    expect(response[:balance]).to eq 23
+    expect(response[:modified_timestamp]).to eq 1501793775
+    expect(response[:block_count]).to eq 33
+  end
+
+  it "account info with unit raw" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
+      \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"balance\":\"23000000000000000000000000000000\",
+      \"modified_timestamp\":\"1501793775\",
+      \"block_count\":\"33\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).info(unit: :raw)
+    expect(response[:balance]).to eq 23000000000000000000000000000000
   end
 
   it "account info with detailed true" do
@@ -140,7 +179,7 @@ RSpec.describe Nanook::Account do
       body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
       \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
       \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
-      \"balance\":\"235580100176034320859259343606608761791\",
+      \"balance\":\"23000000000000000000000000000000\",
       \"modified_timestamp\":\"1501793775\",
       \"block_count\":\"33\"}",
       headers: {}
@@ -149,12 +188,7 @@ RSpec.describe Nanook::Account do
     stub_request(:post, "http://localhost:7076/").
     with(
       body: "{\"action\":\"account_weight\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
-      headers: {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-      }).
+      headers: headers).
     to_return(status: 200, body: "{\"weight\":\"1\"}", headers: {})
 
     stub_request(:post, uri).with(
@@ -162,7 +196,7 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"balance\":\"10000\",\"pending\":\"10000\"}",
+      body: "{\"balance\":\"10000\",\"pending\":\"12323434523432343245645645645645\"}",
       headers: {}
     )
 
@@ -185,8 +219,71 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).info(detailed: true)
-    expect(response).to have_key(:frontier)
-    expect(response).to have_key(:weight)
+
+    expect(response[:id]).to eq account_id
+    expect(response[:frontier]).to eq "FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5"
+    expect(response[:open_block]).to eq "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+    expect(response[:representative_block]).to eq "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+    expect(response[:balance]).to eq 23
+    expect(response[:pending]).to eq 12.32343452343234
+    expect(response[:modified_timestamp]).to eq 1501793775
+    expect(response[:block_count]).to eq 33
+    expect(response[:weight]).to eq 1
+    expect(response[:representative]).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
+    expect(response[:public_key]).to eq "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
+  end
+
+  it "account info with detailed true and unit raw" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
+      \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"balance\":\"23000000000000000000000000000000\",
+      \"modified_timestamp\":\"1501793775\",
+      \"block_count\":\"33\"}",
+      headers: {}
+    )
+
+    stub_request(:post, "http://localhost:7076/").
+    with(
+      body: "{\"action\":\"account_weight\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: headers).
+    to_return(status: 200, body: "{\"weight\":\"1\"}", headers: {})
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"balance\":\"10000\",\"pending\":\"12323434523432343245645645645645\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_representative\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"representative\":\"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_key\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"key\":\"3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).info(detailed: true, unit: :raw)
+    expect(response[:balance]).to eq 23000000000000000000000000000000
+    expect(response[:pending]).to eq 12323434523432343245645645645645
   end
 
   it "account pending no limit" do
@@ -243,7 +340,34 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).pending(detailed: true)).to have_key("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
+    response = Nanook.new.account(account_id).pending(detailed: true)
+    expect(response).to have(1).item
+    expect(response.first[:source]).to eq "xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    expect(response.first[:amount]).to eq 6
+    expect(response.first[:block]).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+  end
+
+
+  it "account pending detailed with raw unit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":{
+        \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\": {
+             \"amount\": \"6000000000000000000000000000000\",
+             \"source\": \"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr\"
+        }
+    }}",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).pending(detailed: true, unit: :raw)
+    expect(response).to have(1).item
+    expect(response.first[:source]).to eq "xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    expect(response.first[:amount]).to eq 6000000000000000000000000000000
+    expect(response.first[:block]).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
   end
 
   it "account pending detailed with no blocks (empty string response)" do
@@ -256,7 +380,7 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).pending(detailed: true)).to eq({})
+    expect(Nanook.new.account(account_id).pending(detailed: true)).to eq([])
   end
 
   it "account weight" do
@@ -318,11 +442,16 @@ RSpec.describe Nanook::Account do
 
   it "account exists? when exists" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"valid\":\"1\"}",
+      body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
+      \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"balance\":\"23\",
+      \"modified_timestamp\":\"1501793775\",
+      \"block_count\":\"33\"}",
       headers: {}
     )
 
@@ -331,11 +460,11 @@ RSpec.describe Nanook::Account do
 
   it "account exists? when doesn't exist" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"valid\":\"0\"}",
+      body: "{\"error\":\"Bad account number\"}",
       headers: {}
     )
 
@@ -356,6 +485,24 @@ RSpec.describe Nanook::Account do
     )
 
     expect(Nanook.new.account(account_id).delegators).to have_key(:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
+  end
+
+  it "account last_modified_at" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"frontier\":\"FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5\",
+      \"open_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"representative_block\":\"991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948\",
+      \"balance\":\"23000000000000000000000000000000\",
+      \"modified_timestamp\":\"1501793775\",
+      \"block_count\":\"33\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).last_modified_at).to eq Time.at(1501793775)
   end
 
 end

@@ -5,6 +5,11 @@ class Nanook
       @rpc = rpc
     end
 
+    def account_count
+      rpc(:frontier_count)[:count]
+    end
+    alias_method :frontier_count, :account_count
+
     def block_count
       rpc(:block_count)
     end
@@ -21,11 +26,7 @@ class Nanook
       rpc(:bootstrap_any).has_key?(:success)
     end
 
-    def frontier_count
-      rpc(:frontier_count)[:count]
-    end
-
-    def inspect # :nodoc:
+    def inspect
       "#{self.class.name}(object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
@@ -39,6 +40,14 @@ class Nanook
 
     def stop
       rpc(:stop).has_key?(:success)
+    end
+
+    def synchronizing_blocks(limit: 1000)
+      response = rpc(:unchecked, count: limit)[:blocks]
+      response = response.map do |block, info|
+        [block, JSON.parse(info).to_symbolized_hash]
+      end
+      Hash[response.sort].to_symbolized_hash
     end
 
     def sync_progress

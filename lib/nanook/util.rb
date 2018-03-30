@@ -10,11 +10,11 @@ class Nanook
     end
 
     def self.raw_to_NANO(raw)
-      raw.to_f / STEP
+      (raw.to_f / STEP).to_f
     end
 
     def self.coerce_empty_string_to_type(response, type)
-      if response == ""
+      if response == "" || response.nil?
         return type.new
       end
 
