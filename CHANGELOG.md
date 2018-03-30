@@ -38,6 +38,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Missing `Nanook#rpc` accessor.
+- `Nanook::Block#publish` can return false when publish fails.
+- `Nanook::Block#info` correctly handles `allow_unchecked: true` errors.
 
 ## 1.0.1
 
