@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Account#pending` now takes additional arguments `detailed:` and `unit:`.
 - `Nanook::Block#account` now returns a `Nanook::Account` instance.
 - `Nanook::Block#info` now also returns the `id` of the block.
+- `Nanook::Wallet#accounts` now returns `Nanook::WalletAccount` instances.
 - `Nanook::Wallet#create` now returns a `Nanook::Wallet` instance.
 - `Nanook::Wallet#pending` now takes additional arguments `detailed:` and `unit:`.
 - `Nanook::Wallet#seed` alias method of `#id`.

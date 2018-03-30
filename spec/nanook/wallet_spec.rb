@@ -23,6 +23,8 @@ RSpec.describe Nanook::Wallet do
   end
 
   it "wallet accounts" do
+    stub_valid_account_check
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_list\",\"wallet\":\"#{wallet_id}\"}",
       headers: headers
@@ -32,7 +34,10 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).accounts).to have(1).item
+    response = Nanook.new.wallet(wallet_id).accounts
+    expect(response).to have(1).item
+    expect(response.first).to be_kind_of Nanook::WalletAccount
+    expect(response.first.account_id).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
   end
 
   it "wallet accounts when blank" do

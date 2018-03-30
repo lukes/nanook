@@ -69,7 +69,9 @@ class Nanook
     def accounts
       wallet_required!
       response = rpc(:account_list)[:accounts]
-      Nanook::Util.coerce_empty_string_to_type(response, Array)
+      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |account|
+        Nanook::WalletAccount.new(@rpc, @wallet, account)
+      end
     end
 
     # Returns a Hash containing the balance of all accounts in the
