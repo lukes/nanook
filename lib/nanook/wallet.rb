@@ -58,14 +58,11 @@ class Nanook
       Nanook::WalletAccount.new(@rpc, @wallet, account)
     end
 
-    # Returns an Array with Strings of all account ids in the wallet.
+    # ==== Example:
     #
-    # ==== Example response
+    #   wallet.accounts # => [Nanook::WalletAccount, Nanook::WalletAccount...]
     #
-    #   [
-    #     "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000",
-    #     "xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx"
-    #   ]
+    # @return [Array<Nanook::WalletAccount>] all accounts in the wallet
     def accounts
       wallet_required!
       response = rpc(:account_list)[:accounts]
