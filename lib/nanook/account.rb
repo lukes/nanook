@@ -133,20 +133,25 @@ class Nanook
 
     # Returns a Hash containing the account's balance.
     #
-    # ==== Example response:
-    #   {
-    #     balance=>2,   # Account balance
-    #     pending=>1.1  # Amount pending and not yet received by the account
-    #   }
+    # ==== Example:
+    #
+    #   account.balance
+    #
+    #   # =>
+    #   # {
+    #   #   balance=>2,   # Account balance
+    #   #   pending=>1.1  # Amount pending and not yet received by the account
+    #   # }
     #
     # ==== Example balance returned in raw:
     #
     #   account.balance(unit: :raw)
     #
-    #   {
-    #     balance: 2000000000000000000000000000000,
-    #     pending: 1100000000000000000000000000000
-    #   }
+    #   # =>
+    #   # {
+    #   #   balance: 2000000000000000000000000000000,
+    #   #   pending: 1100000000000000000000000000000
+    #   # }
     #
     # @param unit [Symbol] default is {Nanook.default_unit}.
     #   Must be one of {Nanook::UNITS}.
