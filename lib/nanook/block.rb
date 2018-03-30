@@ -24,13 +24,14 @@ class Nanook
       block_required! # All methods expect a block
     end
 
-    # Returns a String of the account id of the block.
+    # Returns the {Nanook::Account} of the block.
     #
-    # ==== Example
+    # ==== Example:
+    #   block.account # => Nanook::Account
     #
-    #   block.account # => "xrb_3x7c..."
+    # @return [Nanook::Account] the account of the block
     def account
-      rpc(:block_account, :hash)[:account]
+      Nanook::Account.new(@rpc, rpc(:block_account, :hash)[:account])
     end
 
     # Stop generating work for a block.
