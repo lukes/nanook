@@ -11,7 +11,7 @@ This is a Ruby library for managing a [nano currency](https://nano.org/) node, i
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nanook', "~> 1.0"
+gem 'nanook', "~> 2.0"
 ```
 
 And then execute:
@@ -120,11 +120,11 @@ wallet.receive(block_id, into: account_id)
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/1.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: expand the "**Nanook** < Object" item in the sidebar).
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: expand the "**Nanook** < Object" item in the sidebar).
 
 ### Wallets
 
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/2.0.0/classes/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 #### Create wallet:
 
@@ -220,7 +220,7 @@ account.destroy
 
 #### Working with any account (not necessarily in your wallet):
 
-See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Account.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.0.0/classes/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
 account = Nanook.new.account(account_id)
@@ -250,7 +250,7 @@ account.weight
 
 ### Blocks
 
-See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/1.0.0/classes/Nanook/Block.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.0.0/classes/Nanook/Block.html) for a detailed description of each method and example responses.
 
 ```ruby
 block = Nanook.new.block(block_id)
