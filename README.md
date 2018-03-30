@@ -120,7 +120,7 @@ wallet.receive(block_id, into: account_id)
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: expand the "**Nanook** < Object" item in the sidebar).
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: the classes are listed under the "**Nanook** < Object" item in the sidebar).
 
 ### Wallets
 
