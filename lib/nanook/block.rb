@@ -145,12 +145,12 @@ class Nanook
       _parse_info_response(response)
     end
 
-    # @param work [String] the work id to check is valid
-    # @return [Boolean] signalling if work is valid for the block
-    #
     # ==== Example:
     #
     #   block.is_valid_work?("2bf29ef00786a6bc") # => true
+    #
+    # @param work [String] the work id to check is valid
+    # @return [Boolean] signalling if work is valid for the block
     def is_valid_work?(work)
       response = rpc(:work_validate, :hash, work: work)
       !response.empty? && response[:valid] == 1
@@ -182,11 +182,11 @@ class Nanook
       rpc(:republish, :hash, params)[:blocks]
     end
 
-    # @return [Boolean] signalling if the block is a pending block.
-    #
     # ==== Example:
     #
     #   block.pending? #=> false
+    #
+    # @return [Boolean] signalling if the block is a pending block.
     def pending?
       response = rpc(:pending_exists, :hash)
       !response.empty? && response[:exists] == 1
