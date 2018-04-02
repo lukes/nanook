@@ -121,11 +121,6 @@ class Nanook
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
-      # Check that to: account is valid
-      unless Nanook::Account.new(@rpc, to).exists?
-        raise ArgumentError.new("To account does not exist (#{to})")
-      end
-
       raw = if unit.to_sym.eql?(:nano)
         Nanook::Util.NANO_to_raw(amount)
       else
