@@ -1,6 +1,33 @@
 class Nanook
   class WalletAccount
 
+    extend Forwardable
+    # @!method balance(unit: Nanook.default_unit)
+    #   (see Nanook::Account#balance)
+    # @!method delegators
+    #   (see Nanook::Account#delegators)
+    # @!method exists?
+    #   (see Nanook::Account#exists?)
+    # @!method history(limit: 1000, unit: Nanook.default_unit)
+    #   (see Nanook::Account#history)
+    # @!method id
+    #   (see Nanook::Account#id)
+    # @!method info((detailed: false, unit: Nanook.default_unit)
+    #   (see Nanook::Account#info)
+    # @!method last_modified_at
+    #   (see Nanook::Account#last_modified_at)
+    # @!method ledger(limit: 1)
+    #   (see Nanook::Account#ledger)
+    # @!method pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
+    #   (see Nanook::Account#pending)
+    # @!method public_key
+    #   (see Nanook::Account#public_key)
+    # @!method representative
+    #   (see Nanook::Account#representative)
+    # @!method weight
+    #   (see Nanook::Account#weight)
+    def_delegators :@nanook_account_instance, :balance, :delegators, :exists?, :history, :id, :info, :last_modified_at, :ledger, :pending, :public_key, :representative, :weight
+
     def initialize(rpc, wallet, account)
       @rpc = rpc
       @wallet = wallet
@@ -187,15 +214,6 @@ class Nanook
 
     def wallet_id
       @wallet
-    end
-
-    # Any method of Nanook::Account can be called on this class too
-    def method_missing(m, *args, &block)
-      if @nanook_account_instance.respond_to?(m)
-        @nanook_account_instance.send(m, *args, &block)
-      else
-        super(m, *args, &block)
-      end
     end
 
     private
