@@ -139,7 +139,7 @@ class Nanook
       response = @rpc.call(:send, p)
 
       if response.has_key?(:error)
-        return response[:error]
+        return Nanook::Error.new(response[:error])
       end
 
       response[:block]
