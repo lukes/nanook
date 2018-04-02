@@ -207,32 +207,20 @@ class Nanook
       !response.empty? && response[:exists] == 1
     end
 
+    # @return [String]
     def id
       @wallet
     end
     alias_method :seed, :id
 
+    # @return [String]
     def inspect
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
     # Make a payment from an account in your wallet to another account
-    # on the nano network. Returns a <i>send</i> block hash if successful,
-    # or an error String if unsuccessful.
-    #
-    # ==== Arguments
-    #
-    # [+from:+]   String account id of an account in your wallet
-    # [+to:+]     String account id of the recipient of your payment
-    # [+amount:+] Can be either an Integer or Float.
-    # [+unit:+]   Symbol (default is +:nano+). Represents the unit that +amount+ is in.
-    #             Must be either +:nano+ or +:raw+. (Note: this method
-    #             interprets +:nano+ as NANO, which is technically Mnano
-    #             See {What are Nano's Units}[https://nano.org/en/faq#what-are-nano-units-])
-    # [+id:+]     String. Must be unique per payment. It serves an important
-    #             purpose; it allows you to make the same call multiple
-    #             times with the same +id+ and be reassured that you will
-    #             only ever send that nano payment once.
+    # on the nano network. Returns a <i>send</i> block id
+    # if successful, or a {Nanook::Error} if unsuccessful.
     #
     # Note, there may be a delay in receiving a response due to Proof of Work being done. From the {Nano RPC}[https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create]:
     #
@@ -240,15 +228,17 @@ class Nanook
     #
     # ==== Examples
     #
-    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 1.1, id: "myUniqueId123")
-    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123")
+    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
+    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123") # => "9AE2311..."
     #
-    # ==== Example responses
-    #   "718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"
+    # ==== Arguments
     #
-    # Or:
-    #
-    #   "Account not found"
+    # @param from [String] account id of an account in your wallet
+    # @param to (see Nanook::WalletAccount#pay)
+    # @param amount (see Nanook::WalletAccount#pay)
+    # @param unit (see Nanook::Account#balance)
+    # @params id (see Nanook::WalletAccount#pay)
+    # @return (see Nanook::WalletAccount#pay)
     def pay(from:, to:, amount:, unit: Nanook.default_unit, id:)
       wallet_required!
       validate_wallet_contains_account!(from)
@@ -342,31 +332,22 @@ class Nanook
     # When called with no +block+ argument, the latest pending payment
     # for the account will be received.
     #
-    # Returns a <i>receive</i> block hash if a receive was successful,
-    # or +false+ if there were no pending payments to receive.
+    # Returns a <i>receive</i> block hash
+    # if a receive was successful, or +false+ if there were no pending
+    # payments to receive.
     #
-    # You can also receive a specific pending block if you know it by
+    # You can receive a specific pending block if you know it by
     # passing the block has in as an argument.
-    #
-    # ==== Arguments
-    #
-    # [+block+] Optional block hash of pending payment. If not provided,
-    #           the latest pending payment will be received
-    # [+into:+] String account id of account in your wallet to receive the
-    #           payment into
     #
     # ==== Examples
     #
-    #   wallet.receive(into: "xrb...")
-    #   wallet.receive("718CC21...", into: "xrb...")
+    #   wallet.receive(into: "xrb...")               # => "9AE2311..."
+    #   wallet.receive("718CC21...", into: "xrb...") # => "9AE2311..."
     #
-    # ==== Example responses
-    #
-    #   "718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"
-    #
-    # Or:
-    #
-    #   false
+    # @param block (see Nanook::WalletAccount#receive)
+    # @param into [String] account id of account in your wallet to receive the
+    #   payment into
+    # @return (see Nanook::WalletAccount#receive)
     def receive(block=nil, into:)
       wallet_required!
       validate_wallet_contains_account!(into)

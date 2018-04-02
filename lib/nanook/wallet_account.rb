@@ -20,26 +20,27 @@ class Nanook
       end
     end
 
+    # @return [String] the account id of this account
     def account_id
       @account
     end
 
-    # Create a new account in this wallet.
+    # Creates a new account, or multiple new accounts, in this wallet.
     #
     # ==== Example:
     #
-    #   wallet.create    # => Create 1 account, and return the {Nanook::WalletAccount}
-    #   wallet.create(2) # => Create 2 accounts, and return an Array of {Nanook::WalletAccount}
+    #   wallet.create    # => Creates 1 account, and return a {Nanook::WalletAccount}
+    #   wallet.create(2) # => Creates 2 accounts, and return an Array of {Nanook::WalletAccount}
     #
-    # @param n [Integer] number of accounts to create (default is 1)
+    # @param n [Integer] number of accounts to create
     #
-    # @return [Nanook::WalletAccount] will return a single {Nanook::WalletAccount}
-    #   unless method was called with
-    # @return [Array<Nanook::WalletAccount>] will return an Array of {Nanook::WalletAccount}
-    #   if method was called with
+    # @return [Nanook::WalletAccount] returns a single {Nanook::WalletAccount}
+    #   if invoked with no argument
+    # @return [Array<Nanook::WalletAccount>] returns an Array of {Nanook::WalletAccount}
+    #   if method was called with argument +n+ >  1
     def create(n=1)
       if n < 1
-        raise ArgumentError.new("number of accounts must be greater than 1")
+        raise ArgumentError.new("number of accounts must be greater than 0")
       end
 
       if n == 1
@@ -51,14 +52,43 @@ class Nanook
       end
     end
 
+    # Unlinks the account from the wallet.
+    #
+    # Note, it's impossible to truly destroy an account. Calling this
+    # method on a wallet causes the wallet to "forget" the account.
+    #
+    # @return [Boolean] returns true if action was successful, otherwise +false+
     def destroy
       rpc(:account_remove)[:removed] == 1
     end
 
+    # @return [String]
     def inspect
       "#{self.class.name}(wallet_id: #{wallet_id}, account_id: #{account_id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
+    # Make a payment from an account in this wallet to another account
+    # on the nano network. Returns a <i>send</i> block hash
+    # if successful, or a {Nanook::Error} if unsuccessful.
+    #
+    # Note, there may be a delay in receiving a response due to Proof of Work being done. From the {Nano RPC}[https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create]:
+    #
+    # <i>Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.</i>
+    #
+    # ==== Examples:
+    #
+    #   account.pay(to: "xrb_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
+    #   account.pay(to: "xrb_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123") # => "9AE2311..."
+    #
+    # @param to [String] account id of the recipient of your payment
+    # @param amount [Integer|Float]
+    # @param unit (see Nanook::Account#balance)
+    # @param id [String] must be unique per payment. It serves an important
+    #   purpose; it allows you to make the same call multiple times with
+    #   the same +id+ and be reassured that you will only ever send this
+    #   nano payment once
+    # @return [String] the send block id for the payment
+    # @raise [Nanook::Error] if unsuccesful
     def pay(to:, amount:, unit: Nanook::default_unit, id:)
       unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
@@ -93,7 +123,27 @@ class Nanook
       response[:block]
     end
 
-    # Returns false if no block to receive
+    # Receives a pending payment for this account.
+    #
+    # When called with no +block+ argument, the latest pending payment
+    # for the account will be received.
+    #
+    # Returns a <i>receive</i> block id
+    # if a receive was successful, or +false+ if there were no pending
+    # payments to receive.
+    #
+    # You can receive a specific pending block if you know it by
+    # passing the block has in as an argument.
+    #
+    # ==== Examples
+    #
+    #   account.receive               # => "9AE2311..."
+    #   account.receive("718CC21...") # => "9AE2311..."
+    #
+    # @param block [String] optional block id of pending payment. If
+    #   not provided, the latest pending payment will be received
+    # @return [String] the receive block id
+    # @return [false] if no block to receive
     def receive(block=nil)
       if block.nil?
         _receive_without_block
