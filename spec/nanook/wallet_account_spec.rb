@@ -116,6 +116,15 @@ RSpec.describe Nanook::WalletAccount do
     stub_account_exists_check
 
     stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"1\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
       body: "{\"action\":\"send\",\"wallet\":\"#{wallet_id}\",\"source\":\"#{account_id}\",\"destination\":\"#{account_id}\",\"amount\":\"2000000000000000000000000000000\",\"id\":\"7081e2b8fec9146e\"}",
       headers: headers
     ).to_return(
@@ -128,9 +137,34 @@ RSpec.describe Nanook::WalletAccount do
     expect(response).to eq block_id
   end
 
+  it "wallet account send payment and recipient account is not valid id" do
+    stub_valid_account_check
+    stub_account_exists_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"invalid\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"0\"}",
+      headers: {}
+    )
+
+    expect{Nanook.new.wallet(wallet_id).account(account_id).pay(to: "invalid", amount: 2, id:"7081e2b8fec9146e")}.to raise_error ArgumentError
+  end
+
   it "wallet account send payment in raw" do
     stub_valid_account_check
     stub_account_exists_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"1\"}",
+      headers: {}
+    )
 
     stub_request(:post, uri).with(
       body: "{\"action\":\"send\",\"wallet\":\"#{wallet_id}\",\"source\":\"#{account_id}\",\"destination\":\"#{account_id}\",\"amount\":\"2\",\"id\":\"7081e2b8fec9146e\"}",

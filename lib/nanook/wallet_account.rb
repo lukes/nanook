@@ -121,6 +121,13 @@ class Nanook
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
+      # Check that to account is a valid address
+      response = @rpc.call(:validate_account_number, account: to)
+      unless response[:valid] == 1
+        raise ArgumentError.new("Account address is invalid: #{to}")
+      end
+
+      # Determin amount in raw
       raw = if unit.to_sym.eql?(:nano)
         Nanook::Util.NANO_to_raw(amount)
       else

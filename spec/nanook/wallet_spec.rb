@@ -190,6 +190,15 @@ RSpec.describe Nanook::Wallet do
     )
 
     stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"1\"}",
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
       body: "{\"action\":\"send\",\"wallet\":\"#{wallet_id}\",\"source\":\"#{account_id}\",\"destination\":\"#{account_id}\",\"amount\":\"2000000000000000000000000000000\",\"id\":\"7081e2b8fec9146e\"}",
       headers: headers
     ).to_return(
@@ -204,6 +213,15 @@ RSpec.describe Nanook::Wallet do
 
   it "wallet send payment in raw" do
     stub_valid_account_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"validate_account_number\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"valid\":\"1\"}",
+      headers: {}
+    )
 
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
