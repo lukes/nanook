@@ -85,6 +85,11 @@
 
   
   
+  <dl>
+      <dt>Extended by:</dt>
+      <dd>Forwardable</dd>
+  </dl>
+  
   
   
   
@@ -117,7 +122,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#account_id-instance_method" title="#account_id (instance method)">#<strong>account_id</strong>  &#x21d2; Object </a>
+      <a href="#account_id-instance_method" title="#account_id (instance method)">#<strong>account_id</strong>  &#x21d2; String </a>
     
 
     
@@ -131,7 +136,33 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>The account id of this account.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#balance-instance_method" title="#balance (instance method)">#<strong>balance</strong>(unit: Nanook.default_unit)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns a Hash containing the account&#39;s balance.</p>
+</div></span>
   
 </li>
 
@@ -178,7 +209,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Create a new account in this wallet.</p>
+<p>Creates a new account, or multiple new accounts, in this wallet.</p>
 </div></span>
   
 </li>
@@ -187,7 +218,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#destroy-instance_method" title="#destroy (instance method)">#<strong>destroy</strong>  &#x21d2; Object </a>
+      <a href="#delegators-instance_method" title="#delegators (instance method)">#<strong>delegators</strong>  &#x21d2; Hash{Symbol=&gt;String} </a>
     
 
     
@@ -201,7 +232,129 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns information about this account&#39;s delegators.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#destroy-instance_method" title="#destroy (instance method)">#<strong>destroy</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Unlinks the account from the wallet.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#exists%3F-instance_method" title="#exists? (instance method)">#<strong>exists?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns a boolean indicating if the account exists.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#history-instance_method" title="#history (instance method)">#<strong>history</strong>(limit: 1000, unit: Nanook.default_unit)  &#x21d2; Array&lt;Hash{Symbol=&gt;String}&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns an account&#39;s history of send and receive payments.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#id-instance_method" title="#id (instance method)">#<strong>id</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the id of the account.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#info-instance_method" title="#info (instance method)">#<strong>info</strong>(detailed: false, unit: Nanook.default_unit)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns a Hash containing information about the account.</p>
+</div></span>
   
 </li>
 
@@ -235,7 +388,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#inspect-instance_method" title="#inspect (instance method)">#<strong>inspect</strong>  &#x21d2; Object </a>
+      <a href="#inspect-instance_method" title="#inspect (instance method)">#<strong>inspect</strong>  &#x21d2; String </a>
     
 
     
@@ -257,7 +410,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#method_missing-instance_method" title="#method_missing (instance method)">#<strong>method_missing</strong>(m, *args, &amp;block)  &#x21d2; Object </a>
+      <a href="#last_modified_at-instance_method" title="#last_modified_at (instance method)">#<strong>last_modified_at</strong>  &#x21d2; Time </a>
     
 
     
@@ -272,7 +425,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Any method of Nanook::Account can be called on this class too.</p>
+<p>Last modified time of the account in UTC time zone.</p>
 </div></span>
   
 </li>
@@ -281,29 +434,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#pay-instance_method" title="#pay (instance method)">#<strong>pay</strong>(to:, amount:, unit: Nanook::default_unit, id:)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#receive-instance_method" title="#receive (instance method)">#<strong>receive</strong>(block = nil)  &#x21d2; Object </a>
+      <a href="#ledger-instance_method" title="#ledger (instance method)">#<strong>ledger</strong>(limit: 1)  &#x21d2; Object </a>
     
 
     
@@ -318,7 +449,130 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns false if no block to receive.</p>
+<p>Returns information about the given account as well as other accounts up
+the ledger.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pay-instance_method" title="#pay (instance method)">#<strong>pay</strong>(to:, amount:, unit: Nanook::default_unit, id:)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Make a payment from an account in this wallet to another account on the
+nano network.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pending-instance_method" title="#pending (instance method)">#<strong>pending</strong>(limit: 1000, detailed: false, unit: Nanook.default_unit)  &#x21d2; Array&lt;String&gt;, Array&lt;Hash{Symbol=&gt;String|Integer}&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns information about pending blocks (payments) that are waiting to be
+received by the account.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#public_key-instance_method" title="#public_key (instance method)">#<strong>public_key</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the public key belonging to an account.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#receive-instance_method" title="#receive (instance method)">#<strong>receive</strong>(block = nil)  &#x21d2; String, false </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Receives a pending payment for this account.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#representative-instance_method" title="#representative (instance method)">#<strong>representative</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the representative account for the account.</p>
 </div></span>
   
 </li>
@@ -346,10 +600,35 @@
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#weight-instance_method" title="#weight (instance method)">#<strong>weight</strong>  &#x21d2; Integer </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the account&#39;s weight.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
-<div id="constructor_details" class="method_details_list">
+
+  <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
     <div class="method_details first">
@@ -378,27 +657,27 @@
       <pre class="lines">
 
 
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21</pre>
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 4</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_rpc'>rpc</span><span class='comma'>,</span> <span class='id identifier rubyid_wallet'>wallet</span><span class='comma'>,</span> <span class='id identifier rubyid_account'>account</span><span class='rparen'>)</span>
   <span class='ivar'>@rpc</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span>
@@ -424,63 +703,6 @@
 </div>
   
 </div>
-<div id="method_missing_details" class="method_details_list">
-  <h2>Dynamic Method Handling</h2>
-  <p class="notice this">
-    This class handles dynamic methods through the <tt>method_missing</tt> method
-    
-  </p>
-  
-    <div class="method_details first">
-  <h3 class="signature first" id="method_missing-instance_method">
-  
-    #<strong>method_missing</strong>(m, *args, &amp;block)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Any method of Nanook::Account can be called on this class too</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-143
-144
-145
-146
-147
-148
-149</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 143</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='ivar'>@nanook_account_instance</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='rparen'>)</span>
-    <span class='ivar'>@nanook_account_instance</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='kw'>else</span>
-    <span class='kw'>super</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-  
-</div>
 
 
   <div id="instance_method_details" class="method_details_list">
@@ -490,28 +712,157 @@
       <div class="method_details first">
   <h3 class="signature first" id="account_id-instance_method">
   
-    #<strong>account_id</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>account_id</strong>  &#x21d2; <tt>String</tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the account id of this account</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the account id of this account</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-23
-24
-25</pre>
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_account_id'>account_id</span>
   <span class='ivar'>@account</span>
 <span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="balance-instance_method">
+  
+    #<strong>balance</strong>(unit: Nanook.default_unit)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a Hash containing the account&#39;s balance.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'># {
+</span><span class='comment'>#   balance=&gt;2,   # Account balance
+</span><span class='comment'>#   pending=&gt;1.1  # Amount pending and not yet received by the account
+</span><span class='comment'># }
+</span></code></pre>
+
+<h4 id="label-Example+balance+returned+in+raw-3A">Example balance returned in raw:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'># {
+</span><span class='comment'>#   balance: 2000000000000000000000000000000,
+</span><span class='comment'>#   pending: 1100000000000000000000000000000
+</span><span class='comment'># }
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
+Represents the unit that the balances will be returned in. Note: this
+method interprets <code>:nano</code> as NANO, which is technically Mnano
+See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>
+<p>ArgumentError if an invalid <code>unit</code> was given.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
     </td>
   </tr>
 </table>
@@ -572,17 +923,17 @@ representative.</p>
       <pre class="lines">
 
 
-129
-130
-131
-132
-133
-134
-135
-136</pre>
+208
+209
+210
+211
+212
+213
+214
+215</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 129</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 208</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_change_representative'>change_representative</span><span class='lparen'>(</span><span class='id identifier rubyid_representative'>representative</span><span class='rparen'>)</span>
   <span class='comment'># Check that representative is valid
@@ -609,12 +960,12 @@ representative.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Create a new account in this wallet.</p>
+<p>Creates a new account, or multiple new accounts, in this wallet.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span>    <span class='comment'># =&gt; Create 1 account, and return the {Nanook::WalletAccount}
-</span><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='int'>2</span><span class='rparen'>)</span> <span class='comment'># =&gt; Create 2 accounts, and return an Array of {Nanook::WalletAccount}
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span>    <span class='comment'># =&gt; Creates 1 account, and return a {Nanook::WalletAccount}
+</span><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='int'>2</span><span class='rparen'>)</span> <span class='comment'># =&gt; Creates 2 accounts, and return an Array of {Nanook::WalletAccount}
 </span></code></pre>
 
 
@@ -637,7 +988,7 @@ representative.</p>
       
         &mdash;
         <div class='inline'>
-<p>number of accounts to create (default is 1)</p>
+<p>number of accounts to create</p>
 </div>
       
     </li>
@@ -656,7 +1007,7 @@ representative.</p>
       
         &mdash;
         <div class='inline'>
-<p>will return a single <span class='object_link'><a href="" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> unless method was called with</p>
+<p>returns a single <span class='object_link'><a href="" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> if invoked with no argument</p>
 </div>
       
     </li>
@@ -670,7 +1021,8 @@ representative.</p>
       
         &mdash;
         <div class='inline'>
-<p>will return an Array of <span class='object_link'><a href="" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> if method was called with</p>
+<p>returns an Array of <span class='object_link'><a href="" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> if method was called with
+argument <code>n</code> &gt;  1</p>
 </div>
       
     </li>
@@ -683,26 +1035,26 @@ representative.</p>
       <pre class="lines">
 
 
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52</pre>
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='id identifier rubyid_n'>n</span><span class='op'>=</span><span class='int'>1</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_n'>n</span> <span class='op'>&lt;</span> <span class='int'>1</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>number of accounts must be greater than 1</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>number of accounts must be greater than 0</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
   <span class='kw'>if</span> <span class='id identifier rubyid_n'>n</span> <span class='op'>==</span> <span class='int'>1</span>
@@ -719,26 +1071,121 @@ representative.</p>
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="destroy-instance_method">
+  <h3 class="signature " id="delegators-instance_method">
   
-    #<strong>destroy</strong>  &#x21d2; <tt>Object</tt> 
-  
-
+    #<strong>delegators</strong>  &#x21d2; <tt>Hash{Symbol=&gt;String}</tt> 
   
 
   
-</h3><table class="source_code">
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns information about this account&#39;s delegators.</p>
+
+<h3 id="label-Example+response-3A">Example response:</h3>
+
+<pre class="code ruby"><code class="ruby"><span class='lbrace'>{</span>
+  <span class='symbol'>:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd</span><span class='op'>=&gt;</span><span class='int'>500000000000000000000000000000000000</span><span class='comma'>,</span>
+  <span class='symbol'>:xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn</span><span class='op'>=&gt;</span><span class='int'>961647970820730000000000000000000000</span>
+<span class='rbrace'>}</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol=&gt;String}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Delegators</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-54
-55
-56</pre>
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 54</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="destroy-instance_method">
+  
+    #<strong>destroy</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Unlinks the account from the wallet.</p>
+
+<p>Note, it&#39;s impossible to truly destroy an account. Calling this method
+on a wallet causes the wallet to “forget” the account.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>returns true if action was successful, otherwise <code>false</code></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+88
+89
+90</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 88</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:account_remove</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:removed</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='int'>1</span>
@@ -749,26 +1196,471 @@ representative.</p>
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="inspect-instance_method">
+  <h3 class="signature " id="exists?-instance_method">
   
-    #<strong>inspect</strong>  &#x21d2; <tt>Object</tt> 
-  
-
+    #<strong>exists?</strong>  &#x21d2; <tt>Boolean</tt> 
   
 
   
-</h3><table class="source_code">
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a boolean indicating if the account exists.</p>
+
+<p>Existence is determined by if the account has an <em>open</em> block. An
+<em>open</em> block is a special kind of block that gets published when an
+account receives a payment for the first time.</p>
+
+<p>The reliability of this check depends on the node host having synchronized
+itself with most of the blocks on the nano network, otherwise you may get
+<code>false</code> when the account does exist. You can check if a
+node&#39;s  synchronization is particular low using
+<span class='object_link'><a href="Node.html#sync_progress-instance_method" title="Nanook::Node#sync_progress (method)">Node#sync_progress</a></span>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Indicates if this account exists in the nano network</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-58
-59
-60</pre>
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="history-instance_method">
+  
+    #<strong>history</strong>(limit: 1000, unit: Nanook.default_unit)  &#x21d2; <tt>Array&lt;Hash{Symbol=&gt;String}&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns an account&#39;s history of send and receive payments.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
+</code></pre>
+
+<h4 id="label-Example+response-3A">Example response:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='lbracket'>[</span>
+  <span class='lbrace'>{</span>
+   <span class='symbol'>:type</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>send</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+   <span class='symbol'>:account</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+   <span class='symbol'>:amount</span><span class='op'>=&gt;</span><span class='int'>2</span><span class='comma'>,</span>
+   <span class='symbol'>:hash</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570</span><span class='tstring_end'>&quot;</span></span>
+  <span class='rbrace'>}</span>
+<span class='rbracket'>]</span>
+</code></pre>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+</code></pre>
+
+<h4 id="label-Example+response-3A">Example response:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='lbracket'>[</span>
+  <span class='lbrace'>{</span>
+   <span class='symbol'>:type</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>send</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+   <span class='symbol'>:account</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+   <span class='symbol'>:amount</span><span class='op'>=&gt;</span><span class='int'>2000000000000000000000000000000</span><span class='comma'>,</span>
+   <span class='symbol'>:hash</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570</span><span class='tstring_end'>&quot;</span></span>
+  <span class='rbrace'>}</span>
+<span class='rbracket'>]</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>limit</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maximum number of history items to return</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
+Represents the unit that the balances will be returned in. Note: this
+method interprets <code>:nano</code> as NANO, which is technically Mnano
+See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Hash{Symbol=&gt;String}&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the history of send and receive payments for this account</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="id-instance_method">
+  
+    #<strong>id</strong>  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the id of the account.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of the account</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="info-instance_method">
+  
+    #<strong>info</strong>(detailed: false, unit: Nanook.default_unit)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a Hash containing information about the account.</p>
+
+<h4 id="label-Example+1">Example 1</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span>
+</code></pre>
+
+<h4 id="label-Example+1+response">Example 1 response</h4>
+
+<pre class="code ruby"><code class="ruby">{
+  :id=&gt;&quot;xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5&quot;
+  :balance=&gt;11.439597000000001,
+  :block_count=&gt;4
+  :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+  :modified_timestamp=&gt;1520500357,
+  :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+}</code></pre>
+
+<h4 id="label-Example+2">Example 2</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+</code></pre>
+
+<h4 id="label-Example+2+response">Example 2 response</h4>
+
+<pre class="code ruby"><code class="ruby">{
+  :id=&gt;&quot;xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5&quot;
+  :balance=&gt;11.439597000000001,
+  :block_count=&gt;4,
+  :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+  :modified_timestamp=&gt;1520500357,
+  :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :pending=&gt;0,
+  :public_key=&gt;&quot;A82C906460046D230D7D37C6663723DC3EFCECC4B3254EBF45294B66746F4FEF&quot;,
+  :representative=&gt;&quot;xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh&quot;,
+  :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+  :weight=&gt;0
+}</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>detailed</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>(default is false). When <code>true</code>, four additional calls are made
+to the RPC to return more information</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
+Represents the unit that the balances will be returned in. Note: this
+method interprets <code>:nano</code> as NANO, which is technically Mnano
+See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>information about the account containing:</p>
+<dl class="rdoc-list label-list"><dt>+id
+<dd>
+<p>The account id</p>
+</dd><dt><code>frontier</code>
+<dd>
+<p>The latest block hash</p>
+</dd><dt><code>open_block</code>
+<dd>
+<p>The first block in every account&#39;s blockchain. When this block was
+published the account was officially open</p>
+</dd><dt><code>representative_block</code>
+<dd>
+<p>The block that named the representative for the account</p>
+</dd><dt><code>balance</code>
+<dd>
+<p>Amount in <a href="https://nano.org/en/faq#what-are-nano-units-">NANO</a></p>
+</dd><dt><code>last_modified</code>
+<dd>
+<p>Unix timestamp</p>
+</dd><dt><code>block_count</code>
+<dd>
+<p>Number of blocks in the account&#39;s blockchain</p>
+</dd></dl>
+
+<p>When <code>detailed: true</code> is passed as an argument, this method
+makes four additional calls to the RPC to return more information about an
+account:</p>
+<dl class="rdoc-list label-list"><dt><code>weight</code>
+<dd>
+<p>See <span class='object_link'><a href="#weight-instance_method" title="Nanook::WalletAccount#weight (method)">#weight</a></span></p>
+</dd><dt><code>pending</code>
+<dd>
+<p>See <span class='object_link'><a href="#balance-instance_method" title="Nanook::WalletAccount#balance (method)">#balance</a></span></p>
+</dd><dt><code>representative</code>
+<dd>
+<p>See <span class='object_link'><a href="#representative-instance_method" title="Nanook::WalletAccount#representative (method)">#representative</a></span></p>
+</dd><dt><code>public_key</code>
+<dd>
+<p>See <span class='object_link'><a href="#public_key-instance_method" title="Nanook::WalletAccount#public_key (method)">#public_key</a></span></p>
+</dd></dl>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="inspect-instance_method">
+  
+    #<strong>inspect</strong>  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+93
+94
+95</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 93</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>(wallet_id: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='embexpr_end'>}</span><span class='tstring_content'>, account_id: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_account_id'>account_id</span><span class='embexpr_end'>}</span><span class='tstring_content'>, object_id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0x00%x</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lparen'>(</span><span class='id identifier rubyid_object_id'>object_id</span> <span class='op'>&lt;&lt;</span> <span class='int'>1</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;)</span><span class='tstring_end'>&quot;</span></span>
@@ -779,68 +1671,326 @@ representative.</p>
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="pay-instance_method">
+  <h3 class="signature " id="last_modified_at-instance_method">
   
-    #<strong>pay</strong>(to:, amount:, unit: Nanook::default_unit, id:)  &#x21d2; <tt>Object</tt> 
-  
-
+    #<strong>last_modified_at</strong>  &#x21d2; <tt>Time</tt> 
   
 
   
-</h3><table class="source_code">
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns last modified time of the account in UTC time zone.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Time</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>last modified time of the account in UTC time zone.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94</pre>
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="ledger-instance_method">
+  
+    #<strong>ledger</strong>(limit: 1)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns information about the given account as well as other accounts up
+the ledger. The number of accounts returned is determined by the
+<code>limit:</code> argument.</p>
+
+<p>The information in each Hash is the same as what the #info(detailed: false)
+method returns.</p>
+
+<h4 id="label-Arguments">Arguments</h4>
+<dl class="rdoc-list label-list"><dt><code>limit:</code>
+<dd>
+<p>Number of accounts to return in the ledger (default is 1)</p>
+</dd></dl>
+
+<h4 id="label-Example">Example</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>2</span><span class='rparen'>)</span>
+</code></pre>
+
+<h4 id="label-Example+response">Example response</h4>
+
+<pre class="code ruby"><code class="ruby"> {
+  :xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=&gt;{
+    :frontier=&gt;&quot;2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570&quot;,
+    :open_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+    :representative_block=&gt;&quot;C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9&quot;,
+    :balance=&gt;11439597000000000000000000000000,
+    :modified_timestamp=&gt;1520500357,
+    :block_count=&gt;4
+  },
+  :xrb_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=&gt;{ ... }
+}</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pay-instance_method">
+  
+    #<strong>pay</strong>(to:, amount:, unit: Nanook::default_unit, id:)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Make a payment from an account in this wallet to another account on the
+nano network. Returns a <em>send</em> block hash if successful, or a
+<span class='object_link'><a href="Error.html" title="Nanook::Error (class)">Error</a></span> if unsuccessful.</p>
+
+<p>Note, there may be a delay in receiving a response due to Proof of Work
+being done. From the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create">Nano
+RPC</a>:</p>
+
+<p><em>Proof of Work is precomputed for one transaction in the background. If
+it has been a while since your last transaction it will send instantly, the
+next one will need to wait for Proof of Work to be generated.</em></p>
+
+<h4 id="label-Examples-3A">Examples:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='float'>1.1</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>myUniqueId123</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># =&gt; &quot;9AE2311...&quot;
+</span><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>54000000000000</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>myUniqueId123</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># =&gt; &quot;9AE2311...&quot;
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>to</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>account id of the recipient of your payment</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>amount</span>
+      
+      
+        <span class='type'>(<tt>Integer|Float</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>must be unique per payment. It serves an important purpose; it allows you
+to make the same call multiple times with the same <code>id</code> and be
+reassured that you will only ever send this nano payment once</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
+Represents the unit that the balances will be returned in. Note: this
+method interprets <code>:nano</code> as NANO, which is technically Mnano
+See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the send block id for the payment</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Error.html" title="Nanook::Error (class)">Nanook::Error</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if unsuccesful</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 119</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>to:</span><span class='comma'>,</span> <span class='label'>amount:</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='comma'>,</span> <span class='label'>id:</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unsupported unit: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_unit'>unit</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
-  <span class='comment'># Check that to: account is valid
-</span>  <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Account.html" title="Nanook::Account (class)">Account</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Account.html#initialize-instance_method" title="Nanook::Account#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='ivar'>@rpc</span><span class='comma'>,</span> <span class='id identifier rubyid_to'>to</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_exists?'><span class='object_link'><a href="Account.html#exists%3F-instance_method" title="Nanook::Account#exists? (method)">exists?</a></span></span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>To account does not exist (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_to'>to</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='comment'># Check that to account is a valid address
+</span>  <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='ivar'>@rpc</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='symbol'>:validate_account_number</span><span class='comma'>,</span> <span class='label'>account:</span> <span class='id identifier rubyid_to'>to</span><span class='rparen'>)</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:valid</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='int'>1</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Account address is invalid: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_to'>to</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_raw'>raw</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_unit'>unit</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='period'>.</span><span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='symbol'>:nano</span><span class='rparen'>)</span>
+  <span class='comment'># Determin amount in raw
+</span>  <span class='id identifier rubyid_raw'>raw</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_unit'>unit</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='period'>.</span><span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='symbol'>:nano</span><span class='rparen'>)</span>
     <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Util.html" title="Nanook::Util (class)">Util</a></span></span><span class='period'>.</span><span class='const'>NANO_to_raw</span><span class='lparen'>(</span><span class='id identifier rubyid_amount'>amount</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
     <span class='id identifier rubyid_amount'>amount</span>
@@ -858,7 +2008,7 @@ representative.</p>
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='ivar'>@rpc</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='symbol'>:send</span><span class='comma'>,</span> <span class='id identifier rubyid_p'>p</span><span class='rparen'>)</span>
 
   <span class='kw'>if</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_has_key?'>has_key?</span><span class='lparen'>(</span><span class='symbol'>:error</span><span class='rparen'>)</span>
-    <span class='kw'>return</span> <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:error</span><span class='rbracket'>]</span>
+    <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Error.html" title="Nanook::Error (class)">Error</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:error</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:block</span><span class='rbracket'>]</span>
@@ -869,9 +2019,9 @@ representative.</p>
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="receive-instance_method">
+  <h3 class="signature " id="pending-instance_method">
   
-    #<strong>receive</strong>(block = nil)  &#x21d2; <tt>Object</tt> 
+    #<strong>pending</strong>(limit: 1000, detailed: false, unit: Nanook.default_unit)  &#x21d2; <tt>Array&lt;String&gt;</tt>, <tt>Array&lt;Hash{Symbol=&gt;String|Integer}&gt;</tt> 
   
 
   
@@ -880,13 +2030,124 @@ representative.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns false if no block to receive</p>
+<p>Returns information about pending blocks (payments) that are waiting to be
+received by the account.</p>
+
+<p>See also the #receive method of this class for how to receive a pending
+payment.</p>
+
+<p>The default response is an Array of block ids.</p>
+
+<p>With the <code>detailed:</code> argument, the method returns an Array of
+Hashes, which contain the source account id, amount pending and block id.</p>
+
+<h4 id="label-Example+1-3A">Example 1:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span> <span class='comment'># =&gt; [&quot;000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F&quot;]
+</span></code></pre>
+
+<h4 id="label-Example+2-3A">Example 2:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'># [
+</span><span class='comment'>#   {
+</span><span class='comment'>#     :block=&gt;&quot;000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F&quot;,
+</span><span class='comment'>#     :amount=&gt;6,
+</span><span class='comment'>#     :source=&gt;&quot;xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr&quot;
+</span><span class='comment'>#   },
+</span><span class='comment'>#   { ... }
+</span><span class='comment'># ]
+</span></code></pre>
+
+<h4 id="label-Example+3-3A">Example 3:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='id identifier rubyid_raw'>raw</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='lbracket'>[</span><span class='symbol'>:amount</span><span class='rbracket'>]</span> <span class='comment'># =&gt; 6000000000000000000000000000000
+</span></code></pre>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>limit</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number of pending blocks to return (default is 1000)</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>detailed</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>return a more complex Hash of pending block information (default is
+<code>false</code>)</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
+Represents the unit that the balances will be returned in. Note: this
+method interprets <code>:nano</code> as NANO, which is technically Mnano
+See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;String&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Hash{Symbol=&gt;String|Integer}&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -894,16 +2155,183 @@ representative.</p>
       <pre class="lines">
 
 
-97
-98
-99
-100
-101
-102
-103</pre>
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 97</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="public_key-instance_method">
+  
+    #<strong>public_key</strong>  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the public key belonging to an account.</p>
+
+<h4 id="label-Example+response-3A">Example response:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>public key of this account</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="receive-instance_method">
+  
+    #<strong>receive</strong>(block = nil)  &#x21d2; <tt>String</tt>, <tt>false</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Receives a pending payment for this account.</p>
+
+<p>When called with no <code>block</code> argument, the latest pending payment
+for the account will be received.</p>
+
+<p>Returns a <em>receive</em> block id if a receive was successful, or
+<code>false</code> if there were no pending payments to receive.</p>
+
+<p>You can receive a specific pending block if you know it by passing the
+block has in as an argument.</p>
+
+<h4 id="label-Examples">Examples</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span>               <span class='comment'># =&gt; &quot;9AE2311...&quot;
+</span><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>718CC21...</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># =&gt; &quot;9AE2311...&quot;
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>block</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>optional block id of pending payment. If not provided, the latest pending
+payment will be received</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the receive block id</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>false</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if no block to receive</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+176
+177
+178
+179
+180
+181
+182</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 176</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='id identifier rubyid_block'>block</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -912,6 +2340,67 @@ representative.</p>
     <span class='id identifier rubyid__receive_with_block'>_receive_with_block</span><span class='lparen'>(</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="representative-instance_method">
+  
+    #<strong>representative</strong>  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the representative account for the account. Representatives are
+accounts which cast votes in the case of a fork in the network.</p>
+
+<h4 id="label-Example+response">Example response</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Representative account of this account</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
     </td>
   </tr>
 </table>
@@ -932,16 +2421,80 @@ representative.</p>
       <pre class="lines">
 
 
-138
-139
-140</pre>
+217
+218
+219</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 138</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 217</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_wallet_id'>wallet_id</span>
   <span class='ivar'>@wallet</span>
 <span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="weight-instance_method">
+  
+    #<strong>weight</strong>  &#x21d2; <tt>Integer</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the account&#39;s weight.</p>
+
+<p>Weight is determined by the account&#39;s balance, and represents the
+voting weight that account has on the network. Only accounts with greater
+than 256 weight can vote.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_weight'>weight</span> <span class='comment'># =&gt; 0
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the account&#39;s weight</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet_account.rb', line 29</span>
+
+<span class='id identifier rubyid_def_delegators'>def_delegators</span> <span class='symbol'>:@nanook_account_instance</span><span class='comma'>,</span> <span class='symbol'>:balance</span><span class='comma'>,</span> <span class='symbol'>:delegators</span><span class='comma'>,</span> <span class='symbol'>:exists?</span><span class='comma'>,</span> <span class='symbol'>:history</span><span class='comma'>,</span> <span class='symbol'>:id</span><span class='comma'>,</span> <span class='symbol'>:info</span><span class='comma'>,</span> <span class='symbol'>:last_modified_at</span><span class='comma'>,</span> <span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='symbol'>:pending</span><span class='comma'>,</span> <span class='symbol'>:public_key</span><span class='comma'>,</span> <span class='symbol'>:representative</span><span class='comma'>,</span> <span class='symbol'>:weight</span></pre>
     </td>
   </tr>
 </table>
@@ -952,7 +2505,7 @@ representative.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Mar 30 22:12:26 2018 by
+  Generated on Tue Apr  3 21:47:08 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.2.3).
 </div>

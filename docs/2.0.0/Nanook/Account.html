@@ -548,23 +548,27 @@ received by the account.</p>
     
 <p>Returns a Hash containing the account&#39;s balance.</p>
 
-<h4 id="label-Example+response-3A">Example response:</h4>
+<h4 id="label-Example-3A">Example:</h4>
 
-<pre class="code ruby"><code class="ruby"><span class='lbrace'>{</span>
-  <span class='id identifier rubyid_balance'>balance</span><span class='op'>=&gt;</span><span class='int'>2</span><span class='comma'>,</span>   <span class='comment'># Account balance
-</span>  <span class='id identifier rubyid_pending'>pending</span><span class='op'>=&gt;</span><span class='float'>1.1</span>  <span class='comment'># Amount pending and not yet received by the account
-</span><span class='rbrace'>}</span>
-</code></pre>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'># {
+</span><span class='comment'>#   balance=&gt;2,   # Account balance
+</span><span class='comment'>#   pending=&gt;1.1  # Amount pending and not yet received by the account
+</span><span class='comment'># }
+</span></code></pre>
 
 <h4 id="label-Example+balance+returned+in+raw-3A">Example balance returned in raw:</h4>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
 
-<span class='lbrace'>{</span>
-  <span class='label'>balance:</span> <span class='int'>2000000000000000000000000000000</span><span class='comma'>,</span>
-  <span class='label'>pending:</span> <span class='int'>1100000000000000000000000000000</span>
-<span class='rbrace'>}</span>
-</code></pre>
+<span class='comment'># =&gt;
+</span><span class='comment'># {
+</span><span class='comment'>#   balance: 2000000000000000000000000000000,
+</span><span class='comment'>#   pending: 1100000000000000000000000000000
+</span><span class='comment'># }
+</span></code></pre>
 
 
   </div>
@@ -619,21 +623,21 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       <pre class="lines">
 
 
-159
-160
-161
-162
-163
 164
 165
 166
 167
 168
 169
-170</pre>
+170
+171
+172
+173
+174
+175</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 159</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 164</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
@@ -994,12 +998,12 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       <pre class="lines">
 
 
-174
-175
-176</pre>
+179
+180
+181</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 174</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 179</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_id'>id</span>
   <span class='ivar'>@account</span>
@@ -1171,11 +1175,6 @@ account:</p>
       <pre class="lines">
 
 
-234
-235
-236
-237
-238
 239
 240
 241
@@ -1196,10 +1195,15 @@ account:</p>
 256
 257
 258
-259</pre>
+259
+260
+261
+262
+263
+264</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 234</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 239</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
@@ -1247,12 +1251,12 @@ account:</p>
       <pre class="lines">
 
 
-261
-262
-263</pre>
+266
+267
+268</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 261</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 266</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>(id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;, object_id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0x00%x</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lparen'>(</span><span class='id identifier rubyid_object_id'>object_id</span> <span class='op'>&lt;&lt;</span> <span class='int'>1</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;)</span><span class='tstring_end'>&quot;</span></span>
@@ -1379,12 +1383,12 @@ method returns.</p>
       <pre class="lines">
 
 
-292
-293
-294</pre>
+297
+298
+299</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 292</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 297</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:ledger</span><span class='comma'>,</span> <span class='label'>count:</span> <span class='id identifier rubyid_limit'>limit</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:accounts</span><span class='rbracket'>]</span>
@@ -1531,11 +1535,6 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       <pre class="lines">
 
 
-332
-333
-334
-335
-336
 337
 338
 339
@@ -1553,10 +1552,15 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 351
 352
 353
-354</pre>
+354
+355
+356
+357
+358
+359</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 332</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 337</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1000</span><span class='comma'>,</span> <span class='label'>detailed:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
@@ -1768,12 +1772,12 @@ than 256 weight can vote.</p>
       <pre class="lines">
 
 
-366
-367
-368</pre>
+371
+372
+373</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 366</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/account.rb', line 371</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_weight'>weight</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:account_weight</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:weight</span><span class='rbracket'>]</span>
@@ -1788,7 +1792,7 @@ than 256 weight can vote.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Mar 30 22:12:26 2018 by
+  Generated on Tue Apr  3 21:47:07 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.2.3).
 </div>

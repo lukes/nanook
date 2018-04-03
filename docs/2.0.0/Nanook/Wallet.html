@@ -373,7 +373,7 @@ optionally breaking the balances down by account.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#id-instance_method" title="#id (instance method)">#<strong>id</strong>  &#x21d2; Object </a>
+      <a href="#id-instance_method" title="#id (instance method)">#<strong>id</strong>  &#x21d2; String </a>
     
 
     
@@ -423,7 +423,7 @@ optionally breaking the balances down by account.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#inspect-instance_method" title="#inspect (instance method)">#<strong>inspect</strong>  &#x21d2; Object </a>
+      <a href="#inspect-instance_method" title="#inspect (instance method)">#<strong>inspect</strong>  &#x21d2; String </a>
     
 
     
@@ -469,7 +469,7 @@ optionally breaking the balances down by account.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#pay-instance_method" title="#pay (instance method)">#<strong>pay</strong>(from:, to:, amount:, unit: Nanook.default_unit, id:)  &#x21d2; Object </a>
+      <a href="#pay-instance_method" title="#pay (instance method)">#<strong>pay</strong>(from:, to:, amount:, unit: Nanook.default_unit, id:)  &#x21d2; String </a>
     
 
     
@@ -519,7 +519,7 @@ received by accounts in this wallet.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#receive-instance_method" title="#receive (instance method)">#<strong>receive</strong>(block = nil, into:)  &#x21d2; Object </a>
+      <a href="#receive-instance_method" title="#receive (instance method)">#<strong>receive</strong>(block = nil, into:)  &#x21d2; String, false </a>
     
 
     
@@ -974,13 +974,13 @@ Units</a>)</p>
       <pre class="lines">
 
 
-431
-432
-433
-434</pre>
+412
+413
+414
+415</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 431</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 412</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_change_password'>change_password</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1308,7 +1308,7 @@ successful or not.</p>
       <div class="method_details ">
   <h3 class="signature " id="id-instance_method">
   
-    #<strong>id</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>id</strong>  &#x21d2; <tt>String</tt> 
   
 
   
@@ -1318,18 +1318,40 @@ successful or not.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-210
 211
-212</pre>
+212
+213</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 210</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 211</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_id'>id</span>
   <span class='ivar'>@wallet</span>
@@ -1342,24 +1364,46 @@ successful or not.</p>
       <div class="method_details ">
   <h3 class="signature " id="inspect-instance_method">
   
-    #<strong>inspect</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>inspect</strong>  &#x21d2; <tt>String</tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-215
-216
-217</pre>
+217
+218
+219</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 215</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 217</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>(id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;, object_id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0x00%x</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lparen'>(</span><span class='id identifier rubyid_object_id'>object_id</span> <span class='op'>&lt;&lt;</span> <span class='int'>1</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;)</span><span class='tstring_end'>&quot;</span></span>
@@ -1413,14 +1457,14 @@ successful or not.</p>
       <pre class="lines">
 
 
-408
-409
-410
-411
-412</pre>
+389
+390
+391
+392
+393</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 408</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 389</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_locked?'>locked?</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1435,7 +1479,7 @@ successful or not.</p>
       <div class="method_details ">
   <h3 class="signature " id="pay-instance_method">
   
-    #<strong>pay</strong>(from:, to:, amount:, unit: Nanook.default_unit, id:)  &#x21d2; <tt>Object</tt> 
+    #<strong>pay</strong>(from:, to:, amount:, unit: Nanook.default_unit, id:)  &#x21d2; <tt>String</tt> 
   
 
   
@@ -1445,34 +1489,8 @@ successful or not.</p>
   <div class="discussion">
     
 <p>Make a payment from an account in your wallet to another account on the
-nano network. Returns a <em>send</em> block hash if successful, or an error
-String if unsuccessful.</p>
-
-<h4 id="label-Arguments">Arguments</h4>
-<dl class="rdoc-list label-list"><dt><code>from:</code>
-<dd>
-<p>String account id of an account in your wallet</p>
-</dd><dt><code>to:</code>
-<dd>
-<p>String account id of the recipient of your payment</p>
-</dd><dt><code>amount:</code>
-<dd>
-<p>Can be either an Integer or Float.</p>
-</dd><dt><code>unit:</code>
-<dd>
-<p>Symbol (default is <code>:nano</code>). Represents the unit that
-<code>amount</code> is in. Must be either <code>:nano</code> or
-<code>:raw</code>. (Note: this method interprets <code>:nano</code> as
-NANO, which is technically Mnano See <a
-href="https://nano.org/en/faq#what-are-nano-units-">What are Nano’s
-Units</a>)</p>
-</dd><dt><code>id:</code>
-<dd>
-<p>String. Must be unique per payment. It serves an important purpose; it
-allows you to make the same call multiple times with the same
-<code>id</code> and be reassured that you will only ever send that nano
-payment once.</p>
-</dd></dl>
+nano network. Returns a <em>send</em> block id if successful, or a
+<span class='object_link'><a href="Error.html" title="Nanook::Error (class)">Error</a></span> if unsuccessful.</p>
 
 <p>Note, there may be a delay in receiving a response due to Proof of Work
 being done. From the <a
@@ -1485,25 +1503,101 @@ next one will need to wait for Proof of Work to be generated.</em></p>
 
 <h4 id="label-Examples">Examples</h4>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>to:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='float'>1.1</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>myUniqueId123</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>to:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>54000000000000</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>myUniqueId123</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-</code></pre>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>to:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='float'>1.1</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>myUniqueId123</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># =&gt; &quot;9AE2311...&quot;
+</span><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>to:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb_...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>54000000000000</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>myUniqueId123</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># =&gt; &quot;9AE2311...&quot;
+</span></code></pre>
 
-<h4 id="label-Example+responses">Example responses</h4>
-
-<pre class="code ruby"><code class="ruby"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2</span><span class='tstring_end'>&quot;</span></span>
-</code></pre>
-
-<p>Or:</p>
-
-<pre class="code ruby"><code class="ruby"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Account not found</span><span class='tstring_end'>&quot;</span></span>
-</code></pre>
+<h4 id="label-Arguments">Arguments</h4>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>from</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>account id of an account in your wallet</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>to</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>account id of the recipient of your payment</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>amount</span>
+      
+      
+        <span class='type'>(<tt>Integer|Float</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
+Represents the unit that the balances will be returned in. Note: this
+method interprets <code>:nano</code> as NANO, which is technically Mnano
+See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the send block id for the payment</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -1511,14 +1605,14 @@ next one will need to wait for Proof of Work to be generated.</em></p>
       <pre class="lines">
 
 
-252
-253
-254
-255
-256</pre>
+242
+243
+244
+245
+246</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 252</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 242</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span><span class='comma'>,</span> <span class='label'>to:</span><span class='comma'>,</span> <span class='label'>amount:</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='comma'>,</span> <span class='label'>id:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1664,6 +1758,16 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       <pre class="lines">
 
 
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
 307
 308
 309
@@ -1685,20 +1789,10 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 325
 326
 327
-328
-329
-330
-331
-332
-333
-334
-335
-336
-337
-338</pre>
+328</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 307</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 297</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>limit:</span><span class='int'>1000</span><span class='comma'>,</span> <span class='label'>detailed:</span><span class='kw'>false</span><span class='comma'>,</span> <span class='label'>unit:</span><span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1740,7 +1834,7 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       <div class="method_details ">
   <h3 class="signature " id="receive-instance_method">
   
-    #<strong>receive</strong>(block = nil, into:)  &#x21d2; <tt>Object</tt> 
+    #<strong>receive</strong>(block = nil, into:)  &#x21d2; <tt>String</tt>, <tt>false</tt> 
   
 
   
@@ -1757,40 +1851,91 @@ for the account will be received.</p>
 <p>Returns a <em>receive</em> block hash if a receive was successful, or
 <code>false</code> if there were no pending payments to receive.</p>
 
-<p>You can also receive a specific pending block if you know it by passing the
+<p>You can receive a specific pending block if you know it by passing the
 block has in as an argument.</p>
-
-<h4 id="label-Arguments">Arguments</h4>
-<dl class="rdoc-list label-list"><dt><code>block</code>
-<dd>
-<p>Optional block hash of pending payment. If not provided, the latest pending
-payment will be received</p>
-</dd><dt><code>into:</code>
-<dd>
-<p>String account id of account in your wallet to receive the payment into</p>
-</dd></dl>
 
 <h4 id="label-Examples">Examples</h4>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='label'>into:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb...</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>718CC21...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>into:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb...</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-</code></pre>
-
-<h4 id="label-Example+responses">Example responses</h4>
-
-<pre class="code ruby"><code class="ruby"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2</span><span class='tstring_end'>&quot;</span></span>
-</code></pre>
-
-<p>Or:</p>
-
-<pre class="code ruby"><code class="ruby"><span class='kw'>false</span>
-</code></pre>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='label'>into:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb...</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>               <span class='comment'># =&gt; &quot;9AE2311...&quot;
+</span><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>718CC21...</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>into:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>xrb...</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># =&gt; &quot;9AE2311...&quot;
+</span></code></pre>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>into</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>account id of account in your wallet to receive the payment into</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>block</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>optional block id of pending payment. If not provided, the latest pending
+payment will be received</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the receive block id</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>false</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if no block to receive</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -1798,14 +1943,14 @@ payment will be received</p>
       <pre class="lines">
 
 
-370
-371
-372
-373
-374</pre>
+351
+352
+353
+354
+355</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 370</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 351</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='id identifier rubyid_block'>block</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>into:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1922,22 +2067,22 @@ the given seed.</p>
       <pre class="lines">
 
 
-389
-390
-391
-392
-393
-394
-395
-396
-397
-398
-399
-400
-401</pre>
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 389</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 370</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_restore'>restore</span><span class='lparen'>(</span><span class='id identifier rubyid_seed'>seed</span><span class='comma'>,</span> <span class='label'>accounts:</span><span class='int'>0</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_create'>create</span>
@@ -2006,13 +2151,13 @@ the given seed.</p>
       <pre class="lines">
 
 
-420
-421
-422
-423</pre>
+401
+402
+403
+404</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 420</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 401</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_unlock'>unlock</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -2028,7 +2173,7 @@ the given seed.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Mar 30 22:12:25 2018 by
+  Generated on Tue Apr  3 21:47:06 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.2.3).
 </div>
