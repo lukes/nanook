@@ -81,10 +81,7 @@ class Nanook
 
     # Unlinks the account from the wallet.
     #
-    # Note, it's impossible to truly destroy an account. Calling this
-    # method on a wallet causes the wallet to "forget" the account.
-    #
-    # @return [Boolean] returns true if action was successful, otherwise +false+
+    # @return [Boolean] true if action was successful, otherwise +false+
     def destroy
       rpc(:account_remove)[:removed] == 1
     end
@@ -98,7 +95,8 @@ class Nanook
     # on the nano network. Returns a <i>send</i> block hash
     # if successful, or a {Nanook::Error} if unsuccessful.
     #
-    # Note, there may be a delay in receiving a response due to Proof of Work being done. From the {Nano RPC}[https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create]:
+    # Note, there may be a delay in receiving a response due to Proof
+    # of Work being done. From the {Nano RPC}[https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create]:
     #
     # <i>Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.</i>
     #
@@ -115,7 +113,7 @@ class Nanook
     #   the same +id+ and be reassured that you will only ever send this
     #   nano payment once
     # @return [String] the send block id for the payment
-    # @raise [Nanook::Error] if unsuccesful
+    # @raise [Nanook::Error] if unsuccessful
     def pay(to:, amount:, unit: Nanook::default_unit, id:)
       unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
@@ -172,7 +170,7 @@ class Nanook
     # @param block [String] optional block id of pending payment. If
     #   not provided, the latest pending payment will be received
     # @return [String] the receive block id
-    # @return [false] if no block to receive
+    # @return [false] if there was no block to receive
     def receive(block=nil)
       if block.nil?
         _receive_without_block
@@ -194,17 +192,17 @@ class Nanook
     # Will throw an +ArgumentError+ if the representative account does not
     # exist.
     #
-    # ==== Arguments
-    # [+representative+] String of a representative account (starting with
-    #                    <tt>"xrb..."</tt>) to set as this account's representative.
+    # ==== Example:
     #
-    # ==== Example
-    #
-    #   account.change_representative("xrb_...")
+    #   account.change_representative("xrb_...") # =>
     #
     # ==== Example response
     #
     #   "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    #
+    # @param [String] representative the id of the representative account
+    #   to set as this account's representative
+    # @return [String] id of the <i>change</i> block created
     def change_representative(representative)
       # Check that representative is valid
       unless Nanook::Account.new(@rpc, representative).exists?

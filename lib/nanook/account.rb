@@ -33,7 +33,7 @@ class Nanook
       rpc(:delegators)[:delegators]
     end
 
-    # Returns a boolean indicating if the account exists.
+    # Returns true if the account has an <i>open</i> block.
     #
     # Existence is determined by if the account has an _open_ block.
     # An _open_ block is a special kind of block that gets published when
@@ -161,6 +161,7 @@ class Nanook
     #   See {https://nano.org/en/faq#what-are-nano-units- What are Nano's Units}
     #
     # @raise ArgumentError if an invalid +unit+ was given.
+    # @return [Hash{Symbol=>Integer|Float}]
     def balance(unit: Nanook.default_unit)
       unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
@@ -219,7 +220,7 @@ class Nanook
     # @param detailed [Boolean] (default is false). When +true+, four
     #   additional calls are made to the RPC to return more information
     # @param unit (see #balance)
-    # @return [Hash] information about the account containing:
+    # @return [Hash{Symbol=>String|Integer|Float}] information about the account containing:
     #   [+id] The account id
     #   [+frontier+] The latest block hash
     #   [+open_block+] The first block in every account's blockchain. When this block was published the account was officially open
@@ -272,17 +273,13 @@ class Nanook
     # by the <tt>limit:</tt> argument.
     #
     # The information in each Hash is the same as what the
-    # #info(detailed: false) method returns.
+    # {#info(detailed: false)} method returns.
     #
-    # ==== Arguments
-    #
-    # [+limit:+] Number of accounts to return in the ledger (default is 1)
-    #
-    # ==== Example
+    # ==== Example:
     #
     #   account.ledger(limit: 2)
     #
-    # ==== Example response
+    # ==== Example response:
     #   {
     #    :xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=>{
     #      :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
@@ -294,6 +291,9 @@ class Nanook
     #    },
     #    :xrb_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=>{ ... }
     #  }
+    #
+    # @param [Integer] limit number of accounts to return in the ledger (default is 1)
+    # @return [Hash{Symbol=>String|Integer}]
     def ledger(limit: 1)
       rpc(:ledger, count: limit)[:accounts]
     end
