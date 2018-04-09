@@ -191,7 +191,7 @@ account = Nanook.new.wallet(wallet_id).account(account_id)
 account.balance
 account.balance(unit: :raw)
 account.pay(to: recipient_account_id, amount: 2, id: unique_id)
-account.pay(to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
+account.pay(to: recipient_account_id, amount: 2, id: unique_id, unit: :raw)
 account.pending
 account.pending(limit: 1)
 account.pending(detailed: true)
