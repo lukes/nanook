@@ -67,6 +67,7 @@ class Nanook
     def version
       rpc(:version)
     end
+    alias_method :info, :version
 
     private
 
