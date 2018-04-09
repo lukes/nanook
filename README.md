@@ -150,7 +150,7 @@ wallet.balance
 wallet.balance(account_break_down: true)
 wallet.balance(unit: :raw)
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: unique_id)
-wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, unit: :raw, id: unique_id)
+wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: unique_id, unit: :raw)
 wallet.pending
 wallet.pending(limit: 1)
 wallet.pending(detailed: true)
