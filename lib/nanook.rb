@@ -2,7 +2,7 @@ require 'net/http'
 require 'uri'
 require 'forwardable'
 
-Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each { |file| require file }
 
 # ==== Initializing
 #
