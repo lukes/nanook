@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 2.1.0
 
-- Payment methods check the account id of the recipient is valid, raises ArgumentError if not.
+- Payment methods no longer check that recipient account has an open block, as this prevents
+  funds being sent to accounts about to be opened.
+- Payment methods now check the account id of the recipient is valid, raises ArgumentError if not.
+- Payment methods now return a Nanook::Error if the RPC returns an error when trying to pay, instead of a String.
 
 ## 2.0.0
 
