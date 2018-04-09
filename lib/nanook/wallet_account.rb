@@ -47,11 +47,6 @@ class Nanook
       end
     end
 
-    # @return [String] the account id of this account
-    def account_id
-      @account
-    end
-
     # Creates a new account, or multiple new accounts, in this wallet.
     #
     # ==== Example:
@@ -88,7 +83,7 @@ class Nanook
 
     # @return [String]
     def inspect
-      "#{self.class.name}(wallet_id: #{wallet_id}, account_id: #{account_id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+      "#{self.class.name}(wallet_id: #{@wallet}, account_id: #{id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
     # Make a payment from an account in this wallet to another account
@@ -210,10 +205,6 @@ class Nanook
       end
 
       rpc(:account_representative_set, representative: representative)[:block]
-    end
-
-    def wallet_id
-      @wallet
     end
 
     private
