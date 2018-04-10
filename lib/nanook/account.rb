@@ -61,6 +61,7 @@ class Nanook
       response = rpc(:account_info)
       !response.empty? && !response[:open_block].nil?
     end
+    alias_method :open?, :exists?
 
     # Returns an account's history of send and receive payments.
     #

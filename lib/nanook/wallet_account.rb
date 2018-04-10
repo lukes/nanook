@@ -27,6 +27,7 @@ class Nanook
     # @!method weight
     #   (see Nanook::Account#weight)
     def_delegators :@nanook_account_instance, :balance, :delegators, :exists?, :history, :id, :info, :last_modified_at, :ledger, :pending, :public_key, :representative, :weight
+    alias_method :open?, :exists?
 
     def initialize(rpc, wallet, account)
       @rpc = rpc
