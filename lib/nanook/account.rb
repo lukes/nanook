@@ -21,23 +21,28 @@ class Nanook
       @account = account
     end
 
-    # Returns information about this account's delegators.
+    # Returns information about this accounts that have set this account as their representative.
+    #
+    # === Example:
+    #
+    #   account.delegators
+    #
     # === Example response:
+    #
     #   {
     #     :xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd=>500000000000000000000000000000000000,
     #     :xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn=>961647970820730000000000000000000000
     #   }
     #
-    # @return [Hash{Symbol=>String}] Delegators
+    # @return [Hash{Symbol=>Integer}] account ids which delegate to this account, and their account balance
     def delegators
       rpc(:delegators)[:delegators]
     end
 
     # Returns true if the account has an <i>open</i> block.
     #
-    # Existence is determined by if the account has an _open_ block.
-    # An _open_ block is a special kind of block that gets published when
-    # an account receives a payment for the first time.
+    # An open block gets published when an account receives a payment
+    # for the first time.
     #
     # The reliability of this check depends on the node host having
     # synchronized itself with most of the blocks on the nano network,
@@ -45,7 +50,13 @@ class Nanook
     # You can check if a node's  synchronization is particular low
     # using {Nanook::Node#sync_progress}.
     #
-    # @return [Boolean] Indicates if this account exists in the nano network
+    # ==== Example:
+    #
+    #   account.exists? # => true
+    #   # or
+    #   account.open?   # => true
+    #
+    # @return [Boolean] Indicates if this account has an open block
     def exists?
       response = rpc(:account_info)
       !response.empty? && !response[:open_block].nil?
@@ -56,29 +67,14 @@ class Nanook
     # ==== Example:
     #
     #   account.history
-    #   account.history(limit: 1)
     #
     # ==== Example response:
     #   [
     #     {
-    #      :type=>"send",
-    #      :account=>"xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
-    #      :amount=>2,
-    #      :hash=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570"
-    #     }
-    #   ]
-    # ==== Example:
-    #
-    #   account.history
-    #   account.history(unit: :raw)
-    #
-    # ==== Example response:
-    #   [
-    #     {
-    #      :type=>"send",
-    #      :account=>"xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
-    #      :amount=>2000000000000000000000000000000,
-    #      :hash=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570"
+    #      type: "send",
+    #      account: "xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
+    #      amount: 2,
+    #      hash: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570"
     #     }
     #   ]
     #
@@ -102,16 +98,18 @@ class Nanook
       end
     end
 
+    # ==== Example:
+    #
+    #   account.last_modified_at # => Time
+    #
     # @return [Time] last modified time of the account in UTC time zone.
     def last_modified_at
       response = rpc(:account_info)
       Time.at(response[:modified_timestamp])
     end
 
-    # Returns the public key belonging to an account.
-    #
-    # ==== Example response:
-    #   "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
+    # ==== Example:
+    #   account.public_key # => "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
     #
     # @return [String] public key of this account
     def public_key
@@ -122,9 +120,9 @@ class Nanook
     # Representatives are accounts which cast votes in the case of a
     # fork in the network.
     #
-    # ==== Example response
+    # ==== Example:
     #
-    #   "xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh"
+    #   account.representative # => "xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh"
     #
     # @return [String] Representative account of this account
     def representative
@@ -133,31 +131,33 @@ class Nanook
 
     # Returns a Hash containing the account's balance.
     #
-    # ==== Example:
+    # ==== Example 1:
     #
     #   account.balance
     #
-    #   # =>
-    #   # {
-    #   #   balance=>2,   # Account balance
-    #   #   pending=>1.1  # Amount pending and not yet received by the account
-    #   # }
+    # ==== Example 1 response:
     #
-    # ==== Example balance returned in raw:
+    #   {
+    #     balance: 2,
+    #     pending: 1.1
+    #   }
+    #
+    # ==== Example 2:
     #
     #   account.balance(unit: :raw)
     #
-    #   # =>
-    #   # {
-    #   #   balance: 2000000000000000000000000000000,
-    #   #   pending: 1100000000000000000000000000000
-    #   # }
+    # ==== Example 2 response:
+    #
+    #   {
+    #     balance: 2000000000000000000000000000000,
+    #     pending: 1100000000000000000000000000000
+    #   }
     #
     # @param unit [Symbol] default is {Nanook.default_unit}.
     #   Must be one of {Nanook::UNITS}.
     #   Represents the unit that the balances will be returned in.
     #   Note: this method interprets
-    #   +:nano+ as NANO, which is technically Mnano
+    #   +:nano+ as NANO, which is technically Mnano.
     #   See {https://nano.org/en/faq#what-are-nano-units- What are Nano's Units}
     #
     # @raise ArgumentError if an invalid +unit+ was given.
@@ -175,7 +175,10 @@ class Nanook
       end
     end
 
-    # Returns the id of the account.
+    # ==== Example:
+    #
+    #   account.id # => "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
+    #
     # @return [String] the id of the account
     def id
       @account
@@ -183,49 +186,49 @@ class Nanook
 
     # Returns a Hash containing information about the account.
     #
-    # ==== Example 1
+    # ==== Example 1:
     #
     #   account.info
     #
-    # ==== Example 1 response
+    # ==== Example 1 response:
     #   {
-    #     :id=>"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
-    #     :balance=>11.439597000000001,
-    #     :block_count=>4
-    #     :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
-    #     :modified_timestamp=>1520500357,
-    #     :open_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #     :representative_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
+    #     id: "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
+    #     balance: 11.439597000000001,
+    #     block_count: 4,
+    #     frontier: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
+    #     modified_timestamp: 1520500357,
+    #     open_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
+    #     representative_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9"
     #   }
     #
-    # ==== Example 2
+    # ==== Example 2:
     #
     #   account.info(detailed: true)
     #
-    # ==== Example 2 response
+    # ==== Example 2 response:
     #   {
-    #     :id=>"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
-    #     :balance=>11.439597000000001,
-    #     :block_count=>4,
-    #     :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
-    #     :modified_timestamp=>1520500357,
-    #     :open_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #     :pending=>0,
-    #     :public_key=>"A82C906460046D230D7D37C6663723DC3EFCECC4B3254EBF45294B66746F4FEF",
-    #     :representative=>"xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh",
-    #     :representative_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #     :weight=>0
+    #     id: "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
+    #     balance: 11.439597000000001,
+    #     block_count: 4,
+    #     frontier: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
+    #     modified_timestamp: 1520500357,
+    #     open_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
+    #     pending: 0,
+    #     public_key: "A82C906460046D230D7D37C6663723DC3EFCECC4B3254EBF45294B66746F4FEF",
+    #     representative: "xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh",
+    #     representative_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
+    #     weight: 0
     #   }
     #
     # @param detailed [Boolean] (default is false). When +true+, four
     #   additional calls are made to the RPC to return more information
     # @param unit (see #balance)
     # @return [Hash{Symbol=>String|Integer|Float}] information about the account containing:
-    #   [+id] The account id
+    #   [+id+] The account id
     #   [+frontier+] The latest block hash
     #   [+open_block+] The first block in every account's blockchain. When this block was published the account was officially open
     #   [+representative_block+] The block that named the representative for the account
-    #   [+balance+] Amount in {NANO}[https://nano.org/en/faq#what-are-nano-units-]
+    #   [+balance+] Amount in either NANO or raw (depending on the <tt>unit:</tt> argument)
     #   [+last_modified+] Unix timestamp
     #   [+block_count+] Number of blocks in the account's blockchain
     #
@@ -272,9 +275,6 @@ class Nanook
     # accounts up the ledger. The number of accounts returned is determined
     # by the <tt>limit:</tt> argument.
     #
-    # The information in each Hash is the same as what the
-    # {#info(detailed: false)} method returns.
-    #
     # ==== Example:
     #
     #   account.ledger(limit: 2)
@@ -315,19 +315,18 @@ class Nanook
     # ==== Example 2:
     #
     #   account.pending(detailed: true)
-    #   # =>
-    #   # [
-    #   #   {
-    #   #     :block=>"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
-    #   #     :amount=>6,
-    #   #     :source=>"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
-    #   #   },
-    #   #   { ... }
-    #   # ]
     #
-    # ==== Example 3:
+    # ==== Example 2 response:
     #
-    #   account.pending(detailed: true, unit: raw).first[:amount] # => 6000000000000000000000000000000
+    #   [
+    #     {
+    #       block: "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
+    #       amount: 6,
+    #       source: "xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    #     },
+    #     { ... }
+    #   ]
+    #
     # @param limit [Integer] number of pending blocks to return (default is 1000)
     # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
     # @param unit (see #balance)

@@ -49,10 +49,10 @@ class Nanook
 
     # Creates a new account, or multiple new accounts, in this wallet.
     #
-    # ==== Example:
+    # ==== Examples:
     #
-    #   wallet.create    # => Creates 1 account, and return a {Nanook::WalletAccount}
-    #   wallet.create(2) # => Creates 2 accounts, and return an Array of {Nanook::WalletAccount}
+    #   wallet.create     # => Nanook::WalletAccount
+    #   wallet.create(2)  # => [Nanook::WalletAccount, Nanook::WalletAccount]
     #
     # @param n [Integer] number of accounts to create
     #
@@ -76,6 +76,10 @@ class Nanook
 
     # Unlinks the account from the wallet.
     #
+    # ==== Example:
+    #
+    #   account.destroy # => true
+    #
     # @return [Boolean] true if action was successful, otherwise +false+
     def destroy
       rpc(:account_remove)[:removed] == 1
@@ -98,7 +102,7 @@ class Nanook
     # ==== Examples:
     #
     #   account.pay(to: "xrb_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
-    #   account.pay(to: "xrb_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123") # => "9AE2311..."
+    #   account.pay(to: "xrb_...", amount: 54000000000000, id: "myUniqueId123", unit: :raw) # => "9AE2311..."
     #
     # @param to [String] account id of the recipient of your payment
     # @param amount [Integer|Float]
@@ -155,9 +159,9 @@ class Nanook
     # payments to receive.
     #
     # You can receive a specific pending block if you know it by
-    # passing the block has in as an argument.
+    # passing the block in as an argument.
     #
-    # ==== Examples
+    # ==== Examples:
     #
     #   account.receive               # => "9AE2311..."
     #   account.receive("718CC21...") # => "9AE2311..."
@@ -180,28 +184,21 @@ class Nanook
     # behalf on the nano network if your account is offline and there is
     # a fork of the network that requires voting on.
     #
-    # Returns a String of the <em>change block</em> that was
+    # Returns the <em>change block</em> that was
     # broadcast to the nano network. The block contains the information
     # about the representative change for your account.
     #
-    # Will throw an +ArgumentError+ if the representative account does not
-    # exist.
-    #
     # ==== Example:
     #
-    #   account.change_representative("xrb_...") # =>
-    #
-    # ==== Example response
-    #
-    #   "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    #   account.change_representative("xrb_...") # => "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
     #
     # @param [String] representative the id of the representative account
     #   to set as this account's representative
     # @return [String] id of the <i>change</i> block created
+    # @raise [ArgumentError] if the representative account does not exist
     def change_representative(representative)
-      # Check that representative is valid
       unless Nanook::Account.new(@rpc, representative).exists?
-        raise ArgumentError.new("Representative account does not exist (#{representative})")
+        raise ArgumentError.new("Representative account does not exist: #{representative}")
       end
 
       rpc(:account_representative_set, representative: representative)[:block]
