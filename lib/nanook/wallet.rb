@@ -211,7 +211,6 @@ class Nanook
     def id
       @wallet
     end
-    alias_method :seed, :id
 
     # @return [String]
     def inspect
