@@ -21,13 +21,13 @@ class Nanook
       @account = account
     end
 
-    # Returns information about this accounts that have set this account as their representative.
+    # Information about this accounts that have set this account as their representative.
     #
     # === Example:
     #
     #   account.delegators
     #
-    # === Example response:
+    # Example response:
     #
     #   {
     #     :xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd=>500000000000000000000000000000000000,
@@ -63,13 +63,14 @@ class Nanook
     end
     alias_method :open?, :exists?
 
-    # Returns an account's history of send and receive payments.
+    # An account's history of send and receive payments.
     #
     # ==== Example:
     #
     #   account.history
     #
-    # ==== Example response:
+    # Example response:
+    #
     #   [
     #     {
     #      type: "send",
@@ -99,55 +100,63 @@ class Nanook
       end
     end
 
+    # The last modified time of the account in the time zone of
+    # your nano node (usually UTC).
+    #
     # ==== Example:
     #
     #   account.last_modified_at # => Time
     #
-    # @return [Time] last modified time of the account in UTC time zone.
+    # @return [Time] last modified time of the account in the time zone of
+    #   your nano node (usually UTC).
     def last_modified_at
       response = rpc(:account_info)
       Time.at(response[:modified_timestamp])
     end
 
-    # ==== Example:
-    #   account.public_key # => "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
+    # The public key of the account.
     #
-    # @return [String] public key of this account
+    # ==== Example:
+    #
+    #   account.public_key # => "3068BB1..."
+    #
+    # @return [String] public key of the account
     def public_key
       rpc(:account_key)[:key]
     end
 
-    # Returns the representative account for the account.
+    # The representative account id for the account.
     # Representatives are accounts which cast votes in the case of a
     # fork in the network.
     #
     # ==== Example:
     #
-    #   account.representative # => "xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh"
+    #   account.representative # => "xrb_3pc..."
     #
-    # @return [String] Representative account of this account
+    # @return [String] Representative account of the account
     def representative
       rpc(:account_representative)[:representative]
     end
 
-    # Returns a Hash containing the account's balance.
+    # The account's balance, including pending (unreceived payments).
+    # To receive a pending amount see {WalletAccount#receive}.
     #
-    # ==== Example 1:
+    # ==== Examples:
     #
     #   account.balance
     #
-    # ==== Example 1 response:
+    # Example response:
     #
     #   {
     #     balance: 2,
     #     pending: 1.1
     #   }
     #
-    # ==== Example 2:
+    # Asking for the balance to be returned in raw instead of NANO:
     #
     #   account.balance(unit: :raw)
     #
-    # ==== Example 2 response:
+    # Example response:
     #
     #   {
     #     balance: 2000000000000000000000000000000,
@@ -176,22 +185,30 @@ class Nanook
       end
     end
 
+    # @return [Integer] number of blocks for this account
+    def block_count
+      rpc(:account_block_count)[:block_count]
+    end
+
+    # The id of the account.
+    #
     # ==== Example:
     #
-    #   account.id # => "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
+    #   account.id # => "xrb_16u..."
     #
     # @return [String] the id of the account
     def id
       @account
     end
 
-    # Returns a Hash containing information about the account.
+    # Information about the account.
     #
-    # ==== Example 1:
+    # ==== Examples:
     #
     #   account.info
     #
-    # ==== Example 1 response:
+    # Example response:
+    #
     #   {
     #     id: "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
     #     balance: 11.439597000000001,
@@ -202,11 +219,12 @@ class Nanook
     #     representative_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9"
     #   }
     #
-    # ==== Example 2:
+    # Asking for more detail to be returned:
     #
     #   account.info(detailed: true)
     #
-    # ==== Example 2 response:
+    # Example response:
+    #
     #   {
     #     id: "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
     #     balance: 11.439597000000001,
@@ -272,7 +290,7 @@ class Nanook
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
-    # Returns information about the given account as well as other
+    # Information about the given account as well as other
     # accounts up the ledger. The number of accounts returned is determined
     # by the <tt>limit:</tt> argument.
     #
@@ -280,7 +298,8 @@ class Nanook
     #
     #   account.ledger(limit: 2)
     #
-    # ==== Example response:
+    # Example response:
+    #
     #   {
     #    :xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=>{
     #      :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
@@ -299,25 +318,26 @@ class Nanook
       rpc(:ledger, count: limit)[:accounts]
     end
 
-    # Returns information about pending blocks (payments) that are
+    # Information about pending blocks (payments) that are
     # waiting to be received by the account.
     #
-    # See also the #receive method of this class for how to receive a pending payment.
+    # See also the {Nanook::WalletAccount#receive} method for how to
+    # receive a pending payment.
     #
     # The default response is an Array of block ids.
     #
     # With the +detailed:+ argument, the method returns an Array of Hashes,
     # which contain the source account id, amount pending and block id.
     #
-    # ==== Example 1:
+    # ==== Examples:
     #
-    #   account.pending # => ["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]
+    #   account.pending # => ["000D1BA..."]
     #
-    # ==== Example 2:
+    # Asking for more detail to be returned:
     #
     #   account.pending(detailed: true)
     #
-    # ==== Example 2 response:
+    # Example response:
     #
     #   [
     #     {
@@ -358,13 +378,14 @@ class Nanook
       end
     end
 
-    # Returns the account's weight.
+    # The account's weight.
     #
     # Weight is determined by the account's balance, and represents
     # the voting weight that account has on the network. Only accounts
     # with greater than 256 weight can vote.
     #
     # ==== Example:
+    #
     #   account.weight # => 0
     #
     # @return [Integer] the account's weight
