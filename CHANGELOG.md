@@ -5,15 +5,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## 2.2.0
+
+### Added
+
 - `Nanook::Node#block_count_type` is now an alias to the preferred `#block_count_by_type`
   method.
 - `Nanook::Node#synchronizing_blocks` aliased by `#unchecked`, for people familiar with
   what the RPC calls it.
+
+### Changed
+
 - `Nanook::Node#synced?` is deprecated with a `warn`. Nodes never seem to reach 100%
   synchronized, so this method is useless.
 - `Nanook::Rpc::DEFAULT_TIMEOUT` reduced from 500 to 60.
 
 ## 2.1.0
+
+### Changed
 
 - Payment methods no longer check that recipient account has an open block, as this prevents
   funds being sent to accounts about to be opened.
@@ -36,6 +44,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added ruby version requirement >= 2.0 to gemspec.
 
 ### Changed
+
 - `Nanook::Rpc#inspect` displays full hostname with scheme and port.
 - `Nanook::Account#new` `account` param is now required.
 - `Nanook::Account#info` now also returns the `id` of the account.
@@ -53,6 +62,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed documentation generating tool from rdoc to yard.
 
 ### Fixed
+
 - Missing `Nanook#rpc` accessor.
 - `Nanook::Block#publish` can return false when publish fails.
 - `Nanook::Block#info` correctly handles `allow_unchecked: true` errors.
