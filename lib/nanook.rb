@@ -42,12 +42,12 @@ class Nanook
   # Returns a new instance of {Nanook}.
   #
   # ==== Examples:
-  # Connecting to http://localhost:7076 with the default timeout of 600s:
+  # Connecting to http://localhost:7076 with the default timeout of 10s:
   #   Nanook.new
   # Setting a custom timeout:
-  #   Nanook.new(timeout: 600)
+  #   Nanook.new(timeout: 10)
   # Connecting to a custom RPC host and setting a timeout:
-  #   Nanook.new("http://ip6-localhost.com:7076", timeout: 600)
+  #   Nanook.new("http://ip6-localhost.com:7076", timeout: 10)
   #
   # @param uri [String] default is {Nanook::Rpc::DEFAULT_URI}. The RPC host to connect to
   # @param timeout [Integer] default is {Nanook::Rpc::DEFAULT_TIMEOUT}. Connection timeout in number of seconds

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   what the RPC calls it.
 - `Nanook::Node#synced?` is deprecated with a `warn`. Nodes never seem to reach 100%
   synchronized, so this method is useless.
+- `Nanook::Rpc::DEFAULT_TIMEOUT` reduced from 500 to 60.
 
 ## 2.1.0
 

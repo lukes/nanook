@@ -5,7 +5,8 @@ class Nanook
   class Rpc
 
     DEFAULT_URI = "http://localhost:7076"
-    DEFAULT_TIMEOUT = 500 # seconds
+    # Default request timeout in seconds
+    DEFAULT_TIMEOUT = 60
 
     def initialize(uri=DEFAULT_URI, timeout:DEFAULT_TIMEOUT)
       @rpc_server = URI(uri)
