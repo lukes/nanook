@@ -8,10 +8,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- New `Nanook::Account#block_count` method returns number of blocks in ledger for an account.
 - `Nanook::Node#block_count_type` is now an alias to the preferred `#block_count_by_type`
+  method.
+- `Nanook::Node#version` now an aliased by `#info`
   method.
 - `Nanook::Node#synchronizing_blocks` aliased by `#unchecked`, for people familiar with
   what the RPC calls it.
+- `Nanook::WalletAccount#exists?` now aliased by `#open?`
+
+### Removed
+
+- `Nanook::WalletAccount#account_id` Removed, as there was already an `id` method that returned this.
+- `Nanook::WalletAccount#wallet_id` Removed, as the `WalletAccount` object should be considered a kind of Account.
 
 ### Changed
 
