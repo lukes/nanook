@@ -292,7 +292,6 @@ node.representatives
 node.synchronizing_blocks
 node.synchronizing_blocks(limit: 1)
 node.sync_progress
-node.synced?
 node.version
 
 node.stop

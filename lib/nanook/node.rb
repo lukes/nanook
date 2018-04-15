@@ -60,7 +60,12 @@ class Nanook
       count.to_f * 100 / total.to_f
     end
 
+    # This method is deprecated and will be removed in 3.0, as a node never
+    # reaches 100% synchronization.
+    #
+    # @return [Boolean] signalling if this node ever reaches 100% synchronized
     def synced?
+      warn "[DEPRECATION] `synced?` is deprecated and will be removed in 3.0"
       rpc(:block_count)[:unchecked] == 0
     end
 
