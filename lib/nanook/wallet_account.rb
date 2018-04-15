@@ -1,4 +1,18 @@
 class Nanook
+
+  # The <tt>Nanook::WalletAccount</tt> class lets you manage your nano accounts,
+  # including paying and receiving payment.
+  #
+  # === Initializing
+  #
+  # Initialize this class through an instance of {Nanook::Wallet} like this:
+  #
+  #   account = Nanook.new.wallet(wallet_id).account(account_id)
+  #
+  # Or compose the longhand way like this:
+  #
+  #   rpc_conn = Nanook::Rpc.new
+  #   account = Nanook::WalletAccount.new(rpc_conn, wallet_id, account_id)
   class WalletAccount
 
     extend Forwardable
@@ -61,6 +75,7 @@ class Nanook
     #   if invoked with no argument
     # @return [Array<Nanook::WalletAccount>] returns an Array of {Nanook::WalletAccount}
     #   if method was called with argument +n+ >  1
+    # @raise [ArgumentError] if +n+ is less than 1
     def create(n=1)
       if n < 1
         raise ArgumentError.new("number of accounts must be greater than 0")
@@ -81,7 +96,7 @@ class Nanook
     #
     #   account.destroy # => true
     #
-    # @return [Boolean] true if action was successful, otherwise +false+
+    # @return [Boolean] +true+ if action was successful, otherwise +false+
     def destroy
       rpc(:account_remove)[:removed] == 1
     end
@@ -91,7 +106,7 @@ class Nanook
       "#{self.class.name}(wallet_id: #{@wallet}, account_id: #{id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
-    # Make a payment from an account in this wallet to another account
+    # Makes a payment from this account to another account
     # on the nano network. Returns a <i>send</i> block hash
     # if successful, or a {Nanook::Error} if unsuccessful.
     #
