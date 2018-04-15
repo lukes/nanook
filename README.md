@@ -11,7 +11,7 @@ This is a Ruby library for managing a [nano currency](https://nano.org/) node, i
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nanook', "~> 2.1"
+gem 'nanook', "~> 2.2"
 ```
 
 And then execute:
