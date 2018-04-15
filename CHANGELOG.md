@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 2.2.0
 - `Nanook::Node#block_count_type` is now an alias to the preferred `#block_count_by_type`
   method.
+- `Nanook::Node#synchronizing_blocks` aliased by `#unchecked`, for people familiar with
+  what the RPC calls it.
 - `Nanook::Node#synced?` is deprecated with a `warn`. Nodes never seem to reach 100%
   synchronized, so this method is useless.
 

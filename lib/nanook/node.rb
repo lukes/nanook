@@ -134,6 +134,7 @@ class Nanook
       end
       Hash[response.sort].to_symbolized_hash
     end
+    alias_method :unchecked, :synchronizing_blocks
 
     # The percentage completeness of the synchronization process for
     # your node as it downloads the nano ledger. Note, it's normal for
