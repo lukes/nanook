@@ -314,8 +314,22 @@ class Nanook
     #
     # @param [Integer] limit number of accounts to return in the ledger (default is 1)
     # @return [Hash{Symbol=>String|Integer}]
-    def ledger(limit: 1)
-      rpc(:ledger, count: limit)[:accounts]
+    def ledger(limit: 1, unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
+      response = rpc(:ledger, count: limit)[:accounts]
+
+      return response if unit == :raw
+
+      r = response.map do |account_id, l|
+        l[:balance] = Nanook::Util.raw_to_NANO(l[:balance])
+
+        [account_id, l]
+      end
+
+      Hash[r].to_symbolized_hash
     end
 
     # Information about pending blocks (payments) that are
