@@ -28,7 +28,7 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.block_count).to have_key(:count)
   end
 
-  it "should request block_count_type correctly" do
+  it "should request block_count_by_type correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"block_count_type\"}",
       headers: headers
@@ -38,7 +38,7 @@ RSpec.describe Nanook::Node do
       headers: {}
     )
 
-    expect(Nanook.new.node.block_count_type).to have_key(:send)
+    expect(Nanook.new.node.block_count_by_type).to have_key(:send)
   end
 
   it "should request bootstrap correctly" do

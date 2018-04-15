@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## 2.2.0
+- `Nanook::Node#block_count_type` is now an alias to the preferred `#block_count_by_type`
+  method.
 - `Nanook::Node#synced?` is deprecated with a `warn`. Nodes never seem to reach 100%
   synchronized, so this method is useless.
 
