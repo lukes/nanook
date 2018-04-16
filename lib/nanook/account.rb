@@ -328,14 +328,21 @@ class Nanook
     #  }
     #
     # @param [Integer] limit number of accounts to return in the ledger (default is 1)
+    # @param [Time] modified_since return only accounts modified in the local database after this time
     # @param unit (see #balance)
     # @return [Hash{Symbol=>String|Integer}]
-    def ledger(limit: 1, unit: Nanook.default_unit)
+    def ledger(limit: 1, modified_since:nil, unit: Nanook.default_unit)
       unless Nanook::UNITS.include?(unit)
         raise ArgumentError.new("Unsupported unit: #{unit}")
       end
 
-      response = rpc(:ledger, count: limit)[:accounts]
+      params = { count: limit }
+
+      unless modified_since.nil?
+        params[:modified_since] = modified_since.to_i
+      end
+
+      response = rpc(:ledger, params)[:accounts]
 
       return response if unit == :raw
 

@@ -420,6 +420,32 @@ RSpec.describe Nanook::Account do
     expect(response[:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
   end
 
+  it "account ledger with modified_since" do
+    t = Time.now
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\",\"modified_since\":\"#{t.to_i}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\": {
+        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
+          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"balance\": \"100000000000000000000000000000000\",
+          \"modified_timestamp\": \"1511476234\",
+          \"block_count\": \"2\"
+        }
+      } }",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).ledger(modified_since: t)
+    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    expect(response[:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
+  end
+
   it "account ledger with limit" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"10\"}",

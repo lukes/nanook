@@ -208,6 +208,7 @@ account.info(unit: :raw)
 account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
+account.ledger(modified_since: Time.now)
 account.ledger(unit: :raw)
 account.history
 account.history(limit: 1)
@@ -243,6 +244,7 @@ account.info(unit: :raw)
 account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
+account.ledger(modified_since: Time.now)
 account.ledger(unit: :raw)
 account.history
 account.history(limit: 1)
