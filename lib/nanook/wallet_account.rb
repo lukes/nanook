@@ -18,7 +18,9 @@ class Nanook
     extend Forwardable
     # @!method balance(unit: Nanook.default_unit)
     #   (see Nanook::Account#balance)
-    # @!method delegators
+    # @!method block_count
+    #   (see Nanook::Account#block_count)
+    # @!method delegators(unit: Nanook.default_unit)
     #   (see Nanook::Account#delegators)
     # @!method exists?
     #   (see Nanook::Account#exists?)
@@ -30,7 +32,7 @@ class Nanook
     #   (see Nanook::Account#info)
     # @!method last_modified_at
     #   (see Nanook::Account#last_modified_at)
-    # @!method ledger(limit: 1)
+    # @!method ledger(limit: 1, modified_since: nil, unit: Nanook.default_unit)
     #   (see Nanook::Account#ledger)
     # @!method pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
     #   (see Nanook::Account#pending)
