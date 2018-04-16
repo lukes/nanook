@@ -14,10 +14,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Node#block_count_type` is now an alias to the preferred `#block_count_by_type`
   method.
 - `Nanook::Node#representatives` now takes `unit` argument.
-- `Nanook::Node#version` now an aliased by `#info`
-  method.
+- new `Nanook::Node#representatives_online` method.
 - `Nanook::Node#synchronizing_blocks` aliased by `#unchecked`, for people familiar with
   what the RPC calls it.
+- `Nanook::Node#version` now an aliased by `#info`
+  method.
 - `Nanook::WalletAccount#exists?` now aliased by `#open?`
 
 ### Removed

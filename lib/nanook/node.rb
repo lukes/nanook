@@ -131,6 +131,19 @@ class Nanook
       Hash[r].to_symbolized_hash
     end
 
+    # All online representatives that have voted recently. Note, due to the
+    # design of the nano RPC, this method cannot return the voting weight
+    # of the representatives.
+    #
+    # ==== Example:
+    #
+    #   node.representatives_online # => ["xrb_111...", "xrb_222"]
+    #
+    # @return [Array<String>] array of representative account ids
+    def representatives_online
+      response = rpc(:representatives_online)[:representatives].keys.map(&:to_s)
+    end
+
     # Safely shuts down the node.
     #
     # @return [Boolean] indicating if action was successful

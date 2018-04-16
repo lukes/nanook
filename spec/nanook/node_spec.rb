@@ -123,6 +123,21 @@ RSpec.describe Nanook::Node do
     expect(response[:xrb_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372327060170000000000000000000000)
   end
 
+  it "should request representatives_online correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"representatives_online\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"representatives\":{\"xrb_1111111111111111111111111111111111111111111111111117353trpda\":\"\",\"xrb_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"\",\"xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"\"}}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.representatives_online
+    expect(response).to have(3).items
+    expect(response.first).to eq("xrb_1111111111111111111111111111111111111111111111111117353trpda")
+  end
+
   it "should request peers correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"peers\"}",
