@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nanook (2.1.0)
+    nanook (2.2.0)
       symbolized (~> 0.0.1)
 
 GEM

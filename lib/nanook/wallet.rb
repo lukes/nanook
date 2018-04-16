@@ -3,21 +3,42 @@ class Nanook
   # The <tt>Nanook::Wallet</tt> class lets you manage your nano wallets,
   # as well as some account-specific things like making and receiving payments.
   #
-  # Your wallets each have a seed, which is a 32-byte uppercase hex
-  # string that looks like this:
+  # === Wallet seeds vs ids
+  #
+  # Your wallets each have an id as well as a seed. Both are 32-byte uppercase hex
+  # strings that look like this:
   #
   #   000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F
   #
-  # You can think of this string as your API key to the nano network.
-  # The person who knows it can do all read and write actions against
-  # the wallet and all accounts inside the wallet from anywhere on the
-  # nano network, not just on the node you created the wallet on.
-  # <b>Make sure this key is always secret and safe</b>. Do not commit
-  # your seed into source control.
+  # This class uses wallet _ids_ to identify your wallet. A wallet id only
+  # exists locally on the nano node that it was created on. The person
+  # who knows this id can only perform all read and write actions against
+  # the wallet and all accounts inside the wallet from the same nano node
+  # that it was created on. This makes wallet ids fairly safe to use as a
+  # person needs to know your wallet id as well as have access to run
+  # RPC commands against your nano node to be able to control your accounts.
+  #
+  # A _seed_ on the otherhand can be used to link any wallet to another
+  # wallet's accounts, from anywhere in the nano network. This happens
+  # by setting a wallet's seed to be the same as a previous wallet's seed.
+  # When a wallet has the same seed as another wallet, any accounts
+  # created in the second wallet will be the same accounts as those that were
+  # created in the previous wallet, and the new wallet's owner will
+  # also gain ownership of the previous wallet's accounts. Note, that the
+  # two wallets will have different ids, but the same seed.
+  #
+  # Nanook is based on the Nano RPC, which uses wallet ids and not seeds.
+  # The RPC and therefore Nanook cannot tell you what a wallet's seed is,
+  # only its id. Knowing a wallet's seed is very useful for if you ever
+  # want to restore the wallet anywhere else on the nano network besides
+  # the node you originally created it on. The nano command line interface
+  # (CLI) is the only method for discovering a wallet's seed. See the
+  # {https://github.com/nanocurrency/raiblocks/wiki/Command-line-interface
+  # --wallet_decrypt_unsafe CLI command}.
   #
   # === Initializing
   #
-  # Initialize this class through the convenient Nanook#wallet method:
+  # Initialize this class through the convenient {Nanook#wallet} method:
   #
   #   nanook = Nanook.new
   #   wallet = nanook.wallet(wallet_id)
@@ -33,31 +54,37 @@ class Nanook
       @wallet = wallet
     end
 
-    # A convenient method that returns an account in your wallet, allowing
-    # you to perform all the actions in Nanook::WalletAccount on it.
+    # Returns the given account in the wallet as a {Nanook::WalletAccount} instance
+    # to let you start working with it.
     #
-    #   wallet.account("xrb_...") #=> Nanook::WalletAccount instance
+    # Call with no +account+ argument if you wish to create a new account
+    # in the wallet, like this:
     #
-    # See Nanook::WalletAccount.
+    #   wallet.account.create     # => Nanook::WalletAccount
     #
-    # Will throw an ArgumentError if the wallet does not contain the account.
+    # See {Nanook::WalletAccount} for all the methods you can call on the
+    # account object returned.
     #
-    # ==== Arguments
-    # [+account+] Optional String of an account (starting with
-    #             <tt>"xrb..."</tt>) to start working with. Must be an
-    #             account within the wallet. When
-    #             no account is given, the instance returned only allows you to call
-    #             +create+ on it, to create a new account. Otherwise, you
-    #             must pass an account string for all other methods.
+    # ==== Examples:
     #
-    # ==== Examples
+    #   wallet.account("xrb_...") # => Nanook::WalletAccount
+    #   wallet.account.create     # => Nanook::WalletAccount
     #
-    #   wallet.account.create      # Creates an account in the wallet and returns a Nanook::WalletAccount
-    #   wallet.account(account_id) # Returns a Nanook::WalletAccount for the account
+    # @param [String] account optional String of an account (starting with
+    #   <tt>"xrb..."</tt>) to start working with. Must be an account within
+    #   the wallet. When no account is given, the instance returned only
+    #   allows you to call +create+ on it, to create a new account.
+    # @raise [ArgumentError] if the wallet does no contain the account
+    # @return [Nanook::WalletAccount]
     def account(account=nil)
       Nanook::WalletAccount.new(@rpc, @wallet, account)
     end
 
+    # Array of {Nanook::WalletAccount} instances of accounts in the wallet.
+    #
+    # See {Nanook::WalletAccount} for all the methods you can call on the
+    # account objects returned.
+    #
     # ==== Example:
     #
     #   wallet.accounts # => [Nanook::WalletAccount, Nanook::WalletAccount...]
@@ -71,21 +98,9 @@ class Nanook
       end
     end
 
-    # Returns a Hash containing the balance of all accounts in the
-    # wallet, optionally breaking the balances down by account.
+    # Balance of all accounts in the wallet, optionally breaking the balances down by account.
     #
-    # ==== Arguments
-    #
-    # [+account_break_down:+] Boolean (default is +false+). When +true+
-    #                         the response will contain balances per
-    #                         account.
-    # [+unit:+]   Symbol (default is +:nano+) Represents the unit that
-    #             the balances will be returned in.
-    #             Must be either +:nano+ or +:raw+. (Note: this method
-    #             interprets +:nano+ as NANO, which is technically Mnano
-    #             See {What are Nano's Units}[https://nano.org/en/faq#what-are-nano-units-])
-    #
-    # ==== Examples
+    # ==== Examples:
     #   wallet.balance
     #
     # Example response:
@@ -122,6 +137,12 @@ class Nanook
     #       "pending"=>0
     #     },
     #   }
+    #
+    # @param [Boolean] account_break_down (default is +false+). When +true+
+    #  the response will contain balances per account.
+    # @param unit (see Nanook::Account#balance)
+    #
+    # @return [Hash{Symbol=>Integer|Float|Hash}]
     def balance(account_break_down: false, unit: Nanook.default_unit)
       wallet_required!
 
@@ -150,6 +171,10 @@ class Nanook
 
     # Changes a wallet's seed.
     #
+    # ==== Example:
+    #
+    #   wallet.change_seed("000D1BA...") # => true
+    #
     # @param seed [String] the seed to change to.
     # @return [Boolean] indicating whether the change was successful.
     def change_seed(seed)
@@ -162,6 +187,10 @@ class Nanook
     # The wallet will be created only on this node. It's important that
     # if you intend to add funds to accounts in this wallet that you
     # backup the wallet *seed* in order to restore the wallet in future.
+    # The nano command line interface (CLI) is the only method for
+    # backing up a wallet's seed. See the
+    # {https://github.com/nanocurrency/raiblocks/wiki/Command-line-interface
+    # --wallet_decrypt_unsafe CLI command}.
     #
     # ==== Example:
     #   Nanook.new.wallet.create # => Nanook::Wallet
@@ -172,11 +201,13 @@ class Nanook
       self
     end
 
-    # Destroy the wallet. Returns a boolean indicating whether the action
-    # was successful or not.
+    # Destroys the wallet.
     #
-    # ==== Example Response
-    #   true
+    # ==== Example:
+    #
+    #   wallet.destroy # => true
+    #
+    # @return [Boolean] indicating success of the action
     def destroy
       wallet_required!
       rpc(:wallet_destroy)
@@ -185,29 +216,28 @@ class Nanook
 
     # Generates a String containing a JSON representation of your wallet.
     #
-    # ==== Example response
+    # ==== Example:
     #
-    #   "{\n    \"0000000000000000000000000000000000000000000000000000000000000000\": \"0000000000000000000000000000000000000000000000000000000000000003\",\n    \"0000000000000000000000000000000000000000000000000000000000000001\": \"C3A176FC3B90113277BFC91F55128FC9A1F1B6166A73E7446927CFFCA4C2C9D9\",\n    \"0000000000000000000000000000000000000000000000000000000000000002\": \"3E58EC805B99C52B4715598BD332C234A1FBF1780577137E18F53B9B7F85F04B\",\n    \"0000000000000000000000000000000000000000000000000000000000000003\": \"5FF8021122F3DEE0E4EC4241D35A3F41DEF63CCF6ADA66AF235DE857718498CD\",\n    \"0000000000000000000000000000000000000000000000000000000000000004\": \"A30E0A32ED41C8607AA9212843392E853FCBCB4E7CB194E35C94F07F91DE59EF\",\n    \"0000000000000000000000000000000000000000000000000000000000000005\": \"E707002E84143AA5F030A6DB8DD0C0480F2FFA75AB1FFD657EC22B5AA8E395D5\",\n    \"0000000000000000000000000000000000000000000000000000000000000006\": \"0000000000000000000000000000000000000000000000000000000000000001\",\n    \"8646C0423160DEAEAA64034F9C6858F7A5C8A329E73E825A5B16814F6CCAFFE3\": \"0000000000000000000000000000000000000000000000000000000100000000\"\n}\n"
+    #   wallet.export # => "{\n    \"0000000000000000000000000000000000000000000000000000000000000000\": \"0000000000000000000000000000000000000000000000000000000000000003\",\n    \"0000000000000000000000000000000000000000000000000000000000000001\": \"C3A176FC3B90113277BFC91F55128FC9A1F1B6166A73E7446927CFFCA4C2C9D9\",\n    \"0000000000000000000000000000000000000000000000000000000000000002\": \"3E58EC805B99C52B4715598BD332C234A1FBF1780577137E18F53B9B7F85F04B\",\n    \"0000000000000000000000000000000000000000000000000000000000000003\": \"5FF8021122F3DEE0E4EC4241D35A3F41DEF63CCF6ADA66AF235DE857718498CD\",\n    \"0000000000000000000000000000000000000000000000000000000000000004\": \"A30E0A32ED41C8607AA9212843392E853FCBCB4E7CB194E35C94F07F91DE59EF\",\n    \"0000000000000000000000000000000000000000000000000000000000000005\": \"E707002E84143AA5F030A6DB8DD0C0480F2FFA75AB1FFD657EC22B5AA8E395D5\",\n    \"0000000000000000000000000000000000000000000000000000000000000006\": \"0000000000000000000000000000000000000000000000000000000000000001\",\n    \"8646C0423160DEAEAA64034F9C6858F7A5C8A329E73E825A5B16814F6CCAFFE3\": \"0000000000000000000000000000000000000000000000000000000100000000\"\n}\n"
     def export
       wallet_required!
       rpc(:wallet_export)[:json]
     end
 
-    # Returns boolean indicating if the wallet contains an account.
+    # Will return +true+ if the account exists in the wallet.
     #
-    # ==== Arguments
+    # ==== Example:
+    #   wallet.contains?("xrb_...") # => true
     #
-    # [+account+] String account id (will start with <tt>"xrb_..."</tt>)
-    #
-    # ==== Example response
-    #   true
+    # @param account [String] id (will start with <tt>"xrb_..."</tt>)
+    # @return [Boolean] indicating if the wallet contains the given account
     def contains?(account)
       wallet_required!
       response = rpc(:wallet_contains, account: account)
       !response.empty? && response[:exists] == 1
     end
 
-    # @return [String]
+    # @return [String] the wallet id
     def id
       @wallet
     end
@@ -217,20 +247,21 @@ class Nanook
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
-    # Make a payment from an account in your wallet to another account
-    # on the nano network. Returns a <i>send</i> block id
-    # if successful, or a {Nanook::Error} if unsuccessful.
+    # Makes a payment from an account in your wallet to another account
+    # on the nano network.
     #
-    # Note, there may be a delay in receiving a response due to Proof of Work being done. From the {Nano RPC}[https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create]:
+    # Note, there may be a delay in receiving a response due to Proof of
+    # Work being done. From the {Nano RPC}[https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create]:
     #
-    # <i>Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.</i>
+    # <i>Proof of Work is precomputed for one transaction in the
+    # background. If it has been a while since your last transaction it
+    # will send instantly, the next one will need to wait for Proof of
+    # Work to be generated.</i>
     #
-    # ==== Examples
+    # ==== Examples:
     #
     #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
     #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123") # => "9AE2311..."
-    #
-    # ==== Arguments
     #
     # @param from [String] account id of an account in your wallet
     # @param to (see Nanook::WalletAccount#pay)
@@ -238,26 +269,28 @@ class Nanook
     # @param unit (see Nanook::Account#balance)
     # @params id (see Nanook::WalletAccount#pay)
     # @return (see Nanook::WalletAccount#pay)
+    # @raise [Nanook::Error] if unsuccessful
     def pay(from:, to:, amount:, unit: Nanook.default_unit, id:)
       wallet_required!
       validate_wallet_contains_account!(from)
       account(from).pay(to: to, amount: amount, unit: unit, id: id)
     end
 
-    # Returns information about pending blocks (payments) that are waiting
+    # Information about pending blocks (payments) that are waiting
     # to be received by accounts in this wallet.
     #
-    # See also the #receive method of this class for how to receive a pending payment.
+    # See also the {#receive} method of this class for how to receive a pending payment.
     #
     # @param limit [Integer] number of accounts with pending payments to return (default is 1000)
     # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
     # @param unit (see Nanook::Account#balance)
     #
-    # ==== Example 1:
+    # ==== Examples:
     #
     #   wallet.pending
     #
-    # ==== Example 1 response:
+    # Example response:
+    #
     #   {
     #     :xrb_1111111111111111111111111111111111111111111111111117353trpda=>[
     #       "142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D",
@@ -267,11 +300,13 @@ class Nanook
     #       "4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"
     #     ]
     #   }
-    # ==== Example 2:
+    #
+    # Asking for more information:
     #
     #   wallet.pending(detailed: true)
     #
-    # ==== Example 2 response:
+    # Example response:
+    #
     #   {
     #     :xrb_1111111111111111111111111111111111111111111111111117353trpda=>[
     #       {
@@ -331,14 +366,13 @@ class Nanook
     # When called with no +block+ argument, the latest pending payment
     # for the account will be received.
     #
-    # Returns a <i>receive</i> block hash
-    # if a receive was successful, or +false+ if there were no pending
-    # payments to receive.
+    # Returns a <i>receive</i> block hash id if a receive was successful,
+    # or +false+ if there were no pending payments to receive.
     #
     # You can receive a specific pending block if you know it by
     # passing the block has in as an argument.
     #
-    # ==== Examples
+    # ==== Examples:
     #
     #   wallet.receive(into: "xrb...")               # => "9AE2311..."
     #   wallet.receive("718CC21...", into: "xrb...") # => "9AE2311..."
@@ -353,7 +387,7 @@ class Nanook
       account(into).receive(block)
     end
 
-    # Restore a previously created wallet by its seed.
+    # Restores a previously created wallet by its seed.
     # A new wallet will be created on your node (with a new wallet id)
     # and will have its seed set to the given seed.
     #
@@ -380,11 +414,13 @@ class Nanook
       self
     end
 
-    # Returns a boolean to indicate if the wallet is locked.
+    # Returns +true+ if the wallet is locked.
     #
-    # ==== Example response
+    # ==== Example:
     #
-    #   true
+    #   wallet.locked? #=> false
+    #
+    # @return [Boolean] indicates if the wallet is locked
     def locked?
       wallet_required!
       response = rpc(:wallet_locked)
@@ -396,7 +432,8 @@ class Nanook
     # ==== Example:
     #
     #   wallet.unlock("new_pass") #=> true
-    # @return [Boolean] indicates if the action was successful
+    #
+    # @return [Boolean] indicates if the unlocking action was successful
     def unlock(password)
       wallet_required!
       rpc(:password_enter, password: password)[:valid] == 1

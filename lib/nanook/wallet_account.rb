@@ -1,10 +1,26 @@
 class Nanook
+
+  # The <tt>Nanook::WalletAccount</tt> class lets you manage your nano accounts,
+  # including paying and receiving payment.
+  #
+  # === Initializing
+  #
+  # Initialize this class through an instance of {Nanook::Wallet} like this:
+  #
+  #   account = Nanook.new.wallet(wallet_id).account(account_id)
+  #
+  # Or compose the longhand way like this:
+  #
+  #   rpc_conn = Nanook::Rpc.new
+  #   account = Nanook::WalletAccount.new(rpc_conn, wallet_id, account_id)
   class WalletAccount
 
     extend Forwardable
     # @!method balance(unit: Nanook.default_unit)
     #   (see Nanook::Account#balance)
-    # @!method delegators
+    # @!method block_count
+    #   (see Nanook::Account#block_count)
+    # @!method delegators(unit: Nanook.default_unit)
     #   (see Nanook::Account#delegators)
     # @!method exists?
     #   (see Nanook::Account#exists?)
@@ -16,7 +32,7 @@ class Nanook
     #   (see Nanook::Account#info)
     # @!method last_modified_at
     #   (see Nanook::Account#last_modified_at)
-    # @!method ledger(limit: 1)
+    # @!method ledger(limit: 1, modified_since: nil, unit: Nanook.default_unit)
     #   (see Nanook::Account#ledger)
     # @!method pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
     #   (see Nanook::Account#pending)
@@ -61,6 +77,7 @@ class Nanook
     #   if invoked with no argument
     # @return [Array<Nanook::WalletAccount>] returns an Array of {Nanook::WalletAccount}
     #   if method was called with argument +n+ >  1
+    # @raise [ArgumentError] if +n+ is less than 1
     def create(n=1)
       if n < 1
         raise ArgumentError.new("number of accounts must be greater than 0")
@@ -81,7 +98,7 @@ class Nanook
     #
     #   account.destroy # => true
     #
-    # @return [Boolean] true if action was successful, otherwise +false+
+    # @return [Boolean] +true+ if action was successful, otherwise +false+
     def destroy
       rpc(:account_remove)[:removed] == 1
     end
@@ -91,7 +108,7 @@ class Nanook
       "#{self.class.name}(wallet_id: #{@wallet}, account_id: #{id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
 
-    # Make a payment from an account in this wallet to another account
+    # Makes a payment from this account to another account
     # on the nano network. Returns a <i>send</i> block hash
     # if successful, or a {Nanook::Error} if unsuccessful.
     #

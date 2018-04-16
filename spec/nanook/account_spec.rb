@@ -407,7 +407,7 @@ RSpec.describe Nanook::Account do
           \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
           \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
           \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"balance\": \"0\",
+          \"balance\": \"100000000000000000000000000000000\",
           \"modified_timestamp\": \"1511476234\",
           \"block_count\": \"2\"
         }
@@ -415,7 +415,35 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).ledger).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    response = Nanook.new.account(account_id).ledger
+    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    expect(response[:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
+  end
+
+  it "account ledger with modified_since" do
+    t = Time.now
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\",\"modified_since\":\"#{t.to_i}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\": {
+        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
+          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"balance\": \"100000000000000000000000000000000\",
+          \"modified_timestamp\": \"1511476234\",
+          \"block_count\": \"2\"
+        }
+      } }",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).ledger(modified_since: t)
+    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    expect(response[:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
   end
 
   it "account ledger with limit" do
@@ -429,7 +457,7 @@ RSpec.describe Nanook::Account do
           \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
           \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
           \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"balance\": \"0\",
+          \"balance\": \"100000000000000000000000000000000\",
           \"modified_timestamp\": \"1511476234\",
           \"block_count\": \"2\"
         }
@@ -437,7 +465,32 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).ledger(limit: 10)).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    response = Nanook.new.account(account_id).ledger(limit: 10)
+    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+  end
+
+  it "account ledger with raw unit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\": {
+        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
+          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"balance\": \"100000000000000000000000000000000\",
+          \"modified_timestamp\": \"1511476234\",
+          \"block_count\": \"2\"
+        }
+      } }",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).ledger(unit: :raw)
+    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    expect(response[:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq 100000000000000000000000000000000
   end
 
   it "account exists? when exists" do
@@ -484,7 +537,27 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).delegators).to have_key(:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
+    response = Nanook.new.account(account_id).delegators
+    expect(response).to have_key(:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
+    expect(response[:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500000)
+  end
+
+  it "account delegators with unit" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"delegators\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"delegators\": {
+        \"xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd\":\"500000000000000000000000000000000000\",
+        \"xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn\":\"961647970820730000000000000000000000\"
+      }}",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).delegators(unit: :raw)
+    expect(response).to have_key(:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
+    expect(response[:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500000000000000000000000000000000000)
   end
 
   it "account last_modified_at" do

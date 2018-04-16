@@ -11,7 +11,7 @@ This is a Ruby library for managing a [nano currency](https://nano.org/) node, i
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nanook', "~> 2.1"
+gem 'nanook', "~> 2.2"
 ```
 
 And then execute:
@@ -120,11 +120,11 @@ wallet.receive(block_id, into: account_id)
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.1.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: the classes are listed under the "**Nanook** < Object" item in the sidebar).
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.2.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: the classes are listed under the "**Nanook** < Object" item in the sidebar).
 
 ### Wallets
 
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/2.1.0/Nanook/Wallet.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/2.2.0/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 #### Create wallet:
 
@@ -185,7 +185,7 @@ Nanook.new.wallet(wallet_id).account.create(5)
 
 #### Working with a single account:
 
-See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/2.1.0/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/2.2.0/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
 
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
@@ -208,11 +208,14 @@ account.info(unit: :raw)
 account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
+account.ledger(modified_since: Time.now)
+account.ledger(unit: :raw)
 account.history
 account.history(limit: 1)
 account.history(unit: :raw)
 account.public_key
 account.delegators
+account.delegators(unit: :raw)
 account.representative
 account.change_representative(new_representative)
 account.weight
@@ -222,7 +225,7 @@ account.destroy
 
 #### Working with any account (not necessarily in your wallet):
 
-See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.1.0/Nanook/Account.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.2.0/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
 account = Nanook.new.account(account_id)
@@ -241,18 +244,21 @@ account.info(unit: :raw)
 account.last_modified_at
 account.ledger
 account.ledger(limit: 10)
+account.ledger(modified_since: Time.now)
+account.ledger(unit: :raw)
 account.history
 account.history(limit: 1)
 account.history(unit: :raw)
 account.public_key
 account.delegators
+account.delegators(unit: :raw)
 account.representative
 account.weight
 ```
 
 ### Blocks
 
-See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.1.0/Nanook/Block.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.2.0/Nanook/Block.html) for a detailed description of each method and example responses.
 
 ```ruby
 block = Nanook.new.block(block_id)
@@ -279,20 +285,23 @@ block.is_valid_work?(work_id)
 
 ### Managing your nano node
 
+See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/2.2.0/Nanook/Node.html) for a detailed description of each method and example responses.
+
 ```ruby
 node = Nanook.new.node
 
 node.account_count
 node.block_count
-node.block_count_type
+node.block_count_by_type
 node.bootstrap_any
 node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
 node.peers
 node.representatives
+node.representatives(unit: :raw)
+node.representatives_online
 node.synchronizing_blocks
 node.synchronizing_blocks(limit: 1)
 node.sync_progress
-node.synced?
 node.version
 
 node.stop

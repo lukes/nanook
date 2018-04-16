@@ -28,7 +28,7 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.block_count).to have_key(:count)
   end
 
-  it "should request block_count_type correctly" do
+  it "should request block_count_by_type correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"block_count_type\"}",
       headers: headers
@@ -38,7 +38,7 @@ RSpec.describe Nanook::Node do
       headers: {}
     )
 
-    expect(Nanook.new.node.block_count_type).to have_key(:send)
+    expect(Nanook.new.node.block_count_by_type).to have_key(:send)
   end
 
   it "should request bootstrap correctly" do
@@ -103,7 +103,39 @@ RSpec.describe Nanook::Node do
       headers: {}
     )
 
-    expect(Nanook.new.node.representatives).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
+    response = Nanook.new.node.representatives
+    expect(response).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
+    expect(response[:xrb_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372.32706017)
+  end
+
+  it "should request representatives with unit correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"representatives\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"representatives\":{\"xrb_1111111111111111111111111111111111111111111111111117353trpda\":\"3822372327060170000000000000000000000\",\"xrb_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"30999999999999999999999999000000\",\"xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"0\"}}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.representatives(unit: :raw)
+    expect(response).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
+    expect(response[:xrb_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372327060170000000000000000000000)
+  end
+
+  it "should request representatives_online correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"representatives_online\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"representatives\":{\"xrb_1111111111111111111111111111111111111111111111111117353trpda\":\"\",\"xrb_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"\",\"xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"\"}}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.representatives_online
+    expect(response).to have(3).items
+    expect(response.first).to eq("xrb_1111111111111111111111111111111111111111111111111117353trpda")
   end
 
   it "should request peers correctly" do
