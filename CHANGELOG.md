@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - New `Nanook::Account#block_count` method returns number of blocks in ledger for an account.
+- `Account#delegators` now takes `unit` argument.
 - `Account#ledger` now takes `unit` argument.
 - `Nanook::Node#block_count_type` is now an alias to the preferred `#block_count_by_type`
   method.

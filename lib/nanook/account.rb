@@ -34,9 +34,24 @@ class Nanook
     #     :xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn=>961647970820730000000000000000000000
     #   }
     #
+    # @param unit (see #balance)
     # @return [Hash{Symbol=>Integer}] account ids which delegate to this account, and their account balance
-    def delegators
-      rpc(:delegators)[:delegators]
+    def delegators(unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
+      response = rpc(:delegators)[:delegators]
+
+      return response if unit == :raw
+
+      r = response.map do |account_id, balance|
+        balance = Nanook::Util.raw_to_NANO(balance)
+
+        [account_id, balance]
+      end
+
+      Hash[r].to_symbolized_hash
     end
 
     # Returns true if the account has an <i>open</i> block.
@@ -313,6 +328,7 @@ class Nanook
     #  }
     #
     # @param [Integer] limit number of accounts to return in the ledger (default is 1)
+    # @param unit (see #balance)
     # @return [Hash{Symbol=>String|Integer}]
     def ledger(limit: 1, unit: Nanook.default_unit)
       unless Nanook::UNITS.include?(unit)

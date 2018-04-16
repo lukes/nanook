@@ -214,6 +214,7 @@ account.history(limit: 1)
 account.history(unit: :raw)
 account.public_key
 account.delegators
+account.delegators(unit: :raw)
 account.representative
 account.change_representative(new_representative)
 account.weight
@@ -248,6 +249,7 @@ account.history(limit: 1)
 account.history(unit: :raw)
 account.public_key
 account.delegators
+account.delegators(unit: :raw)
 account.representative
 account.weight
 ```
