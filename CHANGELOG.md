@@ -9,11 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - New `Nanook::Account#block_count` method returns number of blocks in ledger for an account.
-- `Nanook::Account#delegators` now takes `unit` argument.
-- `Nanook::Account#ledger` now takes `unit` and `modified_since` arguments.
 - `Nanook::Node#block_count_type` is now an alias to the preferred `#block_count_by_type`
   method.
-- `Nanook::Node#representatives` now takes `unit` argument.
 - new `Nanook::Node#representatives_online` method.
 - `Nanook::Node#synchronizing_blocks` aliased by `#unchecked`, for people familiar with
   what the RPC calls it.
@@ -28,6 +25,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- `Nanook::Account#delegators` now takes `unit` argument.
+- `Nanook::Account#ledger` now takes `unit` and `modified_since` arguments.
+- `Nanook::Node#representatives` now takes `unit` argument.
 - `Nanook::Node#synced?` is deprecated with a `warn`. Nodes never seem to reach 100%
   synchronized, so this method is useless.
 - `Nanook::Rpc::DEFAULT_TIMEOUT` reduced from 500 to 60.
