@@ -76,7 +76,7 @@ src="https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield"></a></p>
 
 <p>Add this line to your application&#39;s Gemfile:</p>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>nanook</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>~&gt; 2.1</span><span class='tstring_end'>&quot;</span></span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>nanook</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>~&gt; 2.2</span><span class='tstring_end'>&quot;</span></span>
 </code></pre>
 
 <p>And then execute:</p>
@@ -199,7 +199,7 @@ discovered it through calling <code>account.pending</code> for example):</p>
 <h2 id="label-All+commands">All commands</h2>
 
 <p>Below is a quick reference list of commands. See the <a
-href="https://lukes.github.io/nanook/2.1.0/">full Nanook documentation</a>
+href="https://lukes.github.io/nanook/2.2.0/">full Nanook documentation</a>
 for a searchable detailed description of every class and method, what the
 arguments mean, and example responses (Tip: the classes are listed under
 the “<strong>Nanook</strong> &lt; Object” item in the sidebar).</p>
@@ -207,7 +207,7 @@ the “<strong>Nanook</strong> &lt; Object” item in the sidebar).</p>
 <h3 id="label-Wallets">Wallets</h3>
 
 <p>See the <a
-href="https://lukes.github.io/nanook/2.1.0/Nanook/Wallet.html">full
+href="https://lukes.github.io/nanook/2.2.0/Nanook/Wallet.html">full
 documentation for Nanook::Wallet</a> for a detailed description of each
 method and example responses.</p>
 
@@ -267,7 +267,7 @@ Nanook.new.wallet.restore(seed, accounts: 2) </code></p>
 <h4 id="label-Working+with+a+single+account-3A">Working with a single account:</h4>
 
 <p>See the <a
-href="https://lukes.github.io/nanook/2.1.0/Nanook/WalletAccount.html">full
+href="https://lukes.github.io/nanook/2.2.0/Nanook/WalletAccount.html">full
 documentation for Nanook::WalletAccount</a> for a detailed description of
 each method and example responses.</p>
 
@@ -291,11 +291,14 @@ each method and example responses.</p>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_last_modified_at'>last_modified_at</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>10</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>modified_since:</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_public_key'>public_key</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_delegators'>delegators</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_delegators'>delegators</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_representative'>representative</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_change_representative'>change_representative</span><span class='lparen'>(</span><span class='id identifier rubyid_new_representative'>new_representative</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_weight'>weight</span>
@@ -306,7 +309,7 @@ each method and example responses.</p>
 <h4 id="label-Working+with+any+account+-28not+necessarily+in+your+wallet-29-3A">Working with any account (not necessarily in your wallet):</h4>
 
 <p>See the <a
-href="https://lukes.github.io/nanook/2.1.0/Nanook/Account.html">full
+href="https://lukes.github.io/nanook/2.2.0/Nanook/Account.html">full
 documentation for Nanook::Account</a> for a detailed description of each
 method and example responses.</p>
 
@@ -326,11 +329,14 @@ method and example responses.</p>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_last_modified_at'>last_modified_at</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>10</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>modified_since:</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_public_key'>public_key</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_delegators'>delegators</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_delegators'>delegators</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_representative'>representative</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_weight'>weight</span>
 </code></pre>
@@ -338,7 +344,7 @@ method and example responses.</p>
 <h3 id="label-Blocks">Blocks</h3>
 
 <p>See the <a
-href="https://lukes.github.io/nanook/2.1.0/Nanook/Block.html">full
+href="https://lukes.github.io/nanook/2.2.0/Nanook/Block.html">full
 documentation for Nanook::Block</a> for a detailed description of each
 method and example responses.</p>
 
@@ -366,6 +372,11 @@ method and example responses.</p>
 
 <h3 id="label-Managing+your+nano+node">Managing your nano node</h3>
 
+<p>See the <a
+href="https://lukes.github.io/nanook/2.2.0/Nanook/Node.html">full
+documentation for Nanook::Node</a> for a detailed description of each
+method and example responses.</p>
+
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_node'><span class='object_link'><a href="Nanook.html#node-instance_method" title="Nanook#node (method)">node</a></span></span>
 
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_account_count'>account_count</span>
@@ -375,10 +386,11 @@ method and example responses.</p>
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_bootstrap'>bootstrap</span><span class='lparen'>(</span><span class='label'>address:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>::ffff:138.201.94.249</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>port:</span> <span class='int'>7075</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_peers'>peers</span>
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives'>representatives</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives'>representatives</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives_online'>representatives_online</span>
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_synchronizing_blocks'>synchronizing_blocks</span>
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_synchronizing_blocks'>synchronizing_blocks</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_sync_progress'>sync_progress</span>
-<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_synced?'>synced?</span>
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_version'>version</span>
 
 <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_stop'>stop</span>
@@ -457,7 +469,7 @@ src="https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png"></p>
 </div></div>
 
       <div id="footer">
-  Generated on Mon Apr 16 06:55:02 2018 by
+  Generated on Mon Apr 16 14:37:34 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.2.3).
 </div>

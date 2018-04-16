@@ -349,7 +349,7 @@ synchronized by the node.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#representatives-instance_method" title="#representatives (instance method)">#<strong>representatives</strong>  &#x21d2; Hash{Symbol=&gt;Integer} </a>
+      <a href="#representatives-instance_method" title="#representatives (instance method)">#<strong>representatives</strong>(unit: Nanook.default_unit)  &#x21d2; Hash{Symbol=&gt;Integer} </a>
     
 
     
@@ -365,6 +365,30 @@ synchronized by the node.</p>
   
     <span class="summary_desc"><div class='inline'>
 <p>All representatives and their voting weight.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#representatives_online-instance_method" title="#representatives_online (instance method)">#<strong>representatives_online</strong>  &#x21d2; Array&lt;String&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>All online representatives that have voted recently.</p>
 </div></span>
   
 </li>
@@ -961,7 +985,7 @@ synchronized by the node.</p>
       <div class="method_details ">
   <h3 class="signature " id="representatives-instance_method">
   
-    #<strong>representatives</strong>  &#x21d2; <tt>Hash{Symbol=&gt;Integer}</tt> 
+    #<strong>representatives</strong>(unit: Nanook.default_unit)  &#x21d2; <tt>Hash{Symbol=&gt;Integer}</tt> 
   
 
   
@@ -1018,13 +1042,105 @@ synchronized by the node.</p>
 
 117
 118
-119</pre>
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 117</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_representatives'>representatives</span>
-  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:representatives</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:representatives</span><span class='rbracket'>]</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_representatives'>representatives</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unsupported unit: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_unit'>unit</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:representatives</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:representatives</span><span class='rbracket'>]</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_response'>response</span> <span class='kw'>if</span> <span class='id identifier rubyid_unit'>unit</span> <span class='op'>==</span> <span class='symbol'>:raw</span>
+
+  <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_account_id'>account_id</span><span class='comma'>,</span> <span class='id identifier rubyid_balance'>balance</span><span class='op'>|</span>
+    <span class='id identifier rubyid_balance'>balance</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Util.html" title="Nanook::Util (class)">Util</a></span></span><span class='period'>.</span><span class='id identifier rubyid_raw_to_NANO'><span class='object_link'><a href="Util.html#raw_to_NANO-class_method" title="Nanook::Util.raw_to_NANO (method)">raw_to_NANO</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_balance'>balance</span><span class='rparen'>)</span>
+
+    <span class='lbracket'>[</span><span class='id identifier rubyid_account_id'>account_id</span><span class='comma'>,</span> <span class='id identifier rubyid_balance'>balance</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+
+  <span class='const'>Hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_r'>r</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_symbolized_hash'>to_symbolized_hash</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="representatives_online-instance_method">
+  
+    #<strong>representatives_online</strong>  &#x21d2; <tt>Array&lt;String&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>All online representatives that have voted recently. Note, due to the
+design of the nano RPC, this method cannot return the voting weight of the
+representatives.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives_online'>representatives_online</span> <span class='comment'># =&gt; [&quot;xrb_111...&quot;, &quot;xrb_222&quot;]
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;String&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>array of representative account ids</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+143
+144
+145</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 143</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_representatives_online'>representatives_online</span>
+  <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:representatives_online</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:representatives</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1075,12 +1191,12 @@ synchronized by the node.</p>
       <pre class="lines">
 
 
-124
-125
-126</pre>
+150
+151
+152</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 124</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 150</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stop'>stop</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:stop</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_has_key?'>has_key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
@@ -1137,18 +1253,18 @@ data is, and so the query methods in this class become more reliable.</p>
       <pre class="lines">
 
 
-147
-148
-149
-150
-151
-152
-153
-154
-155</pre>
+173
+174
+175
+176
+177
+178
+179
+180
+181</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 147</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 173</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sync_progress'>sync_progress</span>
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:block_count</span><span class='rparen'>)</span>
@@ -1209,13 +1325,13 @@ reaches 100% synchronization.</p>
       <pre class="lines">
 
 
-161
-162
-163
-164</pre>
+187
+188
+189
+190</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 161</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 187</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_synced?'>synced?</span>
   <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[DEPRECATION] `synced?` is deprecated and will be removed in 3.0</span><span class='tstring_end'>&quot;</span></span>
@@ -1294,16 +1410,16 @@ reaches 100% synchronization.</p>
       <pre class="lines">
 
 
-130
-131
-132
-133
-134
-135
-136</pre>
+156
+157
+158
+159
+160
+161
+162</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 130</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 156</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_synchronizing_blocks'>synchronizing_blocks</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1000</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:unchecked</span><span class='comma'>,</span> <span class='label'>count:</span> <span class='id identifier rubyid_limit'>limit</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:blocks</span><span class='rbracket'>]</span>
@@ -1365,12 +1481,12 @@ reaches 100% synchronization.</p>
       <pre class="lines">
 
 
-167
-168
-169</pre>
+193
+194
+195</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 167</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 193</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_version'>version</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:version</span><span class='rparen'>)</span>
@@ -1385,7 +1501,7 @@ reaches 100% synchronization.</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Apr 16 06:55:03 2018 by
+  Generated on Mon Apr 16 14:37:35 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.2.3).
 </div>
