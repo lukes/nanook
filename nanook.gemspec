@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["lduncalfe@eml.cc"]
 
   spec.summary       = "Library for managing a nano currency node, including making and receiving payments, using the nano RPC protocol"
-  spec.description   = "Ruby library for managing a nano currency node, including making and receiving payments, using the nano RPC protocol"
+  spec.description   = "Library for managing a nano currency node, including making and receiving payments, using the nano RPC protocol"
   spec.homepage      = "https://github.com/lukes/nanook"
   spec.license       = "MIT"
 
