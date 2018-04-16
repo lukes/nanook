@@ -7,7 +7,7 @@ class Nanook
   #
   #   "FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB"
   #
-  # Initialize this class through the convenient Nanook#block method:
+  # Initialize this class through the convenient {Nanook#block} method:
   #
   #   nanook = Nanook.new
   #   block = nanook.block("FBF8B0E...")
@@ -27,6 +27,7 @@ class Nanook
     # Returns the {Nanook::Account} of the block.
     #
     # ==== Example:
+    #
     #   block.account # => Nanook::Account
     #
     # @return [Nanook::Account] the account of the block
@@ -34,7 +35,7 @@ class Nanook
       Nanook::Account.new(@rpc, rpc(:block_account, :hash)[:account])
     end
 
-    # Stop generating work for a block.
+    # Stops generating the work for the block.
     #
     # ==== Example:
     #
@@ -52,23 +53,18 @@ class Nanook
     #
     # ==== Example:
     #
-    #   block.chain(limit: 2)
+    #   block.chain(limit: 2) # => ["36A0FB7...", "FBF8B0E..."]
     #
-    # ==== Example reponse:
-    #
-    #   [
-    #     "36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
-    #     "FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB"
-    #   ]
     # @param limit [Integer] maximum number of block hashes to return (default is 1000)
     def chain(limit: 1000)
       response = rpc(:chain, :block, count: limit)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
-    # Generate work for a block.
+    # Generates work for a block.
     #
     # ==== Example:
+    #
     #   block.generate_work # => "2bf29ef00786a6bc"
     #
     # @return [String] the work id of the work completed.
@@ -83,19 +79,20 @@ class Nanook
     #
     #   block.history(limit: 1)
     #
-    # ==== Example response:
+    # Example response:
     #
     #   [
     #     {
-    #       :account=>"xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
-    #       :amount=>539834279601145558517940224,
-    #       :hash=>"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
-    #       :type=>"send"
+    #       account: "xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
+    #       amount: 539834279601145558517940224,
+    #       hash: "36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
+    #       type: "send"
     #     }
     #   ]
     #
     # @param limit [Integer] maximum number of send/receive block hashes
     #   to return in the chain (default is 1000)
+    # @return [Hash{Symbol=>String|Integer}]
     def history(limit: 1000)
       rpc(:history, :hash, count: limit)[:history]
     end
@@ -118,20 +115,21 @@ class Nanook
     #   block.info
     #   block.info(allow_unchecked: true)
     #
-    # ==== Example response:
+    # Example response:
     #
     #   {
-    #     :id=>"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
-    #     :type=>"send",
-    #     :previous=>"FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB",
-    #     :destination=>"xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
-    #     :balance=>"00000000000000000000000000000000",
-    #     :work=>"44cc24b60705083a",
-    #     :signature=>"42ADFEFE7C3FFF188AE92A202F8A5734DE91779C454613E446EEC93D001D6C953E9FD16730AF32C891791BA8EDAECEB059A213E2FE1EEB7ADF9D5D0815464D06"
+    #     id:"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
+    #     type:"send",
+    #     previous:"FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB",
+    #     destination:"xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
+    #     balance:00000000000000000000000000000000,
+    #     work:"44cc24b60705083a",
+    #     signature:"42ADFEFE7C3FFF188AE92A202F8A5734DE91779C454613E446EEC93D001D6C953E9FD16730AF32C891791BA8EDAECEB059A213E2FE1EEB7ADF9D5D0815464D06"
     #   }
     #
     # @param allow_unchecked [Boolean] (default is +false+). If +true+,
     #   information can be returned about blocks that are unchecked (unverified).
+    # @return [Hash{Symbol=>String|Integer}]
     def info(allow_unchecked: false)
       if allow_unchecked
         response = rpc(:unchecked_get, :hash)
@@ -145,6 +143,8 @@ class Nanook
       _parse_info_response(response)
     end
 
+    # Checks if work is valid for the block.
+    #
     # ==== Example:
     #
     #   block.is_valid_work?("2bf29ef00786a6bc") # => true
@@ -156,18 +156,14 @@ class Nanook
       !response.empty? && response[:valid] == 1
     end
 
-    # Republish blocks starting at this block up the account chain
+    # Republishes blocks starting at this block up the account chain
     # back to the nano network.
-    #
-    # @return [Array<String>] block hashes that were republished
     #
     # ==== Example:
     #
-    #   block.republish
+    #   block.republish # => ["36A0FB7..."]
     #
-    # ==== Example response:
-    #
-    #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
+    # @return [Array<String>] block hashes that were republished
     def republish(destinations:nil, sources:nil)
       if !destinations.nil? && !sources.nil?
         raise ArgumentError.new("You must provide either destinations or sources but not both")
@@ -182,6 +178,8 @@ class Nanook
       rpc(:republish, :hash, params)[:blocks]
     end
 
+    # Returns +true+ if the block is pending (still synchronizing on your node)
+    #
     # ==== Example:
     #
     #   block.pending? #=> false
@@ -192,11 +190,11 @@ class Nanook
       !response.empty? && response[:exists] == 1
     end
 
-    # Publish the block to the nano network.
+    # Publishes the block to the nano network.
     #
-    # Note, if block has previously been published, use #republish instead.
+    # Note, if block has previously been published, use {#republish} instead.
     #
-    # ==== Examples:
+    # ==== Example:
     #
     #   block.publish # => "FBF8B0E..."
     #
@@ -213,11 +211,7 @@ class Nanook
     #
     # ==== Example:
     #
-    #   block.successors
-    #
-    # ==== Example response:
-    #
-    #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
+    #   block.successors # => ["36A0FB7..."]
     #
     # @param limit [Integer] maximum number of send/receive block hashes
     #    to return in the chain (default is 1000)
@@ -227,6 +221,7 @@ class Nanook
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
+    # @return [String]
     def inspect
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
     end
