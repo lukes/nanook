@@ -387,6 +387,45 @@ class Nanook
       account(into).receive(block)
     end
 
+    # The default representative account id for the wallet. This is the
+    # representative that new accounts created in this wallet will have
+    # set for them.
+    #
+    # Representatives are accounts that cast votes in the case of a
+    # fork in the network.
+    #
+    # ==== Example:
+    #
+    #   wallet.representative # => "xrb_3pc..."
+    #
+    # @return [String] Representative account of the account
+    def representative
+      rpc(:wallet_representative)[:representative]
+    end
+
+    # Sets the default representative for the wallet. New accounts created
+    # in this wallet will have this representative set for them.
+    #
+    # A representative is an account that will vote on your accounts'
+    # behalf on the nano network if your accounts are offline and there is
+    # a fork of the network that requires voting on.
+    #
+    # ==== Example:
+    #
+    #   wallet.change_representative("xrb_...") # => true
+    #
+    # @param [String] representative the id of the representative account
+    #   to set as this account's representative
+    # @return [Boolean] indicating success of the action
+    # @raise [ArgumentError] if the representative account does not exist
+    def change_representative(representative)
+      unless Nanook::Account.new(@rpc, representative).exists?
+        raise ArgumentError.new("Representative account does not exist: #{representative}")
+      end
+
+      rpc(:wallet_representative_set, representative: representative)[:set] == 1
+    end
+
     # Restores a previously created wallet by its seed.
     # A new wallet will be created on your node (with a new wallet id)
     # and will have its seed set to the given seed.
