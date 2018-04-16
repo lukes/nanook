@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Account#ledger` now takes `unit` argument.
 - `Nanook::Node#block_count_type` is now an alias to the preferred `#block_count_by_type`
   method.
+- `Nanook::Node#representatives` now takes `unit` argument.
 - `Nanook::Node#version` now an aliased by `#info`
   method.
 - `Nanook::Node#synchronizing_blocks` aliased by `#unchecked`, for people familiar with

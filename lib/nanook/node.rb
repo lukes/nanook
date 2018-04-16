@@ -114,8 +114,21 @@ class Nanook
     #   }
     #
     # @return [Hash{Symbol=>Integer}] known representatives and their voting weight
-    def representatives
-      rpc(:representatives)[:representatives]
+    def representatives(unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
+      response = rpc(:representatives)[:representatives]
+      return response if unit == :raw
+
+      r = response.map do |account_id, balance|
+        balance = Nanook::Util.raw_to_NANO(balance)
+
+        [account_id, balance]
+      end
+
+      Hash[r].to_symbolized_hash
     end
 
     # Safely shuts down the node.

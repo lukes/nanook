@@ -103,7 +103,24 @@ RSpec.describe Nanook::Node do
       headers: {}
     )
 
-    expect(Nanook.new.node.representatives).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
+    response = Nanook.new.node.representatives
+    expect(response).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
+    expect(response[:xrb_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372.32706017)
+  end
+
+  it "should request representatives with unit correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"representatives\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"representatives\":{\"xrb_1111111111111111111111111111111111111111111111111117353trpda\":\"3822372327060170000000000000000000000\",\"xrb_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"30999999999999999999999999000000\",\"xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"0\"}}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.representatives(unit: :raw)
+    expect(response).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
+    expect(response[:xrb_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372327060170000000000000000000000)
   end
 
   it "should request peers correctly" do
