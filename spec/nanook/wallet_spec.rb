@@ -607,7 +607,67 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    expect{ Nanook.new.wallet(wallet_id).change_representative(account_id) }.to raise_error(ArgumentError)
+    expect{ Nanook.new.wallet(wallet_id).change_default_representative(account_id) }.to raise_error(ArgumentError)
+  end
+
+  it "wallet info" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_ledger\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\": {
+        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
+          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"balance\": \"124000000000000000000000000000\",
+          \"modified_timestamp\": \"1511476234\",
+          \"block_count\": \"2\"
+        }
+      }  }",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).info
+    expect(response[:id]).to eq wallet_id
+    expect(response[:accounts]).to have(1).item
+    expect(response[:accounts][0][:frontier]).to eq("E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321")
+    expect(response[:accounts][0][:open_block]).to eq("643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F")
+    expect(response[:accounts][0][:representative_block]).to eq("643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F")
+    expect(response[:accounts][0][:balance]).to eq(0.124)
+    expect(response[:accounts][0][:modified_timestamp]).to eq(1511476234)
+    expect(response[:accounts][0][:block_count]).to eq(2)
+  end
+
+  it "wallet info with unit arg" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_ledger\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"accounts\": {
+        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
+          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
+          \"balance\": \"124000000000000000000000000000\",
+          \"modified_timestamp\": \"1511476234\",
+          \"block_count\": \"2\"
+        }
+      }  }",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).info(unit: :raw)
+    expect(response[:id]).to eq wallet_id
+    expect(response[:accounts]).to have(1).item
+    expect(response[:accounts][0][:frontier]).to eq("E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321")
+    expect(response[:accounts][0][:open_block]).to eq("643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F")
+    expect(response[:accounts][0][:representative_block]).to eq("643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F")
+    expect(response[:accounts][0][:balance]).to eq(124000000000000000000000000000)
+    expect(response[:accounts][0][:modified_timestamp]).to eq(1511476234)
+    expect(response[:accounts][0][:block_count]).to eq(2)
   end
 
 end

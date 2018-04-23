@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - New `Nanook::Wallet#default_representative` method.
 - New `Nanook::Wallet#change_default_representative` method.
+- New `Nanook::Wallet#info` method.
 
 ## 2.2.0
 

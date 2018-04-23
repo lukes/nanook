@@ -164,6 +164,8 @@ wallet.contains?(account_id)
 
 wallet.default_representative
 wallet.change_default_representative(new_representative)
+wallet.info
+wallet.info(unit: :raw)
 wallet.export
 wallet.locked?
 wallet.unlock(password)

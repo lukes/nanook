@@ -461,6 +461,53 @@ class Nanook
       self
     end
 
+    # Information about this wallet and all of its accounts.
+    #
+    # ==== Examples:
+    #
+    #   wallet.info
+    #
+    # Example response:
+    #
+    #   {
+    #     id: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
+    #     accounts: [
+    #       {
+    #         id: "xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n"
+    #         frontier: "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+    #         open_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+    #         representative_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+    #         balance: 1.45,
+    #         modified_timestamp: 1511476234,
+    #         block_count: 2
+    #       },
+    #       { ... }
+    #     ]
+    #   }
+    #
+    # @param unit (see #balance)
+    # @return [Hash{Symbol=>String|Array<Hash{Symbol=>String|Integer|Float}>}] information about the wallet.
+    #   See {Nanook::Account#info} for details of what is returned for each account.
+    def info(unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
+      wallet_required!
+      accounts = rpc(:wallet_ledger)[:accounts].map do |account_id, payload|
+        payload[:id] = account_id
+        if unit == :nano
+          payload[:balance] = Nanook::Util.raw_to_NANO(payload[:balance])
+        end
+        payload
+      end
+
+      {
+        id: @wallet,
+        accounts: accounts
+      }.to_symbolized_hash
+    end
+
     # Returns +true+ if the wallet is locked.
     #
     # ==== Example:
