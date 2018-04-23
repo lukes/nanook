@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- New `Nanook::Wallet#change_representative` method.
-- New `Nanook::Wallet#representative` method.
+- New `Nanook::Wallet#default_representative` method.
+- New `Nanook::Wallet#change_default_representative` method.
 
 ## 2.2.0
 

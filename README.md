@@ -162,6 +162,8 @@ wallet.account.create
 wallet.accounts
 wallet.contains?(account_id)
 
+wallet.default_representative
+wallet.change_default_representative(new_representative)
 wallet.export
 wallet.locked?
 wallet.unlock(password)

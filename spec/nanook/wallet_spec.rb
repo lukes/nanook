@@ -556,7 +556,7 @@ RSpec.describe Nanook::Wallet do
     expect(response["xrb_1111111111111111111111111111111111111111111111111117353trpda"][0][:block]).to eq "142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D"
   end
 
-  it "wallet representative" do
+  it "wallet default_representative" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_representative\",\"wallet\":\"#{wallet_id}\"}",
       headers: headers
@@ -566,10 +566,10 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).representative).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
+    expect(Nanook.new.wallet(wallet_id).default_representative).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
   end
 
-  it "wallet change_representative" do
+  it "wallet change_default_representative" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_representative_set\",\"wallet\":\"#{wallet_id}\",\"representative\":\"#{account_id}\"}",
       headers: headers
@@ -593,8 +593,8 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    response = Nanook.new.wallet(wallet_id).change_representative(account_id)
-    expect(response).to be true
+    response = Nanook.new.wallet(wallet_id).change_default_representative(account_id)
+    expect(response).to be account_id
   end
 
   it "wallet change_representative when representative does not exist" do
