@@ -141,7 +141,7 @@ class Nanook
     end
 
     # The representative account id for the account.
-    # Representatives are accounts which cast votes in the case of a
+    # Representatives are accounts that cast votes in the case of a
     # fork in the network.
     #
     # ==== Example:

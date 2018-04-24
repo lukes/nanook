@@ -18,7 +18,7 @@ class Nanook
   # person needs to know your wallet id as well as have access to run
   # RPC commands against your nano node to be able to control your accounts.
   #
-  # A _seed_ on the otherhand can be used to link any wallet to another
+  # A _seed_ on the other hand can be used to link any wallet to another
   # wallet's accounts, from anywhere in the nano network. This happens
   # by setting a wallet's seed to be the same as a previous wallet's seed.
   # When a wallet has the same seed as another wallet, any accounts
@@ -387,6 +387,50 @@ class Nanook
       account(into).receive(block)
     end
 
+    # The default representative account id for the wallet. This is the
+    # representative that all new accounts created in this wallet will have.
+    #
+    # Changing the default representative for a wallet does not change
+    # the representatives for any accounts that have been created.
+    #
+    # ==== Example:
+    #
+    #   wallet.default_representative # => "xrb_3pc..."
+    #
+    # @return [String] Representative account of the account
+    def default_representative
+      rpc(:wallet_representative)[:representative]
+    end
+    alias_method :representative, :default_representative
+
+    # Sets the default representative for the wallet. A wallet's default
+    # representative is the representative all new accounts created in
+    # the wallet will have. Changing the default representative for a
+    # wallet does not change the representatives for existing accounts
+    # in the wallet.
+    #
+    # ==== Example:
+    #
+    #   wallet.change_default_representative("xrb_...") # => "xrb_..."
+    #
+    # @param [String] representative the id of the representative account
+    #   to set as this account's representative
+    # @return [String] the representative account id
+    # @raise [ArgumentError] if the representative account does not exist
+    # @raise [Nanook::Error] if setting the representative fails
+    def change_default_representative(representative)
+      unless Nanook::Account.new(@rpc, representative).exists?
+        raise ArgumentError.new("Representative account does not exist: #{representative}")
+      end
+
+      if rpc(:wallet_representative_set, representative: representative)[:set] == 1
+        representative
+      else
+        raise Nanook::Error.new("Setting the representative failed")
+      end
+    end
+    alias_method :change_representative, :change_default_representative
+
     # Restores a previously created wallet by its seed.
     # A new wallet will be created on your node (with a new wallet id)
     # and will have its seed set to the given seed.
@@ -412,6 +456,53 @@ class Nanook
       end
 
       self
+    end
+
+    # Information about this wallet and all of its accounts.
+    #
+    # ==== Examples:
+    #
+    #   wallet.info
+    #
+    # Example response:
+    #
+    #   {
+    #     id: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
+    #     accounts: [
+    #       {
+    #         id: "xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n"
+    #         frontier: "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+    #         open_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+    #         representative_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+    #         balance: 1.45,
+    #         modified_timestamp: 1511476234,
+    #         block_count: 2
+    #       },
+    #       { ... }
+    #     ]
+    #   }
+    #
+    # @param unit (see #balance)
+    # @return [Hash{Symbol=>String|Array<Hash{Symbol=>String|Integer|Float}>}] information about the wallet.
+    #   See {Nanook::Account#info} for details of what is returned for each account.
+    def info(unit: Nanook.default_unit)
+      unless Nanook::UNITS.include?(unit)
+        raise ArgumentError.new("Unsupported unit: #{unit}")
+      end
+
+      wallet_required!
+      accounts = rpc(:wallet_ledger)[:accounts].map do |account_id, payload|
+        payload[:id] = account_id
+        if unit == :nano
+          payload[:balance] = Nanook::Util.raw_to_NANO(payload[:balance])
+        end
+        payload
+      end
+
+      {
+        id: @wallet,
+        accounts: accounts
+      }.to_symbolized_hash
     end
 
     # Returns +true+ if the wallet is locked.
