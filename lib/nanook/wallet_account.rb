@@ -206,7 +206,7 @@ class Nanook
     # broadcast to the nano network. The block contains the information
     # about the representative change for your account.
     #
-    # Also see {Nanook::Wallet#change_representative} for how to set a default
+    # Also see {Nanook::Wallet#change_default_representative} for how to set a default
     # representative for all new accounts created in a wallet.
     #
     # ==== Example:

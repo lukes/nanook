@@ -388,14 +388,10 @@ class Nanook
     end
 
     # The default representative account id for the wallet. This is the
-    # representative that all new accounts created in this wallet will have
-    # set.
+    # representative that all new accounts created in this wallet will have.
     #
     # Changing the default representative for a wallet does not change
     # the representatives for any accounts that have been created.
-    #
-    # Representatives are accounts that cast votes in the case of a
-    # fork in the network.
     #
     # ==== Example:
     #
@@ -406,12 +402,11 @@ class Nanook
       rpc(:wallet_representative)[:representative]
     end
 
-    # Sets the default representative for the wallet. New accounts created
-    # in this wallet will have this representative set for them.
-    #
-    # A representative is an account that will vote on your accounts'
-    # behalf on the nano network if your accounts are offline and there is
-    # a fork of the network that requires voting on.
+    # Sets the default representative for the wallet. A wallet's default
+    # representative is the representative all new accounts created in
+    # the wallet will have. Changing the default representative for a
+    # wallet does not change the representatives for existing accounts
+    # in the wallet.
     #
     # ==== Example:
     #
@@ -421,7 +416,7 @@ class Nanook
     #   to set as this account's representative
     # @return [String] the representative account id
     # @raise [ArgumentError] if the representative account does not exist
-    # @raise [Nanook::Error] if setting the representative failed
+    # @raise [Nanook::Error] if setting the representative fails
     def change_default_representative(representative)
       unless Nanook::Account.new(@rpc, representative).exists?
         raise ArgumentError.new("Representative account does not exist: #{representative}")
