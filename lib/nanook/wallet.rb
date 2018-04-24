@@ -401,6 +401,7 @@ class Nanook
     def default_representative
       rpc(:wallet_representative)[:representative]
     end
+    alias_method :representative, :default_representative
 
     # Sets the default representative for the wallet. A wallet's default
     # representative is the representative all new accounts created in
@@ -428,6 +429,7 @@ class Nanook
         raise Nanook::Error.new("Setting the representative failed")
       end
     end
+    alias_method :change_representative, :change_default_representative
 
     # Restores a previously created wallet by its seed.
     # A new wallet will be created on your node (with a new wallet id)
