@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Nanook 2.3.0 Documentation
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Nanook">Nanook</h1>
+
+<p>This is a Ruby library for managing a <a href="https://nano.org/">nano
+currency</a> node, including making and receiving payments, using the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol">nano RPC
+protocol</a>. Nano is a fee-less, fast, environmentally-friendly
+cryptocurrency. It&#39;s awesome. See <a
+href="https://nano.org/">nano.org</a>.</p>
+
+<p><a href="https://badge.fury.io/rb/nanook"><img
+src="https://badge.fury.io/rb/nanook.svg"></a> <a
+href="https://circleci.com/gh/lukes/nanook/tree/master"><img
+src="https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield"></a></p>
+
+<h2 id="label-Installation">Installation</h2>
+
+<p>Add this line to your application&#39;s Gemfile:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>nanook</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>~&gt; 2.3</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre class="code ruby"><code class="ruby">$ gem install nanook</code></pre>
+
+<h1 id="label-Getting+Started">Getting Started</h1>
+
+<h2 id="label-Initializing">Initializing</h2>
+
+<p>Nanook will by default connect to <code>http://localhost:7076</code>.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_nanook'>nanook</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span>
+</code></pre>
+
+<p>To connect to another host instead:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_nanook'>nanook</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://ip6-localhost:7076</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<h2 id="label-Basics">Basics</h2>
+
+<h3 id="label-Working+with+wallets+and+accounts">Working with wallets and accounts</h3>
+
+<p>Create a wallet:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Nanook/Wallet.html#create-instance_method" title="Nanook::Wallet#create (method)">create</a></span></span>
+</code></pre>
+
+<p>Create an account within a wallet:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Nanook/WalletAccount.html#create-instance_method" title="Nanook::WalletAccount#create (method)">create</a></span></span>
+</code></pre>
+
+<p>List accounts within a wallet:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_accounts'><span class='object_link'><a href="Nanook/Wallet.html#accounts-instance_method" title="Nanook::Wallet#accounts (method)">accounts</a></span></span>
+</code></pre>
+
+<h3 id="label-Sending+a+payment">Sending a payment</h3>
+
+<p>To send a payment from an account in a wallet:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='float'>0.2</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Or, a wallet:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='id identifier rubyid_your_account_id'>your_account_id</span><span class='comma'>,</span> <span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='float'>0.2</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>The <code>id</code> can be any string and needs to be unique per payment.
+It serves an important purpose; it allows you to make this call multiple
+times with the same <code>id</code> and be reassured that you will only
+ever send that nano payment once. From the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create">Nano
+RPC</a>:</p>
+
+<blockquote>
+<p>You can (and should) specify a unique id for each spend to provide
+idempotency. That means that if you [make the payment call] two times with
+the same id, the second request won&#39;t send any additional Nano.</p>
+</blockquote>
+
+<p>The unit of the <code>amount</code> is NANO (which is currently technically
+Mnano — see <a href="https://nano.org/en/faq#what-are-nano-units-">What are
+Nano’s Units</a>). You can pass an amount of raw instead by adding the
+<code>unit: :raw</code> argument:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>999</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Note, there may be a delay in receiving a response due to Proof of Work
+being done. From the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create">Nano
+RPC</a>:</p>
+
+<blockquote>
+<p>Proof of Work is precomputed for one transaction in the background. If it
+has been a while since your last transaction it will send instantly, the
+next one will need to wait for Proof of Work to be generated.</p>
+</blockquote>
+
+<h3 id="label-Receiving+a+payment">Receiving a payment</h3>
+
+<p>The simplest way to receive a payment is:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span>
+
+<span class='comment'># or:
+</span>
+<span class='id identifier rubyid_wallet'>wallet</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='label'>into:</span> <span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>The <code>receive</code> method when called as above will receive the
+latest pending payment for an account in a wallet. It will either return a
+block hash if a payment was received, or <code>false</code> if there were
+no pending payments to receive.</p>
+
+<p>You can also receive a specific pending block if you know it (you may have
+discovered it through calling <code>account.pending</code> for example):</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='id identifier rubyid_block_id'>block_id</span><span class='rparen'>)</span>
+
+<span class='comment'># or:
+</span>
+<span class='id identifier rubyid_wallet'>wallet</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='id identifier rubyid_block_id'>block_id</span><span class='comma'>,</span> <span class='label'>into:</span> <span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+</code></pre>
+
+<h2 id="label-All+commands">All commands</h2>
+
+<p>Below is a quick reference list of commands. See the <a
+href="https://lukes.github.io/nanook/2.3.0/">full Nanook documentation</a>
+for a searchable detailed description of every class and method, what the
+arguments mean, and example responses (Tip: the classes are listed under
+the “<strong>Nanook</strong> &lt; Object” item in the sidebar).</p>
+
+<h3 id="label-Wallets">Wallets</h3>
+
+<p>See the <a
+href="https://lukes.github.io/nanook/2.3.0/Nanook/Wallet.html">full
+documentation for Nanook::Wallet</a> for a detailed description of each
+method and example responses.</p>
+
+<h4 id="label-Create+wallet-3A">Create wallet:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Nanook/Wallet.html#create-instance_method" title="Nanook::Wallet#create (method)">create</a></span></span>
+</code></pre>
+
+<h4 id="label-Restoring+a+wallet+from+a+seed">Restoring a wallet from a seed</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='period'>.</span><span class='id identifier rubyid_restore'><span class='object_link'><a href="Nanook/Wallet.html#restore-instance_method" title="Nanook::Wallet#restore (method)">restore</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Optionally also restore the wallet&#39;s accounts: <code>ruby
+Nanook.new.wallet.restore(seed, accounts: 2) </code></p>
+
+<h4 id="label-Working+with+a+single+wallet-3A">Working with a single wallet:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>account_break_down:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='id identifier rubyid_your_account_id'>your_account_id</span><span class='comma'>,</span> <span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>2</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='id identifier rubyid_your_account_id'>your_account_id</span><span class='comma'>,</span> <span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>2</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='label'>into:</span> <span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='id identifier rubyid_pending_block_id'>pending_block_id</span><span class='comma'>,</span> <span class='label'>into:</span> <span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_accounts'>accounts</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_contains?'>contains?</span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_default_representative'>default_representative</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_change_default_representative'>change_default_representative</span><span class='lparen'>(</span><span class='id identifier rubyid_new_representative'>new_representative</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_export'>export</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_locked?'>locked?</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_unlock'>unlock</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_change_password'>change_password</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_destroy'>destroy</span>
+</code></pre>
+
+<h3 id="label-Accounts">Accounts</h3>
+
+<h4 id="label-Create+account-3A">Create account:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Nanook/WalletAccount.html#create-instance_method" title="Nanook::WalletAccount#create (method)">create</a></span></span>
+</code></pre>
+
+<h4 id="label-Create+multiple+accounts-3A">Create multiple accounts:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Nanook/WalletAccount.html#create-instance_method" title="Nanook::WalletAccount#create (method)">create</a></span></span><span class='lparen'>(</span><span class='int'>5</span><span class='rparen'>)</span>
+</code></pre>
+
+<h4 id="label-Working+with+a+single+account-3A">Working with a single account:</h4>
+
+<p>See the <a
+href="https://lukes.github.io/nanook/2.3.0/Nanook/WalletAccount.html">full
+documentation for Nanook::WalletAccount</a> for a detailed description of
+each method and example responses.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>2</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>2</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='id identifier rubyid_pending_block_id'>pending_block_id</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_last_modified_at'>last_modified_at</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>10</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>modified_since:</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_public_key'>public_key</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_delegators'>delegators</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_delegators'>delegators</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_representative'>representative</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_change_representative'>change_representative</span><span class='lparen'>(</span><span class='id identifier rubyid_new_representative'>new_representative</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_weight'>weight</span>
+
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_destroy'>destroy</span>
+</code></pre>
+
+<h4 id="label-Working+with+any+account+-28not+necessarily+in+your+wallet-29-3A">Working with any account (not necessarily in your wallet):</h4>
+
+<p>See the <a
+href="https://lukes.github.io/nanook/2.3.0/Nanook/Account.html">full
+documentation for Nanook::Account</a> for a detailed description of each
+method and example responses.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook.html#account-instance_method" title="Nanook#account (method)">account</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>detailed:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_last_modified_at'>last_modified_at</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>10</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>modified_since:</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_ledger'>ledger</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_public_key'>public_key</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_delegators'>delegators</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_delegators'>delegators</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_representative'>representative</span>
+<span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_weight'>weight</span>
+</code></pre>
+
+<h3 id="label-Blocks">Blocks</h3>
+
+<p>See the <a
+href="https://lukes.github.io/nanook/2.3.0/Nanook/Block.html">full
+documentation for Nanook::Block</a> for a detailed description of each
+method and example responses.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_block'>block</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_block'><span class='object_link'><a href="Nanook.html#block-instance_method" title="Nanook#block (method)">block</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_block_id'>block_id</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span>                        <span class='comment'># Verified blocks in the ledger
+</span><span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>allow_unchecked:</span> <span class='kw'>true</span><span class='rparen'>)</span> <span class='comment'># Verified blocks AND unchecked synchronizing blocks
+</span><span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_account'>account</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_chain'>chain</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_chain'>chain</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>10</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_history'>history</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>10</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_republish'>republish</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_republish'>republish</span><span class='lparen'>(</span><span class='label'>sources:</span> <span class='int'>2</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_republish'>republish</span><span class='lparen'>(</span><span class='label'>destinations:</span> <span class='int'>2</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_pending?'>pending?</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_publish'>publish</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_successors'>successors</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_successors'>successors</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>10</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_generate_work'>generate_work</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_cancel_work'>cancel_work</span>
+<span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_is_valid_work?'>is_valid_work?</span><span class='lparen'>(</span><span class='id identifier rubyid_work_id'>work_id</span><span class='rparen'>)</span>
+</code></pre>
+
+<h3 id="label-Managing+your+nano+node">Managing your nano node</h3>
+
+<p>See the <a
+href="https://lukes.github.io/nanook/2.3.0/Nanook/Node.html">full
+documentation for Nanook::Node</a> for a detailed description of each
+method and example responses.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_node'><span class='object_link'><a href="Nanook.html#node-instance_method" title="Nanook#node (method)">node</a></span></span>
+
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_account_count'>account_count</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_block_count'>block_count</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_block_count_by_type'>block_count_by_type</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_bootstrap_any'>bootstrap_any</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_bootstrap'>bootstrap</span><span class='lparen'>(</span><span class='label'>address:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>::ffff:138.201.94.249</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>port:</span> <span class='int'>7075</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_peers'>peers</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives'>representatives</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives'>representatives</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives_online'>representatives_online</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_synchronizing_blocks'>synchronizing_blocks</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_synchronizing_blocks'>synchronizing_blocks</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_sync_progress'>sync_progress</span>
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_version'>version</span>
+
+<span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_stop'>stop</span>
+</code></pre>
+
+<h3 id="label-Work+peers">Work peers</h3>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_work_peers'>work_peers</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_work_peers'><span class='object_link'><a href="Nanook.html#work_peers-instance_method" title="Nanook#work_peers (method)">work_peers</a></span></span>
+
+<span class='id identifier rubyid_work_peers'>work_peers</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='label'>address:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>::ffff:172.17.0.1:7076</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>port:</span> <span class='int'>7076</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_work_peers'>work_peers</span><span class='period'>.</span><span class='id identifier rubyid_clear'>clear</span>
+<span class='id identifier rubyid_work_peers'>work_peers</span><span class='period'>.</span><span class='id identifier rubyid_list'>list</span>
+</code></pre>
+
+<h3 id="label-Keys">Keys</h3>
+
+<h4 id="label-Create+private+public+key+pair-3A">Create private public key pair:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_key'><span class='object_link'><a href="Nanook.html#key-instance_method" title="Nanook#key (method)">key</a></span></span><span class='period'>.</span><span class='id identifier rubyid_generate'><span class='object_link'><a href="Nanook/Key.html#generate-instance_method" title="Nanook::Key#generate (method)">generate</a></span></span>
+<span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_key'><span class='object_link'><a href="Nanook.html#key-instance_method" title="Nanook#key (method)">key</a></span></span><span class='period'>.</span><span class='id identifier rubyid_generate'><span class='object_link'><a href="Nanook/Key.html#generate-instance_method" title="Nanook::Key#generate (method)">generate</a></span></span><span class='lparen'>(</span><span class='label'>seed:</span> <span class='id identifier rubyid_seed'>seed</span><span class='comma'>,</span> <span class='label'>index:</span> <span class='int'>0</span><span class='rparen'>)</span>
+</code></pre>
+
+<h4 id="label-Working+with+a+single+key">Working with a single key</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_key'>key</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_key'><span class='object_link'><a href="Nanook.html#key-instance_method" title="Nanook#key (method)">key</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_private_key'>private_key</span><span class='rparen'>)</span>
+
+<span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span>
+</code></pre>
+
+<h2 id="label-Nanook+Metal">Nanook Metal</h2>
+
+<p>You can do any call listed in the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol">Nano
+RPC</a> directly through the <code>rpc</code> method. The first argument
+should match the <code>action</code> of the RPC call, and then all
+remaining parameters are passed in as arguments.</p>
+
+<p>E.g., the <a
+href="https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create">accounts_create
+command</a> can be called like this:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Nano</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:accounts_create</span><span class='comma'>,</span> <span class='label'>wallet:</span> <span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='comma'>,</span> <span class='label'>count:</span> <span class='int'>2</span><span class='rparen'>)</span>
+</code></pre>
+
+<h2 id="label-Contributing">Contributing</h2>
+
+<p>Bug reports and pull requests are welcome. Pull requests with passing tests
+are even better.</p>
+
+<p>To run the test suite:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_exec'>exec</span> <span class='id identifier rubyid_rspec'>rspec</span> <span class='id identifier rubyid_spec'>spec</span>
+</code></pre>
+
+<p>To update the yard documentation:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_exec'>exec</span> <span class='id identifier rubyid_rake'>rake</span> <span class='id identifier rubyid_yard'>yard</span>
+</code></pre>
+
+<h2 id="label-License">License</h2>
+
+<p>The gem is available as open source under the terms of the <a
+href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+
+<h2 id="label-Buy+me+a+nano+coffee">Buy me a nano coffee</h2>
+
+<p>This library is totally free to use, but feel free to send some nano <a
+href="https://www.nanode.co/account/xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j">my
+way</a> if you&#39;d like to!</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j'>xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j</span>
+</code></pre>
+
+<p><img
+src="https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png"></p>
+</div></div>
+
+      <div id="footer">
+  Generated on Tue Apr 24 15:05:05 2018 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.12 (ruby-2.2.3).
+</div>
+
+    </div>
+  </body>
+</html>
