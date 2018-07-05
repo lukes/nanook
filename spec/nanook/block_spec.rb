@@ -72,7 +72,7 @@ RSpec.describe Nanook::Block do
 
   it "should request generate_work correctly" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"work_generate\",\"hash\":\"#{block}\"}",
+      body: "{\"action\":\"work_generate\",\"hash\":\"#{block}\",\"use_peers\":\"false\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -81,6 +81,19 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).generate_work).to eq "2bf29ef00786a6bc"
+  end
+
+  it "should request generate_work correctly with optional param user_peers true" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"work_generate\",\"hash\":\"#{block}\",\"use_peers\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"work\":\"2bf29ef00786a6bc\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).generate_work(use_peers: true)).to eq "2bf29ef00786a6bc"
   end
 
   it "should request history correctly" do

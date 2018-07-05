@@ -283,6 +283,7 @@ block.successors
 block.successors(limit: 10)
 
 block.generate_work
+block.generate_work(use_peers: true)
 block.cancel_work
 block.is_valid_work?(work_id)
 ```

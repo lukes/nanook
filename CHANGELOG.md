@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+### Added
+
 - New `Nanook::Node#confirmation_history` method.
+- New `Nanook::Node#work_peers` method.
+
 
 ## 2.3.0
 

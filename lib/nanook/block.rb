@@ -71,9 +71,12 @@ class Nanook
     # ==== Example:
     #   block.generate_work # => "2bf29ef00786a6bc"
     #
+    # @param use_peers [Boolean] if set to +true+, then the node will query
+    #   its work peers (if it has any, see {Nanook::Node#work_peers}).
+    #   When +false+, the node will only generate work locally (default is +false+)
     # @return [String] the work id of the work completed.
-    def generate_work
-      rpc(:work_generate, :hash)[:work]
+    def generate_work(use_peers: false)
+      rpc(:work_generate, :hash, use_peers: use_peers)[:work]
     end
 
     # Returns Array of Hashes containing information about a chain of
