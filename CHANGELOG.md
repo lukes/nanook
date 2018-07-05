@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - New `Nanook::Node#confirmation_history` method.
 - New `Nanook::Node#work_peers` method.
 
+### Changed
+
+- `Nanook::Block#generate_work` now can take optional `use_peers` argument.
 
 ## 2.3.0
 

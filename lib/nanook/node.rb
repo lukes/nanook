@@ -223,6 +223,11 @@ class Nanook
     end
     alias_method :info, :version
 
+    # @return [Array<String>] IP addresses of work peers for this node
+    def work_peers
+      rpc(:work_peers)[:work_peers]
+    end
+
     private
 
     def rpc(action, params={})

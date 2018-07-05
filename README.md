@@ -309,6 +309,7 @@ node.synchronizing_blocks
 node.synchronizing_blocks(limit: 1)
 node.sync_progress
 node.version
+node.work_peers
 
 node.stop
 ```

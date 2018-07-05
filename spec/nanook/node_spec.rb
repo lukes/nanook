@@ -180,6 +180,25 @@ RSpec.describe Nanook::Node do
     })
   end
 
+  it "should request work_peers correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"work_peers\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"work_peers\": [
+          \"::ffff:172.17.0.1:7076\"
+        ]
+      }",
+      headers: {}
+    )
+
+    work_peers = Nanook.new.node.work_peers
+    expect(work_peers).to have(1).item
+    expect(work_peers).to eq(["::ffff:172.17.0.1:7076"])
+  end
+
   it "should request stop correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"stop\"}",
