@@ -169,7 +169,7 @@ class Nanook
     #
     # @return [Array<String>] array of representative account ids
     def representatives_online
-      response = rpc(:representatives_online)[:representatives].keys.map(&:to_s)
+      rpc(:representatives_online)[:representatives].keys.map(&:to_s)
     end
 
     # Safely shuts down the node.
