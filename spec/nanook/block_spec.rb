@@ -96,6 +96,67 @@ RSpec.describe Nanook::Block do
     expect(Nanook.new.block(block).generate_work(use_peers: true)).to eq "2bf29ef00786a6bc"
   end
 
+  it "should request block_confirm correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_confirm\",\"hash\":\"#{block}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"started\":\"1\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).confirm).to eq true
+  end
+
+  it "should request confirmed_recently? correctly when hash is in confirmation history" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"confirmation_history\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"confirmations\": [
+          {
+            \"hash\": \"#{block}\",
+            \"tally\": \"80394786589602980996311817874549318248\"
+          },
+          {
+            \"hash\": \"F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667\",
+            \"tally\": \"68921714529890443063672782079965877749\"
+          }
+        ]
+      }",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).confirmed_recently?).to eq true
+  end
+
+  it "should request confirmed_recently? correctly when hash is not in confirmation history" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"confirmation_history\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"confirmations\": [
+          {
+            \"hash\": \"EA70B32C55C193345D625F766EEA2FCA52D3F2CCE0B3A30838CC543026BB0FEA\",
+            \"tally\": \"80394786589602980996311817874549318248\"
+          },
+          {
+            \"hash\": \"F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667\",
+            \"tally\": \"68921714529890443063672782079965877749\"
+          }
+        ]
+      }",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).confirmed_recently?).to eq false
+  end
+
   it "should request history correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"history\",\"hash\":\"#{block}\",\"count\":\"1000\"}",

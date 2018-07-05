@@ -272,6 +272,8 @@ block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing 
 block.account
 block.chain
 block.chain(limit: 10)
+block.confirm
+block.confirmed_recently?
 block.history
 block.history(limit: 10)
 block.republish
