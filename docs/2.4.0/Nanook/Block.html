@@ -260,9 +260,8 @@ block.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Checks if the block appears in the list of blocks recently confirmed by
-online representatives (which can also be queried for using
-Node::confirmation_history).</p>
+<p>Check if the block appears in the list of recently confirmed blocks by
+online representatives.</p>
 </div></span>
   
 </li>
@@ -818,7 +817,7 @@ return immediately with a boolean to indicate if the request for
 confirmation was successful. Note that this boolean does not indicate the
 confirmation status of the block. If confirmed, your block should appear in
 <span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span> within a short amount of time, or you
-can use the convenience method Node#confirmed_recently?</p>
+can use the convenience method <span class='object_link'><a href="#confirmed_recently%3F-instance_method" title="Nanook::Block#confirmed_recently? (method)">#confirmed_recently?</a></span></p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -886,18 +885,18 @@ can use the convenience method Node#confirmed_recently?</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Checks if the block appears in the list of blocks recently confirmed by
-online representatives (which can also be queried for using
-Node::confirmation_history).</p>
+<p>Check if the block appears in the list of recently confirmed blocks by
+online representatives. The full list of blocks can be queried for with
+<span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span>.</p>
 
 <p>This method can work in conjunction with <span class='object_link'><a href="#confirm-instance_method" title="Nanook::Block#confirm (method)">#confirm</a></span>, whereby
 you can send any block (old or new) out to online representatives to
 confirm. The confirmation process can take up to a couple of minutes.</p>
 
-<p><code>false</code> can indicate that the block is still in the process of
-being confirmed and that you should call the method again soon, or that it
-was confirmed earlier than the list available in
-Node::confirmation_history, or that it was not confirmed.</p>
+<p>The method returning <code>false</code> can indicate that the block is
+still in the process of being confirmed and that you should call the method
+again soon, or that it was confirmed earlier than the list available in
+<span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span>, or that it was not confirmed.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1716,7 +1715,7 @@ is 1000)</p>
 </div>
 
       <div id="footer">
-  Generated on Thu Jul  5 22:10:22 2018 by
+  Generated on Thu Jul  5 22:18:40 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.2.3).
 </div>

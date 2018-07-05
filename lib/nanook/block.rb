@@ -71,7 +71,7 @@ class Nanook
     # confirmation was successful. Note that this boolean does not indicate
     # the confirmation status of the block. If confirmed, your block should
     # appear in {Nanook::Node#confirmation_history} within a short amount of
-    # time, or you can use the convenience method {Nanook::Node#confirmed_recently?}
+    # time, or you can use the convenience method {Nanook::Block#confirmed_recently?}
     #
     # ==== Example:
     #   block.confirm # => true
@@ -81,16 +81,16 @@ class Nanook
       rpc(:block_confirm, :hash)[:started] == 1
     end
 
-    # Checks if the block appears in the list of blocks recently confirmed by
-    # online representatives (which can also be queried for using {Nanook::Node::confirmation_history}).
+    # Check if the block appears in the list of recently confirmed blocks by
+    # online representatives. The full list of blocks can be queried for with {Nanook::Node#confirmation_history}.
     #
     # This method can work in conjunction with {Nanook::Block#confirm},
     # whereby you can send any block (old or new) out to online representatives to
     # confirm. The confirmation process can take up to a couple of minutes.
     #
-    # +false+ can indicate that the block is still in the process of being
+    # The method returning +false+ can indicate that the block is still in the process of being
     # confirmed and that you should call the method again soon, or that it
-    # was confirmed earlier than the list available in {Nanook::Node::confirmation_history},
+    # was confirmed earlier than the list available in {Nanook::Node#confirmation_history},
     # or that it was not confirmed.
     #
     # ==== Example:
