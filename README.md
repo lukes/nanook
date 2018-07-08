@@ -349,7 +349,7 @@ You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/rai
 E.g., the [accounts_create command](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create) can be called like this:
 
 ```ruby
-Nano.new.rpc(:accounts_create, wallet: wallet_id, count: 2)
+Nanook.new.rpc.call(:accounts_create, wallet: wallet_id, count: 2)
 ```
 
 ## Contributing
