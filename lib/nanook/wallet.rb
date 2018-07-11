@@ -33,7 +33,7 @@ class Nanook
   # want to restore the wallet anywhere else on the nano network besides
   # the node you originally created it on. The nano command line interface
   # (CLI) is the only method for discovering a wallet's seed. See the
-  # {https://github.com/nanocurrency/raiblocks/wiki/Command-line-interface
+  # {https://developers.nano.org/docs/command-line-interface/#wallet_decrypt_unsafe
   # --wallet_decrypt_unsafe CLI command}.
   #
   # === Initializing
