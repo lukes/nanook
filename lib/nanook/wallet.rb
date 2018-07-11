@@ -254,7 +254,7 @@ class Nanook
     # on the nano network.
     #
     # Note, there may be a delay in receiving a response due to Proof of
-    # Work being done. From the {Nano RPC}[https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create]:
+    # Work being done. From the {Nano RPC}[https://developers.nano.org/docs/rpc#send]:
     #
     # <i>Proof of Work is precomputed for one transaction in the
     # background. If it has been a while since your last transaction it

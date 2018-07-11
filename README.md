@@ -1,6 +1,6 @@
 # Nanook
 
-This is a Ruby library for managing a [nano currency](https://nano.org/) node, including making and receiving payments, using the [nano RPC protocol](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol). Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It's awesome. See [https://nano.org](https://nano.org/).
+This is a Ruby library for managing a [nano currency](https://nano.org/) node, including making and receiving payments, using the [nano RPC protocol](https://developers.nano.org/docs/rpc). Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It's awesome. See [https://nano.org](https://nano.org/).
 
 [![Gem Version](https://badge.fury.io/rb/nanook.svg)](https://badge.fury.io/rb/nanook)
 [![CircleCI](https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield)](https://circleci.com/gh/lukes/nanook/tree/master)
@@ -76,7 +76,7 @@ wallet = Nanook.new.wallet(wallet_id)
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: unique_id)
 ```
 
-The `id` can be any string and needs to be unique per payment. It serves an important purpose; it allows you to make this call multiple times with the same `id` and be reassured that you will only ever send that nano payment once. From the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create):
+The `id` can be any string and needs to be unique per payment. It serves an important purpose; it allows you to make this call multiple times with the same `id` and be reassured that you will only ever send that nano payment once. From the [Nano RPC](https://developers.nano.org/docs/rpc#send):
 
 > You can (and should) specify a unique id for each spend to provide idempotency. That means that if you [make the payment call] two times with the same id, the second request won't send any additional Nano.
 
@@ -86,7 +86,7 @@ The unit of the `amount` is NANO (which is currently technically Mnano &mdash; s
 account.pay(to: recipient_account_id, amount: 999, unit: :raw, id: unique_id)
 ```
 
-Note, there may be a delay in receiving a response due to Proof of Work being done. From the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#account-create):
+Note, there may be a delay in receiving a response due to Proof of Work being done. From the [Nano RPC](https://developers.nano.org/docs/rpc#send):
 
 > Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.
 
@@ -344,9 +344,9 @@ key.info
 
 ## Nanook Metal
 
-You can do any call listed in the [Nano RPC](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol) directly through the `rpc` method. The first argument should match the `action` of the RPC call, and then all remaining parameters are passed in as arguments.
+You can do any call listed in the [Nano RPC](https://developers.nano.org/docs/rpc) directly through the `rpc` method. The first argument should match the `action` of the RPC call, and then all remaining parameters are passed in as arguments.
 
-E.g., the [accounts_create command](https://github.com/nanocurrency/raiblocks/wiki/RPC-protocol#accounts-create) can be called like this:
+E.g., the [accounts_create command](https://developers.nano.org/docs/rpc#accounts-create) can be called like this:
 
 ```ruby
 Nanook.new.rpc.call(:accounts_create, wallet: wallet_id, count: 2)
