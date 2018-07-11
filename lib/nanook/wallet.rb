@@ -508,8 +508,7 @@ class Nanook
       }.to_symbolized_hash
     end
 
-    # Locks the wallet. When a wallet is locked you cannot pocket pending
-    # transaction, or make payments. See {#unlock}.
+    # Locks the wallet. A locked wallet cannot pocket pending transactions or make payments. See {#unlock}.
     #
     # ==== Example:
     #
