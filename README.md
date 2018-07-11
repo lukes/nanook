@@ -159,6 +159,7 @@ wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
 
 wallet.account.create
+wallet.account.create(5)
 wallet.accounts
 wallet.contains?(account_id)
 
