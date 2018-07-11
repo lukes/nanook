@@ -171,6 +171,9 @@ class Nanook
 
     # Changes a wallet's seed.
     #
+    # It's recommended to only change the seed of a wallet that contains
+    # no accounts.
+    #
     # ==== Example:
     #
     #   wallet.change_seed("000D1BA...") # => true
