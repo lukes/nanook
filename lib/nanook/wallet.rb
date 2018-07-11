@@ -508,6 +508,20 @@ class Nanook
       }.to_symbolized_hash
     end
 
+    # Locks the wallet. When a wallet is locked you cannot pocket pending
+    # transaction, or make payments. See {#unlock}.
+    #
+    # ==== Example:
+    #
+    #   wallet.lock #=> true
+    #
+    # @return [Boolean] indicates if the wallet was successfully locked
+    def lock
+      wallet_required!
+      response = rpc(:wallet_lock)
+      !response.empty? && response[:locked] == 1
+    end
+
     # Returns +true+ if the wallet is locked.
     #
     # ==== Example:

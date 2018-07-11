@@ -167,6 +167,8 @@ wallet.change_default_representative(new_representative)
 wallet.info
 wallet.info(unit: :raw)
 wallet.export
+
+wallet.lock
 wallet.locked?
 wallet.unlock(password)
 wallet.change_password(password)
