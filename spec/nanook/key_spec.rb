@@ -11,7 +11,7 @@ RSpec.describe Nanook::Key do
       status: 200,
       body: "{\"private\":\"781186FB9EF17DB6E3D1056550D9FAE5D5BBADA6A6BC370E4CBB938B1DC71DA3\",
       \"public\":\"3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039\",
-      \"account\":\"xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx\"}",
+      \"account\":\"nano_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx\"}",
       headers: {}
     )
 
@@ -26,7 +26,7 @@ RSpec.describe Nanook::Key do
       status: 200,
       body: "{\"private\":\"781186FB9EF17DB6E3D1056550D9FAE5D5BBADA6A6BC370E4CBB938B1DC71DA3\",
       \"public\":\"3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039\",
-      \"account\":\"xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx\"}",
+      \"account\":\"nano_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx\"}",
       headers: {}
     )
 
@@ -43,7 +43,7 @@ RSpec.describe Nanook::Key do
       status: 200,
       body: "{\"private\":\"781186FB9EF17DB6E3D1056550D9FAE5D5BBADA6A6BC370E4CBB938B1DC71DA3\",
       \"public\":\"3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039\",
-      \"account\":\"xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx\"}",
+      \"account\":\"nano_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx\"}",
       headers: {}
     )
 

@@ -120,11 +120,11 @@ wallet.receive(block_id, into: account_id)
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.4.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: the classes are listed under the "**Nanook** < Object" item in the sidebar).
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.5.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: the classes are listed under the "**Nanook** < Object" item in the sidebar).
 
 ### Wallets
 
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/2.4.0/Nanook/Wallet.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/2.5.0/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 #### Create wallet:
 
@@ -159,6 +159,7 @@ wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
 
 wallet.account.create
+wallet.account.create(5)
 wallet.accounts
 wallet.contains?(account_id)
 
@@ -167,6 +168,7 @@ wallet.change_default_representative(new_representative)
 wallet.info
 wallet.info(unit: :raw)
 wallet.export
+wallet.lock
 wallet.locked?
 wallet.unlock(password)
 wallet.change_password(password)
@@ -189,7 +191,7 @@ Nanook.new.wallet(wallet_id).account.create(5)
 
 #### Working with a single account:
 
-See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/2.4.0/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/2.5.0/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
 
 ```ruby
 account = Nanook.new.wallet(wallet_id).account(account_id)
@@ -229,7 +231,7 @@ account.destroy
 
 #### Working with any account (not necessarily in your wallet):
 
-See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.4.0/Nanook/Account.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.5.0/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
 account = Nanook.new.account(account_id)
@@ -262,7 +264,7 @@ account.weight
 
 ### Blocks
 
-See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.4.0/Nanook/Block.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.5.0/Nanook/Block.html) for a detailed description of each method and example responses.
 
 ```ruby
 block = Nanook.new.block(block_id)
@@ -272,6 +274,7 @@ block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing 
 block.account
 block.chain
 block.chain(limit: 10)
+block.chain(offset: 10)
 block.confirm
 block.confirmed_recently?
 block.history
@@ -283,6 +286,7 @@ block.pending?
 block.publish
 block.successors
 block.successors(limit: 10)
+block.successors(offset: 10)
 
 block.generate_work
 block.generate_work(use_peers: true)
@@ -292,7 +296,7 @@ block.is_valid_work?(work_id)
 
 ### Managing your nano node
 
-See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/2.4.0/Nanook/Node.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/2.5.0/Nanook/Node.html) for a detailed description of each method and example responses.
 
 ```ruby
 node = Nanook.new.node
@@ -300,9 +304,14 @@ node = Nanook.new.node
 node.account_count
 node.block_count
 node.block_count_by_type
-node.bootstrap_any
 node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
+node.bootstrap_any
+node.bootstrap_lazy(block_id)
+node.bootstrap_lazy(block_id, force: true)
+node.bootstrap_status
 node.confirmation_history
+node.difficulty
+node.difficulty(include_trend: true)
 node.peers
 node.representatives
 node.representatives(unit: :raw)
@@ -370,11 +379,11 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Buy me a nano coffee
 
-This library is totally free to use, but feel free to send some nano [my way](https://www.nanode.co/account/xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j) if you'd like to!
+This library is totally free to use, but feel free to send some nano [my way](https://www.nanode.co/account/nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j) if you'd like to!
 
-    xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j
+    nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j
 
-![alt xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j](https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png)
+![alt nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j](https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png)
 
 
 

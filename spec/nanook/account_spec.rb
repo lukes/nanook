@@ -1,7 +1,7 @@
 RSpec.describe Nanook::Account do
 
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
-  let(:account_id) { "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
+  let(:account_id) { "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
 
   it "account history" do
     stub_request(:post, uri).with(
@@ -13,7 +13,7 @@ RSpec.describe Nanook::Account do
         \"history\": [{
                 \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
                 \"type\": \"receive\",
-                \"account\": \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"account\": \"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
                 \"amount\": \"100000000000000000000000000000000\"
         }]
     }",
@@ -35,7 +35,7 @@ RSpec.describe Nanook::Account do
         \"history\": [{
                 \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
                 \"type\": \"receive\",
-                \"account\": \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"account\": \"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
                 \"amount\": \"100000000000000000000000000000000\"
         }]
     }",
@@ -57,7 +57,7 @@ RSpec.describe Nanook::Account do
         \"history\": [{
                 \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
                 \"type\": \"receive\",
-                \"account\": \"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"account\": \"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
                 \"amount\": \"100000000000000000000000000000000\"
         }]
     }",
@@ -118,11 +118,11 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"representative\":\"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
+      body: "{\"representative\":\"nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).representative).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
+    expect(Nanook.new.account(account_id).representative).to eq "nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
   end
 
   it "account info" do
@@ -187,7 +187,7 @@ RSpec.describe Nanook::Account do
 
     stub_request(:post, "http://localhost:7076/").
     with(
-      body: "{\"action\":\"account_weight\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      body: "{\"action\":\"account_weight\",\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
       headers: headers).
     to_return(status: 200, body: "{\"weight\":\"1\"}", headers: {})
 
@@ -205,7 +205,7 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"representative\":\"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
+      body: "{\"representative\":\"nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
       headers: {}
     )
 
@@ -229,7 +229,7 @@ RSpec.describe Nanook::Account do
     expect(response[:modified_timestamp]).to eq 1501793775
     expect(response[:block_count]).to eq 33
     expect(response[:weight]).to eq 1
-    expect(response[:representative]).to eq "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
+    expect(response[:representative]).to eq "nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
     expect(response[:public_key]).to eq "3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039"
   end
 
@@ -250,7 +250,7 @@ RSpec.describe Nanook::Account do
 
     stub_request(:post, "http://localhost:7076/").
     with(
-      body: "{\"action\":\"account_weight\",\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      body: "{\"action\":\"account_weight\",\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
       headers: headers).
     to_return(status: 200, body: "{\"weight\":\"1\"}", headers: {})
 
@@ -268,7 +268,7 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"representative\":\"xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
+      body: "{\"representative\":\"nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
       headers: {}
     )
 
@@ -334,7 +334,7 @@ RSpec.describe Nanook::Account do
       body: "{\"blocks\":{
         \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\": {
              \"amount\": \"6000000000000000000000000000000\",
-             \"source\": \"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr\"
+             \"source\": \"nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr\"
         }
     }}",
       headers: {}
@@ -342,7 +342,7 @@ RSpec.describe Nanook::Account do
 
     response = Nanook.new.account(account_id).pending(detailed: true)
     expect(response).to have(1).item
-    expect(response.first[:source]).to eq "xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    expect(response.first[:source]).to eq "nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
     expect(response.first[:amount]).to eq 6
     expect(response.first[:block]).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
   end
@@ -357,7 +357,7 @@ RSpec.describe Nanook::Account do
       body: "{\"blocks\":{
         \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\": {
              \"amount\": \"6000000000000000000000000000000\",
-             \"source\": \"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr\"
+             \"source\": \"nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr\"
         }
     }}",
       headers: {}
@@ -365,7 +365,7 @@ RSpec.describe Nanook::Account do
 
     response = Nanook.new.account(account_id).pending(detailed: true, unit: :raw)
     expect(response).to have(1).item
-    expect(response.first[:source]).to eq "xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    expect(response.first[:source]).to eq "nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
     expect(response.first[:amount]).to eq 6000000000000000000000000000000
     expect(response.first[:block]).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
   end
@@ -403,7 +403,7 @@ RSpec.describe Nanook::Account do
     ).to_return(
       status: 200,
       body: "{\"accounts\": {
-        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
           \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
           \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
           \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
@@ -416,8 +416,8 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).ledger
-    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
-    expect(response[:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
+    expect(response).to have_key(:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    expect(response[:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
   end
 
   it "account ledger with modified_since" do
@@ -429,7 +429,7 @@ RSpec.describe Nanook::Account do
     ).to_return(
       status: 200,
       body: "{\"accounts\": {
-        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
           \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
           \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
           \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
@@ -442,8 +442,8 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).ledger(modified_since: t)
-    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
-    expect(response[:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
+    expect(response).to have_key(:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    expect(response[:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
   end
 
   it "account ledger with limit" do
@@ -453,7 +453,7 @@ RSpec.describe Nanook::Account do
     ).to_return(
       status: 200,
       body: "{\"accounts\": {
-        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
           \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
           \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
           \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
@@ -466,7 +466,7 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).ledger(limit: 10)
-    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    expect(response).to have_key(:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
   end
 
   it "account ledger with raw unit" do
@@ -476,7 +476,7 @@ RSpec.describe Nanook::Account do
     ).to_return(
       status: 200,
       body: "{\"accounts\": {
-        \"xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
+        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
           \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
           \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
           \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
@@ -489,8 +489,8 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).ledger(unit: :raw)
-    expect(response).to have_key(:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
-    expect(response[:xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq 100000000000000000000000000000000
+    expect(response).to have_key(:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+    expect(response[:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq 100000000000000000000000000000000
   end
 
   it "account exists? when exists" do
@@ -531,15 +531,15 @@ RSpec.describe Nanook::Account do
     ).to_return(
       status: 200,
       body: "{\"delegators\": {
-        \"xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd\":\"500000000000000000000000000000000000\",
-        \"xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn\":\"961647970820730000000000000000000000\"
+        \"nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd\":\"500000000000000000000000000000000000\",
+        \"nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn\":\"961647970820730000000000000000000000\"
       }}",
       headers: {}
     )
 
     response = Nanook.new.account(account_id).delegators
-    expect(response).to have_key(:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
-    expect(response[:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500000)
+    expect(response).to have_key(:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
+    expect(response[:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500000)
   end
 
   it "account delegators with unit" do
@@ -549,15 +549,15 @@ RSpec.describe Nanook::Account do
     ).to_return(
       status: 200,
       body: "{\"delegators\": {
-        \"xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd\":\"500000000000000000000000000000000000\",
-        \"xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn\":\"961647970820730000000000000000000000\"
+        \"nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd\":\"500000000000000000000000000000000000\",
+        \"nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn\":\"961647970820730000000000000000000000\"
       }}",
       headers: {}
     )
 
     response = Nanook.new.account(account_id).delegators(unit: :raw)
-    expect(response).to have_key(:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
-    expect(response[:xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500000000000000000000000000000000000)
+    expect(response).to have_key(:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
+    expect(response[:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500000000000000000000000000000000000)
   end
 
   it "account last_modified_at" do

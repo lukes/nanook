@@ -58,7 +58,7 @@ class Nanook
   # Returns a new instance of {Nanook::Account}.
   #
   # ==== Example:
-  #   account = Nanook.new.account("xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
+  #   account = Nanook.new.account("nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
   #
   # @param account [String] the id of the account you want to work with
   # @return [Nanook::Account]

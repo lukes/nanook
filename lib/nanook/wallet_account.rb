@@ -119,8 +119,8 @@ class Nanook
     #
     # ==== Examples:
     #
-    #   account.pay(to: "xrb_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
-    #   account.pay(to: "xrb_...", amount: 54000000000000, id: "myUniqueId123", unit: :raw) # => "9AE2311..."
+    #   account.pay(to: "nano_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
+    #   account.pay(to: "nano_...", amount: 54000000000000, id: "myUniqueId123", unit: :raw) # => "9AE2311..."
     #
     # @param to [String] account id of the recipient of your payment
     # @param amount [Integer|Float]
@@ -211,7 +211,7 @@ class Nanook
     #
     # ==== Example:
     #
-    #   account.change_representative("xrb_...") # => "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    #   account.change_representative("nano_...") # => "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
     #
     # @param [String] representative the id of the representative account
     #   to set as this account's representative

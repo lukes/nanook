@@ -45,8 +45,11 @@ class Nanook
       rpc(:work_cancel, :hash).empty?
     end
 
-    # Returns an Array of block hashes in the account chain starting at
-    # this block.
+    # Returns a consecutive list of block hashes in the account chain
+    # starting at block back to count (direction from frontier back to
+    # open block, from newer blocks to older). Will list all blocks back
+    # to the open block of this chain when count is set to "-1".
+    # The requested block hash is included in the answer.
     #
     # See also #successors.
     #
@@ -60,11 +63,14 @@ class Nanook
     #     "36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
     #     "FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB"
     #   ]
+    #
     # @param limit [Integer] maximum number of block hashes to return (default is 1000)
-    def chain(limit: 1000)
-      response = rpc(:chain, :block, count: limit)[:blocks]
+    # @param offset [Integer] return the account chain block hashes offset by the specified number of blocks (default is 0)
+    def chain(limit: 1000, offset: 0)
+      response = rpc(:chain, :block, count: limit, offset: offset)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
+    alias_method :ancestors, :chain
 
     # Request confirmation for a block from online representative nodes.
     # Will return immediately with a boolean to indicate if the request for
@@ -81,6 +87,9 @@ class Nanook
       rpc(:block_confirm, :hash)[:started] == 1
     end
 
+    # This call is for internal diagnostics/debug purposes only. Do not
+    # rely on this interface being stable and do not use in a production system.
+    #
     # Check if the block appears in the list of recently confirmed blocks by
     # online representatives. The full list of blocks can be queried for with {Nanook::Node#confirmation_history}.
     #
@@ -127,7 +136,7 @@ class Nanook
     #
     #   [
     #     {
-    #       :account=>"xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
+    #       :account=>"nano_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
     #       :amount=>539834279601145558517940224,
     #       :hash=>"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
     #       :type=>"send"
@@ -164,7 +173,7 @@ class Nanook
     #     :id=>"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
     #     :type=>"send",
     #     :previous=>"FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB",
-    #     :destination=>"xrb_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
+    #     :destination=>"nano_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
     #     :balance=>"00000000000000000000000000000000",
     #     :work=>"44cc24b60705083a",
     #     :signature=>"42ADFEFE7C3FFF188AE92A202F8A5734DE91779C454613E446EEC93D001D6C953E9FD16730AF32C891791BA8EDAECEB059A213E2FE1EEB7ADF9D5D0815464D06"
@@ -260,10 +269,12 @@ class Nanook
     #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
     #
     # @param limit [Integer] maximum number of send/receive block hashes
-    #    to return in the chain (default is 1000)
+    #   to return in the chain (default is 1000)
+    # @param offset [Integer] return the account chain block hashes offset
+    #   by the specified number of blocks (default is 0)
     # @return [Array<String>] block hashes in the account chain ending at this block
-    def successors(limit: 1000)
-      response = rpc(:successors, :block, count: limit)[:blocks]
+    def successors(limit: 1000, offset: 0)
+      response = rpc(:successors, :block, count: limit, offset: offset)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 

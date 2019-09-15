@@ -90,7 +90,57 @@ class Nanook
       rpc(:bootstrap_any).has_key?(:success)
     end
 
-    # Returns block and tally weight (in raw) for recent elections winners
+    # Initialize lazy bootstrap with given block hash
+    #
+    # @param hash [String]
+    # @param force [Boolean] False by default. Manually force closing
+    #   of all current bootstraps
+    # @return [Boolean] indicating if the action was successful
+    def bootstrap_lazy(hash, force: false)
+      rpc(:bootstrap_lazy, hash: hash, force: force)[:started] == 1
+    end
+
+    # Returning status of current bootstrap attempt for debug purposes only.
+    # This call is for internal diagnostics/debug purposes only.
+    # Do not rely on this interface being stable and do not use in a
+    # production system.
+    #
+    # ==== Example:
+    #
+    #   node.bootstrap_status
+    #
+    # Example response:
+    #
+    #   {
+    #     clients: 5790,
+    #     pulls: 141065,
+    #     pulling: 3,
+    #     connections: 16,
+    #     idle: 0,
+    #     target_connections: 64,
+    #     total_blocks: 536820,
+    #     lazy_mode: true,
+    #     lazy_blocks: 423388,
+    #     lazy_state_unknown: 2,
+    #     lazy_balances: 0,
+    #     lazy_pulls: 0,
+    #     lazy_stopped: 644,
+    #     lazy_keys: 449,
+    #     lazy_key_1: "A86EB2B479AAF3CD531C8356A1FBE3CB500DFBF5BF292E5E6B8D1048DE199C32"
+    #   }
+    #
+    # @return [Hash{Symbol=>String|Integer|Boolean}]
+    def bootstrap_status
+      rpc(:bootstrap_status)
+    end
+
+    # This call is for internal diagnostics/debug purposes only.
+    # Do not rely on this interface being stable and do not use in a
+    # production system.
+    #
+    # Returns block and tally weight (in raw) election duration (in
+    # milliseconds), election confirmation timestamp for recent elections
+    # winners.
     #
     # ==== Example:
     #
@@ -101,11 +151,15 @@ class Nanook
     #   [
     #     {
     #       block: "EA70B32C55C193345D625F766EEA2FCA52D3F2CCE0B3A30838CC543026BB0FEA",
-    #       tally: 80394786589602980996311817874549318248
+    #       tally: 80394786589602980996311817874549318248,
+    #       duration: 4000,
+    #       time: 1544819986,
     #     },
     #     {
     #       block: "F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667",
-    #       tally: 68921714529890443063672782079965877749
+    #       tally: 68921714529890443063672782079965877749,
+    #       duration: 6000,
+    #       time: 1544819988,
     #     }
     #   ]
     #
@@ -115,6 +169,48 @@ class Nanook
         # Rename hash key to block
         block = history.delete(:hash)
         {block: block}.merge(history)
+      end
+    end
+
+    # Returns the difficulty values (16 hexadecimal digits string, 64 bit)
+    # for the minimum required on the network (network_minimum) as well
+    # as the current active difficulty seen on the network (network_current,
+    # 5 minute trended average of adjusted difficulty seen on confirmed
+    # transactions) which can be used to perform rework for better
+    # prioritization of transaction processing. A multiplier of the
+    # network_current from the base difficulty of network_minimum is also
+    # provided for comparison.
+    #
+    # ==== Example:
+    #
+    #   node.difficulty(include_trend: true)
+    #
+    # Example response:
+    #
+    #   {
+    #     network_minimum: "ffffffc000000000",
+    #     network_current: "ffffffc1816766f2",
+    #     multiplier: 1.024089858417128,
+    #     difficulty_trend: [
+    #       1.156096135149775,
+    #       1.190133894573061,
+    #       1.135567138563921,
+    #       1.000000000000000,
+    #     ]
+    #   }
+    #
+    # @param include_trend [Boolean] false by default. Also returns the
+    #   trend of difficulty seen on the network as a list of multipliers.
+    #   Sampling occurs every 16 to 36 seconds. The list is ordered such
+    #   that the first value is the most recent sample.
+    # @return [Hash{Symbol=>String|Float|Array}]
+    def difficulty(include_trend: false)
+      rpc(:active_difficulty, include_trend: include_trend).tap do |response|
+        response[:multiplier] = response[:multiplier].to_f
+
+        if response.key?(:difficulty_trend)
+          response[:difficulty_trend].map!(&:to_f)
+        end
       end
     end
 
@@ -136,9 +232,9 @@ class Nanook
     # Example response:
     #
     #   {
-    #     xrb_1111111111111111111111111111111111111111111111111117353trpda: 3822372327060170000000000000000000000,
-    #     xrb_1111111111111111111111111111111111111111111111111awsq94gtecn: 30999999999999999999999999000000,
-    #     xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi: 0
+    #     nano_1111111111111111111111111111111111111111111111111117353trpda: 3822372327060170000000000000000000000,
+    #     nano_1111111111111111111111111111111111111111111111111awsq94gtecn: 30999999999999999999999999000000,
+    #     nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi: 0
     #   }
     #
     # @return [Hash{Symbol=>Integer}] known representatives and their voting weight
@@ -165,7 +261,7 @@ class Nanook
     #
     # ==== Example:
     #
-    #   node.representatives_online # => ["xrb_111...", "xrb_222"]
+    #   node.representatives_online # => ["nano_111...", "nano_222"]
     #
     # @return [Array<String>] array of representative account ids
     def representatives_online
@@ -206,6 +302,13 @@ class Nanook
       total =  count + unchecked
 
       count.to_f * 100 / total.to_f
+    end
+
+    # Returns node uptime in seconds
+    #
+    # @return [Integer] seconds of uptime
+    def uptime
+      rpc(:uptime)['seconds']
     end
 
     # This method is deprecated and will be removed in 3.0, as a node never

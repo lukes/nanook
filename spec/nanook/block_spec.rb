@@ -9,13 +9,13 @@ RSpec.describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      body: "{\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
       headers: {}
     )
 
     response = Nanook.new.block(block).account
     expect(response).to be_kind_of Nanook::Account
-    expect(response.id).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(response.id).to eq "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
   end
 
   it "should request cancel_work correctly" do
@@ -33,7 +33,7 @@ RSpec.describe Nanook::Block do
 
   it "should request chain correctly" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -46,7 +46,7 @@ RSpec.describe Nanook::Block do
 
   it "should request chain and when no blocks (empty string response) return an array" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -59,7 +59,7 @@ RSpec.describe Nanook::Block do
 
   it "should request chain with a limit correctly" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1\"}",
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -68,6 +68,32 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).chain(limit: 1)).to have(1).item
+  end
+
+  it "should request chain with an offset correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":[\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"]}",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).chain(offset: 1)).to have(1).item
+  end
+
+  it "should alias ancestors to chain correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":[\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"]}",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).ancestors).to have(1).item
   end
 
   it "should request generate_work correctly" do
@@ -166,7 +192,7 @@ RSpec.describe Nanook::Block do
       body: "{\"history\":[{
         \"hash\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
         \"type\":\"receive\",
-        \"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+        \"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
         \"amount\":\"100000000000000000000000000000000\"
       }]}",
       headers: {}
@@ -184,7 +210,7 @@ RSpec.describe Nanook::Block do
       body: "{\"history\":[{
         \"hash\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
         \"type\":\"receive\",
-        \"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+        \"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
         \"amount\":\"100000000000000000000000000000000\"
       }]}",
       headers: {}
@@ -368,7 +394,7 @@ RSpec.describe Nanook::Block do
 
   it "should request successors correctly" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -381,7 +407,7 @@ RSpec.describe Nanook::Block do
 
   it "should request successors with limit correctly" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1\"}",
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -392,9 +418,22 @@ RSpec.describe Nanook::Block do
     expect(Nanook.new.block(block).successors(limit: 1)).to have(1).item
   end
 
+  it "should request successors with offset correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\":[\"A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293\"]}",
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).successors(offset: 1)).to have(1).item
+  end
+
   it "should request successors when there are none (empty string response) and return blank array" do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,

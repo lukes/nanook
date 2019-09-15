@@ -93,19 +93,61 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.bootstrap_any).to be false
   end
 
+  it "should request bootstrap_lazy correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap_lazy\",\"hash\":\"FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17\",\"force\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"started\":\"1\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.bootstrap_lazy("FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17")
+    expect(response).to eq(true)
+  end
+
+  it "should request bootstrap_lazy correctly with error" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap_lazy\",\"hash\":\"FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17\",\"force\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"started\":\"0\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.bootstrap_lazy("FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17")
+    expect(response).to eq(false)
+  end
+
+  it "should request bootstrap_lazy with force correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap_lazy\",\"hash\":\"FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17\",\"force\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"started\":\"1\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.bootstrap_lazy("FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17", force: true)
+    expect(response).to eq(true)
+  end
+
   it "should request representatives correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"representatives\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"representatives\":{\"xrb_1111111111111111111111111111111111111111111111111117353trpda\":\"3822372327060170000000000000000000000\",\"xrb_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"30999999999999999999999999000000\",\"xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"0\"}}",
+      body: "{\"representatives\":{\"nano_1111111111111111111111111111111111111111111111111117353trpda\":\"3822372327060170000000000000000000000\",\"nano_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"30999999999999999999999999000000\",\"nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"0\"}}",
       headers: {}
     )
 
     response = Nanook.new.node.representatives
-    expect(response).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
-    expect(response[:xrb_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372.32706017)
+    expect(response).to have_key(:nano_1111111111111111111111111111111111111111111111111117353trpda)
+    expect(response[:nano_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372.32706017)
   end
 
   it "should request representatives with unit correctly" do
@@ -114,13 +156,13 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"representatives\":{\"xrb_1111111111111111111111111111111111111111111111111117353trpda\":\"3822372327060170000000000000000000000\",\"xrb_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"30999999999999999999999999000000\",\"xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"0\"}}",
+      body: "{\"representatives\":{\"nano_1111111111111111111111111111111111111111111111111117353trpda\":\"3822372327060170000000000000000000000\",\"nano_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"30999999999999999999999999000000\",\"nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"0\"}}",
       headers: {}
     )
 
     response = Nanook.new.node.representatives(unit: :raw)
-    expect(response).to have_key(:xrb_1111111111111111111111111111111111111111111111111117353trpda)
-    expect(response[:xrb_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372327060170000000000000000000000)
+    expect(response).to have_key(:nano_1111111111111111111111111111111111111111111111111117353trpda)
+    expect(response[:nano_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3822372327060170000000000000000000000)
   end
 
   it "should request representatives_online correctly" do
@@ -129,13 +171,53 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"representatives\":{\"xrb_1111111111111111111111111111111111111111111111111117353trpda\":\"\",\"xrb_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"\",\"xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"\"}}",
+      body: "{\"representatives\":{\"nano_1111111111111111111111111111111111111111111111111117353trpda\":\"\",\"nano_1111111111111111111111111111111111111111111111111awsq94gtecn\":\"\",\"nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi\":\"\"}}",
       headers: {}
     )
 
     response = Nanook.new.node.representatives_online
     expect(response).to have(3).items
-    expect(response.first).to eq("xrb_1111111111111111111111111111111111111111111111111117353trpda")
+    expect(response.first).to eq("nano_1111111111111111111111111111111111111111111111111117353trpda")
+  end
+
+  it "should request difficulty correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"active_difficulty\",\"include_trend\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"network_minimum\":\"ffffffc000000000\",\"network_current\":\"ffffffcdbf40aa45\",\"multiplier\":\"1.273557846739298\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.difficulty
+    expect(response).to eq({
+      network_minimum: "ffffffc000000000",
+      network_current: "ffffffcdbf40aa45",
+      multiplier: 1.273557846739298
+    })
+  end
+
+  it "should request difficulty with include_trend correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"active_difficulty\",\"include_trend\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"network_minimum\":\"ffffffc000000000\",\"network_current\":\"ffffffcdbf40aa45\",\"multiplier\":\"1.273557846739298\",\"difficulty_trend\":[\"1.156096135149775\",\"1.190133894573061\"]}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.difficulty(include_trend: true)
+    expect(response).to eq({
+      network_minimum: "ffffffc000000000",
+      network_current: "ffffffcdbf40aa45",
+      multiplier: 1.273557846739298,
+      difficulty_trend: [
+        1.156096135149775,
+        1.190133894573061
+      ]
+    })
   end
 
   it "should request peers correctly" do
@@ -193,6 +275,19 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.stop).to be true
   end
 
+  it "should request uptime correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"uptime\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"seconds\":\"6000\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.uptime).to eq(6000)
+  end
+
   it "should request version correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"version\"}",
@@ -239,7 +334,7 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"blocks\":{\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\":\"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\",\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3C\":\"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\"}}",
+      body: "{\"blocks\":{\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\":\"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\",\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3C\":\"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\"}}",
       headers: {}
     )
 
@@ -250,8 +345,8 @@ RSpec.describe Nanook::Node do
     block = response["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]
 
     expect(block[:type]).to eq "open"
-    expect(block[:account]).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
-    expect(block[:representative]).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(block[:account]).to eq "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(block[:representative]).to eq "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
     expect(block[:source]).to eq "FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4"
     expect(block[:work]).to eq "0000000000000000"
     expect(block[:signature]).to eq "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
@@ -263,7 +358,7 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"blocks\": {\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\": \"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\"}}",
+      body: "{\"blocks\": {\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\": \"{\\\"type\\\": \\\"open\\\",\\\"account\\\": \\\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"representative\\\": \\\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\\",\\\"source\\\": \\\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\\",\\\"work\\\": \\\"0000000000000000\\\",\\\"signature\\\":\\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\\"}\"}}",
       headers: {}
     )
 
@@ -274,8 +369,8 @@ RSpec.describe Nanook::Node do
     block = response["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]
 
     expect(block[:type]).to eq "open"
-    expect(block[:account]).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
-    expect(block[:representative]).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(block[:account]).to eq "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(block[:representative]).to eq "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
     expect(block[:source]).to eq "FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4"
     expect(block[:work]).to eq "0000000000000000"
     expect(block[:signature]).to eq "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"

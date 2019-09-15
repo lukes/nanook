@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.5.0
+
+### Added
+
+- New `Nanook::Node#bootstrap_lazy` method.
+- New `Nanook::Node#bootstrap_status` method.
+- New `Nanook::Node#difficulty` method.
+- New `Nanook::Node#uptime` method.
+- New `Nanook::Wallet#lock` method.
+
+### Changed
+
+- `Nanook::Node#chain` now takes optional `offset` argument.
+- `Nanook::Node#successors` now takes optional `offset` argument.
+- `Nanook::Node#successors` now aliased as `Nanook::Node#ancestors`
+- Updated docs to use `nano_` prefixed addresses.
+
 ## 2.4.0
 
 ### Added
