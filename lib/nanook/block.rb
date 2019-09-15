@@ -45,8 +45,11 @@ class Nanook
       rpc(:work_cancel, :hash).empty?
     end
 
-    # Returns an Array of block hashes in the account chain starting at
-    # this block.
+    # Returns a consecutive list of block hashes in the account chain
+    # starting at block back to count (direction from frontier back to
+    # open block, from newer blocks to older). Will list all blocks back
+    # to the open block of this chain when count is set to "-1".
+    # The requested block hash is included in the answer.
     #
     # See also #successors.
     #
@@ -84,6 +87,9 @@ class Nanook
       rpc(:block_confirm, :hash)[:started] == 1
     end
 
+    # This call is for internal diagnostics/debug purposes only. Do not
+    # rely on this interface being stable and do not use in a production system.
+    #
     # Check if the block appears in the list of recently confirmed blocks by
     # online representatives. The full list of blocks can be queried for with {Nanook::Node#confirmation_history}.
     #
