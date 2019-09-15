@@ -33,8 +33,7 @@ class Nanook
   # want to restore the wallet anywhere else on the nano network besides
   # the node you originally created it on. The nano command line interface
   # (CLI) is the only method for discovering a wallet's seed. See the
-  # {https://developers.nano.org/docs/command-line-interface/#wallet_decrypt_unsafe
-  # --wallet_decrypt_unsafe CLI command}.
+  # {https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword}.
   #
   # === Initializing
   #
@@ -254,7 +253,7 @@ class Nanook
     # on the nano network.
     #
     # Note, there may be a delay in receiving a response due to Proof of
-    # Work being done. From the {Nano RPC}[https://developers.nano.org/docs/rpc#send]:
+    # Work being done. From the {Nano RPC}[https://docs.nano.org/commands/rpc-protocol/#send]:
     #
     # <i>Proof of Work is precomputed for one transaction in the
     # background. If it has been a while since your last transaction it

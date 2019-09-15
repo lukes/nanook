@@ -113,7 +113,7 @@ class Nanook
     # if successful, or a {Nanook::Error} if unsuccessful.
     #
     # Note, there may be a delay in receiving a response due to Proof
-    # of Work being done. From the {Nano RPC}[https://developers.nano.org/docs/rpc#send]:
+    # of Work being done. From the {Nano RPC}[https://docs.nano.org/commands/rpc-protocol/#send]:
     #
     # <i>Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.</i>
     #
