@@ -8,12 +8,12 @@ class Nanook
   # Initialize this class through the convenient {Nanook#account} method:
   #
   #   nanook = Nanook.new
-  #   account = nanook.account("xrb_...")
+  #   account = nanook.account("nano_...")
   #
   # Or compose the longhand way like this:
   #
   #   rpc_conn = Nanook::Rpc.new
-  #   account = Nanook::Account.new(rpc_conn, "xrb_...")
+  #   account = Nanook::Account.new(rpc_conn, "nano_...")
   class Account
 
     def initialize(rpc, account)
@@ -30,8 +30,8 @@ class Nanook
     # Example response:
     #
     #   {
-    #     :xrb_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd=>500000000000000000000000000000000000,
-    #     :xrb_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn=>961647970820730000000000000000000000
+    #     :nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd=>500000000000000000000000000000000000,
+    #     :nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn=>961647970820730000000000000000000000
     #   }
     #
     # @param unit (see #balance)
@@ -89,7 +89,7 @@ class Nanook
     #   [
     #     {
     #      type: "send",
-    #      account: "xrb_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
+    #      account: "nano_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
     #      amount: 2,
     #      hash: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570"
     #     }
@@ -146,7 +146,7 @@ class Nanook
     #
     # ==== Example:
     #
-    #   account.representative # => "xrb_3pc..."
+    #   account.representative # => "nano_3pc..."
     #
     # @return [String] Representative account of the account
     def representative
@@ -209,7 +209,7 @@ class Nanook
     #
     # ==== Example:
     #
-    #   account.id # => "xrb_16u..."
+    #   account.id # => "nano_16u..."
     #
     # @return [String] the id of the account
     def id
@@ -225,7 +225,7 @@ class Nanook
     # Example response:
     #
     #   {
-    #     id: "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
+    #     id: "nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
     #     balance: 11.439597000000001,
     #     block_count: 4,
     #     frontier: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
@@ -241,7 +241,7 @@ class Nanook
     # Example response:
     #
     #   {
-    #     id: "xrb_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
+    #     id: "nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
     #     balance: 11.439597000000001,
     #     block_count: 4,
     #     frontier: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
@@ -249,7 +249,7 @@ class Nanook
     #     open_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
     #     pending: 0,
     #     public_key: "A82C906460046D230D7D37C6663723DC3EFCECC4B3254EBF45294B66746F4FEF",
-    #     representative: "xrb_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh",
+    #     representative: "nano_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh",
     #     representative_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
     #     weight: 0
     #   }
@@ -316,7 +316,7 @@ class Nanook
     # Example response:
     #
     #   {
-    #    :xrb_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=>{
+    #    :nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=>{
     #      :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
     #      :open_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
     #      :representative_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
@@ -324,7 +324,7 @@ class Nanook
     #      :modified_timestamp=>1520500357,
     #      :block_count=>4
     #    },
-    #    :xrb_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=>{ ... }
+    #    :nano_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=>{ ... }
     #  }
     #
     # @param [Integer] limit number of accounts to return in the ledger (default is 1)
@@ -380,7 +380,7 @@ class Nanook
     #     {
     #       block: "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
     #       amount: 6,
-    #       source: "xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    #       source: "nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
     #     },
     #     { ... }
     #   ]

@@ -67,7 +67,7 @@ class Nanook
     #
     # ==== Examples:
     #
-    #   wallet.account("xrb_...") # => Nanook::WalletAccount
+    #   wallet.account("nano_...") # => Nanook::WalletAccount
     #   wallet.account.create     # => Nanook::WalletAccount
     #
     # @param [String] account optional String of an account (starting with
@@ -128,11 +128,11 @@ class Nanook
     # Example response:
     #
     #   {
-    #     "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"=>{
+    #     "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"=>{
     #       "balance"=>2.5,
     #       "pending"=>1
     #     },
-    #     "xrb_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx"=>{
+    #     "nano_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx"=>{
     #       "balance"=>51.4,
     #       "pending"=>0
     #     },
@@ -230,9 +230,9 @@ class Nanook
     # Will return +true+ if the account exists in the wallet.
     #
     # ==== Example:
-    #   wallet.contains?("xrb_...") # => true
+    #   wallet.contains?("nano_...") # => true
     #
-    # @param account [String] id (will start with <tt>"xrb_..."</tt>)
+    # @param account [String] id (will start with <tt>"nano_..."</tt>)
     # @return [Boolean] indicating if the wallet contains the given account
     def contains?(account)
       wallet_required!
@@ -263,8 +263,8 @@ class Nanook
     #
     # ==== Examples:
     #
-    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
-    #   wallet.pay(from: "xrb_...", to: "xrb_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123") # => "9AE2311..."
+    #   wallet.pay(from: "nano_...", to: "nano_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
+    #   wallet.pay(from: "nano_...", to: "nano_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123") # => "9AE2311..."
     #
     # @param from [String] account id of an account in your wallet
     # @param to (see Nanook::WalletAccount#pay)
@@ -295,11 +295,11 @@ class Nanook
     # Example response:
     #
     #   {
-    #     :xrb_1111111111111111111111111111111111111111111111111117353trpda=>[
+    #     :nano_1111111111111111111111111111111111111111111111111117353trpda=>[
     #       "142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D",
     #       "718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"
     #     ],
-    #     :xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3=>[
+    #     :nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3=>[
     #       "4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"
     #     ]
     #   }
@@ -311,22 +311,22 @@ class Nanook
     # Example response:
     #
     #   {
-    #     :xrb_1111111111111111111111111111111111111111111111111117353trpda=>[
+    #     :nano_1111111111111111111111111111111111111111111111111117353trpda=>[
     #       {
     #         :amount=>6.0,
-    #         :source=>"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr",
+    #         :source=>"nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr",
     #         :block=>:"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D"
     #       },
     #       {
     #         :amount=>12.0,
-    #         :source=>"xrb_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr",
+    #         :source=>"nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr",
     #         :block=>:"242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D"
     #       }
     #     ],
-    #     :xrb_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3=>[
+    #     :nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3=>[
     #       {
     #         :amount=>106.370018,
-    #         :source=>"xrb_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo",
+    #         :source=>"nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo",
     #         :block=>:"4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"
     #       }
     #     ]
@@ -398,7 +398,7 @@ class Nanook
     #
     # ==== Example:
     #
-    #   wallet.default_representative # => "xrb_3pc..."
+    #   wallet.default_representative # => "nano_3pc..."
     #
     # @return [String] Representative account of the account
     def default_representative
@@ -414,7 +414,7 @@ class Nanook
     #
     # ==== Example:
     #
-    #   wallet.change_default_representative("xrb_...") # => "xrb_..."
+    #   wallet.change_default_representative("nano_...") # => "nano_..."
     #
     # @param [String] representative the id of the representative account
     #   to set as this account's representative
@@ -473,7 +473,7 @@ class Nanook
     #     id: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
     #     accounts: [
     #       {
-    #         id: "xrb_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n"
+    #         id: "nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n"
     #         frontier: "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
     #         open_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
     #         representative_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",

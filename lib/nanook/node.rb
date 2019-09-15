@@ -136,9 +136,9 @@ class Nanook
     # Example response:
     #
     #   {
-    #     xrb_1111111111111111111111111111111111111111111111111117353trpda: 3822372327060170000000000000000000000,
-    #     xrb_1111111111111111111111111111111111111111111111111awsq94gtecn: 30999999999999999999999999000000,
-    #     xrb_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi: 0
+    #     nano_1111111111111111111111111111111111111111111111111117353trpda: 3822372327060170000000000000000000000,
+    #     nano_1111111111111111111111111111111111111111111111111awsq94gtecn: 30999999999999999999999999000000,
+    #     nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi: 0
     #   }
     #
     # @return [Hash{Symbol=>Integer}] known representatives and their voting weight
@@ -165,7 +165,7 @@ class Nanook
     #
     # ==== Example:
     #
-    #   node.representatives_online # => ["xrb_111...", "xrb_222"]
+    #   node.representatives_online # => ["nano_111...", "nano_222"]
     #
     # @return [Array<String>] array of representative account ids
     def representatives_online

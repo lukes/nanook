@@ -9,13 +9,13 @@ RSpec.describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      body: "{\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
       headers: {}
     )
 
     response = Nanook.new.block(block).account
     expect(response).to be_kind_of Nanook::Account
-    expect(response.id).to eq "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
+    expect(response.id).to eq "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
   end
 
   it "should request cancel_work correctly" do
@@ -166,7 +166,7 @@ RSpec.describe Nanook::Block do
       body: "{\"history\":[{
         \"hash\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
         \"type\":\"receive\",
-        \"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+        \"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
         \"amount\":\"100000000000000000000000000000000\"
       }]}",
       headers: {}
@@ -184,7 +184,7 @@ RSpec.describe Nanook::Block do
       body: "{\"history\":[{
         \"hash\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
         \"type\":\"receive\",
-        \"account\":\"xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+        \"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
         \"amount\":\"100000000000000000000000000000000\"
       }]}",
       headers: {}
