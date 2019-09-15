@@ -168,6 +168,48 @@ class Nanook
       end
     end
 
+    # Returns the difficulty values (16 hexadecimal digits string, 64 bit)
+    # for the minimum required on the network (network_minimum) as well
+    # as the current active difficulty seen on the network (network_current,
+    # 5 minute trended average of adjusted difficulty seen on confirmed
+    # transactions) which can be used to perform rework for better
+    # prioritization of transaction processing. A multiplier of the
+    # network_current from the base difficulty of network_minimum is also
+    # provided for comparison.
+    #
+    # ==== Example:
+    #
+    #   node.difficulty(include_trend: true)
+    #
+    # Example response:
+    #
+    #   {
+    #     network_minimum: "ffffffc000000000",
+    #     network_current: "ffffffc1816766f2",
+    #     multiplier: 1.024089858417128,
+    #     difficulty_trend: [
+    #       1.156096135149775,
+    #       1.190133894573061,
+    #       1.135567138563921,
+    #       1.000000000000000,
+    #     ]
+    #   }
+    #
+    # @param include_trend [Boolean] false by default. Also returns the
+    #   trend of difficulty seen on the network as a list of multipliers.
+    #   Sampling occurs every 16 to 36 seconds. The list is ordered such
+    #   that the first value is the most recent sample.
+    # @return [Hash{Symbol=>String|Float|Array}]
+    def difficulty(include_trend: false)
+      rpc(:active_difficulty, include_trend: include_trend).tap do |response|
+        response[:multiplier] = response[:multiplier].to_f
+
+        if response.key?(:difficulty_trend)
+          response[:difficulty_trend].map!(&:to_f)
+        end
+      end
+    end
+
     # @return [String]
     def inspect
       "#{self.class.name}(object_id: \"#{"0x00%x" % (object_id << 1)}\")"

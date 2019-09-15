@@ -180,6 +180,46 @@ RSpec.describe Nanook::Node do
     expect(response.first).to eq("nano_1111111111111111111111111111111111111111111111111117353trpda")
   end
 
+  it "should request difficulty correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"active_difficulty\",\"include_trend\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"network_minimum\":\"ffffffc000000000\",\"network_current\":\"ffffffcdbf40aa45\",\"multiplier\":\"1.273557846739298\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.difficulty
+    expect(response).to eq({
+      network_minimum: "ffffffc000000000",
+      network_current: "ffffffcdbf40aa45",
+      multiplier: 1.273557846739298
+    })
+  end
+
+  it "should request difficulty with include_trend correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"active_difficulty\",\"include_trend\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"network_minimum\":\"ffffffc000000000\",\"network_current\":\"ffffffcdbf40aa45\",\"multiplier\":\"1.273557846739298\",\"difficulty_trend\":[\"1.156096135149775\",\"1.190133894573061\"]}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.difficulty(include_trend: true)
+    expect(response).to eq({
+      network_minimum: "ffffffc000000000",
+      network_current: "ffffffcdbf40aa45",
+      multiplier: 1.273557846739298,
+      difficulty_trend: [
+        1.156096135149775,
+        1.190133894573061
+      ]
+    })
+  end
+
   it "should request peers correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"peers\"}",
