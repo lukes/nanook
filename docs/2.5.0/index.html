@@ -62,8 +62,8 @@
 
 <p>This is a Ruby library for managing a <a href="https://nano.org/">nano
 currency</a> node, including making and receiving payments, using the <a
-href="https://developers.nano.org/docs/rpc">nano RPC protocol</a>. Nano is
-a fee-less, fast, environmentally-friendly cryptocurrency. It&#39;s
+href="https://docs.nano.org/commands/rpc-protocol">nano RPC protocol</a>.
+Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It&#39;s
 awesome. See <a href="https://nano.org/">nano.org</a>.</p>
 
 <p><a href="https://badge.fury.io/rb/nanook"><img
@@ -139,7 +139,7 @@ src="https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield"></a></p>
 It serves an important purpose; it allows you to make this call multiple
 times with the same <code>id</code> and be reassured that you will only
 ever send that nano payment once. From the <a
-href="https://developers.nano.org/docs/rpc#send">Nano RPC</a>:</p>
+href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
 
 <blockquote>
 <p>You can (and should) specify a unique id for each spend to provide
@@ -157,7 +157,7 @@ Nano’s Units</a>). You can pass an amount of raw instead by adding the
 
 <p>Note, there may be a delay in receiving a response due to Proof of Work
 being done. From the <a
-href="https://developers.nano.org/docs/rpc#send">Nano RPC</a>:</p>
+href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
 
 <blockquote>
 <p>Proof of Work is precomputed for one transaction in the background. If it
@@ -439,13 +439,13 @@ method and example responses.</p>
 <h2 id="label-Nanook+Metal">Nanook Metal</h2>
 
 <p>You can do any call listed in the <a
-href="https://developers.nano.org/docs/rpc">Nano RPC</a> directly through
-the <code>rpc</code> method. The first argument should match the
+href="https://docs.nano.org/commands/rpc-protocol">Nano RPC</a> directly
+through the <code>rpc</code> method. The first argument should match the
 <code>action</code> of the RPC call, and then all remaining parameters are
 passed in as arguments.</p>
 
 <p>E.g., the <a
-href="https://developers.nano.org/docs/rpc#accounts-create">accounts_create
+href="https://docs.nano.org/commands/rpc-protocol/#accounts_create">accounts_create
 command</a> can be called like this:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_rpc'><span class='object_link'><a href="Nanook.html#rpc-instance_method" title="Nanook#rpc (method)">rpc</a></span></span><span class='period'>.</span><span class='id identifier rubyid_call'><span class='object_link'><a href="Nanook/Rpc.html#call-instance_method" title="Nanook::Rpc#call (method)">call</a></span></span><span class='lparen'>(</span><span class='symbol'>:accounts_create</span><span class='comma'>,</span> <span class='label'>wallet:</span> <span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='comma'>,</span> <span class='label'>count:</span> <span class='int'>2</span><span class='rparen'>)</span>
@@ -485,7 +485,7 @@ src="https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png"></p>
 </div></div>
 
       <div id="footer">
-  Generated on Mon Sep 16 06:11:56 2019 by
+  Generated on Mon Sep 16 06:30:33 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.5.3).
 </div>

@@ -136,7 +136,7 @@ its id. Knowing a wallet&#39;s seed is very useful for if you ever want to
 restore the wallet anywhere else on the nano network besides the node you
 originally created it on. The nano command line interface (CLI) is the only
 method for discovering a wallet&#39;s seed. See the
-<a href="https://developers.nano.org/docs/command-line-interface/#wallet_decrypt_unsafe" target="_parent" title="–wallet_decrypt_unsafe CLI command">–wallet_decrypt_unsafe CLI command</a>.</p>
+<a href="https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword" target="_parent" title="https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword">https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword</a>.</p>
 
 <h3 id="label-Initializing">Initializing</h3>
 
@@ -741,13 +741,13 @@ by accounts in this wallet.</p>
       <pre class="lines">
 
 
+51
 52
 53
-54
-55</pre>
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 52</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_rpc'>rpc</span><span class='comma'>,</span> <span class='id identifier rubyid_wallet'>wallet</span><span class='rparen'>)</span>
   <span class='ivar'>@rpc</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span>
@@ -863,12 +863,12 @@ allows you to call <code>create</code> on it, to create a new account.</p>
       <pre class="lines">
 
 
+78
 79
-80
-81</pre>
+80</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 79</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 78</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_account'>account</span><span class='lparen'>(</span><span class='id identifier rubyid_account'>account</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">WalletAccount</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="WalletAccount.html#initialize-instance_method" title="Nanook::WalletAccount#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='ivar'>@rpc</span><span class='comma'>,</span> <span class='ivar'>@wallet</span><span class='comma'>,</span> <span class='id identifier rubyid_account'>account</span><span class='rparen'>)</span>
@@ -930,16 +930,16 @@ objects returned.</p>
       <pre class="lines">
 
 
+92
 93
 94
 95
 96
 97
-98
-99</pre>
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 93</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_accounts'>accounts</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1078,6 +1078,7 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       <pre class="lines">
 
 
+145
 146
 147
 148
@@ -1101,11 +1102,10 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 166
 167
 168
-169
-170</pre>
+169</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 146</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 145</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>account_break_down:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1246,6 +1246,7 @@ representative</p>
       <pre class="lines">
 
 
+423
 424
 425
 426
@@ -1255,11 +1256,10 @@ representative</p>
 430
 431
 432
-433
-434</pre>
+433</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 424</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 423</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_change_default_representative'>change_default_representative</span><span class='lparen'>(</span><span class='id identifier rubyid_representative'>representative</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Account.html" title="Nanook::Account (class)">Account</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Account.html#initialize-instance_method" title="Nanook::Account#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='ivar'>@rpc</span><span class='comma'>,</span> <span class='id identifier rubyid_representative'>representative</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_exists?'><span class='object_link'><a href="Account.html#exists%3F-instance_method" title="Nanook::Account#exists? (method)">exists?</a></span></span>
@@ -1326,13 +1326,13 @@ representative</p>
       <pre class="lines">
 
 
+554
 555
 556
-557
-558</pre>
+557</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 555</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 554</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_change_password'>change_password</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1415,13 +1415,13 @@ accounts.</p>
       <pre class="lines">
 
 
+182
 183
 184
-185
-186</pre>
+185</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 183</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 182</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_change_seed'>change_seed</span><span class='lparen'>(</span><span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1501,14 +1501,14 @@ accounts.</p>
       <pre class="lines">
 
 
+236
 237
 238
 239
-240
-241</pre>
+240</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 237</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 236</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_contains?'>contains?</span><span class='lparen'>(</span><span class='id identifier rubyid_account'>account</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1571,13 +1571,13 @@ wallet&#39;s seed. See the
       <pre class="lines">
 
 
+201
 202
 203
-204
-205</pre>
+204</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 202</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 201</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
   <span class='ivar'>@wallet</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:wallet_create</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:wallet</span><span class='rbracket'>]</span>
@@ -1645,12 +1645,12 @@ representatives for any accounts that have been created.</p>
       <pre class="lines">
 
 
+403
 404
-405
-406</pre>
+405</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 404</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 403</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_default_representative'>default_representative</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:wallet_representative</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:representative</span><span class='rbracket'>]</span>
@@ -1709,14 +1709,14 @@ representatives for any accounts that have been created.</p>
       <pre class="lines">
 
 
+213
 214
 215
 216
-217
-218</pre>
+217</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 214</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 213</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1759,13 +1759,13 @@ representatives for any accounts that have been created.</p>
       <pre class="lines">
 
 
+224
 225
 226
-227
-228</pre>
+227</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 225</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 224</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_export'>export</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -1820,12 +1820,12 @@ representatives for any accounts that have been created.</p>
       <pre class="lines">
 
 
+243
 244
-245
-246</pre>
+245</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 244</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 243</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_id'>id</span>
   <span class='ivar'>@wallet</span>
@@ -1927,6 +1927,7 @@ what is returned for each account.</p>
       <pre class="lines">
 
 
+490
 491
 492
 493
@@ -1944,11 +1945,10 @@ what is returned for each account.</p>
 505
 506
 507
-508
-509</pre>
+508</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 491</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 490</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
@@ -2011,12 +2011,12 @@ what is returned for each account.</p>
       <pre class="lines">
 
 
+248
 249
-250
-251</pre>
+250</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 249</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 248</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>(id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;, object_id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0x00%x</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lparen'>(</span><span class='id identifier rubyid_object_id'>object_id</span> <span class='op'>&lt;&lt;</span> <span class='int'>1</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;)</span><span class='tstring_end'>&quot;</span></span>
@@ -2076,14 +2076,14 @@ make payments. See <span class='object_link'><a href="#unlock-instance_method" t
       <pre class="lines">
 
 
+517
 518
 519
 520
-521
-522</pre>
+521</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 518</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 517</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_lock'>lock</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -2144,14 +2144,14 @@ make payments. See <span class='object_link'><a href="#unlock-instance_method" t
       <pre class="lines">
 
 
+530
 531
 532
 533
-534
-535</pre>
+534</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 531</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 530</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_locked?'>locked?</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -2180,7 +2180,7 @@ nano network.</p>
 
 <p>Note, there may be a delay in receiving a response due to Proof of Work
 being done. From the <a
-href="https://developers.nano.org/docs/rpc#send">Nano RPC</a>:</p>
+href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
 
 <p><em>Proof of Work is precomputed for one transaction in the background. If
 it has been a while since your last transaction it will send instantly, the
@@ -2306,14 +2306,14 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       <pre class="lines">
 
 
+275
 276
 277
 278
-279
-280</pre>
+279</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 276</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 275</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span><span class='comma'>,</span> <span class='label'>to:</span><span class='comma'>,</span> <span class='label'>amount:</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='comma'>,</span> <span class='label'>id:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -2459,6 +2459,7 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       <pre class="lines">
 
 
+333
 334
 335
 336
@@ -2489,11 +2490,10 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 361
 362
 363
-364
-365</pre>
+364</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 334</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 333</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pending'>pending</span><span class='lparen'>(</span><span class='label'>limit:</span><span class='int'>1000</span><span class='comma'>,</span> <span class='label'>detailed:</span><span class='kw'>false</span><span class='comma'>,</span> <span class='label'>unit:</span><span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -2644,14 +2644,14 @@ payment will be received</p>
       <pre class="lines">
 
 
+386
 387
 388
 389
-390
-391</pre>
+390</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 387</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 386</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='id identifier rubyid_block'>block</span><span class='op'>=</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>into:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -2768,6 +2768,7 @@ the given seed.</p>
       <pre class="lines">
 
 
+449
 450
 451
 452
@@ -2779,11 +2780,10 @@ the given seed.</p>
 458
 459
 460
-461
-462</pre>
+461</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 450</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 449</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_restore'>restore</span><span class='lparen'>(</span><span class='id identifier rubyid_seed'>seed</span><span class='comma'>,</span> <span class='label'>accounts:</span><span class='int'>0</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_create'>create</span>
@@ -2852,13 +2852,13 @@ the given seed.</p>
       <pre class="lines">
 
 
+543
 544
 545
-546
-547</pre>
+546</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 544</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/wallet.rb', line 543</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_unlock'>unlock</span><span class='lparen'>(</span><span class='id identifier rubyid_password'>password</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_wallet_required!'>wallet_required!</span>
@@ -2874,7 +2874,7 @@ the given seed.</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 16 06:11:58 2019 by
+  Generated on Mon Sep 16 06:30:35 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.5.3).
 </div>
