@@ -120,6 +120,19 @@ RSpec.describe Nanook::Wallet do
     expect(Nanook.new.wallet(wallet_id).contains?(account_id)).to be false
   end
 
+  it "wallet lock" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_lock\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"locked\":\"1\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).lock).to be true
+  end
+
   it "wallet locked? when it is not locked" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_locked\",\"wallet\":\"#{wallet_id}\"}",
