@@ -93,6 +93,48 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.bootstrap_any).to be false
   end
 
+  it "should request bootstrap_lazy correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap_lazy\",\"hash\":\"FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17\",\"force\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"started\":\"1\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.bootstrap_lazy("FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17")
+    expect(response).to eq(true)
+  end
+
+  it "should request bootstrap_lazy correctly with error" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap_lazy\",\"hash\":\"FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17\",\"force\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"started\":\"0\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.bootstrap_lazy("FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17")
+    expect(response).to eq(false)
+  end
+
+  it "should request bootstrap_lazy with force correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"bootstrap_lazy\",\"hash\":\"FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17\",\"force\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"started\":\"1\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.node.bootstrap_lazy("FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17", force: true)
+    expect(response).to eq(true)
+  end
+
   it "should request representatives correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"representatives\"}",
