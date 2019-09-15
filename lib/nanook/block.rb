@@ -67,6 +67,7 @@ class Nanook
       response = rpc(:chain, :block, count: limit, offset: offset)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
+    alias_method :ancestors, :chain
 
     # Request confirmation for a block from online representative nodes.
     # Will return immediately with a boolean to indicate if the request for
