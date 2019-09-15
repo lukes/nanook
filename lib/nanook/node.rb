@@ -300,6 +300,13 @@ class Nanook
       count.to_f * 100 / total.to_f
     end
 
+    # Returns node uptime in seconds
+    #
+    # @return [Integer] seconds of uptime
+    def uptime
+      rpc(:uptime)['seconds']
+    end
+
     # This method is deprecated and will be removed in 3.0, as a node never
     # reaches 100% synchronization.
     #

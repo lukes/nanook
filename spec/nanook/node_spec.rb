@@ -275,6 +275,19 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.stop).to be true
   end
 
+  it "should request uptime correctly" do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"uptime\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"seconds\":\"6000\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.node.uptime).to eq(6000)
+  end
+
   it "should request version correctly" do
     stub_request(:post, uri).with(
       body: "{\"action\":\"version\"}",
