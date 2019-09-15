@@ -60,9 +60,11 @@ class Nanook
     #     "36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
     #     "FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB"
     #   ]
+    #
     # @param limit [Integer] maximum number of block hashes to return (default is 1000)
-    def chain(limit: 1000)
-      response = rpc(:chain, :block, count: limit)[:blocks]
+    # @param offset [Integer] return the account chain block hashes offset by the specified number of blocks (default is 0)
+    def chain(limit: 1000, offset: 0)
+      response = rpc(:chain, :block, count: limit, offset: offset)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
@@ -260,10 +262,12 @@ class Nanook
     #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
     #
     # @param limit [Integer] maximum number of send/receive block hashes
-    #    to return in the chain (default is 1000)
+    #   to return in the chain (default is 1000)
+    # @param offset [Integer] return the account chain block hashes offset
+    #   by the specified number of blocks (default is 0)
     # @return [Array<String>] block hashes in the account chain ending at this block
-    def successors(limit: 1000)
-      response = rpc(:successors, :block, count: limit)[:blocks]
+    def successors(limit: 1000, offset: 0)
+      response = rpc(:successors, :block, count: limit, offset: offset)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 

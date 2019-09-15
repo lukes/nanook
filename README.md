@@ -272,6 +272,7 @@ block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing 
 block.account
 block.chain
 block.chain(limit: 10)
+block.chain(offset: 10)
 block.confirm
 block.confirmed_recently?
 block.history
@@ -283,6 +284,7 @@ block.pending?
 block.publish
 block.successors
 block.successors(limit: 10)
+block.successors(offset: 10)
 
 block.generate_work
 block.generate_work(use_peers: true)
