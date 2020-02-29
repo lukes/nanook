@@ -19,7 +19,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.0.2)
-    rake (10.5.0)
+    rake (12.3.3)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -52,7 +52,7 @@ DEPENDENCIES
   bundler (~> 1.16)
   nanook!
   pry (~> 0)
-  rake (~> 10.0)
+  rake (~> 12.3)
   rspec (~> 3.2)
   rspec-collection_matchers (~> 1.1)
   rspec_junit_formatter (~> 0.3)
