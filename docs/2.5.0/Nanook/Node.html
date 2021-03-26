@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Nanook::Node";
   relpath = '../';
 </script>
@@ -102,19 +102,11 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>The <code>Nanook::Node</code> class contains methods to manage your nano
-node and query its data of the nano network.</p>
+<p>The <code>Nanook::Node</code> class contains methods to manage your nano node and query its data of the nano network.</p>
 
-<p>Your node is constantly syncing data with other nodes on the network. When
-your node first starts up after being built, its database will be empty and
-it will begin synchronizing and downloading data of the nano ledger to its
-local database. The ledger is the central record of all accounts and
-transactions. Some of the methods in this class query your node&#39;s
-database formed from the nano ledger, and so the responses are determined
-by the completeness of your node&#39;s database.</p>
+<p>Your node is constantly syncing data with other nodes on the network. When your node first starts up after being built, its database will be empty and it will begin synchronizing and downloading data of the nano ledger to its local database. The ledger is the central record of all accounts and transactions. Some of the methods in this class query your node&#39;s database formed from the nano ledger, and so the responses are determined by the completeness of your node&#39;s database.</p>
 
-<p>You can determine how synchronized your node is with the nano ledger with
-the <span class='object_link'><a href="#sync_progress-instance_method" title="Nanook::Node#sync_progress (method)">#sync_progress</a></span> method.</p>
+<p>You can determine how synchronized your node is with the nano ledger with the <span class='object_link'><a href="#sync_progress-instance_method" title="Nanook::Node#sync_progress (method)">#sync_progress</a></span> method.</p>
 
 <h3 id="label-Initializing">Initializing</h3>
 
@@ -170,8 +162,7 @@ the <span class='object_link'><a href="#sync_progress-instance_method" title="Na
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The number of accounts in the nano ledger–essentially all accounts with
-<em>open</em> blocks.</p>
+<p>The number of accounts in the nano ledger–essentially all accounts with <em>open</em> blocks.</p>
 </div></span>
   
 </li>
@@ -195,8 +186,7 @@ the <span class='object_link'><a href="#sync_progress-instance_method" title="Na
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The count of all blocks downloaded to the node, and blocks still to be
-synchronized by the node.</p>
+<p>The count of all blocks downloaded to the node, and blocks still to be synchronized by the node.</p>
 </div></span>
   
 </li>
@@ -366,12 +356,7 @@ synchronized by the node.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the difficulty values (16 hexadecimal digits string, 64 bit) for
-the minimum required on the network (network_minimum) as well as the
-current active difficulty seen on the network (network_current, 5 minute
-trended average of adjusted difficulty seen on confirmed transactions)
-which can be used to perform rework for better prioritization of
-transaction processing.</p>
+<p>Returns the difficulty values (16 hexadecimal digits string, 64 bit) for the minimum required on the network (network_minimum) as well as the current active difficulty seen on the network (network_current, 5 minute trended average of adjusted difficulty seen on confirmed transactions) which can be used to perform rework for better prioritization of transaction processing.</p>
 </div></span>
   
 </li>
@@ -537,8 +522,7 @@ transaction processing.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The percentage completeness of the synchronization process for your node as
-it downloads the nano ledger.</p>
+<p>The percentage completeness of the synchronization process for your node as it downloads the nano ledger.</p>
 </div></span>
   
 </li>
@@ -562,8 +546,7 @@ it downloads the nano ledger.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>This method is deprecated and will be removed in 3.0, as a node never
-reaches 100% synchronization.</p>
+<p>This method is deprecated and will be removed in 3.0, as a node never reaches 100% synchronization.</p>
 </div></span>
   
 </li>
@@ -663,7 +646,7 @@ reaches 100% synchronization.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns a new instance of Node</p>
+<p>Returns a new instance of Node.</p>
 
 
   </div>
@@ -715,12 +698,7 @@ reaches 100% synchronization.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The number of accounts in the nano ledger–essentially all accounts with
-<em>open</em> blocks. An <em>open</em> block is the type of block written
-to the nano ledger when an account receives its first payment (see
-<span class='object_link'><a href="WalletAccount.html#receive-instance_method" title="Nanook::WalletAccount#receive (method)">WalletAccount#receive</a></span>). All accounts that respond
-<code>true</code> to <span class='object_link'><a href="Account.html#exists%3F-instance_method" title="Nanook::Account#exists? (method)">Account#exists?</a></span> have open blocks in the
-ledger.</p>
+<p>The number of accounts in the nano ledger–essentially all accounts with <em>open</em> blocks. An <em>open</em> block is the type of block written to the nano ledger when an account receives its first payment (see <span class='object_link'><a href="WalletAccount.html#receive-instance_method" title="Nanook::WalletAccount#receive (method)">WalletAccount#receive</a></span>). All accounts that respond <code>true</code> to <span class='object_link'><a href="Account.html#exists%3F-instance_method" title="Nanook::Account#exists? (method)">Account#exists?</a></span> have open blocks in the ledger.</p>
 
 
   </div>
@@ -779,8 +757,7 @@ ledger.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The count of all blocks downloaded to the node, and blocks still to be
-synchronized by the node.</p>
+<p>The count of all blocks downloaded to the node, and blocks still to be synchronized by the node.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1065,6 +1042,8 @@ synchronized by the node.</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -1127,9 +1106,7 @@ synchronized by the node.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returning status of current bootstrap attempt for debug purposes only. This
-call is for internal diagnostics/debug purposes only. Do not rely on this
-interface being stable and do not use in a production system.</p>
+<p>Returning status of current bootstrap attempt for debug purposes only. This call is for internal diagnostics/debug purposes only. Do not rely on this interface being stable and do not use in a production system.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1209,12 +1186,9 @@ interface being stable and do not use in a production system.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This call is for internal diagnostics/debug purposes only. Do not rely on
-this interface being stable and do not use in a production system.</p>
+<p>This call is for internal diagnostics/debug purposes only. Do not rely on this interface being stable and do not use in a production system.</p>
 
-<p>Returns block and tally weight (in raw) election duration (in
-milliseconds), election confirmation timestamp for recent elections
-winners.</p>
+<p>Returns block and tally weight (in raw) election duration (in milliseconds), election confirmation timestamp for recent elections winners.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1299,13 +1273,7 @@ winners.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the difficulty values (16 hexadecimal digits string, 64 bit) for
-the minimum required on the network (network_minimum) as well as the
-current active difficulty seen on the network (network_current, 5 minute
-trended average of adjusted difficulty seen on confirmed transactions)
-which can be used to perform rework for better prioritization of
-transaction processing. A multiplier of the network_current from the base
-difficulty of network_minimum is also provided for comparison.</p>
+<p>Returns the difficulty values (16 hexadecimal digits string, 64 bit) for the minimum required on the network (network_minimum) as well as the current active difficulty seen on the network (network_current, 5 minute trended average of adjusted difficulty seen on confirmed transactions) which can be used to perform rework for better prioritization of transaction processing. A multiplier of the network_current from the base difficulty of network_minimum is also provided for comparison.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1342,12 +1310,12 @@ difficulty of network_minimum is also provided for comparison.</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>false by default. Also returns the trend of difficulty seen on the network
-as a list of multipliers. Sampling occurs every 16 to 36 seconds. The list
-is ordered such that the first value is the most recent sample.</p>
+<p>false by default. Also returns the trend of difficulty seen on the network as a list of multipliers. Sampling occurs every 16 to 36 seconds. The list is ordered such that the first value is the most recent sample.</p>
 </div>
       
     </li>
@@ -1594,9 +1562,7 @@ is ordered such that the first value is the most recent sample.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>All online representatives that have voted recently. Note, due to the
-design of the nano RPC, this method cannot return the voting weight of the
-representatives.</p>
+<p>All online representatives that have voted recently. Note, due to the design of the nano RPC, this method cannot return the voting weight of the representatives.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1719,10 +1685,7 @@ representatives.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The percentage completeness of the synchronization process for your node as
-it downloads the nano ledger. Note, it&#39;s normal for your progress to
-not ever reach 100. The closer to 100, the more complete your node&#39;s
-data is, and so the query methods in this class become more reliable.</p>
+<p>The percentage completeness of the synchronization process for your node as it downloads the nano ledger. Note, it&#39;s normal for your progress to not ever reach 100. The closer to 100, the more complete your node&#39;s data is, and so the query methods in this class become more reliable.</p>
 
 
   </div>
@@ -1793,8 +1756,7 @@ data is, and so the query methods in this class become more reliable.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This method is deprecated and will be removed in 3.0, as a node never
-reaches 100% synchronization.</p>
+<p>This method is deprecated and will be removed in 3.0, as a node never reaches 100% synchronization.</p>
 
 
   </div>
@@ -1859,7 +1821,7 @@ reaches 100% synchronization.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns information about the synchronizing blocks for this node</p>
+<p>Returns information about the synchronizing blocks for this node.</p>
 
 
   </div>
@@ -1875,6 +1837,8 @@ reaches 100% synchronization.</p>
       
         <span class='type'>(<tt>Integer</tt>)</span>
       
+      
+        <em class="default">(defaults to: <tt>1000</tt>)</em>
       
       
         &mdash;
@@ -2009,7 +1973,7 @@ reaches 100% synchronization.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns version information for this node</p>
+<p>Returns version information for this node.</p>
 
 
   </div>
@@ -2061,9 +2025,9 @@ reaches 100% synchronization.</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 16 06:30:34 2019 by
+  Generated on Fri Mar 26 12:47:24 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.5.3).
+  0.9.24 (ruby-3.0.0).
 </div>
 
     </div>

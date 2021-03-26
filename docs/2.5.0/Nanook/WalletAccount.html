@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Nanook::WalletAccount";
   relpath = '../';
 </script>
@@ -107,8 +107,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>The <code>Nanook::WalletAccount</code> class lets you manage your nano
-accounts, including paying and receiving payment.</p>
+<p>The <code>Nanook::WalletAccount</code> class lets you manage your nano accounts, including paying and receiving payment.</p>
 
 <h3 id="label-Initializing">Initializing</h3>
 
@@ -258,8 +257,7 @@ accounts, including paying and receiving payment.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Information about this accounts that have set this account as their
-representative.</p>
+<p>Information about this accounts that have set this account as their representative.</p>
 </div></span>
   
 </li>
@@ -453,8 +451,7 @@ representative.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The last modified time of the account in the time zone of your nano node
-(usually UTC).</p>
+<p>The last modified time of the account in the time zone of your nano node (usually UTC).</p>
 </div></span>
   
 </li>
@@ -478,8 +475,7 @@ representative.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Information about the given account as well as other accounts up the
-ledger.</p>
+<p>Information about the given account as well as other accounts up the ledger.</p>
 </div></span>
   
 </li>
@@ -527,8 +523,7 @@ ledger.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Information about pending blocks (payments) that are waiting to be received
-by the account.</p>
+<p>Information about pending blocks (payments) that are waiting to be received by the account.</p>
 </div></span>
   
 </li>
@@ -649,7 +644,7 @@ by the account.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns a new instance of WalletAccount</p>
+<p>Returns a new instance of WalletAccount.</p>
 
 
   </div>
@@ -691,9 +686,9 @@ by the account.</p>
   <span class='ivar'>@account</span> <span class='op'>=</span> <span class='id identifier rubyid_account'>account</span>
   <span class='ivar'>@nanook_account_instance</span> <span class='op'>=</span> <span class='kw'>nil</span>
 
-  <span class='kw'>unless</span> <span class='ivar'>@account</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-    <span class='comment'># Wallet must contain the account
-</span>    <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Wallet.html" title="Nanook::Wallet (class)">Wallet</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Wallet.html#initialize-instance_method" title="Nanook::Wallet#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='ivar'>@rpc</span><span class='comma'>,</span> <span class='ivar'>@wallet</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_contains?'><span class='object_link'><a href="Wallet.html#contains%3F-instance_method" title="Nanook::Wallet#contains? (method)">contains?</a></span></span><span class='lparen'>(</span><span class='ivar'>@account</span><span class='rparen'>)</span>
+  <span class='kw'>unless</span> <span class='ivar'>@account</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>    <span class='comment'># Wallet must contain the account
+</span>
+    <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Wallet.html" title="Nanook::Wallet (class)">Wallet</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Wallet.html#initialize-instance_method" title="Nanook::Wallet#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='ivar'>@rpc</span><span class='comma'>,</span> <span class='ivar'>@wallet</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_contains?'><span class='object_link'><a href="Wallet.html#contains%3F-instance_method" title="Nanook::Wallet#contains? (method)">contains?</a></span></span><span class='lparen'>(</span><span class='ivar'>@account</span><span class='rparen'>)</span>
       <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Account does not exist in wallet. Account: </span><span class='embexpr_beg'>#{</span><span class='ivar'>@account</span><span class='embexpr_end'>}</span><span class='tstring_content'>, wallet: </span><span class='embexpr_beg'>#{</span><span class='ivar'>@wallet</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
     <span class='kw'>end</span>
 
@@ -727,8 +722,7 @@ by the account.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The account&#39;s balance, including pending (unreceived payments). To
-receive a pending amount see <span class='object_link'><a href="#receive-instance_method" title="Nanook::WalletAccount#receive (method)">#receive</a></span>.</p>
+<p>The account&#39;s balance, including pending (unreceived payments). To receive a pending amount see <span class='object_link'><a href="#receive-instance_method" title="Nanook::WalletAccount#receive (method)">#receive</a></span>.</p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -771,13 +765,12 @@ receive a pending amount see <span class='object_link'><a href="#receive-instanc
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -845,7 +838,7 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns number of blocks for this account</p>
+<p>Returns number of blocks for this account.</p>
 
 
   </div>
@@ -902,16 +895,11 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
     
 <p>Sets the representative for the account.</p>
 
-<p>A representative is an account that will vote on your account&#39;s behalf
-on the nano network if your account is offline and there is a fork of the
-network that requires voting on.</p>
+<p>A representative is an account that will vote on your account&#39;s behalf on the nano network if your account is offline and there is a fork of the network that requires voting on.</p>
 
-<p>Returns the <em>change block</em> that was broadcast to the nano network.
-The block contains the information about the representative change for your
-account.</p>
+<p>Returns the <em>change block</em> that was broadcast to the nano network. The block contains the information about the representative change for your account.</p>
 
-<p>Also see <span class='object_link'><a href="Wallet.html#change_default_representative-instance_method" title="Nanook::Wallet#change_default_representative (method)">Nanook::Wallet#change_default_representative</a></span> for how to set a
-default representative for all new accounts created in a wallet.</p>
+<p>Also see <span class='object_link'><a href="Wallet.html#change_default_representative-instance_method" title="Nanook::Wallet#change_default_representative (method)">Nanook::Wallet#change_default_representative</a></span> for how to set a default representative for all new accounts created in a wallet.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -936,8 +924,7 @@ default representative for all new accounts created in a wallet.</p>
       
         &mdash;
         <div class='inline'>
-<p>the id of the representative account to set as this account&#39;s
-representative</p>
+<p>the id of the representative account to set as this account&#39;s representative</p>
 </div>
       
     </li>
@@ -1083,8 +1070,7 @@ representative</p>
       
         &mdash;
         <div class='inline'>
-<p>returns an Array of <span class='object_link'><a href="" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> if method was called with
-argument <code>n</code> &gt;  1</p>
+<p>returns an Array of <span class='object_link'><a href="" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> if method was called with argument <code>n</code> &gt;  1</p>
 </div>
       
     </li>
@@ -1162,8 +1148,7 @@ argument <code>n</code> &gt;  1</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Information about this accounts that have set this account as their
-representative.</p>
+<p>Information about this accounts that have set this account as their representative.</p>
 
 <h3 id="label-Example-3A">Example:</h3>
 
@@ -1193,13 +1178,12 @@ representative.</p>
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -1324,14 +1308,9 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
     
 <p>Returns true if the account has an <em>open</em> block.</p>
 
-<p>An open block gets published when an account receives a payment for the
-first time.</p>
+<p>An open block gets published when an account receives a payment for the first time.</p>
 
-<p>The reliability of this check depends on the node host having synchronized
-itself with most of the blocks on the nano network, otherwise you may get
-<code>false</code> when the account does exist. You can check if a
-node&#39;s  synchronization is particular low using
-<span class='object_link'><a href="Node.html#sync_progress-instance_method" title="Nanook::Node#sync_progress (method)">Node#sync_progress</a></span>.</p>
+<p>The reliability of this check depends on the node host having synchronized itself with most of the blocks on the nano network, otherwise you may get <code>false</code> when the account does exist. You can check if a node&#39;s  synchronization is particular low using <span class='object_link'><a href="Node.html#sync_progress-instance_method" title="Nanook::Node#sync_progress (method)">Node#sync_progress</a></span>.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1427,6 +1406,8 @@ node&#39;s  synchronization is particular low using
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>1000</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -1443,13 +1424,12 @@ node&#39;s  synchronization is particular low using
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -1621,11 +1601,12 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>(default is false). When <code>true</code>, four additional calls are made
-to the RPC to return more information</p>
+<p>(default is false). When <code>true</code>, four additional calls are made to the RPC to return more information</p>
 </div>
       
     </li>
@@ -1638,13 +1619,12 @@ to the RPC to return more information</p>
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -1672,8 +1652,7 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 <p>The latest block hash</p>
 </dd><dt><code>open_block</code>
 <dd>
-<p>The first block in every account&#39;s blockchain. When this block was
-published the account was officially open</p>
+<p>The first block in every account&#39;s blockchain. When this block was published the account was officially open</p>
 </dd><dt><code>representative_block</code>
 <dd>
 <p>The block that named the representative for the account</p>
@@ -1688,9 +1667,7 @@ published the account was officially open</p>
 <p>Number of blocks in the account&#39;s blockchain</p>
 </dd></dl>
 
-<p>When <code>detailed: true</code> is passed as an argument, this method
-makes four additional calls to the RPC to return more information about an
-account:</p>
+<p>When <code>detailed: true</code> is passed as an argument, this method makes four additional calls to the RPC to return more information about an account:</p>
 <dl class="rdoc-list label-list"><dt><code>weight</code>
 <dd>
 <p>See <span class='object_link'><a href="#weight-instance_method" title="Nanook::WalletAccount#weight (method)">#weight</a></span></p>
@@ -1791,8 +1768,7 @@ account:</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The last modified time of the account in the time zone of your nano node
-(usually UTC).</p>
+<p>The last modified time of the account in the time zone of your nano node (usually UTC).</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1816,8 +1792,7 @@ account:</p>
       
         &mdash;
         <div class='inline'>
-<p>last modified time of the account in the time zone of your nano node
-(usually UTC).</p>
+<p>last modified time of the account in the time zone of your nano node (usually UTC).</p>
 </div>
       
     </li>
@@ -1853,9 +1828,7 @@ account:</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Information about the given account as well as other accounts up the
-ledger. The number of accounts returned is determined by the
-<code>limit:</code> argument.</p>
+<p>Information about the given account as well as other accounts up the ledger. The number of accounts returned is determined by the <code>limit:</code> argument.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1892,6 +1865,8 @@ ledger. The number of accounts returned is determined by the
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>1</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -1907,6 +1882,8 @@ ledger. The number of accounts returned is determined by the
       
         <span class='type'>(<tt>Time</tt>)</span>
       
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
         &mdash;
@@ -1924,13 +1901,12 @@ ledger. The number of accounts returned is determined by the
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -1980,17 +1956,11 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Makes a payment from this account to another account on the nano network.
-Returns a <em>send</em> block hash if successful, or a <span class='object_link'><a href="Error.html" title="Nanook::Error (class)">Error</a></span> if
-unsuccessful.</p>
+<p>Makes a payment from this account to another account on the nano network. Returns a <em>send</em> block hash if successful, or a <span class='object_link'><a href="Error.html" title="Nanook::Error (class)">Error</a></span> if unsuccessful.</p>
 
-<p>Note, there may be a delay in receiving a response due to Proof of Work
-being done. From the <a
-href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
+<p>Note, there may be a delay in receiving a response due to Proof of Work being done. From the <a href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
 
-<p><em>Proof of Work is precomputed for one transaction in the background. If
-it has been a while since your last transaction it will send instantly, the
-next one will need to wait for Proof of Work to be generated.</em></p>
+<p><em>Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.</em></p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -2043,9 +2013,7 @@ next one will need to wait for Proof of Work to be generated.</em></p>
       
         &mdash;
         <div class='inline'>
-<p>must be unique per payment. It serves an important purpose; it allows you
-to make the same call multiple times with the same <code>id</code> and be
-reassured that you will only ever send this nano payment once</p>
+<p>must be unique per payment. It serves an important purpose; it allows you to make the same call multiple times with the same <code>id</code> and be reassured that you will only ever send this nano payment once</p>
 </div>
       
     </li>
@@ -2058,13 +2026,12 @@ reassured that you will only ever send this nano payment once</p>
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook::default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -2205,16 +2172,13 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Information about pending blocks (payments) that are waiting to be received
-by the account.</p>
+<p>Information about pending blocks (payments) that are waiting to be received by the account.</p>
 
-<p>See also the <span class='object_link'><a href="#receive-instance_method" title="Nanook::WalletAccount#receive (method)">#receive</a></span> method for how to receive a
-pending payment.</p>
+<p>See also the <span class='object_link'><a href="#receive-instance_method" title="Nanook::WalletAccount#receive (method)">#receive</a></span> method for how to receive a pending payment.</p>
 
 <p>The default response is an Array of block ids.</p>
 
-<p>With the <code>detailed:</code> argument, the method returns an Array of
-Hashes, which contain the source account id, amount pending and block id.</p>
+<p>With the <code>detailed:</code> argument, the method returns an Array of Hashes, which contain the source account id, amount pending and block id.</p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -2253,6 +2217,8 @@ Hashes, which contain the source account id, amount pending and block id.</p>
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>1000</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -2269,11 +2235,12 @@ Hashes, which contain the source account id, amount pending and block id.</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>return a more complex Hash of pending block information (default is
-<code>false</code>)</p>
+<p>return a more complex Hash of pending block information (default is <code>false</code>)</p>
 </div>
       
     </li>
@@ -2286,13 +2253,12 @@ Hashes, which contain the source account id, amount pending and block id.</p>
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -2413,14 +2379,11 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
     
 <p>Receives a pending payment for this account.</p>
 
-<p>When called with no <code>block</code> argument, the latest pending payment
-for the account will be received.</p>
+<p>When called with no <code>block</code> argument, the latest pending payment for the account will be received.</p>
 
-<p>Returns a <em>receive</em> block id if a receive was successful, or
-<code>false</code> if there were no pending payments to receive.</p>
+<p>Returns a <em>receive</em> block id if a receive was successful, or <code>false</code> if there were no pending payments to receive.</p>
 
-<p>You can receive a specific pending block if you know it by passing the
-block in as an argument.</p>
+<p>You can receive a specific pending block if you know it by passing the block in as an argument.</p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -2448,8 +2411,7 @@ block in as an argument.</p>
       
         &mdash;
         <div class='inline'>
-<p>optional block id of pending payment. If not provided, the latest pending
-payment will be received</p>
+<p>optional block id of pending payment. If not provided, the latest pending payment will be received</p>
 </div>
       
     </li>
@@ -2530,8 +2492,7 @@ payment will be received</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The representative account id for the account. Representatives are accounts
-that cast votes in the case of a fork in the network.</p>
+<p>The representative account id for the account. Representatives are accounts that cast votes in the case of a fork in the network.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -2593,9 +2554,7 @@ that cast votes in the case of a fork in the network.</p>
     
 <p>The account&#39;s weight.</p>
 
-<p>Weight is determined by the account&#39;s balance, and represents the
-voting weight that account has on the network. Only accounts with greater
-than 256 weight can vote.</p>
+<p>Weight is determined by the account&#39;s balance, and represents the voting weight that account has on the network. Only accounts with greater than 256 weight can vote.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -2648,9 +2607,9 @@ than 256 weight can vote.</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 16 06:30:35 2019 by
+  Generated on Fri Mar 26 12:47:25 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.5.3).
+  0.9.24 (ruby-3.0.0).
 </div>
 
     </div>

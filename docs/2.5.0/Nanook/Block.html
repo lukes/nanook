@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Nanook::Block";
   relpath = '../';
 </script>
@@ -102,8 +102,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>The <code>Nanook::Block</code> class contains methods to discover
-publicly-available information about blocks on the nano network.</p>
+<p>The <code>Nanook::Block</code> class contains methods to discover publicly-available information about blocks on the nano network.</p>
 
 <p>A block is represented by a unique id like this:</p>
 
@@ -211,9 +210,7 @@ publicly-available information about blocks on the nano network.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns a consecutive list of block hashes in the account chain starting at
-block back to count (direction from frontier back to open block, from newer
-blocks to older).</p>
+<p>Returns a consecutive list of block hashes in the account chain starting at block back to count (direction from frontier back to open block, from newer blocks to older).</p>
 </div></span>
   
 </li>
@@ -311,8 +308,7 @@ blocks to older).</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns Array of Hashes containing information about a chain of
-send/receive blocks, starting from this block.</p>
+<p>Returns Array of Hashes containing information about a chain of send/receive blocks, starting from this block.</p>
 </div></span>
   
 </li>
@@ -506,8 +502,7 @@ send/receive blocks, starting from this block.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Republish blocks starting at this block up the account chain back to the
-nano network.</p>
+<p>Republish blocks starting at this block up the account chain back to the nano network.</p>
 </div></span>
   
 </li>
@@ -555,7 +550,7 @@ nano network.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns a new instance of Block</p>
+<p>Returns a new instance of Block.</p>
 
 
   </div>
@@ -739,11 +734,7 @@ nano network.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns a consecutive list of block hashes in the account chain starting at
-block back to count (direction from frontier back to open block, from newer
-blocks to older). Will list all blocks back to the open block of this chain
-when count is set to “-1”. The requested block hash is included in the
-answer.</p>
+<p>Returns a consecutive list of block hashes in the account chain starting at block back to count (direction from frontier back to open block, from newer blocks to older). Will list all blocks back to the open block of this chain when count is set to “-1”. The requested block hash is included in the answer.</p>
 
 <p>See also #successors.</p>
 
@@ -775,6 +766,8 @@ answer.</p>
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>1000</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -791,11 +784,12 @@ answer.</p>
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>0</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>return the account chain block hashes offset by the specified number of
-blocks (default is 0)</p>
+<p>return the account chain block hashes offset by the specified number of blocks (default is 0)</p>
 </div>
       
     </li>
@@ -838,12 +832,7 @@ blocks (default is 0)</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Request confirmation for a block from online representative nodes. Will
-return immediately with a boolean to indicate if the request for
-confirmation was successful. Note that this boolean does not indicate the
-confirmation status of the block. If confirmed, your block should appear in
-<span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span> within a short amount of time, or you
-can use the convenience method <span class='object_link'><a href="#confirmed_recently%3F-instance_method" title="Nanook::Block#confirmed_recently? (method)">#confirmed_recently?</a></span></p>
+<p>Request confirmation for a block from online representative nodes. Will return immediately with a boolean to indicate if the request for confirmation was successful. Note that this boolean does not indicate the confirmation status of the block. If confirmed, your block should appear in <span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span> within a short amount of time, or you can use the convenience method <span class='object_link'><a href="#confirmed_recently%3F-instance_method" title="Nanook::Block#confirmed_recently? (method)">#confirmed_recently?</a></span></p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -911,21 +900,13 @@ can use the convenience method <span class='object_link'><a href="#confirmed_rec
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>This call is for internal diagnostics/debug purposes only. Do not rely on
-this interface being stable and do not use in a production system.</p>
+<p>This call is for internal diagnostics/debug purposes only. Do not rely on this interface being stable and do not use in a production system.</p>
 
-<p>Check if the block appears in the list of recently confirmed blocks by
-online representatives. The full list of blocks can be queried for with
-<span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span>.</p>
+<p>Check if the block appears in the list of recently confirmed blocks by online representatives. The full list of blocks can be queried for with <span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span>.</p>
 
-<p>This method can work in conjunction with <span class='object_link'><a href="#confirm-instance_method" title="Nanook::Block#confirm (method)">#confirm</a></span>, whereby
-you can send any block (old or new) out to online representatives to
-confirm. The confirmation process can take up to a couple of minutes.</p>
+<p>This method can work in conjunction with <span class='object_link'><a href="#confirm-instance_method" title="Nanook::Block#confirm (method)">#confirm</a></span>, whereby you can send any block (old or new) out to online representatives to confirm. The confirmation process can take up to a couple of minutes.</p>
 
-<p>The method returning <code>false</code> can indicate that the block is
-still in the process of being confirmed and that you should call the method
-again soon, or that it was confirmed earlier than the list available in
-<span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span>, or that it was not confirmed.</p>
+<p>The method returning <code>false</code> can indicate that the block is still in the process of being confirmed and that you should call the method again soon, or that it was confirmed earlier than the list available in <span class='object_link'><a href="Node.html#confirmation_history-instance_method" title="Nanook::Node#confirmation_history (method)">Node#confirmation_history</a></span>, or that it was not confirmed.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -949,8 +930,7 @@ again soon, or that it was confirmed earlier than the list available in
       
         &mdash;
         <div class='inline'>
-<p><code>true</code> if the block has been recently confirmed by online
-representatives.</p>
+<p><code>true</code> if the block has been recently confirmed by online representatives.</p>
 </div>
       
     </li>
@@ -1012,12 +992,12 @@ representatives.</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>if set to <code>true</code>, then the node will query its work peers (if it
-has any, see <span class='object_link'><a href="WorkPeer.html#list-instance_method" title="Nanook::WorkPeer#list (method)">WorkPeer#list</a></span>). When <code>false</code>, the node
-will only generate work locally (default is <code>false</code>)</p>
+<p>if set to <code>true</code>, then the node will query its work peers (if it has any, see <span class='object_link'><a href="WorkPeer.html#list-instance_method" title="Nanook::WorkPeer#list (method)">WorkPeer#list</a></span>). When <code>false</code>, the node will only generate work locally (default is <code>false</code>)</p>
 </div>
       
     </li>
@@ -1076,8 +1056,7 @@ will only generate work locally (default is <code>false</code>)</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns Array of Hashes containing information about a chain of
-send/receive blocks, starting from this block.</p>
+<p>Returns Array of Hashes containing information about a chain of send/receive blocks, starting from this block.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1111,11 +1090,12 @@ send/receive blocks, starting from this block.</p>
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>1000</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>maximum number of send/receive block hashes to return in the chain (default
-is 1000)</p>
+<p>maximum number of send/receive block hashes to return in the chain (default is 1000)</p>
 </div>
       
     </li>
@@ -1256,11 +1236,12 @@ is 1000)</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>(default is <code>false</code>). If <code>true</code>, information can be
-returned about blocks that are unchecked (unverified).</p>
+<p>(default is <code>false</code>). If <code>true</code>, information can be returned about blocks that are unchecked (unverified).</p>
 </div>
       
     </li>
@@ -1295,9 +1276,9 @@ returned about blocks that are unchecked (unverified).</p>
     <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:unchecked_get</span><span class='comma'>,</span> <span class='symbol'>:hash</span><span class='rparen'>)</span>
     <span class='kw'>unless</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_has_key?'>has_key?</span><span class='lparen'>(</span><span class='symbol'>:error</span><span class='rparen'>)</span>
       <span class='kw'>return</span> <span class='id identifier rubyid__parse_info_response'>_parse_info_response</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
-    <span class='comment'># If unchecked not found, continue to checked block
-</span>  <span class='kw'>end</span>
+    <span class='kw'>end</span>    <span class='comment'># If unchecked not found, continue to checked block
+</span>
+  <span class='kw'>end</span>
 
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:block</span><span class='comma'>,</span> <span class='symbol'>:hash</span><span class='rparen'>)</span>
   <span class='id identifier rubyid__parse_info_response'>_parse_info_response</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='rparen'>)</span>
@@ -1567,8 +1548,7 @@ returned about blocks that are unchecked (unverified).</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Republish blocks starting at this block up the account chain back to the
-nano network.</p>
+<p>Republish blocks starting at this block up the account chain back to the nano network.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1686,11 +1666,12 @@ nano network.</p>
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>1000</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>maximum number of send/receive block hashes to return in the chain (default
-is 1000)</p>
+<p>maximum number of send/receive block hashes to return in the chain (default is 1000)</p>
 </div>
       
     </li>
@@ -1703,11 +1684,12 @@ is 1000)</p>
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>0</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>return the account chain block hashes offset by the specified number of
-blocks (default is 0)</p>
+<p>return the account chain block hashes offset by the specified number of blocks (default is 0)</p>
 </div>
       
     </li>
@@ -1761,9 +1743,9 @@ blocks (default is 0)</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 16 06:30:34 2019 by
+  Generated on Fri Mar 26 12:47:24 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.5.3).
+  0.9.24 (ruby-3.0.0).
 </div>
 
     </div>

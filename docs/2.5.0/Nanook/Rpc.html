@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Nanook::Rpc";
   relpath = '../';
 </script>
@@ -102,13 +102,9 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>The <code>Nanook::Rpc</code> class is responsible for maintaining the
-connection to the RPC server, calling the RPC and parsing its response into
-Ruby primitives.</p>
+<p>The <code>Nanook::Rpc</code> class is responsible for maintaining the connection to the RPC server, calling the RPC and parsing its response into Ruby primitives.</p>
 
-<p>Internally, the <span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span> class creates an instance of this class, and
-it&#39;s generally more convenient to interact with the RPC through an
-instance of <span class='object_link'><a href="../Nanook.html#rpc-instance_method" title="Nanook#rpc (method)">#rpc</a></span> instead of by instantiating this class directly:</p>
+<p>Internally, the <span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span> class creates an instance of this class, and it&#39;s generally more convenient to interact with the RPC through an instance of <span class='object_link'><a href="../Nanook.html#rpc-instance_method" title="Nanook#rpc (method)">#rpc</a></span> instead of by instantiating this class directly:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_nanook'>nanook</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span>
 <span class='id identifier rubyid_nanook'>nanook</span><span class='period'>.</span><span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:accounts_create</span><span class='comma'>,</span> <span class='label'>wallet:</span> <span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='comma'>,</span> <span class='label'>count:</span> <span class='int'>2</span><span class='rparen'>)</span>
@@ -121,11 +117,16 @@ instance of <span class='object_link'><a href="../Nanook.html#rpc-instance_metho
   
 
 </div>
-  <h2>Constant Summary</h2>
-  <dl class="constants">
-    
-      <dt id="DEFAULT_URI-constant" class="">DEFAULT_URI =
-        <div class="docstring">
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="DEFAULT_URI-constant" class="">DEFAULT_URI =
+          <div class="docstring">
   <div class="discussion">
     
 <p>Default RPC server and port to connect to</p>
@@ -137,11 +138,11 @@ instance of <span class='object_link'><a href="../Nanook.html#rpc-instance_metho
   
 
 </div>
-      </dt>
-      <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://localhost:7076</span><span class='tstring_end'>&quot;</span></span></pre></dd>
-    
-      <dt id="DEFAULT_TIMEOUT-constant" class="">DEFAULT_TIMEOUT =
-        <div class="docstring">
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>http://localhost:7076</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="DEFAULT_TIMEOUT-constant" class="">DEFAULT_TIMEOUT =
+          <div class="docstring">
   <div class="discussion">
     
 <p>Default request timeout in seconds</p>
@@ -153,10 +154,11 @@ instance of <span class='object_link'><a href="../Nanook.html#rpc-instance_metho
   
 
 </div>
-      </dt>
-      <dd><pre class="code"><span class='int'>60</span></pre></dd>
-    
-  </dl>
+        </dt>
+        <dd><pre class="code"><span class='int'>60</span></pre></dd>
+      
+    </dl>
+  
 
 
 
@@ -262,7 +264,7 @@ instance of <span class='object_link'><a href="../Nanook.html#rpc-instance_metho
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns a new instance of Rpc</p>
+<p>Returns a new instance of Rpc.</p>
 
 
   </div>
@@ -348,8 +350,7 @@ instance of <span class='object_link'><a href="../Nanook.html#rpc-instance_metho
       
         &mdash;
         <div class='inline'>
-<p>the “action” of the RPC to call. The RPC always expects an “action” param
-to identify what RPC action is being called.</p>
+<p>the “action” of the RPC to call. The RPC always expects an “action” param to identify what RPC action is being called.</p>
 </div>
       
     </li>
@@ -495,9 +496,9 @@ to identify what RPC action is being called.</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 16 06:30:34 2019 by
+  Generated on Fri Mar 26 12:47:23 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.5.3).
+  0.9.24 (ruby-3.0.0).
 </div>
 
     </div>
