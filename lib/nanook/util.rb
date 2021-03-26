@@ -6,14 +6,14 @@ class Nanook
   class Util
 
     # Constant used to convert back and forth between raw and NANO.
-    STEP = BigDecimal.new("10")**BigDecimal.new("30")
+    STEP = BigDecimal("10")**BigDecimal("30")
 
     # Converts an amount of NANO to an amount of raw.
     #
     # @param nano [Float|Integer] amount in nano
     # @return [Integer] amount in raw
     def self.NANO_to_raw(nano)
-      (BigDecimal.new(nano.to_s) * STEP).to_i
+      (BigDecimal(nano.to_s) * STEP).to_i
     end
 
     # Converts an amount of raw to an amount of NANO.
