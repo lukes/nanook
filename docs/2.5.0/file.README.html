@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "README";
   relpath = '';
 </script>
@@ -60,16 +60,9 @@
       <div id="content"><div id='filecontents'>
 <h1 id="label-Nanook">Nanook</h1>
 
-<p>This is a Ruby library for managing a <a href="https://nano.org/">nano
-currency</a> node, including making and receiving payments, using the <a
-href="https://docs.nano.org/commands/rpc-protocol">nano RPC protocol</a>.
-Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It&#39;s
-awesome. See <a href="https://nano.org/">nano.org</a>.</p>
+<p>This is a Ruby library for managing a <a href="https://nano.org/">nano currency</a> node, including making and receiving payments, using the <a href="https://docs.nano.org/commands/rpc-protocol">nano RPC protocol</a>. Nano is a fee-less, fast, environmentally-friendly cryptocurrency. It&#39;s awesome. See <a href="https://nano.org/">nano.org</a>.</p>
 
-<p><a href="https://badge.fury.io/rb/nanook"><img
-src="https://badge.fury.io/rb/nanook.svg"></a> <a
-href="https://circleci.com/gh/lukes/nanook/tree/master"><img
-src="https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield"></a></p>
+<p><a href="https://badge.fury.io/rb/nanook"><img src="https://badge.fury.io/rb/nanook.svg"></a> <a href="https://circleci.com/gh/lukes/nanook/tree/master"><img src="https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield"></a></p>
 
 <h2 id="label-Installation">Installation</h2>
 
@@ -135,34 +128,21 @@ src="https://circleci.com/gh/lukes/nanook/tree/master.svg?style=shield"></a></p>
 <span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='id identifier rubyid_your_account_id'>your_account_id</span><span class='comma'>,</span> <span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='float'>0.2</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='rparen'>)</span>
 </code></pre>
 
-<p>The <code>id</code> can be any string and needs to be unique per payment.
-It serves an important purpose; it allows you to make this call multiple
-times with the same <code>id</code> and be reassured that you will only
-ever send that nano payment once. From the <a
-href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
+<p>The <code>id</code> can be any string and needs to be unique per payment. It serves an important purpose; it allows you to make this call multiple times with the same <code>id</code> and be reassured that you will only ever send that nano payment once. From the <a href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
 
 <blockquote>
-<p>You can (and should) specify a unique id for each spend to provide
-idempotency. That means that if you [make the payment call] two times with
-the same id, the second request won&#39;t send any additional Nano.</p>
+<p>You can (and should) specify a unique id for each spend to provide idempotency. That means that if you [make the payment call] two times with the same id, the second request won&#39;t send any additional Nano.</p>
 </blockquote>
 
-<p>The unit of the <code>amount</code> is NANO (which is currently technically
-Mnano — see <a href="https://nano.org/en/faq#what-are-nano-units-">What are
-Nano’s Units</a>). You can pass an amount of raw instead by adding the
-<code>unit: :raw</code> argument:</p>
+<p>The unit of the <code>amount</code> is NANO (which is currently technically Mnano — see <a href="https://nano.org/en/faq#what-are-nano-units-">What are Nano’s Units</a>). You can pass an amount of raw instead by adding the <code>unit: :raw</code> argument:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_pay'>pay</span><span class='lparen'>(</span><span class='label'>to:</span> <span class='id identifier rubyid_recipient_account_id'>recipient_account_id</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='int'>999</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='symbol'>:raw</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='id identifier rubyid_unique_id'>unique_id</span><span class='rparen'>)</span>
 </code></pre>
 
-<p>Note, there may be a delay in receiving a response due to Proof of Work
-being done. From the <a
-href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
+<p>Note, there may be a delay in receiving a response due to Proof of Work being done. From the <a href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
 
 <blockquote>
-<p>Proof of Work is precomputed for one transaction in the background. If it
-has been a while since your last transaction it will send instantly, the
-next one will need to wait for Proof of Work to be generated.</p>
+<p>Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.</p>
 </blockquote>
 
 <h3 id="label-Receiving+a+payment">Receiving a payment</h3>
@@ -178,13 +158,9 @@ next one will need to wait for Proof of Work to be generated.</p>
 <span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='label'>into:</span> <span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
 </code></pre>
 
-<p>The <code>receive</code> method when called as above will receive the
-latest pending payment for an account in a wallet. It will either return a
-block hash if a payment was received, or <code>false</code> if there were
-no pending payments to receive.</p>
+<p>The <code>receive</code> method when called as above will receive the latest pending payment for an account in a wallet. It will either return a block hash if a payment was received, or <code>false</code> if there were no pending payments to receive.</p>
 
-<p>You can also receive a specific pending block if you know it (you may have
-discovered it through calling <code>account.pending</code> for example):</p>
+<p>You can also receive a specific pending block if you know it (you may have discovered it through calling <code>account.pending</code> for example):</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
 <span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_receive'>receive</span><span class='lparen'>(</span><span class='id identifier rubyid_block_id'>block_id</span><span class='rparen'>)</span>
@@ -197,18 +173,11 @@ discovered it through calling <code>account.pending</code> for example):</p>
 
 <h2 id="label-All+commands">All commands</h2>
 
-<p>Below is a quick reference list of commands. See the <a
-href="https://lukes.github.io/nanook/2.5.0/">full Nanook documentation</a>
-for a searchable detailed description of every class and method, what the
-arguments mean, and example responses (Tip: the classes are listed under
-the “<strong>Nanook</strong> &lt; Object” item in the sidebar).</p>
+<p>Below is a quick reference list of commands. See the <a href="https://lukes.github.io/nanook/2.5.0/">full Nanook documentation</a> for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: the classes are listed under the “<strong>Nanook</strong> &lt; Object” item in the sidebar).</p>
 
 <h3 id="label-Wallets">Wallets</h3>
 
-<p>See the <a
-href="https://lukes.github.io/nanook/2.5.0/Nanook/Wallet.html">full
-documentation for Nanook::Wallet</a> for a detailed description of each
-method and example responses.</p>
+<p>See the <a href="https://lukes.github.io/nanook/2.5.0/Nanook/Wallet.html">full documentation for Nanook::Wallet</a> for a detailed description of each method and example responses.</p>
 
 <h4 id="label-Create+wallet-3A">Create wallet:</h4>
 
@@ -220,8 +189,7 @@ method and example responses.</p>
 <pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='period'>.</span><span class='id identifier rubyid_restore'><span class='object_link'><a href="Nanook/Wallet.html#restore-instance_method" title="Nanook::Wallet#restore (method)">restore</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_seed'>seed</span><span class='rparen'>)</span>
 </code></pre>
 
-<p>Optionally also restore the wallet&#39;s accounts: <code>ruby
-Nanook.new.wallet.restore(seed, accounts: 2) </code></p>
+<p>Optionally also restore the wallet&#39;s accounts: <code>ruby Nanook.new.wallet.restore(seed, accounts: 2) </code></p>
 
 <h4 id="label-Working+with+a+single+wallet-3A">Working with a single wallet:</h4>
 
@@ -271,10 +239,7 @@ Nanook.new.wallet.restore(seed, accounts: 2) </code></p>
 
 <h4 id="label-Working+with+a+single+account-3A">Working with a single account:</h4>
 
-<p>See the <a
-href="https://lukes.github.io/nanook/2.5.0/Nanook/WalletAccount.html">full
-documentation for Nanook::WalletAccount</a> for a detailed description of
-each method and example responses.</p>
+<p>See the <a href="https://lukes.github.io/nanook/2.5.0/Nanook/WalletAccount.html">full documentation for Nanook::WalletAccount</a> for a detailed description of each method and example responses.</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wallet'><span class='object_link'><a href="Nanook.html#wallet-instance_method" title="Nanook#wallet (method)">wallet</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook/Wallet.html#account-instance_method" title="Nanook::Wallet#account (method)">account</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
 
@@ -313,10 +278,7 @@ each method and example responses.</p>
 
 <h4 id="label-Working+with+any+account+-28not+necessarily+in+your+wallet-29-3A">Working with any account (not necessarily in your wallet):</h4>
 
-<p>See the <a
-href="https://lukes.github.io/nanook/2.5.0/Nanook/Account.html">full
-documentation for Nanook::Account</a> for a detailed description of each
-method and example responses.</p>
+<p>See the <a href="https://lukes.github.io/nanook/2.5.0/Nanook/Account.html">full documentation for Nanook::Account</a> for a detailed description of each method and example responses.</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_account'><span class='object_link'><a href="Nanook.html#account-instance_method" title="Nanook#account (method)">account</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span>
 
@@ -348,10 +310,7 @@ method and example responses.</p>
 
 <h3 id="label-Blocks">Blocks</h3>
 
-<p>See the <a
-href="https://lukes.github.io/nanook/2.5.0/Nanook/Block.html">full
-documentation for Nanook::Block</a> for a detailed description of each
-method and example responses.</p>
+<p>See the <a href="https://lukes.github.io/nanook/2.5.0/Nanook/Block.html">full documentation for Nanook::Block</a> for a detailed description of each method and example responses.</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_block'>block</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_block'><span class='object_link'><a href="Nanook.html#block-instance_method" title="Nanook#block (method)">block</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_block_id'>block_id</span><span class='rparen'>)</span>
 
@@ -382,10 +341,7 @@ method and example responses.</p>
 
 <h3 id="label-Managing+your+nano+node">Managing your nano node</h3>
 
-<p>See the <a
-href="https://lukes.github.io/nanook/2.5.0/Nanook/Node.html">full
-documentation for Nanook::Node</a> for a detailed description of each
-method and example responses.</p>
+<p>See the <a href="https://lukes.github.io/nanook/2.5.0/Nanook/Node.html">full documentation for Nanook::Node</a> for a detailed description of each method and example responses.</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_node'><span class='object_link'><a href="Nanook.html#node-instance_method" title="Nanook#node (method)">node</a></span></span>
 
@@ -438,23 +394,16 @@ method and example responses.</p>
 
 <h2 id="label-Nanook+Metal">Nanook Metal</h2>
 
-<p>You can do any call listed in the <a
-href="https://docs.nano.org/commands/rpc-protocol">Nano RPC</a> directly
-through the <code>rpc</code> method. The first argument should match the
-<code>action</code> of the RPC call, and then all remaining parameters are
-passed in as arguments.</p>
+<p>You can do any call listed in the <a href="https://docs.nano.org/commands/rpc-protocol">Nano RPC</a> directly through the <code>rpc</code> method. The first argument should match the <code>action</code> of the RPC call, and then all remaining parameters are passed in as arguments.</p>
 
-<p>E.g., the <a
-href="https://docs.nano.org/commands/rpc-protocol/#accounts_create">accounts_create
-command</a> can be called like this:</p>
+<p>E.g., the <a href="https://docs.nano.org/commands/rpc-protocol/#accounts_create">accounts_create command</a> can be called like this:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_rpc'><span class='object_link'><a href="Nanook.html#rpc-instance_method" title="Nanook#rpc (method)">rpc</a></span></span><span class='period'>.</span><span class='id identifier rubyid_call'><span class='object_link'><a href="Nanook/Rpc.html#call-instance_method" title="Nanook::Rpc#call (method)">call</a></span></span><span class='lparen'>(</span><span class='symbol'>:accounts_create</span><span class='comma'>,</span> <span class='label'>wallet:</span> <span class='id identifier rubyid_wallet_id'>wallet_id</span><span class='comma'>,</span> <span class='label'>count:</span> <span class='int'>2</span><span class='rparen'>)</span>
 </code></pre>
 
 <h2 id="label-Contributing">Contributing</h2>
 
-<p>Bug reports and pull requests are welcome. Pull requests with passing tests
-are even better.</p>
+<p>Bug reports and pull requests are welcome. Pull requests with passing tests are even better.</p>
 
 <p>To run the test suite:</p>
 
@@ -468,26 +417,22 @@ are even better.</p>
 
 <h2 id="label-License">License</h2>
 
-<p>The gem is available as open source under the terms of the <a
-href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+<p>The gem is available as open source under the terms of the <a href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
 
 <h2 id="label-Buy+me+a+nano+coffee">Buy me a nano coffee</h2>
 
-<p>This library is totally free to use, but feel free to send some nano <a
-href="https://www.nanode.co/account/nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j">my
-way</a> if you&#39;d like to!</p>
+<p>This library is totally free to use, but feel free to send some nano <a href="https://www.nanode.co/account/nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j">my way</a> if you&#39;d like to!</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j'>nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j</span>
 </code></pre>
 
-<p><img
-src="https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png"></p>
+<p><img src="https://raw.githubusercontent.com/lukes/nanook/master/img/qr.png"></p>
 </div></div>
 
       <div id="footer">
-  Generated on Mon Sep 16 06:30:33 2019 by
+  Generated on Fri Mar 26 12:47:23 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.5.3).
+  0.9.24 (ruby-3.0.0).
 </div>
 
     </div>

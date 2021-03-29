@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Nanook::Wallet";
   relpath = '../';
 </script>
@@ -102,41 +102,20 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>The <code>Nanook::Wallet</code> class lets you manage your nano wallets, as
-well as some account-specific things like making and receiving payments.</p>
+<p>The <code>Nanook::Wallet</code> class lets you manage your nano wallets, as well as some account-specific things like making and receiving payments.</p>
 
 <h3 id="label-Wallet+seeds+vs+ids">Wallet seeds vs ids</h3>
 
-<p>Your wallets each have an id as well as a seed. Both are 32-byte uppercase
-hex strings that look like this:</p>
+<p>Your wallets each have an id as well as a seed. Both are 32-byte uppercase hex strings that look like this:</p>
 
 <pre class="code ruby"><code class="ruby">000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F
 </code></pre>
 
-<p>This class uses wallet <em>ids</em> to identify your wallet. A wallet id
-only exists locally on the nano node that it was created on. The person who
-knows this id can only perform all read and write actions against the
-wallet and all accounts inside the wallet from the same nano node that it
-was created on. This makes wallet ids fairly safe to use as a person needs
-to know your wallet id as well as have access to run RPC commands against
-your nano node to be able to control your accounts.</p>
+<p>This class uses wallet <em>ids</em> to identify your wallet. A wallet id only exists locally on the nano node that it was created on. The person who knows this id can only perform all read and write actions against the wallet and all accounts inside the wallet from the same nano node that it was created on. This makes wallet ids fairly safe to use as a person needs to know your wallet id as well as have access to run RPC commands against your nano node to be able to control your accounts.</p>
 
-<p>A <em>seed</em> on the other hand can be used to link any wallet to another
-wallet&#39;s accounts, from anywhere in the nano network. This happens by
-setting a wallet&#39;s seed to be the same as a previous wallet&#39;s seed.
-When a wallet has the same seed as another wallet, any accounts created in
-the second wallet will be the same accounts as those that were created in
-the previous wallet, and the new wallet&#39;s owner will also gain
-ownership of the previous wallet&#39;s accounts. Note, that the two wallets
-will have different ids, but the same seed.</p>
+<p>A <em>seed</em> on the other hand can be used to link any wallet to another wallet&#39;s accounts, from anywhere in the nano network. This happens by setting a wallet&#39;s seed to be the same as a previous wallet&#39;s seed. When a wallet has the same seed as another wallet, any accounts created in the second wallet will be the same accounts as those that were created in the previous wallet, and the new wallet&#39;s owner will also gain ownership of the previous wallet&#39;s accounts. Note, that the two wallets will have different ids, but the same seed.</p>
 
-<p>Nanook is based on the Nano RPC, which uses wallet ids and not seeds. The
-RPC and therefore Nanook cannot tell you what a wallet&#39;s seed is, only
-its id. Knowing a wallet&#39;s seed is very useful for if you ever want to
-restore the wallet anywhere else on the nano network besides the node you
-originally created it on. The nano command line interface (CLI) is the only
-method for discovering a wallet&#39;s seed. See the
-<a href="https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword" target="_parent" title="https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword">https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword</a>.</p>
+<p>Nanook is based on the Nano RPC, which uses wallet ids and not seeds. The RPC and therefore Nanook cannot tell you what a wallet&#39;s seed is, only its id. Knowing a wallet&#39;s seed is very useful for if you ever want to restore the wallet anywhere else on the nano network besides the node you originally created it on. The nano command line interface (CLI) is the only method for discovering a wallet&#39;s seed. See the <a href="https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword" target="_parent" title="https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword">https://docs.nano.org/commands/command-line-interface/#-wallet_decrypt_unsafe-walletwallet-passwordpassword</a>.</p>
 
 <h3 id="label-Initializing">Initializing</h3>
 
@@ -191,8 +170,7 @@ method for discovering a wallet&#39;s seed. See the
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the given account in the wallet as a <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">WalletAccount</a></span>
-instance to let you start working with it.</p>
+<p>Returns the given account in the wallet as a <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">WalletAccount</a></span> instance to let you start working with it.</p>
 </div></span>
   
 </li>
@@ -240,8 +218,7 @@ instance to let you start working with it.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Balance of all accounts in the wallet, optionally breaking the balances
-down by account.</p>
+<p>Balance of all accounts in the wallet, optionally breaking the balances down by account.</p>
 </div></span>
   
 </li>
@@ -605,8 +582,7 @@ down by account.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Makes a payment from an account in your wallet to another account on the
-nano network.</p>
+<p>Makes a payment from an account in your wallet to another account on the nano network.</p>
 </div></span>
   
 </li>
@@ -630,8 +606,7 @@ nano network.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Information about pending blocks (payments) that are waiting to be received
-by accounts in this wallet.</p>
+<p>Information about pending blocks (payments) that are waiting to be received by accounts in this wallet.</p>
 </div></span>
   
 </li>
@@ -727,7 +702,7 @@ by accounts in this wallet.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns a new instance of Wallet</p>
+<p>Returns a new instance of Wallet.</p>
 
 
   </div>
@@ -777,17 +752,14 @@ by accounts in this wallet.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the given account in the wallet as a <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span>
-instance to let you start working with it.</p>
+<p>Returns the given account in the wallet as a <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> instance to let you start working with it.</p>
 
-<p>Call with no <code>account</code> argument if you wish to create a new
-account in the wallet, like this:</p>
+<p>Call with no <code>account</code> argument if you wish to create a new account in the wallet, like this:</p>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_wallet'>wallet</span><span class='period'>.</span><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span>     <span class='comment'># =&gt; Nanook::WalletAccount
 </span></code></pre>
 
-<p>See <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> for all the methods you can call on the account
-object returned.</p>
+<p>See <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> for all the methods you can call on the account object returned.</p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -815,10 +787,7 @@ object returned.</p>
       
         &mdash;
         <div class='inline'>
-<p>optional String of an account (starting with
-<code>&quot;xrb...&quot;</code>) to start working with. Must be an account
-within the wallet. When no account is given, the instance returned only
-allows you to call <code>create</code> on it, to create a new account.</p>
+<p>optional String of an account (starting with <code>&quot;xrb...&quot;</code>) to start working with. Must be an account within the wallet. When no account is given, the instance returned only allows you to call <code>create</code> on it, to create a new account.</p>
 </div>
       
     </li>
@@ -892,8 +861,7 @@ allows you to call <code>create</code> on it, to create a new account.</p>
     
 <p>Array of <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> instances of accounts in the wallet.</p>
 
-<p>See <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> for all the methods you can call on the account
-objects returned.</p>
+<p>See <span class='object_link'><a href="WalletAccount.html" title="Nanook::WalletAccount (class)">Nanook::WalletAccount</a></span> for all the methods you can call on the account objects returned.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -965,8 +933,7 @@ objects returned.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Balance of all accounts in the wallet, optionally breaking the balances
-down by account.</p>
+<p>Balance of all accounts in the wallet, optionally breaking the balances down by account.</p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -1028,11 +995,12 @@ down by account.</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>(default is <code>false</code>). When <code>true</code> the response will
-contain balances per account.</p>
+<p>(default is <code>false</code>). When <code>true</code> the response will contain balances per account.</p>
 </div>
       
     </li>
@@ -1045,13 +1013,12 @@ contain balances per account.</p>
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -1153,10 +1120,7 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Sets the default representative for the wallet. A wallet&#39;s default
-representative is the representative all new accounts created in the wallet
-will have. Changing the default representative for a wallet does not change
-the representatives for existing accounts in the wallet.</p>
+<p>Sets the default representative for the wallet. A wallet&#39;s default representative is the representative all new accounts created in the wallet will have. Changing the default representative for a wallet does not change the representatives for existing accounts in the wallet.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1181,8 +1145,7 @@ the representatives for existing accounts in the wallet.</p>
       
         &mdash;
         <div class='inline'>
-<p>the id of the representative account to set as this account&#39;s
-representative</p>
+<p>the id of the representative account to set as this account&#39;s representative</p>
 </div>
       
     </li>
@@ -1357,8 +1320,7 @@ representative</p>
     
 <p>Changes a wallet&#39;s seed.</p>
 
-<p>It&#39;s recommended to only change the seed of a wallet that contains no
-accounts.</p>
+<p>It&#39;s recommended to only change the seed of a wallet that contains no accounts.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1534,12 +1496,7 @@ accounts.</p>
     
 <p>Creates a new wallet.</p>
 
-<p>The wallet will be created only on this node. It&#39;s important that if
-you intend to add funds to accounts in this wallet that you backup the
-wallet <strong>seed</strong> in order to restore the wallet in future. The
-nano command line interface (CLI) is the only method for backing up a
-wallet&#39;s seed. See the
-<a href="https://github.com/nanocurrency/raiblocks/wiki/Command-line-interface" target="_parent" title="–wallet_decrypt_unsafe CLI command">–wallet_decrypt_unsafe CLI command</a>.</p>
+<p>The wallet will be created only on this node. It&#39;s important that if you intend to add funds to accounts in this wallet that you backup the wallet <strong>seed</strong> in order to restore the wallet in future. The nano command line interface (CLI) is the only method for backing up a wallet&#39;s seed. See the <a href="https://github.com/nanocurrency/raiblocks/wiki/Command-line-interface" target="_parent" title="–wallet_decrypt_unsafe CLI command">–wallet_decrypt_unsafe CLI command</a>.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1604,11 +1561,9 @@ wallet&#39;s seed. See the
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The default representative account id for the wallet. This is the
-representative that all new accounts created in this wallet will have.</p>
+<p>The default representative account id for the wallet. This is the representative that all new accounts created in this wallet will have.</p>
 
-<p>Changing the default representative for a wallet does not change the
-representatives for any accounts that have been created.</p>
+<p>Changing the default representative for a wallet does not change the representatives for any accounts that have been created.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -1788,7 +1743,7 @@ representatives for any accounts that have been created.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the wallet id</p>
+<p>Returns the wallet id.</p>
 
 
   </div>
@@ -1888,13 +1843,12 @@ representatives for any accounts that have been created.</p>
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -1913,8 +1867,7 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
       
         &mdash;
         <div class='inline'>
-<p>information about the wallet. See <span class='object_link'><a href="Account.html#info-instance_method" title="Nanook::Account#info (method)">Account#info</a></span> for details of
-what is returned for each account.</p>
+<p>information about the wallet. See <span class='object_link'><a href="Account.html#info-instance_method" title="Nanook::Account#info (method)">Account#info</a></span> for details of what is returned for each account.</p>
 </div>
       
     </li>
@@ -2038,8 +1991,7 @@ what is returned for each account.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Locks the wallet. A locked wallet cannot pocket pending transactions or
-make payments. See <span class='object_link'><a href="#unlock-instance_method" title="Nanook::Wallet#unlock (method)">#unlock</a></span>.</p>
+<p>Locks the wallet. A locked wallet cannot pocket pending transactions or make payments. See <span class='object_link'><a href="#unlock-instance_method" title="Nanook::Wallet#unlock (method)">#unlock</a></span>.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -2175,16 +2127,11 @@ make payments. See <span class='object_link'><a href="#unlock-instance_method" t
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Makes a payment from an account in your wallet to another account on the
-nano network.</p>
+<p>Makes a payment from an account in your wallet to another account on the nano network.</p>
 
-<p>Note, there may be a delay in receiving a response due to Proof of Work
-being done. From the <a
-href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
+<p>Note, there may be a delay in receiving a response due to Proof of Work being done. From the <a href="https://docs.nano.org/commands/rpc-protocol/#send">Nano RPC</a>:</p>
 
-<p><em>Proof of Work is precomputed for one transaction in the background. If
-it has been a while since your last transaction it will send instantly, the
-next one will need to wait for Proof of Work to be generated.</em></p>
+<p><em>Proof of Work is precomputed for one transaction in the background. If it has been a while since your last transaction it will send instantly, the next one will need to wait for Proof of Work to be generated.</em></p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -2250,13 +2197,12 @@ next one will need to wait for Proof of Work to be generated.</em></p>
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -2337,11 +2283,9 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Information about pending blocks (payments) that are waiting to be received
-by accounts in this wallet.</p>
+<p>Information about pending blocks (payments) that are waiting to be received by accounts in this wallet.</p>
 
-<p>See also the <span class='object_link'><a href="#receive-instance_method" title="Nanook::Wallet#receive (method)">#receive</a></span> method of this class for how to receive a pending
-payment.</p>
+<p>See also the <span class='object_link'><a href="#receive-instance_method" title="Nanook::Wallet#receive (method)">#receive</a></span> method of this class for how to receive a pending payment.</p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -2373,19 +2317,19 @@ payment.</p>
     <span class='lbrace'>{</span>
       <span class='symbol'>:amount</span><span class='op'>=&gt;</span><span class='float'>6.0</span><span class='comma'>,</span>
       <span class='symbol'>:source</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
-      <span class='symbol'>:block</span><span class='op'>=&gt;</span><span class='symbol'>:142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D</span><span class='tstring_end'>&quot;</span></span>
+      <span class='symbol'>:block</span><span class='op'>=&gt;</span><span class='symbol'>:&quot;142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D&quot;</span>
     <span class='rbrace'>}</span><span class='comma'>,</span>
     <span class='lbrace'>{</span>
       <span class='symbol'>:amount</span><span class='op'>=&gt;</span><span class='float'>12.0</span><span class='comma'>,</span>
       <span class='symbol'>:source</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
-      <span class='symbol'>:block</span><span class='op'>=&gt;</span><span class='symbol'>:242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D</span><span class='tstring_end'>&quot;</span></span>
+      <span class='symbol'>:block</span><span class='op'>=&gt;</span><span class='symbol'>:&quot;242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D&quot;</span>
     <span class='rbrace'>}</span>
   <span class='rbracket'>]</span><span class='comma'>,</span>
   <span class='symbol'>:nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3</span><span class='op'>=&gt;</span><span class='lbracket'>[</span>
     <span class='lbrace'>{</span>
       <span class='symbol'>:amount</span><span class='op'>=&gt;</span><span class='float'>106.370018</span><span class='comma'>,</span>
       <span class='symbol'>:source</span><span class='op'>=&gt;</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
-      <span class='symbol'>:block</span><span class='op'>=&gt;</span><span class='symbol'>:4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74</span><span class='tstring_end'>&quot;</span></span>
+      <span class='symbol'>:block</span><span class='op'>=&gt;</span><span class='symbol'>:&quot;4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74&quot;</span>
     <span class='rbrace'>}</span>
   <span class='rbracket'>]</span>
 <span class='rbrace'>}</span>
@@ -2406,6 +2350,8 @@ payment.</p>
         <span class='type'>(<tt>Integer</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>1000</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -2422,11 +2368,12 @@ payment.</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>return a more complex Hash of pending block information (default is
-<code>false</code>)</p>
+<p>return a more complex Hash of pending block information (default is <code>false</code>)</p>
 </div>
       
     </li>
@@ -2439,13 +2386,12 @@ payment.</p>
         <span class='type'>(<tt>Symbol</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
-<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>.
-Represents the unit that the balances will be returned in. Note: this
-method interprets <code>:nano</code> as NANO, which is technically Mnano.
-See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://nano.org/en/faq#what-are-nano-units" target="_parent" title="- What are Nano&amp;#39;s Units">- What are Nano&#39;s Units</a></p>
 </div>
       
     </li>
@@ -2546,14 +2492,11 @@ See <a href="https://nano.org/en/faq#what-are-nano-units-" target="_parent" titl
     
 <p>Receives a pending payment into an account in the wallet.</p>
 
-<p>When called with no <code>block</code> argument, the latest pending payment
-for the account will be received.</p>
+<p>When called with no <code>block</code> argument, the latest pending payment for the account will be received.</p>
 
-<p>Returns a <em>receive</em> block hash id if a receive was successful, or
-<code>false</code> if there were no pending payments to receive.</p>
+<p>Returns a <em>receive</em> block hash id if a receive was successful, or <code>false</code> if there were no pending payments to receive.</p>
 
-<p>You can receive a specific pending block if you know it by passing the
-block has in as an argument.</p>
+<p>You can receive a specific pending block if you know it by passing the block has in as an argument.</p>
 
 <h4 id="label-Examples-3A">Examples:</h4>
 
@@ -2597,8 +2540,7 @@ block has in as an argument.</p>
       
         &mdash;
         <div class='inline'>
-<p>optional block id of pending payment. If not provided, the latest pending
-payment will be received</p>
+<p>optional block id of pending payment. If not provided, the latest pending payment will be received</p>
 </div>
       
     </li>
@@ -2675,9 +2617,7 @@ payment will be received</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Restores a previously created wallet by its seed. A new wallet will be
-created on your node (with a new wallet id) and will have its seed set to
-the given seed.</p>
+<p>Restores a previously created wallet by its seed. A new wallet will be created on your node (with a new wallet id) and will have its seed set to the given seed.</p>
 
 <h4 id="label-Example-3A">Example:</h4>
 
@@ -2714,6 +2654,8 @@ the given seed.</p>
       
         <span class='type'>(<tt>Integer</tt>)</span>
       
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
       
       
         &mdash;
@@ -2874,9 +2816,9 @@ the given seed.</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 16 06:30:35 2019 by
+  Generated on Fri Mar 26 12:47:24 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.5.3).
+  0.9.24 (ruby-3.0.0).
 </div>
 
     </div>
