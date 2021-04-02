@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-collection_matchers", "~> 1.1"
   spec.add_development_dependency "rspec_junit_formatter", "~> 0.3"
   spec.add_development_dependency "webmock", "~> 3.3"
-  spec.add_development_dependency "yard", "~> 0"
+  spec.add_development_dependency "yard", ">= 0.9.20"
 
   spec.add_dependency "symbolized", "= 0.0.1"
 

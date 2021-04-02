@@ -1276,9 +1276,9 @@
     <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:unchecked_get</span><span class='comma'>,</span> <span class='symbol'>:hash</span><span class='rparen'>)</span>
     <span class='kw'>unless</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_has_key?'>has_key?</span><span class='lparen'>(</span><span class='symbol'>:error</span><span class='rparen'>)</span>
       <span class='kw'>return</span> <span class='id identifier rubyid__parse_info_response'>_parse_info_response</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>    <span class='comment'># If unchecked not found, continue to checked block
-</span>
-  <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='comment'># If unchecked not found, continue to checked block
+</span>  <span class='kw'>end</span>
 
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:block</span><span class='comma'>,</span> <span class='symbol'>:hash</span><span class='rparen'>)</span>
   <span class='id identifier rubyid__parse_info_response'>_parse_info_response</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='rparen'>)</span>
@@ -1743,9 +1743,9 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Apr  3 09:07:20 2021 by
+  Generated on Sat Apr  3 09:25:53 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.24 (ruby-3.0.0).
+  0.9.26 (ruby-3.0.0).
 </div>
 
     </div>
