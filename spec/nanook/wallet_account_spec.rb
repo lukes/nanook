@@ -1,16 +1,18 @@
-RSpec.describe Nanook::WalletAccount do
+# frozen_string_literal: true
 
+RSpec.describe Nanook::WalletAccount do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
-  let(:account_id) { "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000" }
-  let(:wallet_id) { "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F" }
-  let(:block_id) { "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F" }
+  let(:account_id) { 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000' }
+  let(:wallet_id) { '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F' }
+  let(:block_id) { '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F' }
 
   def stub_valid_account_check
-    stub_request(:post, "http://localhost:7076/").
-    with(
-      body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
-      headers: headers).
-    to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
+    stub_request(:post, 'http://localhost:7076/')
+      .with(
+        body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+        headers: headers
+      )
+      .to_return(status: 200, body: '{"exists":"1"}', headers: {})
   end
 
   def stub_account_exists_check
@@ -29,43 +31,44 @@ RSpec.describe Nanook::WalletAccount do
     )
   end
 
-  it "wallet account create" do
+  it 'wallet account create' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_create\",\"wallet\":\"#{wallet_id}\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      body: '{"account":"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"}',
       headers: {}
     )
 
-    stub_request(:post, "http://localhost:7076/").
-    with(
-      body: "{\"action\":\"wallet_contains\",\"wallet\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
-      headers: {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby nanook gem'
-      }).
-    to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
+    stub_request(:post, 'http://localhost:7076/')
+      .with(
+        body: '{"action":"wallet_contains","wallet":"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F","account":"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"}',
+        headers: {
+          'Accept' => '*/*',
+          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Content-Type' => 'application/json',
+          'User-Agent' => 'Ruby nanook gem'
+        }
+      )
+      .to_return(status: 200, body: '{"exists":"1"}', headers: {})
 
     response = Nanook.new.wallet(wallet_id).account.create
     expect(response).to be_kind_of Nanook::WalletAccount
-    expect(response.id).to eq("nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
+    expect(response.id).to eq('nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000')
   end
 
-  it "wallet account create with 0 as argument" do
-    expect{Nanook.new.wallet(wallet_id).account.create(0)}.to raise_error(ArgumentError)
+  it 'wallet account create with 0 as argument' do
+    expect { Nanook.new.wallet(wallet_id).account.create(0) }.to raise_error(ArgumentError)
   end
 
-  it "wallet account create with 5 as argument" do
-    accounts = [
-      "nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000",
-      "nano_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000",
-      "nano_2e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000",
-      "nano_3e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000",
-      "nano_4e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000"
+  it 'wallet account create with 5 as argument' do
+    accounts = %w[
+      nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
+      nano_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000
+      nano_2e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000
+      nano_3e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000
+      nano_4e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3s00000000
     ]
 
     stub_request(:post, uri).with(
@@ -78,25 +81,25 @@ RSpec.describe Nanook::WalletAccount do
     )
 
     accounts.each do |account|
-      stub_request(:post, "http://localhost:7076/").
-      with(
-        body: "{\"action\":\"wallet_contains\",\"wallet\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"account\":\"#{account}\"}",
-        headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Content-Type'=>'application/json',
-        'User-Agent'=>'Ruby nanook gem'
-        }).
-      to_return(status: 200, body: "{\"exists\":\"1\"}", headers: {})
+      stub_request(:post, 'http://localhost:7076/')
+        .with(
+          body: "{\"action\":\"wallet_contains\",\"wallet\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"account\":\"#{account}\"}",
+          headers: {
+            'Accept' => '*/*',
+            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'Content-Type' => 'application/json',
+            'User-Agent' => 'Ruby nanook gem'
+          }
+        )
+        .to_return(status: 200, body: '{"exists":"1"}', headers: {})
     end
 
     response = Nanook.new.wallet(wallet_id).account.create(5)
     expect(response).to have(5).items
-    expect(response[0].id).to eq("nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000")
+    expect(response[0].id).to eq('nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000')
   end
 
-
-  it "wallet account destroy" do
+  it 'wallet account destroy' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -104,14 +107,14 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"removed\":\"1\"}",
+      body: '{"removed":"1"}',
       headers: {}
     )
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).destroy).to be true
   end
 
-  it "wallet account send payment" do
+  it 'wallet account send payment' do
     stub_valid_account_check
     stub_account_exists_check
 
@@ -120,7 +123,7 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"valid\":\"1\"}",
+      body: '{"valid":"1"}',
       headers: {}
     )
 
@@ -133,27 +136,30 @@ RSpec.describe Nanook::WalletAccount do
       headers: {}
     )
 
-    response = Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, id:"7081e2b8fec9146e")
+    response = Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, id: '7081e2b8fec9146e')
     expect(response).to eq block_id
   end
 
-  it "wallet account send payment and recipient account is not valid id" do
+  it 'wallet account send payment and recipient account is not valid id' do
     stub_valid_account_check
     stub_account_exists_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"validate_account_number\",\"account\":\"invalid\"}",
+      body: '{"action":"validate_account_number","account":"invalid"}',
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"valid\":\"0\"}",
+      body: '{"valid":"0"}',
       headers: {}
     )
 
-    expect{Nanook.new.wallet(wallet_id).account(account_id).pay(to: "invalid", amount: 2, id:"7081e2b8fec9146e")}.to raise_error ArgumentError
+    expect do
+      Nanook.new.wallet(wallet_id).account(account_id).pay(to: 'invalid', amount: 2,
+                                                           id: '7081e2b8fec9146e')
+    end.to raise_error ArgumentError
   end
 
-  it "wallet account send payment in raw" do
+  it 'wallet account send payment in raw' do
     stub_valid_account_check
     stub_account_exists_check
 
@@ -162,7 +168,7 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"valid\":\"1\"}",
+      body: '{"valid":"1"}',
       headers: {}
     )
 
@@ -175,11 +181,12 @@ RSpec.describe Nanook::WalletAccount do
       headers: {}
     )
 
-    response = Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, unit: :raw, id:"7081e2b8fec9146e")
+    response = Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, unit: :raw,
+                                                                    id: '7081e2b8fec9146e')
     expect(response).to eq block_id
   end
 
-  it "wallet account receive latest pending payment" do
+  it 'wallet account receive latest pending payment' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -203,7 +210,7 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account(account_id).receive).to eq block_id
   end
 
-  it "wallet account receive latest pending payment when no payment is pending" do
+  it 'wallet account receive latest pending payment when no payment is pending' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -211,14 +218,14 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"blocks\":[]}",
+      body: '{"blocks":[]}',
       headers: {}
     )
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).receive).to be false
   end
 
-  it "wallet account receive payment with block" do
+  it 'wallet account receive payment with block' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -233,7 +240,7 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account(account_id).receive(block_id)).to eq block_id
   end
 
-  it "wallet account balance" do
+  it 'wallet account balance' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -241,7 +248,7 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"balance\":\"2000000000000000000000000000\",\"pending\":\"1000000000000000000000000000\"}",
+      body: '{"balance":"2000000000000000000000000000","pending":"1000000000000000000000000000"}',
       headers: {}
     )
 
@@ -250,7 +257,7 @@ RSpec.describe Nanook::WalletAccount do
     expect(response[:pending]).to eq(0.001)
   end
 
-  it "wallet account balance raw unit" do
+  it 'wallet account balance raw unit' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -258,23 +265,23 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"balance\":\"10000\",\"pending\":\"20000\"}",
+      body: '{"balance":"10000","pending":"20000"}',
       headers: {}
     )
 
     response = Nanook.new.wallet(wallet_id).account(account_id).balance(unit: :raw)
-    expect(response[:balance]).to eq(10000)
-    expect(response[:pending]).to eq(20000)
+    expect(response[:balance]).to eq(10_000)
+    expect(response[:pending]).to eq(20_000)
   end
 
-  it "wallet account info" do
+  it 'wallet account info' do
     stub_valid_account_check
     stub_account_exists_check
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).info).to have_key(:frontier)
   end
 
-  it "wallet account history" do
+  it 'wallet account history' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -296,7 +303,7 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account(account_id).history).to have(1).item
   end
 
-  it "wallet account history without default count" do
+  it 'wallet account history without default count' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -318,7 +325,7 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account(account_id).history(limit: 1)).to have(1).item
   end
 
-  it "wallet account representative" do
+  it 'wallet account representative' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -326,19 +333,19 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"representative\":\"nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5\"}",
+      body: '{"representative":"nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"}',
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).representative).to eq "nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5"
+    expect(Nanook.new.wallet(wallet_id).account(account_id).representative).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
   end
 
-  it "setting the wallet account representative" do
+  it 'setting the wallet account representative' do
     stub_valid_account_check
     stub_account_exists_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_info\",\"account\":\"nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi\"}",
+      body: '{"action":"account_info","account":"nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi"}',
       headers: headers
     ).to_return(
       status: 200,
@@ -356,24 +363,24 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"block\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"}",
+      body: '{"block":"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"}',
       headers: {}
     )
 
-    response = Nanook.new.wallet(wallet_id).account(account_id).change_representative("nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi")
-    expect(response).to eq "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    response = Nanook.new.wallet(wallet_id).account(account_id).change_representative('nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi')
+    expect(response).to eq '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
   end
 
-  it "setting the wallet account representative if representative does not exist" do
+  it 'setting the wallet account representative if representative does not exist' do
     stub_valid_account_check
     stub_account_exists_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_info\",\"account\":\"nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi\"}",
+      body: '{"action":"account_info","account":"nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi"}',
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"error\":\"Bad account number\"}",
+      body: '{"error":"Bad account number"}',
       headers: {}
     )
 
@@ -382,14 +389,16 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"block\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"}",
+      body: '{"block":"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"}',
       headers: {}
     )
 
-    expect{Nanook.new.wallet(wallet_id).account(account_id).change_representative("nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi")}.to raise_error(ArgumentError)
+    expect do
+      Nanook.new.wallet(wallet_id).account(account_id).change_representative('nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi')
+    end.to raise_error(ArgumentError)
   end
 
-  it "wallet account pending no limit" do
+  it 'wallet account pending no limit' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -397,14 +406,14 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"blocks\":[\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"]}",
+      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
       headers: {}
     )
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).pending).to have(1).item
   end
 
-  it "wallet account pending when none are pending" do
+  it 'wallet account pending when none are pending' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -412,14 +421,14 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"blocks\":\"\"}",
+      body: '{"blocks":""}',
       headers: {}
     )
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).pending).to eq []
   end
 
-  it "wallet account pending with limit" do
+  it 'wallet account pending with limit' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -427,14 +436,14 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"blocks\":[\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\"]}",
+      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
       headers: {}
     )
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).pending(limit: 1)).to have(1).item
   end
 
-  it "wallet account weight" do
+  it 'wallet account weight' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -442,14 +451,14 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"weight\":\"10000\"}",
+      body: '{"weight":"10000"}',
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).weight).to eq 10000
+    expect(Nanook.new.wallet(wallet_id).account(account_id).weight).to eq 10_000
   end
 
-  it "wallet account ledger" do
+  it 'wallet account ledger' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -473,7 +482,7 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account(account_id).ledger).to have_key :nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n
   end
 
-  it "wallet account ledger with limit" do
+  it 'wallet account ledger with limit' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -497,7 +506,7 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account(account_id).ledger(limit: 10)).to have_key :nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n
   end
 
-  it "wallet account exists? when exists" do
+  it 'wallet account exists? when exists' do
     stub_valid_account_check
     stub_account_exists_check
 
@@ -511,14 +520,14 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"error\":\"Bad account number\"}",
+      body: '{"error":"Bad account number"}',
       headers: {}
     )
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).exists?).to be false
   end
 
-  it "wallet account delegators" do
+  it 'wallet account delegators' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
@@ -535,5 +544,4 @@ RSpec.describe Nanook::WalletAccount do
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).delegators).to have_key :nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd
   end
-
 end

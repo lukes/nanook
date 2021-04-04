@@ -936,7 +936,7 @@
       <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 82</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bootstrap'>bootstrap</span><span class='lparen'>(</span><span class='label'>address:</span><span class='comma'>,</span> <span class='label'>port:</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:bootstrap</span><span class='comma'>,</span> <span class='label'>address:</span> <span class='id identifier rubyid_address'>address</span><span class='comma'>,</span> <span class='label'>port:</span> <span class='id identifier rubyid_port'>port</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_has_key?'>has_key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:bootstrap</span><span class='comma'>,</span> <span class='label'>address:</span> <span class='id identifier rubyid_address'>address</span><span class='comma'>,</span> <span class='label'>port:</span> <span class='id identifier rubyid_port'>port</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -995,7 +995,7 @@
       <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 89</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bootstrap_any'>bootstrap_any</span>
-  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:bootstrap_any</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_has_key?'>has_key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:bootstrap_any</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1253,7 +1253,7 @@
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:confirmation_history</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:confirmations</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_history'>history</span><span class='op'>|</span>
     <span class='comment'># Rename hash key to block
 </span>    <span class='id identifier rubyid_block'>block</span> <span class='op'>=</span> <span class='id identifier rubyid_history'>history</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:hash</span><span class='rparen'>)</span>
-    <span class='lbrace'>{</span><span class='label'>block:</span> <span class='id identifier rubyid_block'>block</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_history'>history</span><span class='rparen'>)</span>
+    <span class='lbrace'>{</span> <span class='label'>block:</span> <span class='id identifier rubyid_block'>block</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_history'>history</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1348,9 +1348,7 @@
 210
 211
 212
-213
-214
-215</pre>
+213</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 207</span>
@@ -1359,9 +1357,7 @@
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:active_difficulty</span><span class='comma'>,</span> <span class='label'>include_trend:</span> <span class='id identifier rubyid_include_trend'>include_trend</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_response'>response</span><span class='op'>|</span>
     <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:multiplier</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:multiplier</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
 
-    <span class='kw'>if</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:difficulty_trend</span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:difficulty_trend</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_map!'>map!</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_f</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
+    <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:difficulty_trend</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_map!'>map!</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_f</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:difficulty_trend</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1406,15 +1402,15 @@
       <pre class="lines">
 
 
-218
-219
-220</pre>
+216
+217
+218</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 218</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 216</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
-  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>(object_id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0x00%x</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lparen'>(</span><span class='id identifier rubyid_object_id'>object_id</span> <span class='op'>&lt;&lt;</span> <span class='int'>1</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>(object_id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_format'>format</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0x00%x</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='lparen'>(</span><span class='id identifier rubyid_object_id'>object_id</span> <span class='op'>&lt;&lt;</span> <span class='int'>1</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;)</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1436,12 +1432,12 @@
       <pre class="lines">
 
 
-222
-223
-224</pre>
+220
+221
+222</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 222</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 220</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_peers'>peers</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:peers</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:peers</span><span class='rbracket'>]</span>
@@ -1502,6 +1498,19 @@
     </li>
   
 </ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -1509,6 +1518,8 @@
       <pre class="lines">
 
 
+239
+240
 241
 242
 243
@@ -1520,19 +1531,13 @@
 249
 250
 251
-252
-253
-254
-255
-256</pre>
+252</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 241</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 239</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_representatives'>representatives</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
-  <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unsupported unit: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_unit'>unit</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unsupported unit: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_unit'>unit</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:representatives</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:representatives</span><span class='rbracket'>]</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_response'>response</span> <span class='kw'>if</span> <span class='id identifier rubyid_unit'>unit</span> <span class='op'>==</span> <span class='symbol'>:raw</span>
@@ -1599,12 +1604,12 @@
       <pre class="lines">
 
 
-267
-268
-269</pre>
+263
+264
+265</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 267</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 263</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_representatives_online'>representatives_online</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:representatives_online</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:representatives</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
@@ -1658,15 +1663,15 @@
       <pre class="lines">
 
 
-274
-275
-276</pre>
+270
+271
+272</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 274</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 270</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stop'>stop</span>
-  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:stop</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_has_key?'>has_key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:stop</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1717,25 +1722,25 @@
       <pre class="lines">
 
 
+293
+294
+295
+296
 297
 298
 299
 300
-301
-302
-303
-304
-305</pre>
+301</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 297</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 293</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sync_progress'>sync_progress</span>
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:block_count</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_count'>count</span> <span class='op'>=</span> <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:count</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_unchecked'>unchecked</span> <span class='op'>=</span> <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:unchecked</span><span class='rbracket'>]</span>
-  <span class='id identifier rubyid_total'>total</span> <span class='op'>=</span>  <span class='id identifier rubyid_count'>count</span> <span class='op'>+</span> <span class='id identifier rubyid_unchecked'>unchecked</span>
+  <span class='id identifier rubyid_total'>total</span> <span class='op'>=</span> <span class='id identifier rubyid_count'>count</span> <span class='op'>+</span> <span class='id identifier rubyid_unchecked'>unchecked</span>
 
   <span class='id identifier rubyid_count'>count</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>*</span> <span class='int'>100</span> <span class='op'>/</span> <span class='id identifier rubyid_total'>total</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
 <span class='kw'>end</span></pre>
@@ -1788,17 +1793,17 @@
       <pre class="lines">
 
 
-318
-319
-320
-321</pre>
+314
+315
+316
+317</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 318</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 314</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_synced?'>synced?</span>
-  <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[DEPRECATION] `synced?` is deprecated and will be removed in 3.0</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:block_count</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:unchecked</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='int'>0</span>
+  <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>[DEPRECATION] `synced?` is deprecated and will be removed in 3.0</span><span class='tstring_end'>&#39;</span></span>
+  <span class='lparen'>(</span><span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:block_count</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:unchecked</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1875,16 +1880,16 @@
       <pre class="lines">
 
 
+276
+277
+278
+279
 280
 281
-282
-283
-284
-285
-286</pre>
+282</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 280</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 276</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_synchronizing_blocks'>synchronizing_blocks</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1000</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:unchecked</span><span class='comma'>,</span> <span class='label'>count:</span> <span class='id identifier rubyid_limit'>limit</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:blocks</span><span class='rbracket'>]</span>
@@ -1942,12 +1947,12 @@
       <pre class="lines">
 
 
-310
-311
-312</pre>
+306
+307
+308</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 310</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 306</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_uptime'>uptime</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:uptime</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>seconds</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
@@ -2005,12 +2010,12 @@
       <pre class="lines">
 
 
-324
-325
-326</pre>
+320
+321
+322</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 324</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 320</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_version'>version</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:version</span><span class='rparen'>)</span>
@@ -2025,7 +2030,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Apr  3 09:25:53 2021 by
+  Generated on Mon Apr  5 10:03:06 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.26 (ruby-3.0.0).
 </div>

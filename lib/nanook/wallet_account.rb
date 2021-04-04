@@ -1,5 +1,6 @@
-class Nanook
+# frozen_string_literal: true
 
+class Nanook
   # The <tt>Nanook::WalletAccount</tt> class lets you manage your nano accounts,
   # including paying and receiving payment.
   #
@@ -14,7 +15,6 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   account = Nanook::WalletAccount.new(rpc_conn, wallet_id, account_id)
   class WalletAccount
-
     extend Forwardable
     # @!method balance(unit: Nanook.default_unit)
     #   (see Nanook::Account#balance)
@@ -42,26 +42,30 @@ class Nanook
     #   (see Nanook::Account#representative)
     # @!method weight
     #   (see Nanook::Account#weight)
-    def_delegators :@nanook_account_instance, :balance, :delegators, :exists?, :history, :id, :info, :last_modified_at, :ledger, :pending, :public_key, :representative, :weight
-    alias_method :open?, :exists?
+    def_delegators :@nanook_account_instance, :balance, :delegators, :exists?, :history, :id, :info, :last_modified_at,
+                   :ledger, :pending, :public_key, :representative, :weight
+    alias open? exists?
 
     def initialize(rpc, wallet, account)
       @rpc = rpc
       @wallet = wallet
       @account = account
+
+      # Initialize an instance to delegate the RPC commands that do not
+      # need `enable_control` enabled (the read-only RPC commands).
       @nanook_account_instance = nil
 
-      unless @account.nil?
-        # Wallet must contain the account
-        unless Nanook::Wallet.new(@rpc, @wallet).contains?(@account)
-          raise ArgumentError.new("Account does not exist in wallet. Account: #{@account}, wallet: #{@wallet}")
-        end
+      return if @account.nil?
 
-        # An object to delegate account methods that don't
-        # expect a wallet param in the RPC call, to allow this
-        # class to support all methods that can be called on Nanook::Account
-        @nanook_account_instance = Nanook::Account.new(@rpc, @account)
+      # Wallet must contain the account
+      unless Nanook::Wallet.new(@rpc, @wallet).contains?(@account)
+        raise ArgumentError, "Account does not exist in wallet. Account: #{@account}, wallet: #{@wallet}"
       end
+
+      # An object to delegate account methods that don't
+      # expect a wallet param in the RPC call, to allow this
+      # class to support all methods that can be called on Nanook::Account
+      @nanook_account_instance = Nanook::Account.new(@rpc, @account)
     end
 
     # Creates a new account, or multiple new accounts, in this wallet.
@@ -71,22 +75,20 @@ class Nanook
     #   wallet.create     # => Nanook::WalletAccount
     #   wallet.create(2)  # => [Nanook::WalletAccount, Nanook::WalletAccount]
     #
-    # @param n [Integer] number of accounts to create
+    # @param n_accounts [Integer] number of accounts to create
     #
     # @return [Nanook::WalletAccount] returns a single {Nanook::WalletAccount}
     #   if invoked with no argument
     # @return [Array<Nanook::WalletAccount>] returns an Array of {Nanook::WalletAccount}
     #   if method was called with argument +n+ >  1
     # @raise [ArgumentError] if +n+ is less than 1
-    def create(n=1)
-      if n < 1
-        raise ArgumentError.new("number of accounts must be greater than 0")
-      end
+    def create(n_accounts = 1)
+      raise ArgumentError, 'number of accounts must be greater than 0' if n_accounts < 1
 
-      if n == 1
+      if n_accounts == 1
         Nanook::WalletAccount.new(@rpc, @wallet, rpc(:account_create)[:account])
       else
-        Array(rpc(:accounts_create, count: n)[:accounts]).map do |account|
+        Array(rpc(:accounts_create, count: n_accounts)[:accounts]).map do |account|
           Nanook::WalletAccount.new(@rpc, @wallet, account)
         end
       end
@@ -105,7 +107,8 @@ class Nanook
 
     # @return [String]
     def inspect
-      "#{self.class.name}(wallet_id: #{@wallet}, account_id: #{id}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+      "#{self.class.name}(wallet_id: #{@wallet}, account_id: #{id}, object_id: \"#{format('0x00%x',
+                                                                                          (object_id << 1))}\")"
     end
 
     # Makes a payment from this account to another account
@@ -131,23 +134,19 @@ class Nanook
     #   nano payment once
     # @return [String] the send block id for the payment
     # @raise [Nanook::Error] if unsuccessful
-    def pay(to:, amount:, unit: Nanook::default_unit, id:)
-      unless Nanook::UNITS.include?(unit)
-        raise ArgumentError.new("Unsupported unit: #{unit}")
-      end
+    def pay(to:, amount:, id:, unit: Nanook.default_unit)
+      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
 
       # Check that to account is a valid address
       response = @rpc.call(:validate_account_number, account: to)
-      unless response[:valid] == 1
-        raise ArgumentError.new("Account address is invalid: #{to}")
-      end
+      raise ArgumentError, "Account address is invalid: #{to}" unless response[:valid] == 1
 
       # Determin amount in raw
       raw = if unit.to_sym.eql?(:nano)
-        Nanook::Util.NANO_to_raw(amount)
-      else
-        amount
-      end
+              Nanook::Util.NANO_to_raw(amount)
+            else
+              amount
+            end
 
       # account is called source, so don't use the normal rpc method
       p = {
@@ -160,9 +159,7 @@ class Nanook
 
       response = @rpc.call(:send, p)
 
-      if response.has_key?(:error)
-        return Nanook::Error.new(response[:error])
-      end
+      return Nanook::Error.new(response[:error]) if response.key?(:error)
 
       response[:block]
     end
@@ -188,7 +185,7 @@ class Nanook
     #   not provided, the latest pending payment will be received
     # @return [String] the receive block id
     # @return [false] if there was no block to receive
-    def receive(block=nil)
+    def receive(block = nil)
       if block.nil?
         _receive_without_block
       else
@@ -211,7 +208,8 @@ class Nanook
     #
     # ==== Example:
     #
-    #   account.change_representative("nano_...") # => "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    #   account.change_representative("nano_...")
+    #     # => "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
     #
     # @param [String] representative the id of the representative account
     #   to set as this account's representative
@@ -219,7 +217,7 @@ class Nanook
     # @raise [ArgumentError] if the representative account does not exist
     def change_representative(representative)
       unless Nanook::Account.new(@rpc, representative).exists?
-        raise ArgumentError.new("Representative account does not exist: #{representative}")
+        raise ArgumentError, "Representative account does not exist: #{representative}"
       end
 
       rpc(:account_representative_set, representative: representative)[:block]
@@ -231,9 +229,7 @@ class Nanook
       # Discover the first pending block
       pending_blocks = @rpc.call(:pending, { account: @account, count: 1 })
 
-      if pending_blocks[:blocks].empty?
-        return false
-      end
+      return false if pending_blocks[:blocks].empty?
 
       # Then call receive_with_block as normal
       block = pending_blocks[:blocks][0]
@@ -246,13 +242,12 @@ class Nanook
       response.nil? ? false : response
     end
 
-    def rpc(action, params={})
+    def rpc(action, params = {})
       p = {}
       p[:wallet] = @wallet unless @wallet.nil?
       p[:account] = @account unless @account.nil?
 
       @rpc.call(action, p.merge(params))
     end
-
   end
 end

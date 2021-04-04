@@ -1,0 +1,19 @@
+AllCops:
+  TargetRubyVersion: 2.4
+
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/**/*'
+
+Layout/LineLength:
+  Exclude:
+    - 'lib/**/*'
+    - 'spec/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'spec/**/*'

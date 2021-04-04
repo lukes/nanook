@@ -1,5 +1,6 @@
-class Nanook
+# frozen_string_literal: true
 
+class Nanook
   # The <tt>Nanook::Wallet</tt> class lets you manage your nano wallets,
   # as well as some account-specific things like making and receiving payments.
   #
@@ -47,7 +48,6 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   wallet = Nanook::Wallet.new(rpc_conn, wallet_id)
   class Wallet
-
     def initialize(rpc, wallet)
       @rpc = rpc
       @wallet = wallet
@@ -75,7 +75,7 @@ class Nanook
     #   allows you to call +create+ on it, to create a new account.
     # @raise [ArgumentError] if the wallet does no contain the account
     # @return [Nanook::WalletAccount]
-    def account(account=nil)
+    def account(account = nil)
       Nanook::WalletAccount.new(@rpc, @wallet, account)
     end
 
@@ -145,14 +145,12 @@ class Nanook
     def balance(account_break_down: false, unit: Nanook.default_unit)
       wallet_required!
 
-      unless Nanook::UNITS.include?(unit)
-        raise ArgumentError.new("Unsupported unit: #{unit}")
-      end
+      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
 
       if account_break_down
         return Nanook::Util.coerce_empty_string_to_type(rpc(:wallet_balances)[:balances], Hash).tap do |r|
           if unit == :nano
-            r.each do |account, balances|
+            r.each do |account, _balances|
               r[account][:balance] = Nanook::Util.raw_to_NANO(r[account][:balance])
               r[account][:pending] = Nanook::Util.raw_to_NANO(r[account][:pending])
             end
@@ -181,7 +179,7 @@ class Nanook
     # @return [Boolean] indicating whether the change was successful.
     def change_seed(seed)
       wallet_required!
-      rpc(:wallet_change_seed, seed: seed).has_key?(:success)
+      rpc(:wallet_change_seed, seed: seed).key?(:success)
     end
 
     # Creates a new wallet.
@@ -220,7 +218,8 @@ class Nanook
     #
     # ==== Example:
     #
-    #   wallet.export # => "{\n    \"0000000000000000000000000000000000000000000000000000000000000000\": \"0000000000000000000000000000000000000000000000000000000000000003\",\n    \"0000000000000000000000000000000000000000000000000000000000000001\": \"C3A176FC3B90113277BFC91F55128FC9A1F1B6166A73E7446927CFFCA4C2C9D9\",\n    \"0000000000000000000000000000000000000000000000000000000000000002\": \"3E58EC805B99C52B4715598BD332C234A1FBF1780577137E18F53B9B7F85F04B\",\n    \"0000000000000000000000000000000000000000000000000000000000000003\": \"5FF8021122F3DEE0E4EC4241D35A3F41DEF63CCF6ADA66AF235DE857718498CD\",\n    \"0000000000000000000000000000000000000000000000000000000000000004\": \"A30E0A32ED41C8607AA9212843392E853FCBCB4E7CB194E35C94F07F91DE59EF\",\n    \"0000000000000000000000000000000000000000000000000000000000000005\": \"E707002E84143AA5F030A6DB8DD0C0480F2FFA75AB1FFD657EC22B5AA8E395D5\",\n    \"0000000000000000000000000000000000000000000000000000000000000006\": \"0000000000000000000000000000000000000000000000000000000000000001\",\n    \"8646C0423160DEAEAA64034F9C6858F7A5C8A329E73E825A5B16814F6CCAFFE3\": \"0000000000000000000000000000000000000000000000000000000100000000\"\n}\n"
+    #   wallet.export
+    #     # => "{\n    \"0000000000000000000000000000000000000000000000000000000000000000\": \"0000000000000000000000000000000000000000000000000000000000000003\",\n    \"0000000000000000000000000000000000000000000000000000000000000001\": \"C3A176FC3B90113277BFC91F55128FC9A1F1B6166A73E7446927CFFCA4C2C9D9\",\n    \"0000000000000000000000000000000000000000000000000000000000000002\": \"3E58EC805B99C52B4715598BD332C234A1FBF1780577137E18F53B9B7F85F04B\",\n    \"0000000000000000000000000000000000000000000000000000000000000003\": \"5FF8021122F3DEE0E4EC4241D35A3F41DEF63CCF6ADA66AF235DE857718498CD\",\n    \"0000000000000000000000000000000000000000000000000000000000000004\": \"A30E0A32ED41C8607AA9212843392E853FCBCB4E7CB194E35C94F07F91DE59EF\",\n    \"0000000000000000000000000000000000000000000000000000000000000005\": \"E707002E84143AA5F030A6DB8DD0C0480F2FFA75AB1FFD657EC22B5AA8E395D5\",\n    \"0000000000000000000000000000000000000000000000000000000000000006\": \"0000000000000000000000000000000000000000000000000000000000000001\",\n    \"8646C0423160DEAEAA64034F9C6858F7A5C8A329E73E825A5B16814F6CCAFFE3\": \"0000000000000000000000000000000000000000000000000000000100000000\"\n}\n"
     def export
       wallet_required!
       rpc(:wallet_export)[:json]
@@ -246,7 +245,7 @@ class Nanook
 
     # @return [String]
     def inspect
-      "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+      "#{self.class.name}(id: \"#{id}\", object_id: \"#{format('0x00%x', (object_id << 1))}\")"
     end
 
     # Makes a payment from an account in your wallet to another account
@@ -263,7 +262,8 @@ class Nanook
     # ==== Examples:
     #
     #   wallet.pay(from: "nano_...", to: "nano_...", amount: 1.1, id: "myUniqueId123") # => "9AE2311..."
-    #   wallet.pay(from: "nano_...", to: "nano_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123") # => "9AE2311..."
+    #   wallet.pay(from: "nano_...", to: "nano_...", amount: 54000000000000, unit: :raw, id: "myUniqueId123")
+    #     # => "9AE2311..."
     #
     # @param from [String] account id of an account in your wallet
     # @param to (see Nanook::WalletAccount#pay)
@@ -272,7 +272,7 @@ class Nanook
     # @params id (see Nanook::WalletAccount#pay)
     # @return (see Nanook::WalletAccount#pay)
     # @raise [Nanook::Error] if unsuccessful
-    def pay(from:, to:, amount:, unit: Nanook.default_unit, id:)
+    def pay(from:, to:, amount:, id:, unit: Nanook.default_unit)
       wallet_required!
       validate_wallet_contains_account!(from)
       account(from).pay(to: to, amount: amount, unit: unit, id: id)
@@ -330,12 +330,10 @@ class Nanook
     #       }
     #     ]
     #   }
-    def pending(limit:1000, detailed:false, unit:Nanook.default_unit)
+    def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
       wallet_required!
 
-      unless Nanook::UNITS.include?(unit)
-        raise ArgumentError.new("Unsupported unit: #{unit}")
-      end
+      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
 
       params = { count: limit }
       params[:source] = true if detailed
@@ -351,9 +349,7 @@ class Nanook
       x = response.map do |account, data|
         new_data = data.map do |block, amount_and_source|
           d = amount_and_source.merge(block: block.to_s)
-          if unit == :nano
-            d[:amount] = Nanook::Util.raw_to_NANO(d[:amount])
-          end
+          d[:amount] = Nanook::Util.raw_to_NANO(d[:amount]) if unit == :nano
           d
         end
 
@@ -383,7 +379,7 @@ class Nanook
     # @param into [String] account id of account in your wallet to receive the
     #   payment into
     # @return (see Nanook::WalletAccount#receive)
-    def receive(block=nil, into:)
+    def receive(block = nil, into:)
       wallet_required!
       validate_wallet_contains_account!(into)
       account(into).receive(block)
@@ -403,7 +399,7 @@ class Nanook
     def default_representative
       rpc(:wallet_representative)[:representative]
     end
-    alias_method :representative, :default_representative
+    alias representative default_representative
 
     # Sets the default representative for the wallet. A wallet's default
     # representative is the representative all new accounts created in
@@ -422,16 +418,15 @@ class Nanook
     # @raise [Nanook::Error] if setting the representative fails
     def change_default_representative(representative)
       unless Nanook::Account.new(@rpc, representative).exists?
-        raise ArgumentError.new("Representative account does not exist: #{representative}")
+        raise ArgumentError, "Representative account does not exist: #{representative}"
       end
 
-      if rpc(:wallet_representative_set, representative: representative)[:set] == 1
-        representative
-      else
-        raise Nanook::Error.new("Setting the representative failed")
-      end
+      raise Nanook::Error, 'Setting the representative failed' \
+        unless rpc(:wallet_representative_set, representative: representative)[:set] == 1
+
+      representative
     end
-    alias_method :change_representative, :change_default_representative
+    alias change_representative change_default_representative
 
     # Restores a previously created wallet by its seed.
     # A new wallet will be created on your node (with a new wallet id)
@@ -446,16 +441,12 @@ class Nanook
     #
     # @return [Nanook::Wallet] a new wallet
     # @raise [Nanook::Error] if unsuccessful
-    def restore(seed, accounts:0)
+    def restore(seed, accounts: 0)
       create
 
-      unless change_seed(seed)
-        raise Nanook::Error.new("Unable to set seed for wallet")
-      end
+      raise Nanook::Error, 'Unable to set seed for wallet' unless change_seed(seed)
 
-      if accounts > 0
-        account.create(accounts)
-      end
+      account.create(accounts) if accounts.positive?
 
       self
     end
@@ -488,16 +479,12 @@ class Nanook
     # @return [Hash{Symbol=>String|Array<Hash{Symbol=>String|Integer|Float}>}] information about the wallet.
     #   See {Nanook::Account#info} for details of what is returned for each account.
     def info(unit: Nanook.default_unit)
-      unless Nanook::UNITS.include?(unit)
-        raise ArgumentError.new("Unsupported unit: #{unit}")
-      end
+      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
 
       wallet_required!
       accounts = rpc(:wallet_ledger)[:accounts].map do |account_id, payload|
         payload[:id] = account_id
-        if unit == :nano
-          payload[:balance] = Nanook::Util.raw_to_NANO(payload[:balance])
-        end
+        payload[:balance] = Nanook::Util.raw_to_NANO(payload[:balance]) if unit == :nano
         payload
       end
 
@@ -558,27 +545,25 @@ class Nanook
 
     private
 
-    def rpc(action, params={})
+    def rpc(action, params = {})
       p = @wallet.nil? ? {} : { wallet: @wallet }
       @rpc.call(action, p.merge(params))
     end
 
     def wallet_required!
-      if @wallet.nil?
-        raise ArgumentError.new("Wallet must be present")
-      end
+      raise ArgumentError, 'Wallet must be present' if @wallet.nil?
     end
 
     def validate_wallet_contains_account!(account)
       @known_valid_accounts ||= []
       return if @known_valid_accounts.include?(account)
 
-      if contains?(account)
-        @known_valid_accounts << account
-      else
-        raise ArgumentError.new("Account does not exist in wallet. Account: #{account}, wallet: #{@wallet}")
+      unless contains?(account)
+        raise ArgumentError,
+              "Account does not exist in wallet. Account: #{account}, wallet: #{@wallet}"
       end
-    end
 
+      @known_valid_accounts << account
+    end
   end
 end

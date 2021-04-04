@@ -1,5 +1,6 @@
-class Nanook
+# frozen_string_literal: true
 
+class Nanook
   # The <tt>Nanook::Block</tt> class contains methods to discover
   # publicly-available information about blocks on the nano network.
   #
@@ -17,7 +18,6 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   block = Nanook::Block.new(rpc_conn, "FBF8B0E...")
   class Block
-
     def initialize(rpc, block)
       @rpc = rpc
       @block = block
@@ -70,7 +70,7 @@ class Nanook
       response = rpc(:chain, :block, count: limit, offset: offset)[:blocks]
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
-    alias_method :ancestors, :chain
+    alias ancestors chain
 
     # Request confirmation for a block from online representative nodes.
     # Will return immediately with a boolean to indicate if the request for
@@ -108,9 +108,9 @@ class Nanook
     # @return [Boolean] +true+ if the block has been recently confirmed by
     #   online representatives.
     def confirmed_recently?
-      @rpc.call(:confirmation_history)[:confirmations].map{|h| h[:hash]}.include?(@block)
+      @rpc.call(:confirmation_history)[:confirmations].map { |h| h[:hash] }.include?(@block)
     end
-    alias_method :recently_confirmed?, :confirmed_recently?
+    alias recently_confirmed? confirmed_recently?
 
     # Generate work for a block.
     #
@@ -184,9 +184,7 @@ class Nanook
     def info(allow_unchecked: false)
       if allow_unchecked
         response = rpc(:unchecked_get, :hash)
-        unless response.has_key?(:error)
-          return _parse_info_response(response)
-        end
+        return _parse_info_response(response) unless response.key?(:error)
         # If unchecked not found, continue to checked block
       end
 
@@ -217,9 +215,9 @@ class Nanook
     # ==== Example response:
     #
     #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
-    def republish(destinations:nil, sources:nil)
+    def republish(destinations: nil, sources: nil)
       if !destinations.nil? && !sources.nil?
-        raise ArgumentError.new("You must provide either destinations or sources but not both")
+        raise ArgumentError, 'You must provide either destinations or sources but not both'
       end
 
       # Add in optional arguments
@@ -253,7 +251,7 @@ class Nanook
     def publish
       rpc(:process, :block)[:hash] || false
     end
-    alias_method :process, :publish
+    alias process publish
 
     # Returns an Array of block hashes in the account chain ending at
     # this block.
@@ -279,7 +277,7 @@ class Nanook
     end
 
     def inspect
-      "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+      "#{self.class.name}(id: \"#{id}\", object_id: \"#{format('0x00%x', (object_id << 1))}\")"
     end
 
     private
@@ -287,15 +285,13 @@ class Nanook
     # Some RPC calls expect the param that represents the block to be named
     # "hash", and others "block".
     # The param_name argument allows us to specify which it should be for this call.
-    def rpc(action, param_name, params={})
+    def rpc(action, param_name, params = {})
       p = @block.nil? ? {} : { param_name.to_sym => @block }
       @rpc.call(action, p.merge(params))
     end
 
     def block_required!
-      if @block.nil?
-        raise ArgumentError.new("Block must be present")
-      end
+      raise ArgumentError, 'Block must be present' if @block.nil?
     end
 
     def _parse_info_response(response)
@@ -307,6 +303,5 @@ class Nanook
 
       response
     end
-
   end
 end

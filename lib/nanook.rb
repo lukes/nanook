@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'uri'
 require 'forwardable'
 
-Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each { |file| require file }
+Dir["#{File.dirname(__FILE__)}/nanook/*.rb"].sort.each { |file| require file }
 
 # ==== Initializing
 #
@@ -19,8 +21,7 @@ Dir[File.dirname(__FILE__) + '/nanook/*.rb'].each { |file| require file }
 #   Nanook.new(timeout: 600)
 #   Nanook.new("http://ip6-localhost.com:7076", timeout: 600)
 class Nanook
-
-  UNITS = [:raw, :nano]
+  UNITS = %i[raw nano].freeze
   DEFAULT_UNIT = :nano
 
   # @return [Nanook::Rpc]
@@ -32,9 +33,7 @@ class Nanook
   def self.default_unit
     return DEFAULT_UNIT unless defined?(UNIT)
 
-    unless UNITS.include?(UNIT.to_sym)
-      raise Nanook::Error.new("UNIT #{UNIT} must be one of #{UNITS}")
-    end
+    raise Nanook::Error, "UNIT #{UNIT} must be one of #{UNITS}" unless UNITS.include?(UNIT.to_sym)
 
     UNIT.to_sym
   end
@@ -51,7 +50,7 @@ class Nanook
   #
   # @param uri [String] default is {Nanook::Rpc::DEFAULT_URI}. The RPC host to connect to
   # @param timeout [Integer] default is {Nanook::Rpc::DEFAULT_TIMEOUT}. Connection timeout in number of seconds
-  def initialize(uri=Nanook::Rpc::DEFAULT_URI, timeout:Nanook::Rpc::DEFAULT_TIMEOUT)
+  def initialize(uri = Nanook::Rpc::DEFAULT_URI, timeout: Nanook::Rpc::DEFAULT_TIMEOUT)
     @rpc = Nanook::Rpc.new(uri, timeout: timeout)
   end
 
@@ -79,7 +78,7 @@ class Nanook
 
   # @return [String]
   def inspect
-    "#{self.class.name}(rpc: #{@rpc.inspect}, object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+    "#{self.class.name}(rpc: #{@rpc.inspect}, object_id: \"#{format('0x00%x', (object_id << 1))}\")"
   end
 
   # Returns a new instance of {Nanook::Key}.
@@ -89,7 +88,7 @@ class Nanook
   #
   # @param key [String] a private key
   # @return [Nanook::Key]
-  def key(key=nil)
+  def key(key = nil)
     Nanook::Key.new(@rpc, key)
   end
 
@@ -110,7 +109,7 @@ class Nanook
   #
   # @param wallet [String] the id of the wallet you want to work with
   # @return [Nanook::Wallet]
-  def wallet(wallet=nil)
+  def wallet(wallet = nil)
     Nanook::Wallet.new(@rpc, wallet)
   end
 
@@ -123,5 +122,4 @@ class Nanook
   def work_peers
     Nanook::WorkPeer.new(@rpc)
   end
-
 end

@@ -1,12 +1,12 @@
+# frozen_string_literal: true
+
 require 'bigdecimal'
 
 class Nanook
-
   # Set of class utility methods.
   class Util
-
     # Constant used to convert back and forth between raw and NANO.
-    STEP = BigDecimal("10")**BigDecimal("30")
+    STEP = BigDecimal('10')**BigDecimal('30')
 
     # Converts an amount of NANO to an amount of raw.
     #
@@ -33,12 +33,9 @@ class Nanook
     # @param response the value returned from the RPC server
     # @param type the type to return an empty of
     def self.coerce_empty_string_to_type(response, type)
-      if response == "" || response.nil?
-        return type.new
-      end
+      return type.new if response == '' || response.nil?
 
       response
     end
-
   end
 end

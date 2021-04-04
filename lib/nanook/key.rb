@@ -1,7 +1,9 @@
-class Nanook
-  class Key
+# frozen_string_literal: true
 
-    def initialize(rpc, key=nil)
+class Nanook
+  # The <tt>Nanook::Key</tt> class lets you manage your node's keys.
+  class Key
+    def initialize(rpc, key = nil)
       @rpc = rpc
       @key = key
     end
@@ -12,7 +14,7 @@ class Nanook
       elsif !seed.nil? && !index.nil?
         rpc(:deterministic_key, seed: seed, index: index)
       else
-        raise ArgumentError.new("This method must be called with either seed AND index params given or no params")
+        raise ArgumentError, 'This method must be called with either seed AND index params given or no params'
       end
     end
 
@@ -26,21 +28,18 @@ class Nanook
     end
 
     def inspect
-      "#{self.class.name}(id: \"#{id}\", object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+      "#{self.class.name}(id: \"#{id}\", object_id: \"#{format('0x00%x', (object_id << 1))}\")"
     end
 
     private
 
-    def rpc(action, params={})
+    def rpc(action, params = {})
       p = @key.nil? ? {} : { key: @key }
       @rpc.call(action, p.merge(params))
     end
 
     def key_required!
-      if @key.nil?
-        raise ArgumentError.new("Key must be present")
-      end
+      raise ArgumentError, 'Key must be present' if @key.nil?
     end
-
   end
 end

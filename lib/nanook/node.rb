@@ -1,5 +1,6 @@
-class Nanook
+# frozen_string_literal: true
 
+class Nanook
   # The <tt>Nanook::Node</tt> class contains methods to manage your nano
   # node and query its data of the nano network.
   #
@@ -25,7 +26,6 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   node = Nanook::Node.new(rpc_conn)
   class Node
-
     def initialize(rpc)
       @rpc = rpc
     end
@@ -40,7 +40,7 @@ class Nanook
     def account_count
       rpc(:frontier_count)[:count]
     end
-    alias_method :frontier_count, :account_count
+    alias frontier_count account_count
 
     # The count of all blocks downloaded to the node, and
     # blocks still to be synchronized by the node.
@@ -74,20 +74,20 @@ class Nanook
     def block_count_by_type
       rpc(:block_count_type)
     end
-    alias_method :block_count_type, :block_count_by_type
+    alias block_count_type block_count_by_type
 
     # Initialize bootstrap to a specific IP address and port.
     #
     # @return [Boolean] indicating if the action was successful
     def bootstrap(address:, port:)
-      rpc(:bootstrap, address: address, port: port).has_key?(:success)
+      rpc(:bootstrap, address: address, port: port).key?(:success)
     end
 
     # Initialize multi-connection bootstrap to random peers
     #
     # @return [Boolean] indicating if the action was successful
     def bootstrap_any
-      rpc(:bootstrap_any).has_key?(:success)
+      rpc(:bootstrap_any).key?(:success)
     end
 
     # Initialize lazy bootstrap with given block hash
@@ -168,7 +168,7 @@ class Nanook
       rpc(:confirmation_history)[:confirmations].map do |history|
         # Rename hash key to block
         block = history.delete(:hash)
-        {block: block}.merge(history)
+        { block: block }.merge(history)
       end
     end
 
@@ -208,15 +208,13 @@ class Nanook
       rpc(:active_difficulty, include_trend: include_trend).tap do |response|
         response[:multiplier] = response[:multiplier].to_f
 
-        if response.key?(:difficulty_trend)
-          response[:difficulty_trend].map!(&:to_f)
-        end
+        response[:difficulty_trend].map!(&:to_f) if response.key?(:difficulty_trend)
       end
     end
 
     # @return [String]
     def inspect
-      "#{self.class.name}(object_id: \"#{"0x00%x" % (object_id << 1)}\")"
+      "#{self.class.name}(object_id: \"#{format('0x00%x', (object_id << 1))}\")"
     end
 
     def peers
@@ -239,9 +237,7 @@ class Nanook
     #
     # @return [Hash{Symbol=>Integer}] known representatives and their voting weight
     def representatives(unit: Nanook.default_unit)
-      unless Nanook::UNITS.include?(unit)
-        raise ArgumentError.new("Unsupported unit: #{unit}")
-      end
+      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
 
       response = rpc(:representatives)[:representatives]
       return response if unit == :raw
@@ -272,7 +268,7 @@ class Nanook
     #
     # @return [Boolean] indicating if action was successful
     def stop
-      rpc(:stop).has_key?(:success)
+      rpc(:stop).key?(:success)
     end
 
     # @param limit [Integer] number of synchronizing blocks to return
@@ -284,7 +280,7 @@ class Nanook
       end
       Hash[response.sort].to_symbolized_hash
     end
-    alias_method :unchecked, :synchronizing_blocks
+    alias unchecked synchronizing_blocks
 
     # The percentage completeness of the synchronization process for
     # your node as it downloads the nano ledger. Note, it's normal for
@@ -299,7 +295,7 @@ class Nanook
 
       count = response[:count]
       unchecked = response[:unchecked]
-      total =  count + unchecked
+      total = count + unchecked
 
       count.to_f * 100 / total.to_f
     end
@@ -316,21 +312,20 @@ class Nanook
     #
     # @return [Boolean] signalling if this node ever reaches 100% synchronized
     def synced?
-      warn "[DEPRECATION] `synced?` is deprecated and will be removed in 3.0"
-      rpc(:block_count)[:unchecked] == 0
+      warn '[DEPRECATION] `synced?` is deprecated and will be removed in 3.0'
+      (rpc(:block_count)[:unchecked]).zero?
     end
 
     # @return [Hash{Symbol=>Integer|String}] version information for this node
     def version
       rpc(:version)
     end
-    alias_method :info, :version
+    alias info version
 
     private
 
-    def rpc(action, params={})
+    def rpc(action, params = {})
       @rpc.call(action, params)
     end
-
   end
 end

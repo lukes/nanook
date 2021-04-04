@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 RSpec.describe Nanook::Key do
-
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
-  let(:key) { "781186FB9EF17DB6E3D1056550D9FAE5D5BBADA6A6BC370E4CBB938B1DC71DA3" }
+  let(:key) { '781186FB9EF17DB6E3D1056550D9FAE5D5BBADA6A6BC370E4CBB938B1DC71DA3' }
 
-  it "should request info correctly" do
+  it 'should request info correctly' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"key_expand\",\"key\":\"#{key}\"}",
       headers: headers
@@ -18,9 +19,9 @@ RSpec.describe Nanook::Key do
     expect(Nanook.new.key(key).info).to have_key(:private)
   end
 
-  it "should create a key correctly" do
+  it 'should create a key correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"key_create\"}",
+      body: '{"action":"key_create"}',
       headers: headers
     ).to_return(
       status: 200,
@@ -33,8 +34,8 @@ RSpec.describe Nanook::Key do
     expect(Nanook.new.key.generate).to have_key(:private)
   end
 
-  it "should create a key with seed and index correctly" do
-    seed = "0000000000000000000000000000000000000000000000000000000000000000"
+  it 'should create a key with seed and index correctly' do
+    seed = '0000000000000000000000000000000000000000000000000000000000000000'
 
     stub_request(:post, uri).with(
       body: "{\"action\":\"deterministic_key\",\"seed\":\"#{seed}\",\"index\":\"0\"}",
@@ -50,10 +51,8 @@ RSpec.describe Nanook::Key do
     expect(Nanook.new.key.generate(seed: seed, index: 0)).to have_key(:private)
   end
 
-  it "should raise an exception if seed or index is provided but not both" do
-    expect{Nanook.new.key.generate(seed: "seed")}.to raise_error(ArgumentError)
-    expect{Nanook.new.key.generate(index: 1)}.to raise_error(ArgumentError)
+  it 'should raise an exception if seed or index is provided but not both' do
+    expect { Nanook.new.key.generate(seed: 'seed') }.to raise_error(ArgumentError)
+    expect { Nanook.new.key.generate(index: 1) }.to raise_error(ArgumentError)
   end
-
-
 end
