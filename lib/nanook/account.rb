@@ -74,7 +74,7 @@ class Nanook
     def exists?
       begin
         response = rpc(:account_info)
-      rescue Nanook::NodeRpcError
+      rescue Nanook::Error
         return false
       end
 
