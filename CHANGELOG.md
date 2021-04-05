@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 3.0.0
 
+### Added
+
+- Added missing `Nanook::WalletAccount#block_count` delegate.
+
 ### Changed
 
 - New error classes: `Nanook::ConnectionError`, `NanoUnitError`, `NodeRpcError` and `NodeRpcConfigurationError`.
