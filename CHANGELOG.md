@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 
 - `Nanook::Block#block_count_by_type` Removed, as the RPC no longer supports this command.
+- `Nanook::Block#history` Removed, as the RPC command is deprecated.
 
 ## 2.5.1
 

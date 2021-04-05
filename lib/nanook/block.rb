@@ -125,30 +125,6 @@ class Nanook
       rpc(:work_generate, :hash, use_peers: use_peers)[:work]
     end
 
-    # Returns Array of Hashes containing information about a chain of
-    # send/receive blocks, starting from this block.
-    #
-    # ==== Example:
-    #
-    #   block.history(limit: 1)
-    #
-    # ==== Example response:
-    #
-    #   [
-    #     {
-    #       :account=>"nano_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
-    #       :amount=>539834279601145558517940224,
-    #       :hash=>"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
-    #       :type=>"send"
-    #     }
-    #   ]
-    #
-    # @param limit [Integer] maximum number of send/receive block hashes
-    #   to return in the chain (default is 1000)
-    def history(limit: 1000)
-      rpc(:history, :hash, count: limit)[:history]
-    end
-
     # Returns the block hash id.
     #
     # ==== Example:

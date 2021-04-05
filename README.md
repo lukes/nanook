@@ -277,8 +277,6 @@ block.chain(limit: 10)
 block.chain(offset: 10)
 block.confirm
 block.confirmed_recently?
-block.history
-block.history(limit: 10)
 block.republish
 block.republish(sources: 2)
 block.republish(destinations: 2)

@@ -184,42 +184,6 @@ RSpec.describe Nanook::Block do
     expect(Nanook.new.block(block).confirmed_recently?).to eq false
   end
 
-  it 'should request history correctly' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"history\",\"hash\":\"#{block}\",\"count\":\"1000\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"history\":[{
-        \"hash\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
-        \"type\":\"receive\",
-        \"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"amount\":\"100000000000000000000000000000000\"
-      }]}",
-      headers: {}
-    )
-
-    expect(Nanook.new.block(block).history).to have(1).item
-  end
-
-  it 'should request history with a limit correctly' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"history\",\"hash\":\"#{block}\",\"count\":\"1\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"history\":[{
-        \"hash\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
-        \"type\":\"receive\",
-        \"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"amount\":\"100000000000000000000000000000000\"
-      }]}",
-      headers: {}
-    )
-
-    expect(Nanook.new.block(block).history(limit: 1)).to have(1).item
-  end
-
   it 'should request info correctly' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"block\",\"hash\":\"#{block}\"}",
