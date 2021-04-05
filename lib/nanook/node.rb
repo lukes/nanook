@@ -84,30 +84,6 @@ class Nanook
     # Do not rely on this interface being stable and do not use in a
     # production system.
     #
-    # ==== Example:
-    #
-    #   node.bootstrap_status
-    #
-    # Example response:
-    #
-    #   {
-    #     clients: 5790,
-    #     pulls: 141065,
-    #     pulling: 3,
-    #     connections: 16,
-    #     idle: 0,
-    #     target_connections: 64,
-    #     total_blocks: 536820,
-    #     lazy_mode: true,
-    #     lazy_blocks: 423388,
-    #     lazy_state_unknown: 2,
-    #     lazy_balances: 0,
-    #     lazy_pulls: 0,
-    #     lazy_stopped: 644,
-    #     lazy_keys: 449,
-    #     lazy_key_1: "A86EB2B479AAF3CD531C8356A1FBE3CB500DFBF5BF292E5E6B8D1048DE199C32"
-    #   }
-    #
     # @return [Hash{Symbol=>String|Integer|Boolean}]
     def bootstrap_status
       rpc(:bootstrap_status)
