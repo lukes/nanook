@@ -107,7 +107,10 @@ class Nanook
     # Example response:
     #
     #   {
+    #     "accounts_count"=>1,
     #     "balance"=>5,
+    #     "deterministic_count"=>1,
+    #     "deterministic_index"=>1,
     #     "pending"=>0.001
     #   }
     #
@@ -118,7 +121,10 @@ class Nanook
     # Example response:
     #
     #   {
+    #     "accounts_count"=>1,
     #     "balance"=>5000000000000000000000000000000,
+    #     "deterministic_count"=>1,
+    #     "deterministic_index"=>1,
     #     "pending"=>1000000000000000000000000000
     #   }
     #
@@ -398,9 +404,11 @@ class Nanook
     #
     #   wallet.default_representative # => "nano_3pc..."
     #
-    # @return [String] Representative account of the account
+    # @return [Nanook::Account] Representative account
     def default_representative
-      rpc(:wallet_representative)[:representative]
+      representative = rpc(:wallet_representative)[:representative]
+
+      Nanook::Account.new(@rpc, representative) if representative
     end
     alias representative default_representative
 
@@ -416,7 +424,7 @@ class Nanook
     #
     # @param [String] representative the id of the representative account
     #   to set as this account's representative
-    # @return [String] the representative account id
+    # @return [Nanook::Account] the representative account
     # @raise [ArgumentError] if the representative account does not exist
     # @raise [Nanook::Error] if setting the representative fails
     def change_default_representative(representative)
@@ -427,7 +435,7 @@ class Nanook
       raise Nanook::Error, 'Setting the representative failed' \
         unless rpc(:wallet_representative_set, representative: representative)[:set] == 1
 
-      representative
+      Nanook::Account.new(@rpc, representative)
     end
     alias change_representative change_default_representative
 
@@ -487,7 +495,9 @@ class Nanook
 
       Nanook.validate_unit!(unit)
 
-      accounts = rpc(:wallet_ledger)[:accounts].map do |account_id, payload|
+      response = rpc(:wallet_ledger)[:accounts]
+
+      accounts = Nanook::Util.coerce_empty_string_to_type(response, Hash).map do |account_id, payload|
         payload[:id] = account_id
         payload[:balance] = Nanook::Util.raw_to_NANO(payload[:balance]) if unit == :nano
         payload
@@ -532,7 +542,7 @@ class Nanook
     #   wallet.unlock("new_pass") #=> true
     #
     # @return [Boolean] indicates if the unlocking action was successful
-    def unlock(password)
+    def unlock(password = nil)
       wallet_required!
       rpc(:password_enter, password: password)[:valid] == 1
     end

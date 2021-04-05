@@ -70,6 +70,20 @@ RSpec.describe Nanook::Account do
     expect(response).to have(1).item
   end
 
+  it 'account history when history is blank (unsynced node)' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"history\": \"\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).history(limit: 1)
+    expect(response).to eq([])
+  end
+
   it 'account key' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_key\",\"account\":\"#{account_id}\"}",
@@ -560,6 +574,20 @@ RSpec.describe Nanook::Account do
     response = Nanook.new.account(account_id).delegators(unit: :raw)
     expect(response).to have_key(:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
     expect(response[:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500_000_000_000_000_000_000_000_000_000_000_000)
+  end
+
+  it 'account delegators when response is blank (unsynced node)' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"delegators\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"delegators\": \"\"}",
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).delegators
+    expect(response).to eq({})
   end
 
   it 'account last_modified_at' do

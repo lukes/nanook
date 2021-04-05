@@ -583,7 +583,10 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).default_representative).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
+    response = Nanook.new.wallet(wallet_id).default_representative
+
+    expect(response).to be_kind_of(Nanook::Account)
+    expect(response.id).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
   end
 
   it 'wallet change_default_representative' do
@@ -611,7 +614,9 @@ RSpec.describe Nanook::Wallet do
     )
 
     response = Nanook.new.wallet(wallet_id).change_default_representative(account_id)
-    expect(response).to be account_id
+
+    expect(response).to be_kind_of(Nanook::Account)
+    expect(response.id).to be account_id
   end
 
   it 'wallet change_representative when representative does not exist' do

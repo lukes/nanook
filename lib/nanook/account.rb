@@ -41,6 +41,7 @@ class Nanook
       Nanook.validate_unit!(unit)
 
       response = rpc(:delegators)[:delegators]
+      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
 
       return response if unit == :raw
 
@@ -107,6 +108,7 @@ class Nanook
       Nanook.validate_unit!(unit)
 
       response = rpc(:account_history, count: limit)[:history]
+      response = Nanook::Util.coerce_empty_string_to_type(response, Array)
 
       return response if unit == :raw
 
@@ -337,6 +339,7 @@ class Nanook
       params[:modified_since] = modified_since.to_i unless modified_since.nil?
 
       response = rpc(:ledger, params)[:accounts]
+      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
 
       return response if unit == :raw
 

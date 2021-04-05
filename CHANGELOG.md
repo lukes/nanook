@@ -13,11 +13,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - New error classes: `Nanook::ConnectionError`, `NanoUnitError`, `NodeRpcError` and `NodeRpcConfigurationError`.
+- `Nanook::Wallet#default_representative` now returns a `Nanook::Account`.
+- `Nanook::Wallet#change_representative` now returns a `Nanook::Account`.
+- `Nanook::Wallet#unlock` can be passed no argument (`password` will be `nil`).
 
 ### Removed
 
 - `Nanook::Block#block_count_by_type` Removed, as the RPC no longer supports this command.
 - `Nanook::Block#history` Removed, as the RPC command is deprecated.
+
+### Fixed
+
+- A number of errors when node has not synced accounts
 
 ## 2.5.1
 
