@@ -173,11 +173,11 @@ class Nanook
 
     # ==== Example:
     #
-    #   block.is_valid_work?("2bf29ef00786a6bc") # => true
+    #   block.valid_work?("2bf29ef00786a6bc") # => true
     #
     # @param work [String] the work id to check is valid
     # @return [Boolean] signalling if work is valid for the block
-    def is_valid_work?(work)
+    def valid_work?(work)
       response = rpc(:work_validate, :hash, work: work)
       !response.empty? && response[:valid] == 1
     end

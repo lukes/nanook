@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Wallet#default_representative` now returns a `Nanook::Account`.
 - `Nanook::Wallet#change_representative` now returns a `Nanook::Account`.
 - `Nanook::Wallet#unlock` can be passed no argument (`password` will be `nil`).
+- `Nanook::Block#is_valid_work?` renamed to `#valid_work?`.
 
 ### Removed
 
