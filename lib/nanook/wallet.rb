@@ -214,7 +214,6 @@ class Nanook
     def destroy
       wallet_required!
       rpc(:wallet_destroy)[:destroyed] == 1
-      true
     end
 
     # Generates a String containing a JSON representation of your wallet.
