@@ -55,27 +55,6 @@ class Nanook
       rpc(:block_count)
     end
 
-    # The count of all known blocks by their type.
-    #
-    # ==== Example:
-    #
-    #   node.block_count_by_type
-    #
-    # Example response:
-    #
-    #   {
-    #     send: 1000,
-    #     receive: 900,
-    #     open: 900,
-    #     change: 50
-    #   }
-    #
-    # @return [Hash{Symbol=>Integer}] number of blocks by type
-    def block_count_by_type
-      rpc(:block_count_type)
-    end
-    alias block_count_type block_count_by_type
-
     # Initialize bootstrap to a specific IP address and port.
     #
     # @return [Boolean] indicating if the action was successful

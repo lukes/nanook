@@ -29,19 +29,6 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.block_count).to have_key(:count)
   end
 
-  it 'should request block_count_by_type correctly' do
-    stub_request(:post, uri).with(
-      body: '{"action":"block_count_type"}',
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"send":"1000","receive":"900","open":"100","change":"50"}',
-      headers: {}
-    )
-
-    expect(Nanook.new.node.block_count_by_type).to have_key(:send)
-  end
-
   it 'should request bootstrap correctly' do
     stub_request(:post, uri).with(
       body: '{"action":"bootstrap","address":"::ffff:138.201.94.249","port":"7075"}',

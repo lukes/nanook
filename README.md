@@ -303,7 +303,6 @@ node = Nanook.new.node
 
 node.account_count
 node.block_count
-node.block_count_by_type
 node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
 node.bootstrap_any
 node.bootstrap_lazy(block_id)
