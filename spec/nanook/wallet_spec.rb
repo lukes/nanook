@@ -76,7 +76,7 @@ RSpec.describe Nanook::Wallet do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{}',
+      body: '{"destroyed": "1"}',
       headers: {}
     )
 
