@@ -141,7 +141,7 @@ Optionally also restore the wallet's accounts:
 Nanook.new.wallet.restore(seed, accounts: 2)
 ```
 
-#### Working with a single wallet:
+#### Working with a wallet:
 
 ```ruby
 wallet = Nanook.new.wallet(wallet_id)
@@ -189,47 +189,9 @@ Nanook.new.wallet(wallet_id).account.create
 Nanook.new.wallet(wallet_id).account.create(5)
 ```
 
-#### Working with a single account:
+#### Working with any account:
 
-See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/2.5.1/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
-
-```ruby
-account = Nanook.new.wallet(wallet_id).account(account_id)
-
-account.balance
-account.balance(unit: :raw)
-account.pay(to: recipient_account_id, amount: 2, id: unique_id)
-account.pay(to: recipient_account_id, amount: 2, id: unique_id, unit: :raw)
-account.pending
-account.pending(limit: 1)
-account.pending(detailed: true)
-account.pending(unit: :raw)
-account.receive
-account.receive(pending_block_id)
-
-account.exists?
-account.info
-account.info(detailed: true)
-account.info(unit: :raw)
-account.last_modified_at
-account.ledger
-account.ledger(limit: 10)
-account.ledger(modified_since: Time.now)
-account.ledger(unit: :raw)
-account.history
-account.history(limit: 1)
-account.history(unit: :raw)
-account.public_key
-account.delegators
-account.delegators(unit: :raw)
-account.representative
-account.change_representative(new_representative)
-account.weight
-
-account.destroy
-```
-
-#### Working with any account (not necessarily in your wallet):
+These commands can be made for any account on the Nano network that is known by your node.
 
 See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.5.1/Nanook/Account.html) for a detailed description of each method and example responses.
 
@@ -244,6 +206,7 @@ account.pending(detailed: true)
 account.pending(unit: :raw)
 
 account.exists?
+
 account.info
 account.info(detailed: true)
 account.info(unit: :raw)
@@ -260,6 +223,26 @@ account.delegators
 account.delegators(unit: :raw)
 account.representative
 account.weight
+```
+
+#### Working with an account created on the node:
+
+For accounts that have been created on your node, you can initialize the wallet that the account was created in first, and then call additional methods.
+
+As well as the following methods, all methods of [regular accounts](#working-with-any-account) can also be called.
+
+See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/2.5.1/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
+
+```ruby
+wallet = Nanook.new.wallet(wallet_id)
+account = wallet.account(account_id)
+
+account.pay(to: recipient_account_id, amount: 2, id: unique_id)
+account.pay(to: recipient_account_id, amount: 2, id: unique_id, unit: :raw)
+account.receive
+account.receive(pending_block_id)
+account.change_representative(new_representative)
+account.destroy
 ```
 
 ### Blocks
