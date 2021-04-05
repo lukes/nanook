@@ -45,19 +45,19 @@ nanook = Nanook.new("http://ip6-localhost:7076")
 Create a wallet:
 
 ```ruby
-Nanook.new.wallet.create
+wallet = nanook.wallet.create
 ```
 
 Create an account within a wallet:
 
 ```ruby
-Nanook.new.wallet(wallet_id).account.create
+account = wallet.account.create
 ```
 
 List accounts within a wallet:
 
 ```ruby
-Nanook.new.wallet(wallet_id).accounts
+accounts = wallet.accounts
 ```
 
 ### Sending a payment
@@ -65,14 +65,14 @@ Nanook.new.wallet(wallet_id).accounts
 To send a payment from an account in a wallet:
 
 ```ruby
-account = Nanook.new.wallet(wallet_id).account(account_id)
+account = nanook.wallet(wallet_id).account(account_id)
 account.pay(to: recipient_account_id, amount: 0.2, id: unique_id)
 ```
 
 Or, a wallet:
 
 ```ruby
-wallet = Nanook.new.wallet(wallet_id)
+wallet = nanook.wallet(wallet_id)
 wallet.pay(from: your_account_id, to: recipient_account_id, amount: 0.2, id: unique_id)
 ```
 
@@ -95,12 +95,12 @@ Note, there may be a delay in receiving a response due to Proof of Work being do
 The simplest way to receive a payment is:
 
 ```ruby
-account = Nanook.new.wallet(wallet_id).account(account_id)
+account = nanook.wallet(wallet_id).account(account_id)
 account.receive
 
 # or:
 
-wallet = Nanook.new.wallet(wallet_id)
+wallet = nanook.wallet(wallet_id)
 wallet.receive(into: account_id)
 ```
 
@@ -109,12 +109,12 @@ The `receive` method when called as above will receive the latest pending paymen
 You can also receive a specific pending block if you know it (you may have discovered it through calling `account.pending` for example):
 
 ```ruby
-account = Nanook.new.wallet(wallet_id).account(account_id)
+account = nanook.wallet(wallet_id).account(account_id)
 account.receive(block_id)
 
 # or:
 
-wallet = Nanook.new.wallet(wallet_id)
+wallet = nanook.wallet(wallet_id)
 wallet.receive(block_id, into: account_id)
 ```
 
@@ -129,22 +129,22 @@ See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/2
 #### Create wallet:
 
 ```ruby
-Nanook.new.wallet.create
+nanook.wallet.create
 ```
 #### Restoring a wallet from a seed
 
 ```ruby
-Nanook.new.wallet.restore(seed)
+nanook.wallet.restore(seed)
 ```
 Optionally also restore the wallet's accounts:
 ```ruby
-Nanook.new.wallet.restore(seed, accounts: 2)
+nanook.wallet.restore(seed, accounts: 2)
 ```
 
 #### Working with a wallet:
 
 ```ruby
-wallet = Nanook.new.wallet(wallet_id)
+wallet = nanook.wallet(wallet_id)
 
 wallet.balance
 wallet.balance(account_break_down: true)
@@ -180,13 +180,13 @@ wallet.destroy
 #### Create account:
 
 ```ruby
-Nanook.new.wallet(wallet_id).account.create
+nanook.wallet(wallet_id).account.create
 ```
 
 #### Create multiple accounts:
 
 ```ruby
-Nanook.new.wallet(wallet_id).account.create(5)
+nanook.wallet(wallet_id).account.create(5)
 ```
 
 #### Working with any account:
@@ -196,7 +196,7 @@ These commands can be made for any account on the Nano network that is known by 
 See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.5.1/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
-account = Nanook.new.account(account_id)
+account = nanook.account(account_id)
 
 account.balance
 account.balance(unit: :raw)
@@ -234,7 +234,7 @@ As well as the following methods, all methods of [regular accounts](#working-wit
 See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/2.5.1/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
 
 ```ruby
-wallet = Nanook.new.wallet(wallet_id)
+wallet = nanook.wallet(wallet_id)
 account = wallet.account(account_id)
 
 account.pay(to: recipient_account_id, amount: 2, id: unique_id)
@@ -250,7 +250,7 @@ account.destroy
 See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.5.1/Nanook/Block.html) for a detailed description of each method and example responses.
 
 ```ruby
-block = Nanook.new.block(block_id)
+block = nanook.block(block_id)
 
 block.info                        # Verified blocks in the ledger
 block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing blocks
@@ -280,7 +280,7 @@ block.is_valid_work?(work_id)
 See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/2.5.1/Nanook/Node.html) for a detailed description of each method and example responses.
 
 ```ruby
-node = Nanook.new.node
+node = nanook.node
 
 node.account_count
 node.block_count
@@ -307,7 +307,7 @@ node.stop
 ### Work peers
 
 ```ruby
-work_peers = Nanook.new.work_peers
+work_peers = nanook.work_peers
 
 work_peers.add(address: "::ffff:172.17.0.1:7076", port: 7076)
 work_peers.clear
@@ -319,14 +319,14 @@ work_peers.list
 #### Create private public key pair:
 
 ```ruby
-Nanook.new.key.generate
-Nanook.new.key.generate(seed: seed, index: 0)
+nanook.key.generate
+nanook.key.generate(seed: seed, index: 0)
 ```
 
 #### Working with a single key
 
 ```ruby
-key = Nanook.new.key(private_key)
+key = nanook.key(private_key)
 
 key.info
 ```
@@ -338,7 +338,7 @@ You can do any call listed in the [Nano RPC](https://docs.nano.org/commands/rpc-
 E.g., the [accounts_create command](https://docs.nano.org/commands/rpc-protocol/#accounts_create) can be called like this:
 
 ```ruby
-Nanook.new.rpc.call(:accounts_create, wallet: wallet_id, count: 2)
+nanook.rpc.call(:accounts_create, wallet: wallet_id, count: 2)
 ```
 
 ## Contributing
