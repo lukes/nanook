@@ -120,7 +120,9 @@ class Nanook
     #
     # @return [Hash{Symbol=>String|Integer}]
     def confirmation_history
-      rpc(:confirmation_history)[:confirmations].map do |history|
+      response = rpc(:confirmation_history)[:confirmations]
+
+      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |history|
         # Rename hash key to block
         block = history.delete(:hash)
         { block: block }.merge(history)
@@ -172,6 +174,17 @@ class Nanook
       "#{self.class.name}(object_id: \"#{format('0x00%x', (object_id << 1))}\")"
     end
 
+    # Returns a list of pairs of online peer IPv6:port and its node protocol
+    # network version.
+    #
+    # Example response:
+    #
+    #   {
+    #     :"[::ffff:104.131.102.132]:7075"=>18,
+    #     :"[::ffff:104.131.114.102]:7075"=>18
+    #   }
+    #
+    # @return [Hash{String=>Integer}]
     def peers
       rpc(:peers)[:peers]
     end
@@ -217,7 +230,7 @@ class Nanook
     #
     # @return [Array<String>] array of representative account ids
     def representatives_online
-      rpc(:representatives_online)[:representatives].keys.map(&:to_s)
+      rpc(:representatives_online)[:representatives].map(&:to_s)
     end
 
     # Safely shuts down the node.

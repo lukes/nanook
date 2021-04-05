@@ -160,7 +160,7 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"representatives":{"nano_1111111111111111111111111111111111111111111111111117353trpda":"","nano_1111111111111111111111111111111111111111111111111awsq94gtecn":"","nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi":""}}',
+      body: '{"representatives":["nano_1111111111111111111111111111111111111111111111111117353trpda","nano_1111111111111111111111111111111111111111111111111awsq94gtecn","nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi"]}',
       headers: {}
     )
 

@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - A number of errors when node has not synced accounts
+- `Nanook::Node#representatives_online` accessing representative list as a `Hash` after RPC change.
 
 ## 2.5.1
 

@@ -20,7 +20,8 @@ class Nanook
     end
 
     def list
-      rpc(:work_peers)[:work_peers]
+      response = rpc(:work_peers)[:work_peers]
+      Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
     private
