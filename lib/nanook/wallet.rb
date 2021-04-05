@@ -76,6 +76,7 @@ class Nanook
     # @raise [ArgumentError] if the wallet does no contain the account
     # @return [Nanook::WalletAccount]
     def account(account = nil)
+      wallet_required!
       Nanook::WalletAccount.new(@rpc, @wallet, account)
     end
 
@@ -91,6 +92,7 @@ class Nanook
     # @return [Array<Nanook::WalletAccount>] all accounts in the wallet
     def accounts
       wallet_required!
+
       response = rpc(:account_list)[:accounts]
       Nanook::Util.coerce_empty_string_to_type(response, Array).map do |account|
         Nanook::WalletAccount.new(@rpc, @wallet, account)
@@ -211,7 +213,7 @@ class Nanook
     # @return [Boolean] indicating success of the action
     def destroy
       wallet_required!
-      rpc(:wallet_destroy)
+      rpc(:wallet_destroy)[:destroyed] == 1
       true
     end
 
@@ -235,8 +237,7 @@ class Nanook
     # @return [Boolean] indicating if the wallet contains the given account
     def contains?(account)
       wallet_required!
-      response = rpc(:wallet_contains, account: account)
-      !response.empty? && response[:exists] == 1
+      rpc(:wallet_contains, account: account)[:exists] == 1
     end
 
     # @return [String] the wallet id

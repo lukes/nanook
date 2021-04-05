@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Nanook
-  # The <tt>Nanook::WalletAccount</tt> class lets you manage your nano accounts,
-  # including paying and receiving payment.
+  # The <tt>Nanook::WalletAccount</tt> class lets you manage your nano accounts
+  # that are on your node, including paying and receiving payment.
   #
   # === Initializing
   #
