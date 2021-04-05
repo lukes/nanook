@@ -19,6 +19,9 @@ class Nanook
     DEFAULT_URI = 'http://localhost:7076'
     # Default request timeout in seconds
     DEFAULT_TIMEOUT = 60
+    # Error expected to be returned when the RPC makes a call that requires the
+    # `enable_control` setting to be enabled when it is disabled.
+    RPC_CONTROL_DISABLED_ERROR = 'RPC control is disabled'
 
     def initialize(uri = DEFAULT_URI, timeout: DEFAULT_TIMEOUT)
       @rpc_server = URI(uri)
@@ -47,11 +50,14 @@ class Nanook
 
       response = @http.request(@request)
 
-      raise Nanook::Error, "Encountered net/http error #{response.code}: #{response.class.name}" \
+      raise Nanook::ConnectionError, "Encountered net/http error #{response.code}: #{response.class.name}" \
         unless response.is_a?(Net::HTTPSuccess)
 
       hash = JSON.parse(response.body)
-      process_hash(hash)
+
+      check_for_errors!(hash)
+
+      process_hash!(hash)
     end
 
     # @return [String]
@@ -62,18 +68,30 @@ class Nanook
 
     private
 
+    # Raises a {Nanook::NodeRpcConfigurationError} or {Nanook::NodeRpcError} if the RPC
+    # response contains an `:error` key.
+    def check_for_errors!(response)
+      # Raise a special error for when `enable_control` should be enabled.
+      raise Nanook::NodeRpcConfigurationError,
+        'RPC must have the `enable_control` setting enabled to perform this action.' \
+        if response['error'] == RPC_CONTROL_DISABLED_ERROR
+
+      # Raise any other error.
+      raise Nanook::NodeRpcError, "An error was returned from the RPC: #{response['error']}" if response.key?('error')
+    end
+
     # Recursively parses the RPC response, sending values to #parse_value
-    def process_hash(hash)
+    def process_hash!(hash)
       new_hash = hash.map do |k, val|
         new_val = case val
                   when Array
                     if val[0].is_a?(Hash)
-                      val.map { |v| process_hash(v) }
+                      val.map { |v| process_hash!(v) }
                     else
                       val.map { |v| parse_value(v) }
                     end
                   when Hash
-                    process_hash(val)
+                    process_hash!(val)
                   else
                     parse_value(val)
                   end

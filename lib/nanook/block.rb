@@ -159,9 +159,12 @@ class Nanook
     #   information can be returned about blocks that are unchecked (unverified).
     def info(allow_unchecked: false)
       if allow_unchecked
-        response = rpc(:unchecked_get, :hash)
-        return _parse_info_response(response) unless response.key?(:error)
-        # If unchecked not found, continue to checked block
+        begin
+          response = rpc(:unchecked_get, :hash)
+          return _parse_info_response(response)
+        rescue Nanook::Error
+          # If unchecked not found, continue to checked block
+        end
       end
 
       response = rpc(:block, :hash)

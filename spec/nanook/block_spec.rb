@@ -214,7 +214,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).info).to have_key(:error)
+    expect { Nanook.new.block(block).info } .to raise_error(Nanook::NodeRpcError)
   end
 
   it 'should request info allowing_unchecked when block is unchecked correctly' do

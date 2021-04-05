@@ -48,7 +48,7 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"error":""}',
+      body: '{}',
       headers: {}
     )
 
@@ -74,7 +74,7 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"error":""}',
+      body: '{}',
       headers: {}
     )
 

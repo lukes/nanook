@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Nanook
-  # The <tt>Nanook::Wallet</tt> class lets you manage your nano wallets,
-  # as well as some account-specific things like making and receiving payments.
+  # The <tt>Nanook::Wallet</tt> class lets you manage your nano wallets.
+  # Your node will need the <tt>enable_control</tt> setting enabled.
   #
   # === Wallet seeds vs ids
   #
@@ -142,10 +142,11 @@ class Nanook
     # @param unit (see Nanook::Account#balance)
     #
     # @return [Hash{Symbol=>Integer|Float|Hash}]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def balance(account_break_down: false, unit: Nanook.default_unit)
       wallet_required!
 
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       if account_break_down
         return Nanook::Util.coerce_empty_string_to_type(rpc(:wallet_balances)[:balances], Hash).tap do |r|
@@ -330,10 +331,12 @@ class Nanook
     #       }
     #     ]
     #   }
+    #
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
       wallet_required!
 
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       params = { count: limit }
       params[:source] = true if detailed
@@ -478,10 +481,12 @@ class Nanook
     # @param unit (see #balance)
     # @return [Hash{Symbol=>String|Array<Hash{Symbol=>String|Integer|Float}>}] information about the wallet.
     #   See {Nanook::Account#info} for details of what is returned for each account.
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def info(unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
-
       wallet_required!
+
+      Nanook.validate_unit!(unit)
+
       accounts = rpc(:wallet_ledger)[:accounts].map do |account_id, payload|
         payload[:id] = account_id
         payload[:balance] = Nanook::Util.raw_to_NANO(payload[:balance]) if unit == :nano

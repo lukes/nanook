@@ -33,9 +33,17 @@ class Nanook
   def self.default_unit
     return DEFAULT_UNIT unless defined?(UNIT)
 
-    raise Nanook::Error, "UNIT #{UNIT} must be one of #{UNITS}" unless UNITS.include?(UNIT.to_sym)
+    validate_unit!(UNIT)
 
     UNIT.to_sym
+  end
+
+  # @return [TrueClass] if unit is valid.
+  # @raise [Nanook::NanoUnitError] if `unit` is invalid.
+  def self.validate_unit!(unit)
+    raise Nanook::NanoUnitError, "Unit #{unit} must be one of #{UNITS}" unless UNITS.include?(unit.to_sym)
+
+    true
   end
 
   # Returns a new instance of {Nanook}.

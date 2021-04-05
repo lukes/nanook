@@ -215,8 +215,9 @@ class Nanook
     #   }
     #
     # @return [Hash{Symbol=>Integer}] known representatives and their voting weight
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def representatives(unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       response = rpc(:representatives)[:representatives]
       return response if unit == :raw

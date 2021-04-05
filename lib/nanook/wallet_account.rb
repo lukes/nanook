@@ -113,7 +113,7 @@ class Nanook
 
     # Makes a payment from this account to another account
     # on the nano network. Returns a <i>send</i> block hash
-    # if successful, or a {Nanook::Error} if unsuccessful.
+    # if successful, or a {Nanook::NodeRpcError} if unsuccessful.
     #
     # Note, there may be a delay in receiving a response due to Proof
     # of Work being done. From the {Nano RPC}[https://docs.nano.org/commands/rpc-protocol/#send]:
@@ -133,15 +133,16 @@ class Nanook
     #   the same +id+ and be reassured that you will only ever send this
     #   nano payment once
     # @return [String] the send block id for the payment
-    # @raise [Nanook::Error] if unsuccessful
+    # @raise [Nanook::NodeRpcError] if unsuccessful
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pay(to:, amount:, id:, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       # Check that to account is a valid address
       response = @rpc.call(:validate_account_number, account: to)
       raise ArgumentError, "Account address is invalid: #{to}" unless response[:valid] == 1
 
-      # Determin amount in raw
+      # Determine amount in raw
       raw = if unit.to_sym.eql?(:nano)
               Nanook::Util.NANO_to_raw(amount)
             else
@@ -158,8 +159,6 @@ class Nanook
       }
 
       response = @rpc.call(:send, p)
-
-      return Nanook::Error.new(response[:error]) if response.key?(:error)
 
       response[:block]
     end

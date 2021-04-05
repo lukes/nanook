@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 3.0.0
 
+### Changed
+
+- New error classes: `Nanook::ConnectionError`, `NanoUnitError`, `NodeRpcError` and `NodeRpcConfigurationError`.
+
 ### Removed
 
 - `Nanook::Block#block_count_by_type` Removed, as the RPC no longer supports this command.

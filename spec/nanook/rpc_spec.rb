@@ -37,7 +37,7 @@ RSpec.describe Nanook::Rpc do
 
     expect do
       Nanook::Rpc.new.call(:block_count)
-    end.to raise_error(Nanook::Error,
+    end.to raise_error(Nanook::ConnectionError,
                        'Encountered net/http error 500: Net::HTTPInternalServerError')
   end
 

@@ -36,8 +36,9 @@ class Nanook
     #
     # @param unit (see #balance)
     # @return [Hash{Symbol=>Integer}] account ids which delegate to this account, and their account balance
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def delegators(unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       response = rpc(:delegators)[:delegators]
 
@@ -71,7 +72,12 @@ class Nanook
     #
     # @return [Boolean] Indicates if this account has an open block
     def exists?
-      response = rpc(:account_info)
+      begin
+        response = rpc(:account_info)
+      rescue Nanook::NodeRpcError
+        return false
+      end
+
       !response.empty? && !response[:open_block].nil?
     end
     alias open? exists?
@@ -96,8 +102,9 @@ class Nanook
     # @param limit [Integer] maximum number of history items to return
     # @param unit (see #balance)
     # @return [Array<Hash{Symbol=>String}>] the history of send and receive payments for this account
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def history(limit: 1000, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       response = rpc(:account_history, count: limit)[:history]
 
@@ -178,11 +185,11 @@ class Nanook
     #   Note: this method interprets
     #   +:nano+ as NANO, which is technically Mnano.
     #   See {https://nano.org/en/faq#what-are-nano-units- What are Nano's Units}
-    #
-    # @raise ArgumentError if an invalid +unit+ was given.
+    #.
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     # @return [Hash{Symbol=>Integer|Float}]
     def balance(unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       rpc(:account_balance).tap do |r|
         if unit == :nano
@@ -266,8 +273,10 @@ class Nanook
     #   [+pending+] See {#balance}
     #   [+representative+] See {#representative}
     #   [+public_key+] See {#public_key}
+    #
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def info(detailed: false, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       response = rpc(:account_info)
       response.merge!(id: @account)
@@ -319,8 +328,9 @@ class Nanook
     # @param [Time] modified_since return only accounts modified in the local database after this time
     # @param unit (see #balance)
     # @return [Hash{Symbol=>String|Integer}]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def ledger(limit: 1, modified_since: nil, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       params = { count: limit }
 
@@ -375,8 +385,9 @@ class Nanook
     #
     # @return [Array<String>]
     # @return [Array<Hash{Symbol=>String|Integer}>]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      Nanook.validate_unit!(unit)
 
       params = { count: limit }
       params[:source] = true if detailed
