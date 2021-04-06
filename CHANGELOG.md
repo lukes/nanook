@@ -10,6 +10,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added missing `Nanook::WalletAccount#block_count` delegate.
 - Added `Nanook::Node#confirmation_quorum`.
+- Added `Nanook::Block#account`.
+- Added `Nanook::Block#amount`.
+- Added `Nanook::Block#balance`.
+- Added `Nanook::Block#change?`.
+- Added `Nanook::Block#checked?`.
+- Added `Nanook::Block#epoch?`.
+- Added `Nanook::Block#height`.
+- Added `Nanook::Block#open?`.
+- Added `Nanook::Block#previous`.
+- Added `Nanook::Block#receive?`.
+- Added `Nanook::Block#representative`.
+- Added `Nanook::Block#send?`.
+- Added `Nanook::Block#signature`.
+- Added `Nanook::Block#timestamp`.
+- Added `Nanook::Block#type`.
+- Added `Nanook::Block#unchecked?`.
+- Added `Nanook::Block#work`.
 
 ### Changed
 

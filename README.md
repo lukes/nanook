@@ -256,6 +256,22 @@ See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.
 ```ruby
 block = nanook.block(block_id)
 
+# TODO from `#info`:
+#
+# block.exists?
+# block.exists?(unchecked: false)
+# block.confirmed? (is this checked?)
+# block.cemented? (not sure how to get this info)
+#
+
+block.account
+block.amount
+block.amount(unit: :raw)
+block.balance
+block.change?
+block.checked?
+block.epoch?
+block.height
 block.info                        # Verified blocks in the ledger
 block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing blocks
 block.info(unit: :raw)
@@ -268,11 +284,21 @@ block.confirmed_recently?
 block.republish
 block.republish(sources: 2)
 block.republish(destinations: 2)
+block.open?
 block.pending?
+block.previous
 block.publish
+block.receive?
+block.representative
+block.send?
+block.signature
 block.successors
 block.successors(limit: 10)
 block.successors(offset: 10)
+block.timestamp
+block.type
+block.unchecked?
+block.work
 
 block.generate_work
 block.generate_work(use_peers: true)

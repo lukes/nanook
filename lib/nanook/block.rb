@@ -24,16 +24,6 @@ class Nanook
       block_required! # All methods expect a block
     end
 
-    # Returns the {Nanook::Account} of the block.
-    #
-    # ==== Example:
-    #   block.account # => Nanook::Account
-    #
-    # @return [Nanook::Account] the account of the block
-    def account
-      Nanook::Account.new(@rpc, rpc(:block_account, :hash)[:account])
-    end
-
     # Stop generating work for a block.
     #
     # ==== Example:
@@ -258,6 +248,195 @@ class Nanook
       Nanook::Util.coerce_empty_string_to_type(response, Array)
     end
 
+    # Returns the {Nanook::Account} of the block representative.
+    #
+    # ==== Example:
+    #   block.representative # => Nanook::Account
+    #
+    # @return [Nanook::Account] representative account of the block. Can be nil.
+    def representative
+      representative = memoized_info[:representative]
+      Nanook::Account.new(@rpc, representative) if representative
+    end
+
+    # Returns the {Nanook::Account} of the block.
+    #
+    # ==== Example:
+    #   block.account # => Nanook::Account
+    #
+    # @return [Nanook::Account] the account of the block. Can be nil.
+    def account
+      account = memoized_info[:account]
+      Nanook::Account.new(@rpc, account) if account
+    end
+
+    # Returns the amount of the block.
+    #
+    # ==== Example:
+    #   block.amount # => 3.01
+    #
+    # @param unit (see Nanook::Account#balance)
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    # @return [Float]
+    def amount(unit: Nanook.default_unit)
+      Nanook.validate_unit!(unit)
+
+      amount = memoized_info[:amount]
+      return amount unless unit == :nano
+
+      Nanook::Util.raw_to_NANO(amount)
+    end
+
+    # Returns the balance of the account at the time the block was created.
+    #
+    # ==== Example:
+    #   block.balance # => 3.01
+    #
+    # @param unit (see Nanook::Account#balance)
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    # @return [Float]
+    def balance(unit: Nanook.default_unit)
+      Nanook.validate_unit!(unit)
+
+      balance = memoized_info[:balance]
+      return balance unless unit == :nano
+
+      Nanook::Util.raw_to_NANO(balance)
+    end
+
+    # Returns the height of the block.
+    #
+    # ==== Example:
+    #   block.height # => 5
+    #
+    # @return [Integer]
+    def height
+      memoized_info[:height]
+    end
+
+    # Returns the block work.
+    #
+    # ==== Example:
+    #   block.work # => "8a142e07a10996d5"
+    #
+    # @return [String]
+    def work
+      memoized_info[:work]
+    end
+
+    # Returns the block signature.
+    #
+    # ==== Example:
+    #   block.signature # => "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501"
+    #
+    # @return [String]
+    def signature
+      memoized_info[:signature]
+    end
+
+    # Returns the timestamp of when the node saw the block.
+    #
+    # ==== Example:
+    #   block.timestamp # => 2018-05-30 16:41:48 UTC
+    #
+    # @return [Time] Time in UTC of when the node saw the block. Can be nil.
+    def timestamp
+      timestamp = memoized_info[:local_timestamp]
+      Time.at(timestamp).utc if timestamp
+    end
+
+
+    # Returns the {Nanook::Block} of the previous block in the chain.
+    #
+    # ==== Example:
+    #   block.previous # => Nanook::Block
+    #
+    # @return [Nanook::Block] previous block in the chain. Can be nil.
+    def previous
+      block = memoized_info[:previous]
+      Nanook::Block.new(@rpc, block) if block
+    end
+
+    # Returns true if block is checked.
+    #
+    # ==== Example:
+    #   block.checked? # => true
+    #
+    # @return [Boolean]
+    def checked?
+      memoized_info[:checked] == true
+    end
+
+    # Returns true if block is unchecked.
+    #
+    # ==== Example:
+    #   block.unchecked? # => true
+    #
+    # @return [Boolean]
+    def unchecked?
+      !checked?
+    end
+
+    # Returns the type of the block. One of "open", "send", "receive", "change", "epoch".
+    #
+    # ==== Example:
+    #   block.type # => "open"
+    #
+    # @return [String] type of block.
+    def type
+      memoized_info[:subtype]
+    end
+
+    # Returns true if block is type "send".
+    #
+    # ==== Example:
+    #   block.send? # => true
+    #
+    # @return [Boolean]
+    def send?
+      type == "send"
+    end
+
+    # Returns true if block is type "open".
+    #
+    # ==== Example:
+    #   block.open? # => true
+    #
+    # @return [Boolean]
+    def open?
+      type == "open"
+    end
+
+    # Returns true if block is type "receive".
+    #
+    # ==== Example:
+    #   block.receive? # => true
+    #
+    # @return [Boolean]
+    def receive?
+      type == "receive"
+    end
+
+    # Returns true if block is type "change" (change of representative).
+    #
+    # ==== Example:
+    #   block.change? # => true
+    #
+    # @return [Boolean]
+    def change?
+      type == "change"
+    end
+
+    # Returns true if block is type "epoch".
+    #
+    # ==== Example:
+    #   block.epoch? # => true
+    #
+    # @return [Boolean]
+    def epoch?
+      type == "epoch"
+    end
+
     def inspect
       "#{self.class.name}(id: \"#{id}\", object_id: \"#{format('0x00%x', (object_id << 1))}\")"
     end
@@ -270,6 +449,11 @@ class Nanook
     def rpc(action, param_name, params = {})
       p = @block.nil? ? {} : { param_name.to_sym => @block }
       @rpc.call(action, p.merge(params))
+    end
+
+    # Memoize the `#info` response as we can refer to it for other methods (`type`, `#open?`, `#send?` etc.)
+    def memoized_info
+      @_memoized_info ||= info(allow_unchecked: true)
     end
 
     def block_required!
