@@ -280,14 +280,12 @@ block.chain
 block.chain(limit: 10)
 block.chain(offset: 10)
 block.confirm
-block.confirmed_recently?
 block.republish
 block.republish(sources: 2)
 block.republish(destinations: 2)
 block.open?
 block.pending?
 block.previous
-block.publish
 block.receive?
 block.representative
 block.send?
@@ -319,8 +317,6 @@ node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
 node.bootstrap_any
 node.bootstrap_lazy(block_id)
 node.bootstrap_lazy(block_id, force: true)
-node.bootstrap_status
-node.confirmation_history
 node.difficulty
 node.difficulty(include_trend: true)
 node.peers

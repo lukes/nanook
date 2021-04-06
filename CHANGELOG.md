@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 3.0.0
 
+### Removed
+
+- `Nanook::Block#block_count_by_type` Removed, as the RPC no longer supports this command.
+- `Nanook::Block#history` Removed, as the RPC command is deprecated.
+- `Nanook::Block#publish` Removed, as the RPC command expects more data than what we instantiate within `Nanook::Block`.
+- Removed all RPC calls that are not recommended for production:
+  - `Nanook::Node#bootstrap_status`.
+  - `Nanook::Node#confirmation_history`.
+  - `Nanook::Node#confirmed_recently?`.
+
 ### Added
 
 - Added missing `Nanook::WalletAccount#block_count` delegate.
@@ -35,12 +45,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Wallet#change_representative` now returns a `Nanook::Account`.
 - `Nanook::Wallet#unlock` can be passed no argument (`password` will be `nil`).
 - `Nanook::Block#is_valid_work?` renamed to `#valid_work?`.
+- `Nanook::Block#republish` now returns an Array of `Nanook::Block`s.
+- `Nanook::Block#chain` now returns an Array of `Nanook::Block`s.
+- `Nanook::Block#successors` now returns an Array of `Nanook::Block`s.
 - `Nanook::Block#info` returns balances in nano, and can optionally be passed `unit: :raw` argument.
-
-### Removed
-
-- `Nanook::Block#block_count_by_type` Removed, as the RPC no longer supports this command.
-- `Nanook::Block#history` Removed, as the RPC command is deprecated.
+- `Nanook::Account#pending` returns source as `Nanook::Account` and block as `Nanook::Block` when `detailed: true`.
+- `Nanook::Account#representative` returns a `Nanook::Account`.
 
 ### Fixed
 

@@ -121,54 +121,6 @@ RSpec.describe Nanook::Block do
     expect(Nanook.new.block(block).confirm).to eq true
   end
 
-  it 'should request confirmed_recently? correctly when hash is in confirmation history' do
-    stub_request(:post, uri).with(
-      body: '{"action":"confirmation_history"}',
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{
-        \"confirmations\": [
-          {
-            \"hash\": \"#{block}\",
-            \"tally\": \"80394786589602980996311817874549318248\"
-          },
-          {
-            \"hash\": \"F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667\",
-            \"tally\": \"68921714529890443063672782079965877749\"
-          }
-        ]
-      }",
-      headers: {}
-    )
-
-    expect(Nanook.new.block(block).confirmed_recently?).to eq true
-  end
-
-  it 'should request confirmed_recently? correctly when hash is not in confirmation history' do
-    stub_request(:post, uri).with(
-      body: '{"action":"confirmation_history"}',
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{
-        \"confirmations\": [
-          {
-            \"hash\": \"EA70B32C55C193345D625F766EEA2FCA52D3F2CCE0B3A30838CC543026BB0FEA\",
-            \"tally\": \"80394786589602980996311817874549318248\"
-          },
-          {
-            \"hash\": \"F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667\",
-            \"tally\": \"68921714529890443063672782079965877749\"
-          }
-        ]
-      }",
-      headers: {}
-    )
-
-    expect(Nanook.new.block(block).confirmed_recently?).to eq false
-  end
-
   it 'should request info correctly' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
@@ -481,19 +433,6 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).pending?).to be false
-  end
-
-  it 'should request process correctly' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"process\",\"block\":\"#{block}\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"hash":"42A723D2B60462BF7C9A003FE9A70057D3A6355CA5F1D0A57581000000000000"}',
-      headers: {}
-    )
-
-    Nanook.new.block(block).publish
   end
 
   it 'should request successors correctly' do

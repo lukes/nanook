@@ -65,9 +65,7 @@ class Nanook
     # Request confirmation for a block from online representative nodes.
     # Will return immediately with a boolean to indicate if the request for
     # confirmation was successful. Note that this boolean does not indicate
-    # the confirmation status of the block. If confirmed, your block should
-    # appear in {Nanook::Node#confirmation_history} within a short amount of
-    # time, or you can use the convenience method {Nanook::Block#confirmed_recently?}
+    # the confirmation status of the block.
     #
     # ==== Example:
     #   block.confirm # => true
@@ -76,31 +74,6 @@ class Nanook
     def confirm
       rpc(:block_confirm, :hash)[:started] == 1
     end
-
-    # This call is for internal diagnostics/debug purposes only. Do not
-    # rely on this interface being stable and do not use in a production system.
-    #
-    # Check if the block appears in the list of recently confirmed blocks by
-    # online representatives. The full list of blocks can be queried for with {Nanook::Node#confirmation_history}.
-    #
-    # This method can work in conjunction with {Nanook::Block#confirm},
-    # whereby you can send any block (old or new) out to online representatives to
-    # confirm. The confirmation process can take up to a couple of minutes.
-    #
-    # The method returning +false+ can indicate that the block is still in the process of being
-    # confirmed and that you should call the method again soon, or that it
-    # was confirmed earlier than the list available in {Nanook::Node#confirmation_history},
-    # or that it was not confirmed.
-    #
-    # ==== Example:
-    #   block.confirmed_recently? # => true
-    #
-    # @return [Boolean] +true+ if the block has been recently confirmed by
-    #   online representatives.
-    def confirmed_recently?
-      @rpc.call(:confirmation_history)[:confirmations].map { |h| h[:hash] }.include?(@block)
-    end
-    alias recently_confirmed? confirmed_recently?
 
     # Generate work for a block.
     #
@@ -210,20 +183,6 @@ class Nanook
       response = rpc(:pending_exists, :hash)
       !response.empty? && response[:exists] == 1
     end
-
-    # Publish the block to the nano network.
-    #
-    # Note, if block has previously been published, use #republish instead.
-    #
-    # ==== Examples:
-    #
-    #   block.publish # => "FBF8B0E..."
-    #
-    # @return [String] the block hash, or false.
-    def publish
-      rpc(:process, :block)[:hash] || false
-    end
-    alias process publish
 
     # Returns an Array of block hashes in the account chain ending at
     # this block.

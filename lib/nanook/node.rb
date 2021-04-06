@@ -79,56 +79,6 @@ class Nanook
       rpc(:bootstrap_lazy, hash: hash, force: force)[:started] == 1
     end
 
-    # Returning status of current bootstrap attempt for debug purposes only.
-    # This call is for internal diagnostics/debug purposes only.
-    # Do not rely on this interface being stable and do not use in a
-    # production system.
-    #
-    # @return [Hash{Symbol=>String|Integer|Boolean}]
-    def bootstrap_status
-      rpc(:bootstrap_status)
-    end
-
-    # This call is for internal diagnostics/debug purposes only.
-    # Do not rely on this interface being stable and do not use in a
-    # production system.
-    #
-    # Returns block and tally weight (in raw) election duration (in
-    # milliseconds), election confirmation timestamp for recent elections
-    # winners.
-    #
-    # ==== Example:
-    #
-    #   node.confirmation_history
-    #
-    # Example response:
-    #
-    #   [
-    #     {
-    #       block: "EA70B32C55C193345D625F766EEA2FCA52D3F2CCE0B3A30838CC543026BB0FEA",
-    #       tally: 80394786589602980996311817874549318248,
-    #       duration: 4000,
-    #       time: 1544819986,
-    #     },
-    #     {
-    #       block: "F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667",
-    #       tally: 68921714529890443063672782079965877749,
-    #       duration: 6000,
-    #       time: 1544819988,
-    #     }
-    #   ]
-    #
-    # @return [Hash{Symbol=>String|Integer}]
-    def confirmation_history
-      response = rpc(:confirmation_history)[:confirmations]
-
-      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |history|
-        # Rename hash key to block
-        block = history.delete(:hash)
-        { block: block }.merge(history)
-      end
-    end
-
     # Returns information about node elections settings and observed network state:
     #
     # - `quorum_delta`: delta tally required to rollback block
