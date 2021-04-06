@@ -13,6 +13,8 @@ class Nanook
     # @param nano [Float|Integer] amount in nano
     # @return [Integer] amount in raw
     def self.NANO_to_raw(nano)
+      return if nano.nil?
+
       (BigDecimal(nano.to_s) * STEP).to_i
     end
 
@@ -21,6 +23,8 @@ class Nanook
     # @param raw [Integer] amount in raw
     # @return [Float|Integer] amount in NANO
     def self.raw_to_NANO(raw)
+      return if raw.nil?
+
       (raw.to_f / STEP).to_f
     end
 
