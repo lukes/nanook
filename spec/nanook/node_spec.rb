@@ -251,6 +251,66 @@ RSpec.describe Nanook::Node do
                              })
   end
 
+  it 'should request confirmation_quorum correctly' do
+    stub_request(:post, uri).with(
+      body: '{"action":"confirmation_quorum"}',
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+      {
+        "quorum_delta": "41469707173777717318245825935516662250",
+        "online_weight_quorum_percent": "50",
+        "online_weight_minimum": "60000000000000000000000000000000000000",
+        "online_stake_total": "82939414347555434636491651871033324568",
+        "peers_stake_total": "69026910610720098597176027400951402360",
+        "peers_stake_required": "60000000000000000000000000000000000000"
+      }
+      BODY
+      headers: {}
+    )
+
+    response = Nanook.new.node.confirmation_quorum
+    expect(response).to eq({
+      "quorum_delta": 41469707.17377772,
+      "online_weight_quorum_percent": 50,
+      "online_weight_minimum": 60000000.0,
+      "online_stake_total": 82939414.34755543,
+      "peers_stake_total": 69026910.6107201,
+      "peers_stake_required": 60000000.0
+    })
+  end
+
+  it 'should request confirmation_quorum correctly, unit: :raw' do
+    stub_request(:post, uri).with(
+      body: '{"action":"confirmation_quorum"}',
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+      {
+        "quorum_delta": "41469707173777717318245825935516662250",
+        "online_weight_quorum_percent": "50",
+        "online_weight_minimum": "60000000000000000000000000000000000000",
+        "online_stake_total": "82939414347555434636491651871033324568",
+        "peers_stake_total": "69026910610720098597176027400951402360",
+        "peers_stake_required": "60000000000000000000000000000000000000"
+      }
+      BODY
+      headers: {}
+    )
+
+    response = Nanook.new.node.confirmation_quorum(unit: :raw)
+    expect(response).to eq({
+      "quorum_delta": 41469707173777717318245825935516662250,
+      "online_weight_quorum_percent": 50,
+      "online_weight_minimum": 60000000000000000000000000000000000000,
+      "online_stake_total": 82939414347555434636491651871033324568,
+      "peers_stake_total": 69026910610720098597176027400951402360,
+      "peers_stake_required": 60000000000000000000000000000000000000
+    })
+  end
+
   it 'should request stop correctly' do
     stub_request(:post, uri).with(
       body: '{"action":"stop"}',

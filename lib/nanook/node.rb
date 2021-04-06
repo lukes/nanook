@@ -129,6 +129,49 @@ class Nanook
       end
     end
 
+    # Returns information about node elections settings and observed network state:
+    #
+    # - `quorum_delta`: delta tally required to rollback block
+    # - `online_weight_quorum_percent`: percentage of online weight for delta
+    # - `online_weight_minimum`: minimum online weight to confirm block
+    # - `online_stake_total`: currently observed online total weight
+    # - `peers_stake_total`: known peers total weight
+    # - `peers_stake_required`: effective stake needed from directly connected peers for quorum
+    #
+    # ==== Example:
+    #
+    #   node.confirmation_quorum
+    #
+    # Example response:
+    #
+    #   {
+    #     "quorum_delta": "41469707173777717318245825935516662250",
+    #     "online_weight_quorum_percent": "50",
+    #     "online_weight_minimum": "60000000000000000000000000000000000000",
+    #     "online_stake_total": "82939414347555434636491651871033324568",
+    #     "peers_stake_total": "69026910610720098597176027400951402360",
+    #     "peers_stake_required": "60000000000000000000000000000000000000"
+    #   }
+    #
+    # @return [Hash{Symbol=>String|Integer}]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def confirmation_quorum(unit: Nanook.default_unit)
+      Nanook.validate_unit!(unit)
+
+      response = rpc(:confirmation_quorum)
+      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
+
+      return response unless unit == :nano
+
+      response[:quorum_delta] = Nanook::Util.raw_to_NANO(response[:quorum_delta])
+      response[:online_weight_minimum] = Nanook::Util.raw_to_NANO(response[:online_weight_minimum])
+      response[:online_stake_total] = Nanook::Util.raw_to_NANO(response[:online_stake_total])
+      response[:peers_stake_total] = Nanook::Util.raw_to_NANO(response[:peers_stake_total])
+      response[:peers_stake_required] = Nanook::Util.raw_to_NANO(response[:peers_stake_required])
+
+      response.compact
+    end
+
     # Returns the difficulty values (16 hexadecimal digits string, 64 bit)
     # for the minimum required on the network (network_minimum) as well
     # as the current active difficulty seen on the network (network_current,
