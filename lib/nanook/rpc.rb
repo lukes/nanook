@@ -72,9 +72,10 @@ class Nanook
     # response contains an `:error` key.
     def check_for_errors!(response)
       # Raise a special error for when `enable_control` should be enabled.
-      raise Nanook::NodeRpcConfigurationError,
-        'RPC must have the `enable_control` setting enabled to perform this action.' \
-        if response['error'] == RPC_CONTROL_DISABLED_ERROR
+      if response['error'] == RPC_CONTROL_DISABLED_ERROR
+        raise Nanook::NodeRpcConfigurationError,
+              'RPC must have the `enable_control` setting enabled to perform this action.'
+      end
 
       # Raise any other error.
       raise Nanook::NodeRpcError, "An error was returned from the RPC: #{response['error']}" if response.key?('error')
