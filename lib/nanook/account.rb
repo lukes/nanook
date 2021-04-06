@@ -21,6 +21,33 @@ class Nanook
       @account = account
     end
 
+    # The id of the account.
+    #
+    # ==== Example:
+    #
+    #   account.id # => "nano_16u..."
+    #
+    # @return [String] the id of the account
+    def id
+      @account
+    end
+
+    # @param [Nanook::Account] account to compare
+    # @return [Boolean] true if accounts are equal
+    def ==(account)
+      account.class == self.class &&
+        account.id == id
+    end
+    alias eql? ==
+
+    # The hash value is used along with #eql? by the Hash class to determine if two objects
+    # reference the same hash key.
+    #
+    # @return [Integer]
+    def hash
+      id.hash
+    end
+
     # Information about this accounts that have set this account as their representative.
     #
     # === Example:
@@ -203,17 +230,6 @@ class Nanook
     # @return [Integer] number of blocks for this account
     def block_count
       rpc(:account_block_count)[:block_count]
-    end
-
-    # The id of the account.
-    #
-    # ==== Example:
-    #
-    #   account.id # => "nano_16u..."
-    #
-    # @return [String] the id of the account
-    def id
-      @account
     end
 
     # Information about the account.

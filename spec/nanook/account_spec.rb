@@ -4,6 +4,23 @@ RSpec.describe Nanook::Account do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:account_id) { 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000' }
 
+  it 'can compare equality' do
+    account_1 = Nanook.new.account("foo")
+    account_2 = Nanook.new.account("foo")
+    account_3 = Nanook.new.account("bar")
+
+    expect(account_1).to eq(account_2)
+    expect(account_1).not_to eq(account_3)
+  end
+
+  it 'can be used as a hash key lookup' do
+    hash = {
+      Nanook.new.account("foo") => "found"
+    }
+
+    expect(hash[Nanook.new.account("foo")]).to eq("found")
+  end
+
   it 'account history' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",

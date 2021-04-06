@@ -20,6 +20,24 @@ RSpec.describe Nanook::Wallet do
       .to_return(status: 200, body: '{"exists":"1"}', headers: {})
   end
 
+  it 'can compare equality' do
+    wallet_1 = Nanook.new.wallet("foo")
+    wallet_2 = Nanook.new.wallet("foo")
+    wallet_3 = Nanook.new.wallet("bar")
+
+    expect(wallet_1).to eq(wallet_2)
+    expect(wallet_1).not_to eq(wallet_3)
+  end
+
+  it 'can be used as a hash key lookup' do
+    hash = {
+      Nanook.new.wallet("foo") => "found"
+    }
+
+    expect(hash[Nanook.new.wallet("foo")]).to eq("found")
+  end
+
+
   it 'should have an account method' do
     expect(Nanook.new.wallet(wallet_id).account).to be_kind_of(Nanook::WalletAccount)
   end

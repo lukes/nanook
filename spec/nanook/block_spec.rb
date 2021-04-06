@@ -4,6 +4,23 @@ RSpec.describe Nanook::Block do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:block) { '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F' }
 
+  it 'can compare equality' do
+    block_1 = Nanook.new.block("foo")
+    block_2 = Nanook.new.block("foo")
+    block_3 = Nanook.new.block("bar")
+
+    expect(block_1).to eq(block_2)
+    expect(block_1).not_to eq(block_3)
+  end
+
+  it 'can be used as a hash key lookup' do
+    hash = {
+      Nanook.new.block("foo") => "found"
+    }
+
+    expect(hash[Nanook.new.block("foo")]).to eq("found")
+  end
+
   it 'should request cancel_work correctly' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"work_cancel\",\"hash\":\"#{block}\"}",

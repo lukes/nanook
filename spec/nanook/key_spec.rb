@@ -4,6 +4,24 @@ RSpec.describe Nanook::Key do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:key) { '781186FB9EF17DB6E3D1056550D9FAE5D5BBADA6A6BC370E4CBB938B1DC71DA3' }
 
+  it 'can compare equality' do
+    key_1 = Nanook.new.key("foo")
+    key_2 = Nanook.new.key("foo")
+    key_3 = Nanook.new.key("bar")
+
+    expect(key_1).to eq(key_2)
+    expect(key_1).not_to eq(key_3)
+  end
+
+  it 'can be used as a hash key lookup' do
+    hash = {
+      Nanook.new.key("foo") => "found"
+    }
+
+    expect(hash[Nanook.new.key("foo")]).to eq("found")
+  end
+
+
   it 'should request info correctly' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"key_expand\",\"key\":\"#{key}\"}",

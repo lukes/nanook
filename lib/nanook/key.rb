@@ -8,6 +8,26 @@ class Nanook
       @key = key
     end
 
+    def id
+      @key
+    end
+
+    # @param [Nanook::Key] key to compare
+    # @return [Boolean] true if keys are equal
+    def ==(key)
+      key.class == self.class &&
+        key.id == id
+    end
+    alias eql? ==
+
+    # The hash value is used along with #eql? by the Hash class to determine if two objects
+    # reference the same hash key.
+    #
+    # @return [Integer]
+    def hash
+      id.hash
+    end
+
     def generate(seed: nil, index: nil)
       if seed.nil? && index.nil?
         rpc(:key_create)
@@ -16,10 +36,6 @@ class Nanook
       else
         raise ArgumentError, 'This method must be called with either seed AND index params given or no params'
       end
-    end
-
-    def id
-      @key
     end
 
     def info

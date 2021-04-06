@@ -24,6 +24,33 @@ class Nanook
       block_required! # All methods expect a block
     end
 
+    # Returns the block hash id.
+    #
+    # ==== Example:
+    #
+    #   block.id #=> "FBF8B0E..."
+    #
+    # @return [String] the block hash id
+    def id
+      @block
+    end
+
+    # @param [Nanook::Block] block to compare
+    # @return [Boolean] true if blocks are equal
+    def ==(block)
+      block.class == self.class &&
+        block.id == id
+    end
+    alias eql? ==
+
+    # The hash value is used along with #eql? by the Hash class to determine if two objects
+    # reference the same hash key.
+    #
+    # @return [Integer]
+    def hash
+      id.hash
+    end
+
     # Stop generating work for a block.
     #
     # ==== Example:
@@ -86,17 +113,6 @@ class Nanook
     # @return [String] the work id of the work completed.
     def generate_work(use_peers: false)
       rpc(:work_generate, :hash, use_peers: use_peers)[:work]
-    end
-
-    # Returns the block hash id.
-    #
-    # ==== Example:
-    #
-    #   block.id #=> "FBF8B0E..."
-    #
-    # @return [String] the block hash id
-    def id
-      @block
     end
 
     # Returns a Hash of information about the block.

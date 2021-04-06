@@ -53,6 +53,27 @@ class Nanook
       @wallet = wallet
     end
 
+    # @return [String] the wallet id
+    def id
+      @wallet
+    end
+
+    # @param [Nanook::Wallet] wallet to compare
+    # @return [Boolean] true if wallets are equal
+    def ==(wallet)
+      wallet.class == self.class &&
+        wallet.id == id
+    end
+    alias eql? ==
+
+    # The hash value is used along with #eql? by the Hash class to determine if two objects
+    # reference the same hash key.
+    #
+    # @return [Integer]
+    def hash
+      id.hash
+    end
+
     # Returns the given account in the wallet as a {Nanook::WalletAccount} instance
     # to let you start working with it.
     #
@@ -243,11 +264,6 @@ class Nanook
     def contains?(account)
       wallet_required!
       rpc(:wallet_contains, account: account)[:exists] == 1
-    end
-
-    # @return [String] the wallet id
-    def id
-      @wallet
     end
 
     # @return [String]

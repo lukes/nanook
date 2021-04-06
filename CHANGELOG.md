@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Block#type`.
 - Added `Nanook::Block#unchecked?`.
 - Added `Nanook::Block#work`.
+- Added equality methods for `Nanook::Block`, `Nanook::Wallet`, `Nanook::Account`, `Nanook::WalletAccount` and `Nanook::Key`.
 
 ### Changed
 

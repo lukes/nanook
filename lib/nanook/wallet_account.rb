@@ -16,14 +16,20 @@ class Nanook
   #   account = Nanook::WalletAccount.new(rpc_conn, wallet_id, account_id)
   class WalletAccount
     extend Forwardable
+    # @!method ==
+    #   (see Nanook::Account#==)
     # @!method balance(unit: Nanook.default_unit)
     #   (see Nanook::Account#balance)
     # @!method block_count
     #   (see Nanook::Account#block_count)
     # @!method delegators(unit: Nanook.default_unit)
     #   (see Nanook::Account#delegators)
+    # @!method eql?
+    #   (see Nanook::Account#eql?)
     # @!method exists?
     #   (see Nanook::Account#exists?)
+    # @!method hash
+    #   (see Nanook::Account#hash)
     # @!method history(limit: 1000, unit: Nanook.default_unit)
     #   (see Nanook::Account#history)
     # @!method id
@@ -43,9 +49,8 @@ class Nanook
     # @!method weight
     #   (see Nanook::Account#weight)
     def_delegators :@nanook_account_instance,
-                   :balance, :block_count, :delegators, :exists?, :history, :id,
-                   :info, :last_modified_at, :ledger, :pending, :public_key, :representative,
-                   :weight
+                   :==, :balance, :block_count, :delegators, :eql?, :exists?, :hash, :history, :id,
+                   :info, :last_modified_at, :ledger, :pending, :public_key, :representative, :weight
     alias open? exists?
 
     def initialize(rpc, wallet, account)
