@@ -187,11 +187,9 @@ class Nanook
     # @return [String] the receive block id
     # @return [false] if there was no block to receive
     def receive(block = nil)
-      if block.nil?
-        _receive_without_block
-      else
-        _receive_with_block(block)
-      end
+      return receive_without_block if block.nil?
+
+      receive_with_block(block)
     end
 
     # Sets the representative for the account.
@@ -226,7 +224,7 @@ class Nanook
 
     private
 
-    def _receive_without_block
+    def receive_without_block
       # Discover the first pending block
       pending_blocks = @rpc.call(:pending, { account: @account, count: 1 })
 
@@ -234,11 +232,11 @@ class Nanook
 
       # Then call receive_with_block as normal
       block = pending_blocks[:blocks][0]
-      _receive_with_block(block)
+      receive_with_block(block)
     end
 
     # Returns block if successful, otherwise false
-    def _receive_with_block(block)
+    def receive_with_block(block)
       response = rpc(:receive, block: block)[:block]
       response.nil? ? false : response
     end
