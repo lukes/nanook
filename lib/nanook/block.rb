@@ -157,18 +157,21 @@ class Nanook
     #
     # @param allow_unchecked [Boolean] (default is +false+). If +true+,
     #   information can be returned about blocks that are unchecked (unverified).
-    def info(allow_unchecked: false)
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def info(allow_unchecked: false, unit: Nanook.default_unit)
+      Nanook.validate_unit!(unit)
+
       if allow_unchecked
         begin
-          response = rpc(:unchecked_get, :hash)
-          return _parse_info_response(response)
+          response = rpc(:unchecked_get, :hash, json_block: true)
+          return parse_info_response(response, unit).merge(checked: false)
         rescue Nanook::Error
           # If unchecked not found, continue to checked block
         end
       end
 
-      response = rpc(:block, :hash)
-      _parse_info_response(response)
+      response = rpc(:block_info, :hash, json_block: true)
+      parse_info_response(response, unit).merge(checked: true)
     end
 
     # ==== Example:
@@ -273,14 +276,19 @@ class Nanook
       raise ArgumentError, 'Block must be present' if @block.nil?
     end
 
-    def _parse_info_response(response)
-      # The contents is a stringified JSON
-      if response[:contents]
-        r = JSON.parse(response[:contents]).to_symbolized_hash
-        return r.merge(id: id)
-      end
+    def parse_info_response(response, unit)
+      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
+      response.merge!(id: id)
 
-      response
+      contents = response.delete(:contents)
+      response.merge!(contents) if contents
+
+      return response unless unit == :nano
+
+      response[:amount] = Nanook::Util.raw_to_NANO(response[:amount])
+      response[:balance] = Nanook::Util.raw_to_NANO(response[:balance])
+
+      response.compact
     end
   end
 end

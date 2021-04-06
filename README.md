@@ -254,6 +254,7 @@ block = nanook.block(block_id)
 
 block.info                        # Verified blocks in the ledger
 block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing blocks
+block.info(unit: :raw)
 block.account
 block.chain
 block.chain(limit: 10)
