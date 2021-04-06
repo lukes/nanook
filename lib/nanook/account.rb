@@ -186,8 +186,7 @@ class Nanook
     #   Represents the unit that the balances will be returned in.
     #   Note: this method interprets
     #   +:nano+ as NANO, which is technically Mnano.
-    #   See {https://nano.org/en/faq#what-are-nano-units- What are Nano's Units}
-    #.
+    #   See {https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers What are Nano's Units}
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     # @return [Hash{Symbol=>Integer|Float}]
     def balance(unit: Nanook.default_unit)

@@ -80,7 +80,7 @@ The `id` can be any string and needs to be unique per payment. It serves an impo
 
 > You can (and should) specify a unique id for each spend to provide idempotency. That means that if you [make the payment call] two times with the same id, the second request won't send any additional Nano.
 
-The unit of the `amount` is NANO (which is currently technically Mnano &mdash; see [What are Nano's Units](https://nano.org/en/faq#what-are-nano-units-)). You can pass an amount of raw instead by adding the `unit: :raw` argument:
+The unit of the `amount` is NANO (which is currently technically Mnano &mdash; see [What are Nano's Units](https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers)). You can pass an amount of raw instead by adding the `unit: :raw` argument:
 
 ```ruby
 account.pay(to: recipient_account_id, amount: 999, unit: :raw, id: unique_id)
