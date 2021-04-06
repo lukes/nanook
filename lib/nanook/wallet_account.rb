@@ -212,19 +212,19 @@ class Nanook
     #
     # ==== Example:
     #
-    #   account.change_representative("nano_...")
-    #     # => "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"
+    #   account.change_representative("nano_...") # => Nanook::Block
     #
     # @param [String] representative the id of the representative account
     #   to set as this account's representative
-    # @return [String] id of the <i>change</i> block created
-    # @raise [ArgumentError] if the representative account does not exist
+    # @return [Nanook::Block] <i>change</i> block created
+    # @raise [Nanook::Error] if setting the representative account fails
     def change_representative(representative)
       unless Nanook::Account.new(@rpc, representative).exists?
-        raise ArgumentError, "Representative account does not exist: #{representative}"
+        raise Nanook::Error, "Representative account does not exist: #{representative}"
       end
 
-      rpc(:account_representative_set, representative: representative)[:block]
+      block = rpc(:account_representative_set, representative: representative)[:block]
+      Nanook::Block.new(@rpc, block)
     end
 
     private

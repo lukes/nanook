@@ -95,12 +95,12 @@ class Nanook
     # Example response:
     #
     #   {
-    #     "quorum_delta": "41469707173777717318245825935516662250",
-    #     "online_weight_quorum_percent": "50",
-    #     "online_weight_minimum": "60000000000000000000000000000000000000",
-    #     "online_stake_total": "82939414347555434636491651871033324568",
-    #     "peers_stake_total": "69026910610720098597176027400951402360",
-    #     "peers_stake_required": "60000000000000000000000000000000000000"
+    #     "quorum_delta": 43216377.43025059,
+    #     "online_weight_quorum_percent": 50,
+    #     "online_weight_minimum": 60000000.0",
+    #     "online_stake_total": 86432754.86050119,
+    #     "peers_stake_total": 84672338.52479072,
+    #     "peers_stake_required": 60000000.0"
     #   }
     #
     # @return [Hash{Symbol=>String|Integer}]
@@ -196,7 +196,7 @@ class Nanook
     #     nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi: 0
     #   }
     #
-    # @return [Hash{Symbol=>Integer}] known representatives and their voting weight
+    # @return [Hash{Symbol=>Float|Integer}] known representatives and their voting weight
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def representatives(unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
@@ -204,18 +204,16 @@ class Nanook
       response = rpc(:representatives)[:representatives]
       return response if unit == :raw
 
-      r = response.map do |account_id, balance|
-        balance = Nanook::Util.raw_to_NANO(balance)
+      r = response.map do |account_id, weight|
+        weight = Nanook::Util.raw_to_NANO(weight)
 
-        [account_id, balance]
+        [account_id, weight]
       end
 
       Hash[r].to_symbolized_hash
     end
 
-    # All online representatives that have voted recently. Note, due to the
-    # design of the nano RPC, this method cannot return the voting weight
-    # of the representatives.
+    # All online representatives that have voted recently and their weight.
     #
     # ==== Example:
     #

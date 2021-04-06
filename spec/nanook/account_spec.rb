@@ -154,7 +154,10 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).representative).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
+    representative = Nanook.new.account(account_id).representative
+
+    expect(representative).to be_kind_of(Nanook::Account)
+    expect(representative.id).to eq("nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5")
   end
 
   it 'account info' do
@@ -262,7 +265,8 @@ RSpec.describe Nanook::Account do
     expect(response[:modified_timestamp]).to eq 1_501_793_775
     expect(response[:block_count]).to eq 33
     expect(response[:weight]).to eq 1
-    expect(response[:representative]).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
+    expect(response[:representative]).to be_kind_of(Nanook::Account)
+    expect(response[:representative].id).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
     expect(response[:public_key]).to eq '3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039'
   end
 
@@ -330,7 +334,11 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).pending).to have(1).item
+    pending = Nanook.new.account(account_id).pending
+
+    expect(pending).to have(1).item
+    expect(pending.first).to be_kind_of(Nanook::Block)
+    expect(pending.first.id).to eq("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
   end
 
   it 'account pending with no blocks (empty string response) to be empty' do
@@ -356,7 +364,10 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).pending(limit: 1)).to have(1).item
+    pending = Nanook.new.account(account_id).pending(limit: 1)
+
+    expect(pending.first).to be_kind_of(Nanook::Block)
+    expect(pending.first.id).to eq("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
   end
 
   it 'account pending detailed' do
@@ -376,9 +387,11 @@ RSpec.describe Nanook::Account do
 
     response = Nanook.new.account(account_id).pending(detailed: true)
     expect(response).to have(1).item
-    expect(response.first[:source]).to eq 'nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'
+    expect(response.first[:source]).to be_kind_of(Nanook::Account)
+    expect(response.first[:source].id).to eq 'nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'
     expect(response.first[:amount]).to eq 6
-    expect(response.first[:block]).to eq '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
+    expect(response.first[:block]).to be_kind_of(Nanook::Block)
+    expect(response.first[:block].id).to eq '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
   end
 
   it 'account pending detailed with raw unit' do
@@ -398,9 +411,11 @@ RSpec.describe Nanook::Account do
 
     response = Nanook.new.account(account_id).pending(detailed: true, unit: :raw)
     expect(response).to have(1).item
-    expect(response.first[:source]).to eq 'nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'
+    expect(response.first[:source]).to be_kind_of(Nanook::Account)
+    expect(response.first[:source].id).to eq 'nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'
     expect(response.first[:amount]).to eq 6_000_000_000_000_000_000_000_000_000_000
-    expect(response.first[:block]).to eq '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
+    expect(response.first[:block]).to be_kind_of(Nanook::Block)
+    expect(response.first[:block].id).to eq '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
   end
 
   it 'account pending detailed with no blocks (empty string response)' do

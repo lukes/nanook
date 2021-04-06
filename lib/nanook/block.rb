@@ -85,7 +85,10 @@ class Nanook
     # @param offset [Integer] return the account chain block hashes offset by the specified number of blocks (default is 0)
     def chain(limit: 1000, offset: 0)
       response = rpc(:chain, :block, count: limit, offset: offset)[:blocks]
-      Nanook::Util.coerce_empty_string_to_type(response, Array)
+
+      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |block|
+        Nanook::Block.new(@rpc, block)
+      end
     end
     alias ancestors chain
 
@@ -167,15 +170,13 @@ class Nanook
     # Republish blocks starting at this block up the account chain
     # back to the nano network.
     #
-    # @return [Array<String>] block hashes that were republished
+    # @return [Array<Nanook::Block>] blocks that were republished
     #
     # ==== Example:
     #
-    #   block.republish
+    #   block.republish # => [Nanook::Block, ...]
     #
-    # ==== Example response:
-    #
-    #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
+    # @param limit [Integer] maximum number of history items to return
     def republish(destinations: nil, sources: nil)
       if !destinations.nil? && !sources.nil?
         raise ArgumentError, 'You must provide either destinations or sources but not both'
@@ -187,7 +188,11 @@ class Nanook
       params[:sources] = sources unless sources.nil?
       params[:count] = 1 unless params.empty?
 
-      rpc(:republish, :hash, params)[:blocks]
+      response = rpc(:republish, :hash, params)[:blocks]
+
+      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |block|
+        Nanook::Block.new(@rpc, block)
+      end
     end
 
     # ==== Example:
@@ -207,20 +212,18 @@ class Nanook
     #
     # ==== Example:
     #
-    #   block.successors
-    #
-    # ==== Example response:
-    #
-    #   ["36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E"]
+    #   block.successors # => [Nanook::Block, .. ]
     #
     # @param limit [Integer] maximum number of send/receive block hashes
     #   to return in the chain (default is 1000)
     # @param offset [Integer] return the account chain block hashes offset
     #   by the specified number of blocks (default is 0)
-    # @return [Array<String>] block hashes in the account chain ending at this block
+    # @return [Array<Nanook::Block>] blocks in the account chain ending at this block
     def successors(limit: 1000, offset: 0)
       response = rpc(:successors, :block, count: limit, offset: offset)[:blocks]
-      Nanook::Util.coerce_empty_string_to_type(response, Array)
+      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |block|
+        Nanook::Block.new(@rpc, block)
+      end
     end
 
     # Returns the {Nanook::Account} of the block representative.

@@ -44,7 +44,8 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).chain).to have(1).item
+    expect(Nanook.new.block(block).chain.first).to be_kind_of(Nanook::Block)
+    expect(Nanook.new.block(block).chain.first.id).to eq("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
   end
 
   it 'should request chain and when no blocks (empty string response) return an array' do
@@ -387,7 +388,13 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).republish).to have(2).items
+    expect(Nanook.new.block(block).republish.first).to be_kind_of(Nanook::Block)
+    expect(Nanook.new.block(block).republish.map(&:id)).to eq(
+      [
+        "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
+        "A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"
+      ]
+    )
   end
 
   it 'should raise execption if both sources and destinations arguments passed to republish' do
@@ -462,7 +469,10 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).successors).to have(1).item
+    successors = Nanook.new.block(block).successors
+
+    expect(successors.first).to be_kind_of(Nanook::Block)
+    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
   end
 
   it 'should request successors with limit correctly' do
@@ -475,7 +485,10 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).successors(limit: 1)).to have(1).item
+    successors = Nanook.new.block(block).successors(limit: 1)
+
+    expect(successors.first).to be_kind_of(Nanook::Block)
+    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
   end
 
   it 'should request successors with offset correctly' do
@@ -488,7 +501,10 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).successors(offset: 1)).to have(1).item
+    successors = Nanook.new.block(block).successors(offset: 1)
+
+    expect(successors.first).to be_kind_of(Nanook::Block)
+    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
   end
 
   it 'should request successors when there are none (empty string response) and return blank array' do

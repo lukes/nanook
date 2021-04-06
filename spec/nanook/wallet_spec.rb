@@ -637,19 +637,6 @@ RSpec.describe Nanook::Wallet do
     expect(response.id).to be account_id
   end
 
-  it 'wallet change_representative when representative does not exist' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"error":"Bad account number"}',
-      headers: {}
-    )
-
-    expect { Nanook.new.wallet(wallet_id).change_default_representative(account_id) }.to raise_error(ArgumentError)
-  end
-
   it 'wallet info' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_ledger\",\"wallet\":\"#{wallet_id}\"}",

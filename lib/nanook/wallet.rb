@@ -441,11 +441,10 @@ class Nanook
     # @param [String] representative the id of the representative account
     #   to set as this account's representative
     # @return [Nanook::Account] the representative account
-    # @raise [ArgumentError] if the representative account does not exist
     # @raise [Nanook::Error] if setting the representative fails
     def change_default_representative(representative)
       unless Nanook::Account.new(@rpc, representative).exists?
-        raise ArgumentError, "Representative account does not exist: #{representative}"
+        raise Nanook::Error, "Representative account does not exist: #{representative}"
       end
 
       raise Nanook::Error, 'Setting the representative failed' \

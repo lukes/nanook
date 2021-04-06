@@ -337,7 +337,10 @@ RSpec.describe Nanook::WalletAccount do
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).representative).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
+    representative = Nanook.new.wallet(wallet_id).account(account_id).representative
+
+    expect(representative).to be_kind_of(Nanook::Account)
+    expect(representative.id).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
   end
 
   it 'setting the wallet account representative' do
@@ -368,7 +371,9 @@ RSpec.describe Nanook::WalletAccount do
     )
 
     response = Nanook.new.wallet(wallet_id).account(account_id).change_representative('nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi')
-    expect(response).to eq '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
+
+    expect(response).to be_kind_of(Nanook::Block)
+    expect(response.id).to eq '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
   end
 
   it 'setting the wallet account representative if representative does not exist' do
@@ -395,7 +400,7 @@ RSpec.describe Nanook::WalletAccount do
 
     expect do
       Nanook.new.wallet(wallet_id).account(account_id).change_representative('nano_19a73oy5ungrhxy5z5oao1xso4zo7dmgpjd4u74xcrx3r1w6rtazuouw6qfi')
-    end.to raise_error(ArgumentError)
+    end.to raise_error(Nanook::Error)
   end
 
   it 'wallet account pending no limit' do
