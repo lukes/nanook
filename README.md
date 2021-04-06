@@ -189,15 +189,17 @@ nanook.wallet(wallet_id).account.create
 nanook.wallet(wallet_id).account.create(5)
 ```
 
-#### Working with any account:
+#### Working with an account:
 
-These commands can be made for any account on the Nano network that is known by your node.
+Any account on the Nano network that is known by your node can be initialized through `Nanook#account`:
+
+```ruby
+account = nanook.account(account_id)
+```
 
 See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/2.5.1/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
-account = nanook.account(account_id)
-
 account.balance
 account.balance(unit: :raw)
 account.pending
@@ -206,7 +208,6 @@ account.pending(detailed: true)
 account.pending(unit: :raw)
 
 account.exists?
-
 account.info
 account.info(detailed: true)
 account.info(unit: :raw)
@@ -227,16 +228,19 @@ account.weight
 
 #### Working with an account created on the node:
 
-For accounts that have been created on your node, you can initialize the wallet that the account was created in first, and then call additional methods.
+Accounts that have been created on your node can have
+additional methods when initialized through `Nanook::Wallet#account`:
+
+```ruby
+wallet = nanook.wallet(wallet_id)
+account = wallet.account(account_id)
+```
 
 As well as the following methods, all methods of [regular accounts](#working-with-any-account) can also be called.
 
 See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/2.5.1/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
 
 ```ruby
-wallet = nanook.wallet(wallet_id)
-account = wallet.account(account_id)
-
 account.pay(to: recipient_account_id, amount: 2, id: unique_id)
 account.pay(to: recipient_account_id, amount: 2, id: unique_id, unit: :raw)
 account.receive
