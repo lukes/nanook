@@ -346,16 +346,26 @@ work_peers.list
 #### Create private public key pair:
 
 ```ruby
-nanook.key.generate
-nanook.key.generate(seed: seed, index: 0)
+private_key = nanook.private_key.create
+private_key = nanook.private_key.create(seed: seed, index: 0)
+private_key.public_key # => Nanook::PublicKey
 ```
 
-#### Working with a single key
+#### Working with a private key
 
 ```ruby
-key = nanook.key(private_key)
+key = nanook.private_key(private_key)
 
-key.info
+key.account
+key.public_key
+```
+
+#### Working with a public key
+
+```ruby
+key = nanook.public_key(public_key)
+
+key.account
 ```
 
 ## Nanook Metal

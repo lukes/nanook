@@ -232,7 +232,6 @@ RSpec.describe Nanook::Block do
       {
         "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
         "amount": 30000000000000000000000000000000000,
-        "balance": 5606157000000000000000000000000000000,
         "height": 58,
         "local_timestamp": 0,
         "confirmed": true,

@@ -45,8 +45,12 @@ RSpec.describe Nanook do
     expect(Nanook.new.block('some_block')).to be_kind_of(Nanook::Block)
   end
 
-  it 'should have a key method' do
-    expect(Nanook.new.key).to be_kind_of(Nanook::Key)
+  it 'should have a private_key method' do
+    expect(Nanook.new.private_key).to be_kind_of(Nanook::PrivateKey)
+  end
+
+  it 'should have a public_key method' do
+    expect(Nanook.new.public_key('some_key')).to be_kind_of(Nanook::PublicKey)
   end
 
   it 'should have a node method' do

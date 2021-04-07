@@ -214,7 +214,7 @@ class Nanook
     #
     #   account.change_representative("nano_...") # => Nanook::Block
     #
-    # @param [String] representative the id of the representative account
+    # @param representative [String] the id of the representative account
     #   to set as this account's representative
     # @return [Nanook::Block] <i>change</i> block created
     # @raise [Nanook::Error] if setting the representative account fails

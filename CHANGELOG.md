@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `Nanook::Node#bootstrap_status`.
   - `Nanook::Node#confirmation_history`.
   - `Nanook::Node#confirmed_recently?`.
+- `Nanook::Key` Replaced by `Nanook::PrivateKey`.
 
 ### Added
 
@@ -37,8 +38,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Block#type`.
 - Added `Nanook::Block#unchecked?`.
 - Added `Nanook::Block#work`.
-- Added equality methods for `Nanook::Block`, `Nanook::Wallet`, `Nanook::Account`, `Nanook::WalletAccount` and `Nanook::Key`.
-
+- Added `Nanook::PrivateKey` with methods `#create`, `#account` and `#public_key`.
+- Added `Nanook::PublicKey` with method `#account`.
+- Added equality testing methods `#==`, `#eql?` and `#hash` for:
+    - `Nanook::Account`
+    - `Nanook::Block`
+    - `Nanook::PrivateKey`
+    - `Nanook::PublicKey`
+    - `Nanook::Wallet`
+    - `Nanook::WalletAccount`
 ### Changed
 
 - New error classes: `Nanook::ConnectionError`, `NanoUnitError`, `NodeRpcError` and `NodeRpcConfigurationError`.
@@ -52,10 +60,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Block#info` returns balances in nano, and can optionally be passed `unit: :raw` argument.
 - `Nanook::Account#pending` returns source as `Nanook::Account` and block as `Nanook::Block` when `detailed: true`.
 - `Nanook::Account#representative` returns a `Nanook::Account`.
+- `Nanook::Key` has become `Nanook::PrivateKey`, `#generate` has been renamed `#create` and returns a `Nanook::PrivateKey`.
 
 ### Fixed
 
-- A number of errors when node has not synced accounts
+- A number of errors when node is still bootstrapping and is missing accounts from the ledger.
 - `Nanook::Node#representatives_online` accessing representative list as a `Hash` after RPC change.
 
 ## 2.5.1

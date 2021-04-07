@@ -89,15 +89,26 @@ class Nanook
     "#{self.class.name}(rpc: #{@rpc.inspect}, object_id: \"#{format('0x00%x', (object_id << 1))}\")"
   end
 
-  # Returns a new instance of {Nanook::Key}.
+  # Returns a new instance of {Nanook::PrivateKey}.
   #
   # ==== Example:
-  #   key = Nanook.new.key("3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039")
+  #   key = Nanook.new.private_key("3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039")
   #
   # @param key [String] a private key
-  # @return [Nanook::Key]
-  def key(key = nil)
-    Nanook::Key.new(@rpc, key)
+  # @return [Nanook::PrivateKey]
+  def private_key(key = nil)
+    Nanook::PrivateKey.new(@rpc, key)
+  end
+
+  # Returns a new instance of {Nanook::PublicKey}.
+  #
+  # ==== Example:
+  #   key = Nanook.new.public_key("3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039")
+  #
+  # @param key [String] a public key
+  # @return [Nanook::PublicKey]
+  def public_key(key)
+    Nanook::PublicKey.new(@rpc, key)
   end
 
   # Returns a new instance of {Nanook::Node}.

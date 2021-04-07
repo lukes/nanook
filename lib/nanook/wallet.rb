@@ -58,7 +58,7 @@ class Nanook
       @wallet
     end
 
-    # @param [Nanook::Wallet] wallet to compare
+    # @param wallet [Nanook::Wallet] wallet to compare
     # @return [Boolean] true if wallets are equal
     def ==(wallet)
       wallet.class == self.class &&
@@ -90,7 +90,7 @@ class Nanook
     #   wallet.account("nano_...") # => Nanook::WalletAccount
     #   wallet.account.create     # => Nanook::WalletAccount
     #
-    # @param [String] account optional String of an account (starting with
+    # @param account [String] optional String of an account (starting with
     #   <tt>"xrb..."</tt>) to start working with. Must be an account within
     #   the wallet. When no account is given, the instance returned only
     #   allows you to call +create+ on it, to create a new account.
@@ -166,7 +166,7 @@ class Nanook
     #     },
     #   }
     #
-    # @param [Boolean] account_break_down (default is +false+). When +true+
+    # @param account_break_down [Boolean] (default is +false+). When +true+
     #  the response will contain balances per account.
     # @param unit (see Nanook::Account#balance)
     #
@@ -438,7 +438,7 @@ class Nanook
     #
     #   wallet.change_default_representative("nano_...") # => "nano_..."
     #
-    # @param [String] representative the id of the representative account
+    # @param representative [String] id of the representative account
     #   to set as this account's representative
     # @return [Nanook::Account] the representative account
     # @raise [Nanook::Error] if setting the representative fails

@@ -35,7 +35,7 @@ class Nanook
       @block
     end
 
-    # @param [Nanook::Block] block to compare
+    # @param block [Nanook::Block] block to compare
     # @return [Boolean] true if blocks are equal
     def ==(block)
       block.class == self.class &&

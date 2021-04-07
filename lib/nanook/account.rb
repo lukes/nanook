@@ -32,7 +32,7 @@ class Nanook
       @account
     end
 
-    # @param [Nanook::Account] account to compare
+    # @param account [Nanook::Account] account to compare
     # @return [Boolean] true if accounts are equal
     def ==(account)
       account.class == self.class &&
@@ -182,6 +182,11 @@ class Nanook
 
     # The account's balance, including pending (unreceived payments).
     # To receive a pending amount see {WalletAccount#receive}.
+    #
+    # This call returns information that may be based on unconfirmed blocks.
+    # These details should not be relied on for any process or integration that
+    # requires confirmed blocks. The pending balance is calculated from
+    # potentially unconfirmed blocks.
     #
     # ==== Examples:
     #
@@ -338,8 +343,8 @@ class Nanook
     #    :nano_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=>{ ... }
     #  }
     #
-    # @param [Integer] limit number of accounts to return in the ledger (default is 1)
-    # @param [Time] modified_since return only accounts modified in the local database after this time
+    # @param limit [Integer] number of accounts to return in the ledger (default is 1)
+    # @param modified_since [Time] return only accounts modified in the local database after this time
     # @param unit (see #balance)
     # @return [Hash{Symbol=>String|Integer}]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
