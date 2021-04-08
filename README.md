@@ -223,6 +223,7 @@ account.delegators
 account.delegators(unit: :raw)
 account.representative
 account.weight
+account.weight(unit: :raw)
 ```
 
 #### Working with an account created on the node:

@@ -353,11 +353,24 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"weight":"10000"}',
+      body: '{"weight":"1334523434434545666663345345453450"}',
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).weight).to eq 10_000
+    expect(Nanook.new.account(account_id).weight).to eq 1334.523434434546
+  end
+
+  it 'account weight unit raw' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_weight\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"weight":"1334523434434545345345345345666660000000"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).weight(unit: :raw)).to eq 1334523434434545345345345345666660000000
   end
 
   it 'account ledger' do

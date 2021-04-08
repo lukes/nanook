@@ -52,18 +52,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - New error classes: `Nanook::ConnectionError`, `NanoUnitError`, `NodeRpcError` and `NodeRpcConfigurationError`.
-- `Nanook::Wallet#default_representative` now returns a `Nanook::Account`.
-- `Nanook::Wallet#change_representative` now returns a `Nanook::Account`.
+- `Nanook::Wallet#default_representative` returns a `Nanook::Account`.
+- `Nanook::Wallet#change_representative` returns a `Nanook::Account`.
 - `Nanook::Wallet#unlock` can be passed no argument (`password` will be `nil`).
 - `Nanook::Block#is_valid_work?` renamed to `#valid_work?`.
-- `Nanook::Block#republish` now returns an Array of `Nanook::Block`s.
-- `Nanook::Block#chain` now returns an Array of `Nanook::Block`s.
-- `Nanook::Block#successors` now returns an Array of `Nanook::Block`s.
+- `Nanook::Block#republish` returns an Array of `Nanook::Block`s.
+- `Nanook::Block#chain` returns an Array of `Nanook::Block`s.
+- `Nanook::Block#successors` returns an Array of `Nanook::Block`s.
 - `Nanook::Block#info` returns balances in nano, and can optionally be passed `unit: :raw` argument.
 - `Nanook::Account#pending` returns source as `Nanook::Account` and block as `Nanook::Block` when `detailed: true`.
 - `Nanook::Account#representative` returns a `Nanook::Account`.
 - `Nanook::Account#history` returns account as `Nanook::Account` and block as `Nanook::Block`.
 - `Nanook::Account#public_key` returns a `Nanook::PublicKey`.
+- `Nanook::Account#weight` accepts an optional `unit:` argment.
 - `Nanook::Account#info`:
      - returns the `frontier`, `open_block`, `representative_block` values as `Nanook::Block`s.
      - returns the `representative` as a `Nanook::Account`.

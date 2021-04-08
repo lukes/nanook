@@ -278,6 +278,27 @@ RSpec.describe Nanook::WalletAccount do
     stub_valid_account_check
     stub_account_exists_check
 
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\",\"representative\":\"true\",\"weight\":\"true\",\"pending\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "frontier": "FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5",
+          "open_block": "191CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
+          "representative_block": "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
+          "balance": "235580100176034320859259343606608761791",
+          "modified_timestamp": "1501793775",
+          "block_count": "33",
+          "representative": "nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3",
+          "weight": "1105577030935649664609129644855132177",
+          "pending": "2309370929000000000000000000000000"
+        }
+      BODY
+      headers: {}
+    )
+
     expect(Nanook.new.wallet(wallet_id).account(account_id).info).to have_key(:frontier)
   end
 
@@ -456,11 +477,11 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"weight":"10000"}',
+      body: '{"weight":"1334523434434545666663345345453450"}',
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).weight).to eq 10_000
+    expect(Nanook.new.wallet(wallet_id).account(account_id).weight).to eq 1334.523434434546
   end
 
   it 'wallet account ledger' do

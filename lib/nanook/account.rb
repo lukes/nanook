@@ -281,6 +281,8 @@ class Nanook
     # @return [Hash{Symbol=>String|Integer|Float|Nanook::Account|Nanook::Block|Time}] information about the account containing:
     #   [+id+] The account id
     #   [+frontier+] The latest {Nanook::Block}
+    #   [+confirmation_height+] Confirmation height
+    #   [+confirmation_height_frontier+] The {Nanook::Block} of the confirmation height
     #   [+pending+] Pending balance in either NANO or raw (depending on the <tt>unit:</tt> argument)
     #   [+open_block+] The first {Nanook::Block} in every account's blockchain. When this block was published the account was officially open
     #   [+representative_block+] The {Nanook::Block} that named the representative for the account
@@ -300,7 +302,8 @@ class Nanook
         frontier: Nanook::Block.new(@rpc, response[:frontier]),
         open_block: Nanook::Block.new(@rpc, response[:open_block]),
         representative_block: Nanook::Block.new(@rpc, response[:representative_block]),
-        representative: Nanook::Account.new(@rpc, response[:representative])
+        representative: Nanook::Account.new(@rpc, response[:representative]),
+        confirmation_height_frontier: Nanook::Block.new(@rpc, response[:confirmation_height_frontier])
       )
 
       response[:last_modified_at] = Time.at(response.delete(:modified_timestamp)).utc
@@ -435,15 +438,23 @@ class Nanook
     #
     # Weight is determined by the account's balance, and represents
     # the voting weight that account has on the network. Only accounts
-    # with greater than 256 weight can vote.
+    # with greater than 0.1% of the online voting weight and are on a node
+    # configured to vote can vote.
     #
     # ==== Example:
     #
     #   account.weight # => 0
     #
-    # @return [Integer] the account's weight
-    def weight
-      rpc(:account_weight)[:weight]
+    # @return [Integer|Float] the account's weight
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def weight(unit: Nanook.default_unit)
+      Nanook.validate_unit!(unit)
+
+      weight = rpc(:account_weight)[:weight]
+
+      return weight unless unit == :nano
+
+      Nanook::Util.raw_to_NANO(weight)
     end
 
     private
