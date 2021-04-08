@@ -297,15 +297,12 @@ class Nanook
       Nanook.validate_unit!(unit)
 
       response = rpc(:account_info, representative: true, weight: true, pending: true)
-      response.merge!(
-        id: @account,
-        frontier: Nanook::Block.new(@rpc, response[:frontier]),
-        open_block: Nanook::Block.new(@rpc, response[:open_block]),
-        representative_block: Nanook::Block.new(@rpc, response[:representative_block]),
-        representative: Nanook::Account.new(@rpc, response[:representative]),
-        confirmation_height_frontier: Nanook::Block.new(@rpc, response[:confirmation_height_frontier])
-      )
-
+      response.merge!(id: @account)
+      response[:frontier] = Nanook::Block.new(@rpc, response[:frontier]) if response[:frontier]
+      response[:open_block] = Nanook::Block.new(@rpc, response[:open_block]) if response[:open_block]
+      response[:representative_block] = Nanook::Block.new(@rpc, response[:representative_block]) if response[:representative_block]
+      response[:representative] = Nanook::Account.new(@rpc, response[:representative]) if response[:representative]
+      response[:confirmation_height_frontier] = Nanook::Block.new(@rpc, response[:confirmation_height_frontier]) if response[:confirmation_height_frontier]
       response[:last_modified_at] = Time.at(response.delete(:modified_timestamp)).utc
 
       if unit == :nano
