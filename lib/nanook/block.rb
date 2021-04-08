@@ -153,7 +153,7 @@ class Nanook
     #   information can be returned about blocks that are unchecked (unverified).
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def info(allow_unchecked: false, unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       # Params for both `unchecked_get` and `block_info` calls
       params = {
@@ -280,7 +280,7 @@ class Nanook
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     # @return [Float]
     def amount(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       amount = memoized_info[:amount]
       return amount unless unit == :nano
@@ -297,7 +297,7 @@ class Nanook
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     # @return [Float]
     def balance(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       balance = memoized_info[:balance]
       return balance unless unit == :nano

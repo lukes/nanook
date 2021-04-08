@@ -37,17 +37,7 @@ class Nanook
   def self.default_unit
     return DEFAULT_UNIT unless defined?(UNIT)
 
-    validate_unit!(UNIT)
-
     UNIT.to_sym
-  end
-
-  # @return [TrueClass] if unit is valid.
-  # @raise [Nanook::NanoUnitError] if `unit` is invalid.
-  def self.validate_unit!(unit)
-    raise Nanook::NanoUnitError, "Unit #{unit} must be one of #{UNITS}" unless UNITS.include?(unit.to_sym)
-
-    true
   end
 
   # Returns a new instance of {Nanook}.
@@ -101,7 +91,7 @@ class Nanook
   # @param key [String] a private key
   # @return [Nanook::PrivateKey]
   def private_key(key = nil)
-    as_private_key(@rpc, key)
+    as_private_key(key)
   end
 
   # Returns a new instance of {Nanook::PublicKey}.

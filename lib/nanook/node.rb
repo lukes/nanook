@@ -121,7 +121,7 @@ class Nanook
     # @return [Hash{Symbol=>String|Integer}]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def confirmation_quorum(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       response = rpc(:confirmation_quorum, _coerce: Hash)
 
@@ -306,7 +306,7 @@ class Nanook
     # @param unit optional. Specify +raw+ if you want to set the amount in +raw+. (See Nanook::Account#balance)
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def change_receive_minimum(minimum, unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       minimum = NANO_to_raw(minimum) if unit == :nano
 
@@ -323,7 +323,7 @@ class Nanook
     # @param unit (see Nanook::Account#balance)
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def receive_minimum(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       amount = rpc(:receive_minimum)[:amount]
 

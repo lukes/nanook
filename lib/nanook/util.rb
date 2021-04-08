@@ -30,6 +30,14 @@ class Nanook
       (raw.to_f / STEP).to_f
     end
 
+    # @return [TrueClass] if unit is valid.
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid.
+    def validate_unit!(unit)
+      raise Nanook::NanoUnitError, "Unit #{unit} must be one of #{Nanook::UNITS}" unless Nanook::UNITS.include?(unit.to_sym)
+
+      true
+    end
+
     def as_account(account_id)
       Nanook::Account.new(@rpc, account_id)
     end

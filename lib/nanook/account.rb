@@ -69,7 +69,7 @@ class Nanook
     # @return [Hash{Nanook::Account=>Integer|Float}] {Nanook::Account} accounts which delegate to this account, and their account balance
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def delegators(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       response = rpc(:delegators, _access: :delegators, _coerce: Hash)
 
@@ -147,7 +147,7 @@ class Nanook
     # @return [Array<Hash{Symbol=>String|Float|Integer|Nanook::Account|NanookBlock}>] the history of send and receive payments for this account
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def history(limit: 1000, unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       response = rpc(:account_history, count: limit, _access: :history, _coerce: Array)
 
@@ -236,7 +236,7 @@ class Nanook
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     # @return [Hash{Symbol=>Integer|Float}]
     def balance(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       rpc(:account_balance).tap do |r|
         if unit == :nano
@@ -305,7 +305,7 @@ class Nanook
     #
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def info(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       response = rpc(:account_info, representative: true, weight: true, pending: true)
       response.merge!(id: @account)
@@ -362,7 +362,7 @@ class Nanook
     # @return [Hash{Nanook::Account=>String|Integer}]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def ledger(limit: 1, modified_since: 0, unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       params = {
         count: limit,
@@ -430,7 +430,7 @@ class Nanook
     # @return [Array<Hash{Symbol=>Nanook::Block|Nanook::Account|Integer}>]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       params = {
         count: limit,
@@ -472,7 +472,7 @@ class Nanook
     # @return [Integer|Float] the account's weight
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def weight(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       weight = rpc(:account_weight)[:weight]
 

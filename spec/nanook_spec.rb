@@ -23,24 +23,6 @@ RSpec.describe Nanook do
     end
   end
 
-  it 'default_unit class method should raise Nanook::Error if Nanook::UNIT is not one of Nanook::UNITS' do
-    silent_warnings do
-      Nanook::UNIT = :invalid
-      expect { Nanook.default_unit }.to raise_error(Nanook::Error)
-      Nanook::UNIT = :nano # reset
-    end
-  end
-
-  it 'validate_unit! should allow valid units' do
-    expect(Nanook.validate_unit!('raw')).to eq(true)
-    expect(Nanook.validate_unit!(:raw)).to eq(true)
-    expect(Nanook.validate_unit!('nano')).to eq(true)
-  end
-
-  it 'validate_unit! should raise exception for invalid units' do
-    expect { Nanook.validate_unit!('foo') }.to raise_error(Nanook::NanoUnitError)
-  end
-
   it 'should have a block method' do
     expect(Nanook.new.block('some_block')).to be_kind_of(Nanook::Block)
   end

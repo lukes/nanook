@@ -198,7 +198,7 @@ class Nanook
     # @return [Hash{Symbol=>Integer|Float|Hash}]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def balance(account_break_down: false, unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       if account_break_down
         return rpc(:wallet_balances, _access: :balances, _coerce: Hash).tap do |r|
@@ -530,7 +530,7 @@ class Nanook
     #   See {Nanook::Account#info} for details of what is returned for each account.
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def info(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       response = rpc(:wallet_ledger, _access: :accounts, _coerce: Hash)
 
@@ -574,7 +574,7 @@ class Nanook
     # @return [Array<Hash{Symbol=>String|Nanook::Account|Nanook::WalletAccount|Nanook::Block|Integer|Float|Time}>]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def history(unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       rpc(:wallet_history, _access: :history, _coerce: Array).map do |h|
         h[:account] = account(h[:account])

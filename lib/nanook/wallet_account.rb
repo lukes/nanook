@@ -160,7 +160,7 @@ class Nanook
     # @raise [Nanook::NodeRpcError] if unsuccessful
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pay(to:, amount:, id:, unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       # Check that to account is a valid address
       response = @rpc.call(:validate_account_number, account: to)
