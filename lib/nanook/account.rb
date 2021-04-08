@@ -79,6 +79,17 @@ class Nanook
       Hash[r]
     end
 
+    # Number of accounts that have set this account as their representative.
+    #
+    # === Example:
+    #
+    #   account.delegators_count # => 2
+    #
+    # @return [Integer]
+    def delegators_count
+      rpc(:delegators_count)[:count]
+    end
+
     # Returns true if the account has an <i>open</i> block.
     #
     # An open block gets published when an account receives a payment

@@ -574,4 +574,17 @@ RSpec.describe Nanook::Account do
 
     expect(Nanook.new.account(account_id).last_modified_at).to eq Time.at(1_501_793_775)
   end
+
+  it 'account delegators_count' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"delegators_count\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"count\":\"2\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).delegators_count).to eq 2
+  end
 end
