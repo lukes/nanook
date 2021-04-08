@@ -325,6 +325,7 @@ node.change_receive_minimum(amount)
 node.representatives
 node.representatives(unit: :raw)
 node.representatives_online
+node.search_pending
 node.synchronizing_blocks
 node.synchronizing_blocks(limit: 1)
 node.sync_progress

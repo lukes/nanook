@@ -238,6 +238,16 @@ class Nanook
       rpc(:representatives_online)[:representatives].map(&:to_s)
     end
 
+    # Tells the node to look for any account in all available wallets.
+    #
+    # ==== Example:
+    #
+    #   node.search_pending #=> true
+    # @return [Boolean] indicates if the action was successful
+    def search_pending
+      rpc(:search_pending_all).key?(:success)
+    end
+
     # Safely shuts down the node.
     #
     # @return [Boolean] indicating if action was successful

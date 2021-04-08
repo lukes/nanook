@@ -261,6 +261,19 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.change_receive_minimum(1000000001000000000000000000000, unit: :raw)).to be true
   end
 
+  it 'search pending' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"search_pending_all\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"success": ""}',
+      headers: {}
+    )
+
+    expect(Nanook.new.node.search_pending).to eq true
+  end
+
   it 'receive minimum' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"receive_minimum\"}",
@@ -274,7 +287,7 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.receive_minimum).to eq(10.0)
   end
 
-  it 'receive minimum' do
+  it 'receive minimum unit raw' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"receive_minimum\"}",
       headers: headers
