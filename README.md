@@ -157,6 +157,7 @@ wallet.pending(detailed: true)
 wallet.pending(unit: :raw)
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
+wallet.search_pending
 
 wallet.account.create
 wallet.account.create(5)

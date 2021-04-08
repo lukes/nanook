@@ -150,6 +150,19 @@ RSpec.describe Nanook::Wallet do
     expect(Nanook.new.wallet(wallet_id).export).to eq '{"0000000000000000000000000000000000000000000000000000000000000000": "0000000000000000000000000000000000000000000000000000000000000001"}'
   end
 
+  it 'wallet search pending' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"search_pending\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"started":"1"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).search_pending).to eq true
+  end
+
   it 'wallet contains? when true' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\"}",
