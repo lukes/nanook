@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `Nanook::Node#confirmation_history`.
   - `Nanook::Node#confirmed_recently?`.
 - `Nanook::Key` Replaced by `Nanook::PrivateKey`.
+- `Nanook::Account#info` No longer accepts `detailed:` argument.
 
 ### Added
 
@@ -25,8 +26,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Block#amount`.
 - Added `Nanook::Block#balance`.
 - Added `Nanook::Block#change?`.
-- Added `Nanook::Block#checked?`.
+- Added `Nanook::Block#confirmed?`.
 - Added `Nanook::Block#epoch?`.
+- Added `Nanook::Block#exists?`.
 - Added `Nanook::Block#height`.
 - Added `Nanook::Block#open?`.
 - Added `Nanook::Block#previous`.
@@ -36,7 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Block#signature`.
 - Added `Nanook::Block#timestamp`.
 - Added `Nanook::Block#type`.
-- Added `Nanook::Block#unchecked?`.
+- Added `Nanook::Block#unconfirmed?`.
 - Added `Nanook::Block#work`.
 - Added `Nanook::PrivateKey` with methods `#create`, `#account` and `#public_key`.
 - Added `Nanook::PublicKey` with method `#account`.
@@ -60,6 +62,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Block#info` returns balances in nano, and can optionally be passed `unit: :raw` argument.
 - `Nanook::Account#pending` returns source as `Nanook::Account` and block as `Nanook::Block` when `detailed: true`.
 - `Nanook::Account#representative` returns a `Nanook::Account`.
+- `Nanook::Account#history` returns account as `Nanook::Account` and block as `Nanook::Block`.
+- `Nanook::Account#public_key` returns a `Nanook::PublicKey`.
+- `Nanook::Account#info`:
+     - returns the `frontier`, `open_block`, `representative_block` values as `Nanook::Block`s.
+     - returns the `representative` as a `Nanook::Account`.
+     - `modified_timestamp` key renamed to `last_modified_at` and value is a `Time` in UTC.
 - `Nanook::Key` has become `Nanook::PrivateKey`, `#generate` has been renamed `#create` and returns a `Nanook::PrivateKey`.
 
 ### Fixed

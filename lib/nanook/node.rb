@@ -47,7 +47,11 @@ class Nanook
     #
     # ==== Example:
     #
-    #
+    #   {
+    #     count: 100,
+    #     unchecked: 10,
+    #     cemented: 25
+    #   }
     #
     # @return [Hash{Symbol=>Integer}] number of blocks and unchecked
     #   synchronizing blocks

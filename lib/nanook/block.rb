@@ -132,7 +132,7 @@ class Nanook
     #     :type=>"send",
     #     :previous=>"FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB",
     #     :destination=>"nano_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
-    #     :balance=>"00000000000000000000000000000000",
+    #     :balance=>1.01,
     #     :work=>"44cc24b60705083a",
     #     :signature=>"42ADFEFE7C3FFF188AE92A202F8A5734DE91779C454613E446EEC93D001D6C953E9FD16730AF32C891791BA8EDAECEB059A213E2FE1EEB7ADF9D5D0815464D06"
     #   }
@@ -146,14 +146,14 @@ class Nanook
       if allow_unchecked
         begin
           response = rpc(:unchecked_get, :hash, json_block: true)
-          return parse_info_response(response, unit).merge(checked: false)
+          return parse_info_response(response, unit).merge(confirmed: false)
         rescue Nanook::Error
           # If unchecked not found, continue to checked block
         end
       end
 
       response = rpc(:block_info, :hash, json_block: true)
-      parse_info_response(response, unit).merge(checked: true)
+      parse_info_response(response, unit)
     end
 
     # ==== Example:
@@ -282,6 +282,49 @@ class Nanook
       Nanook::Util.raw_to_NANO(balance)
     end
 
+    # Returns true if block is confirmed.
+    #
+    # ==== Example:
+    #   block.confirmed # => true
+    #
+    # @return [Boolean]
+    def confirmed?
+      memoized_info[:confirmed]
+    end
+    alias checked? confirmed?
+
+    # Returns true if block is unconfirmed.
+    #
+    # ==== Example:
+    #   block.unconfirmed? # => true
+    #
+    # @return [Boolean]
+    def unconfirmed?
+      !confirmed?
+    end
+    alias unchecked? unconfirmed?
+
+    # Returns true if block exists in the node's ledger. This will return
+    # false for blocks that exist on the nano ledger but have not yet
+    # synchronized to the node.
+    #
+    # ==== Example:
+    #
+    #   block.exists? # => false
+    #   block.exists?(allow_unchecked: true) # => true
+    #
+    # @param allow_unchecked [Boolean] defaults to +false+
+    # @return [Boolean]
+    def exists?(allow_unchecked: false)
+      begin
+        allow_unchecked ? memoized_info : info
+      rescue Nanook::NodeRpcError
+        return false
+      end
+
+      true
+    end
+
     # Returns the height of the block.
     #
     # ==== Example:
@@ -333,26 +376,6 @@ class Nanook
     def previous
       block = memoized_info[:previous]
       Nanook::Block.new(@rpc, block) if block
-    end
-
-    # Returns true if block is checked.
-    #
-    # ==== Example:
-    #   block.checked? # => true
-    #
-    # @return [Boolean]
-    def checked?
-      memoized_info[:checked] == true
-    end
-
-    # Returns true if block is unchecked.
-    #
-    # ==== Example:
-    #   block.unchecked? # => true
-    #
-    # @return [Boolean]
-    def unchecked?
-      !checked?
     end
 
     # Returns the type of the block. One of "open", "send", "receive", "change", "epoch".

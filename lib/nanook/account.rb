@@ -112,6 +112,9 @@ class Nanook
 
     # An account's history of send and receive payments.
     #
+    # This call may return results that include unconfirmed blocks, so it should not be used in
+    # any processes or integrations requiring only details from blocks confirmed by the network.
+    #
     # ==== Example:
     #
     #   account.history
@@ -121,15 +124,15 @@ class Nanook
     #   [
     #     {
     #      type: "send",
-    #      account: "nano_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
+    #      account: Nanook::Account,
     #      amount: 2,
-    #      hash: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570"
+    #      block: Nanook::Block
     #     }
     #   ]
     #
     # @param limit [Integer] maximum number of history items to return
     # @param unit (see #balance)
-    # @return [Array<Hash{Symbol=>String}>] the history of send and receive payments for this account
+    # @return [Array<Hash{Symbol=>String|Float|Integer|Nanook::Account|NanookBlock}>] the history of send and receive payments for this account
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def history(limit: 1000, unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
@@ -141,6 +144,9 @@ class Nanook
 
       response.map! do |history|
         history[:amount] = Nanook::Util.raw_to_NANO(history[:amount])
+        history[:account] = Nanook::Account.new(@rpc, history[:account])
+        history[:block] = Nanook::Block.new(@rpc, history.delete(:hash)) # We rename the key from `hash` to `block` here
+
         history
       end
     end
@@ -161,11 +167,11 @@ class Nanook
     #
     # ==== Example:
     #
-    #   account.public_key # => "3068BB1..."
+    #   account.public_key # => Nanook::PublicKey
     #
-    # @return [String] public key of the account
+    # @return [Nanook::PublicKey] public key of the account
     def public_key
-      rpc(:account_key)[:key]
+      Nanook::PublicKey.new(@rpc, rpc(:account_key)[:key])
     end
 
     # The representative for the account.
@@ -262,59 +268,52 @@ class Nanook
     #     id: "nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
     #     balance: 11.439597000000001,
     #     block_count: 4,
-    #     frontier: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
-    #     modified_timestamp: 1520500357,
-    #     open_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #     pending: 0,
-    #     public_key: "A82C906460046D230D7D37C6663723DC3EFCECC4B3254EBF45294B66746F4FEF",
-    #     representative: "nano_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh",
-    #     representative_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #     weight: 0
+    #     frontier: Nanook::Block,
+    #     last_modified_at: Time,
+    #     open_block: Nanook::Block,
+    #     pending: 1.0,
+    #     representative: Nanook::Account,
+    #     representative_block: Nanook::Block,
+    #     weight: 0.1
     #   }
     #
-    # @param detailed [Boolean] (default is false). When +true+, four
-    #   additional calls are made to the RPC to return more information
     # @param unit (see #balance)
-    # @return [Hash{Symbol=>String|Integer|Float}] information about the account containing:
+    # @return [Hash{Symbol=>String|Integer|Float|Nanook::Account|Nanook::Block|Time}] information about the account containing:
     #   [+id+] The account id
-    #   [+frontier+] The latest block hash
-    #   [+open_block+] The first block in every account's blockchain. When this block was published the account was officially open
-    #   [+representative_block+] The block that named the representative for the account
-    #   [+balance+] Amount in either NANO or raw (depending on the <tt>unit:</tt> argument)
-    #   [+last_modified+] Unix timestamp
+    #   [+frontier+] The latest {Nanook::Block}
+    #   [+pending+] Pending balance in either NANO or raw (depending on the <tt>unit:</tt> argument)
+    #   [+open_block+] The first {Nanook::Block} in every account's blockchain. When this block was published the account was officially open
+    #   [+representative_block+] The {Nanook::Block} that named the representative for the account
+    #   [+balance+] Balance in either NANO or raw (depending on the <tt>unit:</tt> argument)
+    #   [+last_modified_at+] {Time} of when the account was last modified in UTC
+    #   [+representative+] Representative {Nanook::Account}
     #   [+block_count+] Number of blocks in the account's blockchain
-    #
-    #   When <tt>detailed: true</tt> is passed as an argument, this method
-    #   makes four additional calls to the RPC to return more information
-    #   about an account:
-    #
     #   [+weight+] See {#weight}
-    #   [+pending+] See {#balance}
-    #   [+representative+] See {#representative}
-    #   [+public_key+] See {#public_key}
     #
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def info(detailed: false, unit: Nanook.default_unit)
+    def info(unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      response = rpc(:account_info)
-      response.merge!(id: @account)
+      response = rpc(:account_info, representative: true, weight: true, pending: true)
+      response.merge!(
+        id: @account,
+        frontier: Nanook::Block.new(@rpc, response[:frontier]),
+        open_block: Nanook::Block.new(@rpc, response[:open_block]),
+        representative_block: Nanook::Block.new(@rpc, response[:representative_block]),
+        representative: Nanook::Account.new(@rpc, response[:representative])
+      )
 
-      response[:balance] = Nanook::Util.raw_to_NANO(response[:balance]) if unit == :nano
+      response[:last_modified_at] = Time.at(response.delete(:modified_timestamp)).utc
 
-      # Return the response if we don't need any more info
-      return response unless detailed
+      if unit == :nano
+        response.merge!(
+          balance: Nanook::Util.raw_to_NANO(response[:balance]),
+          pending: Nanook::Util.raw_to_NANO(response[:pending]),
+          weight: Nanook::Util.raw_to_NANO(response[:weight])
+        )
+      end
 
-      # Otherwise make additional calls
-      response.merge!({
-                        weight: weight,
-                        pending: balance(unit: unit)[:pending],
-                        representative: representative,
-                        public_key: public_key
-                      })
-
-      # Sort this new hash by keys
-      Hash[response.sort].to_symbolized_hash
+      response
     end
 
     def inspect

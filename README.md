@@ -209,7 +209,6 @@ account.pending(unit: :raw)
 
 account.exists?
 account.info
-account.info(detailed: true)
 account.info(unit: :raw)
 account.last_modified_at
 account.ledger
@@ -256,14 +255,6 @@ See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/2.
 ```ruby
 block = nanook.block(block_id)
 
-# TODO from `#info`:
-#
-# block.exists?
-# block.exists?(unchecked: false)
-# block.confirmed? (is this checked?)
-# block.cemented? (not sure how to get this info)
-#
-
 block.account
 block.amount
 block.amount(unit: :raw)
@@ -271,6 +262,8 @@ block.balance
 block.change?
 block.checked?
 block.epoch?
+block.exists?
+block.exists?(allow_unchecked: true)
 block.height
 block.info                        # Verified blocks in the ledger
 block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing blocks
