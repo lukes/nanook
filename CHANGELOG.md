@@ -59,7 +59,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Block#republish` returns an Array of `Nanook::Block`s.
 - `Nanook::Block#chain` returns an Array of `Nanook::Block`s.
 - `Nanook::Block#successors` returns an Array of `Nanook::Block`s.
-- `Nanook::Block#info` returns balances in nano, and can optionally be passed `unit: :raw` argument.
+- `Nanook::Block#info`:
+  - returns balances in nano, and can optionally be passed `unit: :raw` argument.
+  - returns account values as `Nanook::Account` and block values as `Nanook::Block`.
 - `Nanook::Account#pending` returns source as `Nanook::Account` and block as `Nanook::Block` when `detailed: true`.
 - `Nanook::Account#representative` returns a `Nanook::Account`.
 - `Nanook::Account#history` returns account as `Nanook::Account` and block as `Nanook::Block`.

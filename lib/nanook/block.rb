@@ -128,13 +128,20 @@ class Nanook
     # ==== Example response:
     #
     #   {
-    #     :id=>"36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
-    #     :type=>"send",
-    #     :previous=>"FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB",
-    #     :destination=>"nano_3x7cjioqahgs5ppheys6prpqtb4rdknked83chf97bot1unrbdkaux37t31b",
-    #     :balance=>1.01,
-    #     :work=>"44cc24b60705083a",
-    #     :signature=>"42ADFEFE7C3FFF188AE92A202F8A5734DE91779C454613E446EEC93D001D6C953E9FD16730AF32C891791BA8EDAECEB059A213E2FE1EEB7ADF9D5D0815464D06"
+    #     "account": Nanook::Account,
+    #     "amount": 34.2,
+    #     "balance": 2.3
+    #     "height": 58,
+    #     "local_timestamp": Time,
+    #     "confirmed": true,
+    #     "type": "send",
+    #     "account": Nanook::Account,
+    #     "previous": Nanook::Block,
+    #     "representative": Nanook::Account,
+    #     "link": Nanook::Block,
+    #     "link_as_account": Nanook::Account,
+    #     "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+    #     "work": "8a142e07a10996d5"
     #   }
     #
     # @param allow_unchecked [Boolean] (default is +false+). If +true+,
@@ -233,8 +240,7 @@ class Nanook
     #
     # @return [Nanook::Account] representative account of the block. Can be nil.
     def representative
-      representative = memoized_info[:representative]
-      Nanook::Account.new(@rpc, representative) if representative
+      memoized_info[:representative]
     end
 
     # Returns the {Nanook::Account} of the block.
@@ -244,8 +250,7 @@ class Nanook
     #
     # @return [Nanook::Account] the account of the block. Can be nil.
     def account
-      account = memoized_info[:account]
-      Nanook::Account.new(@rpc, account) if account
+      memoized_info[:account]
     end
 
     # Returns the amount of the block.
@@ -362,8 +367,7 @@ class Nanook
     #
     # @return [Time] Time in UTC of when the node saw the block. Can be nil.
     def timestamp
-      timestamp = memoized_info[:local_timestamp]
-      Time.at(timestamp).utc if timestamp
+      memoized_info[:local_timestamp]
     end
 
 
@@ -374,8 +378,7 @@ class Nanook
     #
     # @return [Nanook::Block] previous block in the chain. Can be nil.
     def previous
-      block = memoized_info[:previous]
-      Nanook::Block.new(@rpc, block) if block
+      memoized_info[:previous]
     end
 
     # Returns the type of the block. One of "open", "send", "receive", "change", "epoch".
@@ -385,7 +388,7 @@ class Nanook
     #
     # @return [String] type of block.
     def type
-      memoized_info[:subtype]
+      memoized_info[:type]
     end
 
     # Returns true if block is type "send".
@@ -463,15 +466,27 @@ class Nanook
 
     def parse_info_response(response, unit)
       response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
-      response.merge!(id: id)
 
+      response.merge!(id: id)
       contents = response.delete(:contents)
       response.merge!(contents) if contents
 
-      return response unless unit == :nano
+      response.delete(:block_account) # duplicate of contents.account
+      response[:type] = response.delete(:subtype) # rename key
+      response[:last_modified_at] = response.delete(:modified_timestamp) # rename key
 
-      response[:amount] = Nanook::Util.raw_to_NANO(response[:amount])
-      response[:balance] = Nanook::Util.raw_to_NANO(response[:balance])
+      response[:account] = Nanook::Account.new(@rpc, response[:account]) if response[:account]
+      response[:representative] = Nanook::Account.new(@rpc, response[:representative]) if response[:representative]
+      response[:previous] = Nanook::Block.new(@rpc, response[:previous]) if response[:previous]
+      response[:link] = Nanook::Block.new(@rpc, response[:link]) if response[:link]
+      response[:link_as_account] = Nanook::Account.new(@rpc, response[:link_as_account]) if response[:link_as_account]
+      response[:local_timestamp] = Time.at(response[:local_timestamp]).utc if response[:local_timestamp]
+      response[:last_modified_at] = Time.at(response[:last_modified_at]).utc if response[:last_modified_at]
+
+      if unit == :nano
+        response[:amount] = Nanook::Util.raw_to_NANO(response[:amount])
+        response[:balance] = Nanook::Util.raw_to_NANO(response[:balance])
+      end
 
       response.compact
     end

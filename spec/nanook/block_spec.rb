@@ -151,7 +151,7 @@ RSpec.describe Nanook::Block do
           "amount": "30000000000000000000000000000000000",
           "balance": "5606157000000000000000000000000000000",
           "height": "58",
-          "local_timestamp": "0",
+          "local_timestamp": "1617855149",
           "confirmed": "true",
           "contents": {
             "type": "state",
@@ -174,22 +174,20 @@ RSpec.describe Nanook::Block do
 
     expect(response).to eq(
       {
-        "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
         "amount": 30000.0,
         "balance": 5606157.0,
         "height": 58,
-        "local_timestamp": 0,
+        "local_timestamp": Time.at(1617855149),
         "confirmed": true,
         "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
-        "type": "state",
-        "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
-        "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
-        "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
-        "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
-        "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+        "type": "send",
+        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
+        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
+        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
+        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
         "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
-        "work": "8a142e07a10996d5",
-        "subtype": "send"
+        "work": "8a142e07a10996d5"
       }
     )
   end
@@ -206,7 +204,7 @@ RSpec.describe Nanook::Block do
           "amount": "30000000000000000000000000000000000",
           "balance": "5606157000000000000000000000000000000",
           "height": "58",
-          "local_timestamp": "0",
+          "local_timestamp": "1617855149",
           "confirmed": "true",
           "contents": {
             "type": "state",
@@ -229,22 +227,20 @@ RSpec.describe Nanook::Block do
 
     expect(response).to eq(
       {
-        "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
         "amount": 30000000000000000000000000000000000,
+        "balance": 5606157000000000000000000000000000000,
         "height": 58,
-        "local_timestamp": 0,
+        "local_timestamp": Time.at(1617855149),
         "confirmed": true,
         "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
-        "type": "state",
-        "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
-        "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
-        "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
-        "balance": 5606157000000000000000000000000000000,
-        "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
-        "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+        "type": "send",
+        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
+        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
+        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
+        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
         "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
-        "work": "8a142e07a10996d5",
-        "subtype": "send"
+        "work": "8a142e07a10996d5"
       }
     )
   end
@@ -291,16 +287,15 @@ RSpec.describe Nanook::Block do
 
     expect(response).to eq(
       {
-        "modified_timestamp": 1565856525,
-        "type": "state",
-        "account": "nano_1hmqzugsmsn4jxtzo5yrm4rsysftkh9343363hctgrjch1984d8ey9zoyqex",
-        "previous": "009C587914611E83EE7F75BD9C000C430C720D0364D032E84F37678D7D012911",
-        "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
         "balance": 0.00018901267959211,
+        "last_modified_at": Time.at(1565856525),
         "confirmed": false,
-        "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
-        "link": 0,
-        "link_as_account": "nano_1111111111111111111111111111111111111111111111111111hifc8npp",
+        "id": block,
+        "account": Nanook.new.account("nano_1hmqzugsmsn4jxtzo5yrm4rsysftkh9343363hctgrjch1984d8ey9zoyqex"),
+        "previous": Nanook.new.block("009C587914611E83EE7F75BD9C000C430C720D0364D032E84F37678D7D012911"),
+        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "link": Nanook.new.block(0),
+        "link_as_account": Nanook.new.account("nano_1111111111111111111111111111111111111111111111111111hifc8npp"),
         "signature": "845C8660750895843C013CE33E31B80EF0A7A69E52DDAF74A5F1BDFAA9A52E4D9EA2C3BE1AB0BD5790FCC1AD9B7A3D2F4B44EECE4279A8184D414A30A1B4620F",
         "work": "0dfb32653e189699"
       }
@@ -351,22 +346,20 @@ RSpec.describe Nanook::Block do
 
     expect(response).to eq(
       {
-        "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
         "amount": 30000.0,
         "balance": 5606157.0,
         "height": 58,
-        "local_timestamp": 0,
+        "local_timestamp": Time.at(0),
         "confirmed": true,
         "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
-        "type": "state",
-        "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
-        "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
-        "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
-        "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
-        "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+        "type": "send",
+        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
+        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
+        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
+        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
         "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
         "work": "8a142e07a10996d5",
-        "subtype": "send"
       }
     )
   end
