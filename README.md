@@ -163,11 +163,11 @@ wallet.account.create
 wallet.account.create(5)
 wallet.accounts
 wallet.contains?(account_id)
-wallet.move_accounts(from_wallet, [account_1, account_2])
-wallet.remove_account(account)
+wallet.move_accounts(from_wallet_id, [account_1_id, account_2_id])
+wallet.remove_account(account_id)
 
 wallet.default_representative
-wallet.change_default_representative(new_representative)
+wallet.change_default_representative(representative_account_id)
 wallet.info
 wallet.info(unit: :raw)
 wallet.export

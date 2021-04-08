@@ -111,13 +111,11 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    wallet = Nanook.new.wallet('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    wallet = '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
     accounts = [
       'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000',
       'nano_5e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
-    ].map do |account|
-      Nanook.new.account(account)
-    end
+    ]
 
     expect(Nanook.new.wallet(wallet_id).move_accounts(wallet, accounts)).to be true
   end
@@ -132,7 +130,7 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    account = Nanook.new.account('nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000')
+    account = 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
 
     expect(Nanook.new.wallet(wallet_id).remove_account(account)).to be true
   end

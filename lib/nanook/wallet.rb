@@ -122,11 +122,11 @@ class Nanook
     #
     # ==== Example:
     #
-    #   wallet.move_accounts(wallet, [account1, account2]) # => true
+    #   wallet.move_accounts("0023200...", ["nano_3e3j5...", "nano_5f2a1..."]) # => true
     #
     # @return [Boolean] true when the move was successful
     def move_accounts(wallet, accounts)
-      response = rpc(:account_move, source: wallet.id, accounts: accounts.map(&:id))
+      response = rpc(:account_move, source: wallet, accounts: accounts)
       response[:moved] == 1
     end
 
@@ -134,11 +134,11 @@ class Nanook
     #
     # ==== Example:
     #
-    #   wallet.remove_account(account) # => true
+    #   wallet.remove_account("nano_3e3j5...") # => true
     #
     # @return [Boolean] true when the remove was successful
     def remove_account(account)
-      response = rpc(:account_remove, account: account.id)
+      response = rpc(:account_remove, account: account)
       response[:removed] == 1
     end
 
