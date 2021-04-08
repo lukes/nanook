@@ -442,49 +442,130 @@ RSpec.describe Nanook::Node do
 
   it 'should show synchronizing_blocks' do
     stub_request(:post, uri).with(
-      body: '{"action":"unchecked","count":"1000"}',
+      body: '{"action":"unchecked","count":"1000","json_block":"true"}',
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks":{"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F":"{\\"type\\": \\"open\\",\\"account\\": \\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\",\\"representative\\": \\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\",\\"source\\": \\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\",\\"work\\": \\"0000000000000000\\",\\"signature\\":\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\"}","000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3C":"{\\"type\\": \\"open\\",\\"account\\": \\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\",\\"representative\\": \\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\",\\"source\\": \\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\",\\"work\\": \\"0000000000000000\\",\\"signature\\":\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\"}"}}',
+      body: <<~BODY,
+        {
+          "blocks": {
+            "87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9": {
+              "type": "state",
+              "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+              "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+              "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+              "balance": "5606157000000000000000000000000000000",
+              "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+              "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+              "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+              "work": "8a142e07a10996d5"
+            }
+          }
+        }
+      BODY
       headers: {}
     )
 
     response = Nanook.new.node.synchronizing_blocks
 
-    expect(response).to have(2).items
-
-    block = response['000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F']
-
-    expect(block[:type]).to eq 'open'
-    expect(block[:account]).to eq 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
-    expect(block[:representative]).to eq 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
-    expect(block[:source]).to eq 'FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4'
-    expect(block[:work]).to eq '0000000000000000'
-    expect(block[:signature]).to eq '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+    expect(response).to eq({
+      Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
+        type: 'state',
+        account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+        representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+        link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+        previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+        link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+        signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+        work: '8a142e07a10996d5',
+        balance: 5606157.0,
+      }
+    })
   end
 
   it 'should show synchronizing_blocks with limit' do
     stub_request(:post, uri).with(
-      body: '{"action":"unchecked","count":"1"}',
+      body: '{"action":"unchecked","count":"1","json_block":"true"}',
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks": {"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F": "{\\"type\\": \\"open\\",\\"account\\": \\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\",\\"representative\\": \\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\\",\\"source\\": \\"FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4\\",\\"work\\": \\"0000000000000000\\",\\"signature\\":\\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\\"}"}}',
+      body: <<~BODY,
+        {
+          "blocks": {
+            "87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9": {
+              "type": "state",
+              "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+              "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+              "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+              "balance": "5606157000000000000000000000000000000",
+              "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+              "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+              "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+              "work": "8a142e07a10996d5"
+            }
+          }
+        }
+      BODY
       headers: {}
     )
 
     response = Nanook.new.node.synchronizing_blocks(limit: 1)
 
-    expect(response).to have(1).item
+    expect(response).to eq({
+      Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
+        type: 'state',
+        account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+        representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+        link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+        previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+        link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+        signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+        work: '8a142e07a10996d5',
+        balance: 5606157.0,
+      }
+    })
+  end
 
-    block = response['000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F']
+  it 'should show synchronizing_blocks with unit raw' do
+    stub_request(:post, uri).with(
+      body: '{"action":"unchecked","count":"1000","json_block":"true"}',
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "blocks": {
+            "87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9": {
+              "type": "state",
+              "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+              "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+              "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+              "balance": "5606157000000000000000000000000000000",
+              "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+              "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+              "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+              "work": "8a142e07a10996d5"
+            }
+          }
+        }
+      BODY
+      headers: {}
+    )
 
-    expect(block[:type]).to eq 'open'
-    expect(block[:account]).to eq 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
-    expect(block[:representative]).to eq 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
-    expect(block[:source]).to eq 'FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4'
-    expect(block[:work]).to eq '0000000000000000'
-    expect(block[:signature]).to eq '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+    response = Nanook.new.node.synchronizing_blocks(unit: :raw)
+
+    expect(response).to eq({
+      Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
+        type: 'state',
+        account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+        representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+        link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+        previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+        link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+        signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+        work: '8a142e07a10996d5',
+        balance: 5606157000000000000000000000000000000,
+      }
+    })
   end
 end

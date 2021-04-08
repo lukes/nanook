@@ -260,14 +260,32 @@ class Nanook
     end
 
     # @param limit [Integer] number of synchronizing blocks to return
+    # @param unit (see Nanook::Account#balance)
+    #
     # @return [Hash{Symbol=>String}] information about the synchronizing blocks for this node
-    def synchronizing_blocks(limit: 1000)
-      # TODO check this method
-      response = rpc(:unchecked, count: limit, _access: :blocks, _coerce: Hash)
-      response = response.map do |block, info|
-        [block, JSON.parse(info).to_symbolized_hash]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def synchronizing_blocks(limit: 1000, unit: Nanook.default_unit)
+      validate_unit!(unit)
+
+      params = {
+        count: limit,
+        json_block: true,
+        _access: :blocks,
+        _coerce: Hash
+      }
+
+      response = rpc(:unchecked, params).map do |block, info|
+        info[:account] = as_account(info[:account]) if info[:account]
+        info[:link_as_account] = as_account(info[:link_as_account]) if info[:link_as_account]
+        info[:representative] = as_account(info[:representative]) if info[:representative]
+        info[:previous] = as_block(info[:previous]) if info[:previous]
+        info[:link] = as_block(info[:link]) if info[:link]
+        info[:balance] = raw_to_NANO(info[:balance]) if unit == :nano && info[:balance]
+
+        [as_block(block), info]
       end
-      Hash[response.sort].to_symbolized_hash
+
+      Hash[response]
     end
     alias unchecked synchronizing_blocks
 
