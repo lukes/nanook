@@ -568,6 +568,11 @@ RSpec.describe Nanook::WalletAccount do
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).delegators).to have_key :nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd
+    response = Nanook.new.wallet(wallet_id).account(account_id).delegators
+
+    expect(response).to eq(
+      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500000.0,
+      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961647.97082073
+    )
   end
 end

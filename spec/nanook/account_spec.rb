@@ -515,8 +515,11 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).delegators
-    expect(response).to have_key(:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
-    expect(response[:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500_000)
+
+    expect(response).to eq(
+      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500000.0,
+      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961647.97082073
+    )
   end
 
   it 'account delegators with unit' do
@@ -533,8 +536,11 @@ RSpec.describe Nanook::Account do
     )
 
     response = Nanook.new.account(account_id).delegators(unit: :raw)
-    expect(response).to have_key(:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd)
-    expect(response[:nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd]).to eq(500_000_000_000_000_000_000_000_000_000_000_000)
+
+    expect(response).to eq(
+      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500000000000000000000000000000000000,
+      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961647970820730000000000000000000000
+    )
   end
 
   it 'account delegators when response is blank (unsynced node)' do

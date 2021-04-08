@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - returns account values as `Nanook::Account` and block values as `Nanook::Block`.
 - `Nanook::Account#pending` returns source as `Nanook::Account` and block as `Nanook::Block` when `detailed: true`.
 - `Nanook::Account#representative` returns a `Nanook::Account`.
+- `Nanook::Account#delegators` returns keys as `Nanook::Account`s.
 - `Nanook::Account#history` returns account as `Nanook::Account` and block as `Nanook::Block`.
 - `Nanook::Account#public_key` returns a `Nanook::PublicKey`.
 - `Nanook::Account#weight` accepts an optional `unit:` argment.

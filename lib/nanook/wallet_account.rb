@@ -53,10 +53,10 @@ class Nanook
                    :info, :last_modified_at, :ledger, :pending, :public_key, :representative, :weight
     alias open? exists?
 
-    def initialize(rpc, wallet, account)
+    def initialize(rpc, wallet, account = nil)
       @rpc = rpc
       @wallet = wallet
-      @account = account
+      @account = account.to_s if account
 
       # Initialize an instance to delegate the RPC commands that do not
       # need `enable_control` enabled (the read-only RPC commands).
@@ -69,9 +69,6 @@ class Nanook
         raise ArgumentError, "Account does not exist in wallet. Account: #{@account}, wallet: #{@wallet}"
       end
 
-      # An object to delegate account methods that don't
-      # expect a wallet param in the RPC call, to allow this
-      # class to support all methods that can be called on Nanook::Account
       @nanook_account_instance = Nanook::Account.new(@rpc, @account)
     end
 

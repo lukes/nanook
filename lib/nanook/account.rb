@@ -18,7 +18,7 @@ class Nanook
   class Account
     def initialize(rpc, account)
       @rpc = rpc
-      @account = account
+      @account = account.to_s
     end
 
     # The id of the account.
@@ -57,12 +57,12 @@ class Nanook
     # Example response:
     #
     #   {
-    #     :nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd=>500000000000000000000000000000000000,
-    #     :nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn=>961647970820730000000000000000000000
+    #     Nanook::Account=>50.0,
+    #     Nanook::Account=>961.64
     #   }
     #
     # @param unit (see #balance)
-    # @return [Hash{Symbol=>Integer}] account ids which delegate to this account, and their account balance
+    # @return [Hash{Nanook::Account=>Integer|Float}] {Nanook::Account} accounts which delegate to this account, and their account balance
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def delegators(unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
@@ -70,15 +70,13 @@ class Nanook
       response = rpc(:delegators)[:delegators]
       response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
 
-      return response if unit == :raw
-
       r = response.map do |account_id, balance|
-        balance = Nanook::Util.raw_to_NANO(balance)
+        balance = Nanook::Util.raw_to_NANO(balance) if unit == :nano
 
-        [account_id, balance]
+        [Nanook::Account.new(@rpc, account_id), balance]
       end
 
-      Hash[r].to_symbolized_hash
+      Hash[r]
     end
 
     # Returns true if the account has an <i>open</i> block.

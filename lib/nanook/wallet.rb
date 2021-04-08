@@ -48,9 +48,9 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   wallet = Nanook::Wallet.new(rpc_conn, wallet_id)
   class Wallet
-    def initialize(rpc, wallet)
+    def initialize(rpc, wallet = nil)
       @rpc = rpc
-      @wallet = wallet
+      @wallet = wallet.to_s if wallet
     end
 
     # @return [String] the wallet id

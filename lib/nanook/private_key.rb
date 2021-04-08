@@ -5,7 +5,7 @@ class Nanook
   class PrivateKey
     def initialize(rpc, key = nil)
       @rpc = rpc
-      @key = key
+      @key = key.to_s if key
     end
 
     def id

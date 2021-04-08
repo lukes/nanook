@@ -20,7 +20,7 @@ class Nanook
   class Block
     def initialize(rpc, block)
       @rpc = rpc
-      @block = block
+      @block = block.to_s
       block_required! # All methods expect a block
     end
 
@@ -76,10 +76,7 @@ class Nanook
     #
     # ==== Example reponse:
     #
-    #   [
-    #     "36A0FB717368BA8CF8D255B63DC207771EABC6C6FFC22A7F455EC2209464897E",
-    #     "FBF8B0E6623A31AB528EBD839EEAA91CAFD25C12294C46754E45FD017F7939EB"
-    #   ]
+    #   [Nanook::Block, ...]
     #
     # @param limit [Integer] maximum number of block hashes to return (default is 1000)
     # @param offset [Integer] return the account chain block hashes offset by the specified number of blocks (default is 0)

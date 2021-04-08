@@ -5,7 +5,7 @@ class Nanook
   class PublicKey
     def initialize(rpc, key)
       @rpc = rpc
-      @key = key
+      @key = key.to_s
     end
 
     def id
