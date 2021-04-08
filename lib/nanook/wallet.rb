@@ -94,10 +94,10 @@ class Nanook
     #   <tt>"xrb..."</tt>) to start working with. Must be an account within
     #   the wallet. When no account is given, the instance returned only
     #   allows you to call +create+ on it, to create a new account.
-    # @raise [ArgumentError] if the wallet does no contain the account
+    # @raise [ArgumentError] if the wallet does not contain the account
     # @return [Nanook::WalletAccount]
     def account(account = nil)
-      wallet_required!
+      check_wallet_required!
       Nanook::WalletAccount.new(@rpc, @wallet, account)
     end
 
@@ -112,8 +112,6 @@ class Nanook
     #
     # @return [Array<Nanook::WalletAccount>] all accounts in the wallet
     def accounts
-      wallet_required!
-
       response = rpc(:account_list)[:accounts]
       Nanook::Util.coerce_empty_string_to_type(response, Array).map do |account|
         Nanook::WalletAccount.new(@rpc, @wallet, account)
@@ -197,8 +195,6 @@ class Nanook
     # @return [Hash{Symbol=>Integer|Float|Hash}]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def balance(account_break_down: false, unit: Nanook.default_unit)
-      wallet_required!
-
       Nanook.validate_unit!(unit)
 
       if account_break_down
@@ -232,7 +228,6 @@ class Nanook
     # @param seed [String] the seed to change to.
     # @return [Boolean] indicating whether the change was successful.
     def change_seed(seed)
-      wallet_required!
       rpc(:wallet_change_seed, seed: seed).key?(:success)
     end
 
@@ -251,6 +246,7 @@ class Nanook
     #
     # @return [Nanook::Wallet]
     def create
+      skip_wallet_required!
       @wallet = rpc(:wallet_create)[:wallet]
       self
     end
@@ -263,7 +259,6 @@ class Nanook
     #
     # @return [Boolean] indicating success of the action
     def destroy
-      wallet_required!
       rpc(:wallet_destroy)[:destroyed] == 1
     end
 
@@ -274,7 +269,6 @@ class Nanook
     #   wallet.export
     #     # => "{\n    \"0000000000000000000000000000000000000000000000000000000000000000\": \"0000000000000000000000000000000000000000000000000000000000000003\",\n    \"0000000000000000000000000000000000000000000000000000000000000001\": \"C3A176FC3B90113277BFC91F55128FC9A1F1B6166A73E7446927CFFCA4C2C9D9\",\n    \"0000000000000000000000000000000000000000000000000000000000000002\": \"3E58EC805B99C52B4715598BD332C234A1FBF1780577137E18F53B9B7F85F04B\",\n    \"0000000000000000000000000000000000000000000000000000000000000003\": \"5FF8021122F3DEE0E4EC4241D35A3F41DEF63CCF6ADA66AF235DE857718498CD\",\n    \"0000000000000000000000000000000000000000000000000000000000000004\": \"A30E0A32ED41C8607AA9212843392E853FCBCB4E7CB194E35C94F07F91DE59EF\",\n    \"0000000000000000000000000000000000000000000000000000000000000005\": \"E707002E84143AA5F030A6DB8DD0C0480F2FFA75AB1FFD657EC22B5AA8E395D5\",\n    \"0000000000000000000000000000000000000000000000000000000000000006\": \"0000000000000000000000000000000000000000000000000000000000000001\",\n    \"8646C0423160DEAEAA64034F9C6858F7A5C8A329E73E825A5B16814F6CCAFFE3\": \"0000000000000000000000000000000000000000000000000000000100000000\"\n}\n"
     def export
-      wallet_required!
       rpc(:wallet_export)[:json]
     end
 
@@ -286,7 +280,6 @@ class Nanook
     # @param account [String] id (will start with <tt>"nano_..."</tt>)
     # @return [Boolean] indicating if the wallet contains the given account
     def contains?(account)
-      wallet_required!
       rpc(:wallet_contains, account: account)[:exists] == 1
     end
 
@@ -320,7 +313,6 @@ class Nanook
     # @return (see Nanook::WalletAccount#pay)
     # @raise [Nanook::Error] if unsuccessful
     def pay(from:, to:, amount:, id:, unit: Nanook.default_unit)
-      wallet_required!
       validate_wallet_contains_account!(from)
       account(from).pay(to: to, amount: amount, unit: unit, id: id)
     end
@@ -380,8 +372,6 @@ class Nanook
     #
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
-      wallet_required!
-
       Nanook.validate_unit!(unit)
 
       params = { count: limit }
@@ -429,7 +419,6 @@ class Nanook
     #   payment into
     # @return (see Nanook::WalletAccount#receive)
     def receive(block = nil, into:)
-      wallet_required!
       validate_wallet_contains_account!(into)
       account(into).receive(block)
     end
@@ -447,7 +436,6 @@ class Nanook
     # @return [Nanook::Account] Representative account
     def default_representative
       representative = rpc(:wallet_representative)[:representative]
-
       Nanook::Account.new(@rpc, representative) if representative
     end
     alias representative default_representative
@@ -492,6 +480,8 @@ class Nanook
     # @return [Nanook::Wallet] a new wallet
     # @raise [Nanook::Error] if unsuccessful
     def restore(seed, accounts: 0)
+      skip_wallet_required!
+
       create
 
       raise Nanook::Error, 'Unable to set seed for wallet' unless change_seed(seed)
@@ -530,8 +520,6 @@ class Nanook
     #   See {Nanook::Account#info} for details of what is returned for each account.
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def info(unit: Nanook.default_unit)
-      wallet_required!
-
       Nanook.validate_unit!(unit)
 
       response = rpc(:wallet_ledger)[:accounts]
@@ -556,7 +544,6 @@ class Nanook
     #
     # @return [Boolean] indicates if the wallet was successfully locked
     def lock
-      wallet_required!
       response = rpc(:wallet_lock)
       !response.empty? && response[:locked] == 1
     end
@@ -569,7 +556,6 @@ class Nanook
     #
     # @return [Boolean] indicates if the wallet is locked
     def locked?
-      wallet_required!
       response = rpc(:wallet_locked)
       !response.empty? && response[:locked] != 0
     end
@@ -582,7 +568,6 @@ class Nanook
     #
     # @return [Boolean] indicates if the unlocking action was successful
     def unlock(password = nil)
-      wallet_required!
       rpc(:password_enter, password: password)[:valid] == 1
     end
 
@@ -593,19 +578,40 @@ class Nanook
     #   wallet.change_password("new_pass") #=> true
     # @return [Boolean] indicates if the action was successful
     def change_password(password)
-      wallet_required!
       rpc(:password_change, password: password)[:changed] == 1
+    end
+
+    # Tells the node to look for pending blocks for any account in the wallet.
+    #
+    # ==== Example:
+    #
+    #   wallet.search_pending #=> true
+    # @return [Boolean] indicates if the action was successful
+    def search_pending
+      rpc(:search_pending)[:started] == 1
     end
 
     private
 
     def rpc(action, params = {})
+      check_wallet_required!
+
       p = @wallet.nil? ? {} : { wallet: @wallet }
-      @rpc.call(action, p.merge(params))
+      @rpc.call(action, p.merge(params)).tap { reset_skip_wallet_required! }
     end
 
-    def wallet_required!
-      raise ArgumentError, 'Wallet must be present' if @wallet.nil?
+    def skip_wallet_required!
+      @skip_wallet_required_check = true
+    end
+
+    def reset_skip_wallet_required!
+      @skip_wallet_required_check = false
+    end
+
+    def check_wallet_required!
+      return if @wallet || @skip_wallet_required_check
+
+      raise ArgumentError, 'Wallet must be present'
     end
 
     def validate_wallet_contains_account!(account)

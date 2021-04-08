@@ -42,6 +42,8 @@ class Nanook
     # @param index [Integer] optional (but required if +seed+ is given) index to generate a deterministic private key.
     # @return Nanook::PrivateKey
     def create(seed: nil, index: nil)
+      skip_key_required!
+
       response = if seed.nil?
         rpc(:key_create)
       else
@@ -76,17 +78,28 @@ class Nanook
     private
 
     def memoized_key_expand
-      key_required!
       @_memoized_key_expand = rpc(:key_expand)
     end
 
     def rpc(action, params = {})
+      check_key_required!
+
       p = @key.nil? ? {} : { key: @key }
-      @rpc.call(action, p.merge(params))
+      @rpc.call(action, p.merge(params)).tap { reset_skip_key_required! }
     end
 
-    def key_required!
-      raise ArgumentError, 'Key must be present' if @key.nil?
+    def skip_key_required!
+      @skip_key_required_check = true
+    end
+
+    def reset_skip_key_required!
+      @skip_key_required_check = false
+    end
+
+    def check_key_required!
+      return if @key || @skip_key_required_check
+
+      raise ArgumentError, 'Key must be present'
     end
   end
 end

@@ -21,7 +21,6 @@ class Nanook
     def initialize(rpc, block)
       @rpc = rpc
       @block = block.to_s
-      block_required! # All methods expect a block
     end
 
     # Returns the block hash id.
@@ -455,10 +454,6 @@ class Nanook
     # Memoize the `#info` response as we can refer to it for other methods (`type`, `#open?`, `#send?` etc.)
     def memoized_info
       @_memoized_info ||= info(allow_unchecked: true)
-    end
-
-    def block_required!
-      raise ArgumentError, 'Block must be present' if @block.nil?
     end
 
     def parse_info_response(response, unit)

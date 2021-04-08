@@ -55,7 +55,7 @@ class Nanook
 
     def initialize(rpc, wallet, account = nil)
       @rpc = rpc
-      @wallet = wallet
+      @wallet = wallet.to_s
       @account = account.to_s if account
 
       # Initialize an instance to delegate the RPC commands that do not
@@ -87,6 +87,7 @@ class Nanook
     #   if method was called with argument +n+ >  1
     # @raise [ArgumentError] if +n+ is less than 1
     def create(n_accounts = 1)
+      skip_account_required!
       raise ArgumentError, 'number of accounts must be greater than 0' if n_accounts < 1
 
       if n_accounts == 1
@@ -244,11 +245,26 @@ class Nanook
     end
 
     def rpc(action, params = {})
-      p = {}
-      p[:wallet] = @wallet unless @wallet.nil?
+      check_account_required!
+
+      p = { wallet: @wallet }
       p[:account] = @account unless @account.nil?
 
-      @rpc.call(action, p.merge(params))
+      @rpc.call(action, p.merge(params)).tap { reset_skip_account_required! }
+    end
+
+    def skip_account_required!
+      @skip_account_required_check = true
+    end
+
+    def reset_skip_account_required!
+      @skip_account_required_check = false
+    end
+
+    def check_account_required!
+      return if @account || @skip_account_required_check
+
+      raise ArgumentError, 'Account must be present'
     end
   end
 end
