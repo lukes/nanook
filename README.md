@@ -163,6 +163,7 @@ wallet.account.create(5)
 wallet.accounts
 wallet.contains?(account_id)
 wallet.move_accounts(from_wallet, [account_1, account_2])
+wallet.remove_account(account)
 
 wallet.default_representative
 wallet.change_default_representative(new_representative)

@@ -122,6 +122,21 @@ RSpec.describe Nanook::Wallet do
     expect(Nanook.new.wallet(wallet_id).move_accounts(wallet, accounts)).to be true
   end
 
+  it 'account remove' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_remove\",\"wallet\":\"#{wallet_id}\",\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"removed": "1"}',
+      headers: {}
+    )
+
+    account = Nanook.new.account('nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000')
+
+    expect(Nanook.new.wallet(wallet_id).remove_account(account)).to be true
+  end
+
   it 'wallet export' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_export\",\"wallet\":\"#{wallet_id}\"}",

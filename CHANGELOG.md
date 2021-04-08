@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Node#confirmation_quorum`.
 - Added `Nanook::Node#keepalive`.
 - Added `Nanook::Wallet#move_accounts`.
+- Added `Nanook::Wallet#remove_account`.
 - Added `Nanook::Block#account`.
 - Added `Nanook::Block#amount`.
 - Added `Nanook::Block#balance`.

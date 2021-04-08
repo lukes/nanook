@@ -132,6 +132,18 @@ class Nanook
       response[:moved] == 1
     end
 
+    # Remove an {Nanook::Account} from this {Nanook::Wallet}.
+    #
+    # ==== Example:
+    #
+    #   wallet.remove_account(account) # => true
+    #
+    # @return [Boolean] true when the remove was successful
+    def remove_account(account)
+      response = rpc(:account_remove, account: account.id)
+      response[:removed] == 1
+    end
+
     # Balance of all accounts in the wallet, optionally breaking the balances down by account.
     #
     # ==== Examples:
