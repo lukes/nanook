@@ -107,7 +107,7 @@ class Nanook
     #
     # @return [Boolean] if the confirmation request was sent successful
     def confirm
-      rpc(:block_confirm, :hash)[:started] == 1
+      rpc(:block_confirm, :hash, _access: :started) == 1
     end
 
     # Generate work for a block.
@@ -120,7 +120,7 @@ class Nanook
     #   When +false+, the node will only generate work locally (default is +false+)
     # @return [String] the work id of the work completed.
     def generate_work(use_peers: false)
-      rpc(:work_generate, :hash, use_peers: use_peers)[:work]
+      rpc(:work_generate, :hash, use_peers: use_peers, _access: :work)
     end
 
     # Returns a Hash of information about the block.
@@ -181,8 +181,7 @@ class Nanook
     # @param work [String] the work id to check is valid
     # @return [Boolean] signalling if work is valid for the block
     def valid_work?(work)
-      response = rpc(:work_validate, :hash, work: work)
-      !response.empty? && response[:valid] == 1
+      rpc(:work_validate, :hash, work: work, _access: :valid) == 1
     end
 
     # Republish blocks starting at this block up the account chain
@@ -220,8 +219,7 @@ class Nanook
     #
     # @return [Boolean] signalling if the block is a pending block.
     def pending?
-      response = rpc(:pending_exists, :hash)
-      !response.empty? && response[:exists] == 1
+      rpc(:pending_exists, :hash, _access: :exists) == 1
     end
 
     # Returns an Array of block hashes in the account chain ending at

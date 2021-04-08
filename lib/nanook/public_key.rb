@@ -36,7 +36,7 @@ class Nanook
     #
     # @return [Nanook::Account] account for the public key
     def account
-      account = rpc(:account_get)[:account]
+      account = rpc(:account_get, _access: :account)
       as_account(account)
     end
 

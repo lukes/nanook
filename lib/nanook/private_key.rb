@@ -49,10 +49,10 @@ class Nanook
       skip_key_required!
 
       response = if seed.nil?
-        rpc(:key_create)
+        rpc(:key_create, _coerce: Hash)
       else
         raise ArgumentError, "index argument is required when seed is given" if index.nil?
-        rpc(:deterministic_key, seed: seed, index: index)
+        rpc(:deterministic_key, seed: seed, index: index, _coerce: Hash)
       end
 
       @key = response[:private]
@@ -82,7 +82,7 @@ class Nanook
     private
 
     def memoized_key_expand
-      @_memoized_key_expand = rpc(:key_expand)
+      @_memoized_key_expand = rpc(:key_expand, _coerce: Hash)
     end
 
     def rpc(action, params = {})

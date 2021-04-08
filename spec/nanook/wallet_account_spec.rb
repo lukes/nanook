@@ -175,7 +175,7 @@ RSpec.describe Nanook::WalletAccount do
     )
 
     response = Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, id: '7081e2b8fec9146e')
-    expect(response).to eq block_id
+    expect(response).to eq Nanook.new.block(block_id)
   end
 
   it 'wallet account send payment and recipient account is not valid id' do
@@ -221,7 +221,7 @@ RSpec.describe Nanook::WalletAccount do
 
     response = Nanook.new.wallet(wallet_id).account(account_id).pay(to: account_id, amount: 2, unit: :raw,
                                                                     id: '7081e2b8fec9146e')
-    expect(response).to eq block_id
+    expect(response).to eq Nanook.new.block(block_id)
   end
 
   it 'wallet account receive latest pending payment' do
@@ -245,7 +245,8 @@ RSpec.describe Nanook::WalletAccount do
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).receive).to eq block_id
+    response = Nanook.new.wallet(wallet_id).account(account_id).receive
+    expect(response).to eq Nanook.new.block(block_id)
   end
 
   it 'wallet account receive latest pending payment when no payment is pending' do
@@ -275,7 +276,8 @@ RSpec.describe Nanook::WalletAccount do
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).receive(block_id)).to eq block_id
+    response = Nanook.new.wallet(wallet_id).account(account_id).receive(block_id)
+    expect(response).to eq Nanook.new.block(block_id)
   end
 
   it 'wallet account balance' do

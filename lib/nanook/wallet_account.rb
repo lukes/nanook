@@ -110,9 +110,9 @@ class Nanook
       raise ArgumentError, 'number of accounts must be greater than 0' if n_accounts < 1
 
       if n_accounts == 1
-        as_wallet_account(rpc(:account_create)[:account])
+        as_wallet_account(rpc(:account_create, _access: :account))
       else
-        Array(rpc(:accounts_create, count: n_accounts)[:accounts]).map do |account|
+        rpc(:accounts_create, count: n_accounts, _access: :accounts, _coerce: Array).map do |account|
           as_wallet_account(account)
         end
       end
@@ -126,7 +126,7 @@ class Nanook
     #
     # @return [Boolean] +true+ if action was successful, otherwise +false+
     def destroy
-      rpc(:account_remove)[:removed] == 1
+      rpc(:account_remove, _access: :removed) == 1
     end
 
     # @return [String]
@@ -156,15 +156,15 @@ class Nanook
     #   purpose; it allows you to make the same call multiple times with
     #   the same +id+ and be reassured that you will only ever send this
     #   nano payment once
-    # @return [String] the send block id for the payment
+    # @return [Nanook::Block] the send block for the payment
     # @raise [Nanook::NodeRpcError] if unsuccessful
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pay(to:, amount:, id:, unit: Nanook.default_unit)
       validate_unit!(unit)
 
       # Check that to account is a valid address
-      response = @rpc.call(:validate_account_number, account: to)
-      raise ArgumentError, "Account address is invalid: #{to}" unless response[:valid] == 1
+      valid = @rpc.call(:validate_account_number, account: to, _access: :valid) == 1
+      raise ArgumentError, "Account address is invalid: #{to}" unless valid
 
       # Determine amount in raw
       raw = if unit.to_sym.eql?(:nano)
@@ -174,17 +174,16 @@ class Nanook
             end
 
       # account is called source, so don't use the normal rpc method
-      p = {
+      params = {
         wallet: @wallet,
         source: @account,
         destination: to,
         amount: raw,
-        id: id
+        id: id,
+        _access: :block
       }
 
-      response = @rpc.call(:send, p)
-
-      response[:block]
+      as_block(@rpc.call(:send, params))
     end
 
     # Receives a pending payment for this account.
@@ -201,12 +200,12 @@ class Nanook
     #
     # ==== Examples:
     #
-    #   account.receive               # => "9AE2311..."
-    #   account.receive("718CC21...") # => "9AE2311..."
+    #   account.receive               # => Nanook::Block
+    #   account.receive("718CC21...") # => Nanook::Block
     #
     # @param block [String] optional block id of pending payment. If
     #   not provided, the latest pending payment will be received
-    # @return [String] the receive block id
+    # @return [Nanook::Block] the receive block
     # @return [false] if there was no block to receive
     def receive(block = nil)
       return receive_without_block if block.nil?
@@ -240,7 +239,7 @@ class Nanook
         raise Nanook::Error, "Representative account does not exist: #{representative}"
       end
 
-      block = rpc(:account_representative_set, representative: representative)[:block]
+      block = rpc(:account_representative_set, representative: representative, _access: :block)
       as_block(block)
     end
 
@@ -248,19 +247,19 @@ class Nanook
 
     def receive_without_block
       # Discover the first pending block
-      pending_blocks = @rpc.call(:pending, { account: @account, count: 1 })
+      pending_blocks = @rpc.call(:pending, { account: @account, count: 1, _access: :blocks, _coerce: Array })
 
-      return false if pending_blocks[:blocks].empty?
+      return false if pending_blocks.empty?
 
       # Then call receive_with_block as normal
-      block = pending_blocks[:blocks][0]
+      block = pending_blocks[0]
       receive_with_block(block)
     end
 
     # Returns block if successful, otherwise false
     def receive_with_block(block)
-      response = rpc(:receive, block: block)[:block]
-      response.nil? ? false : response
+      response = rpc(:receive, block: block, _access: :block)
+      response ? as_block(response) : false
     end
 
     def rpc(action, params = {})

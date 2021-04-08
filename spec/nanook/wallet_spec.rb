@@ -333,7 +333,7 @@ RSpec.describe Nanook::Wallet do
     )
 
     response = Nanook.new.wallet(wallet_id).pay(from: account_id, to: account_id, amount: 2, id: '7081e2b8fec9146e')
-    expect(response).to eq block_id
+    expect(response).to eq Nanook.new.block(block_id)
   end
 
   it 'wallet send payment in raw' do
@@ -373,7 +373,7 @@ RSpec.describe Nanook::Wallet do
 
     response = Nanook.new.wallet(wallet_id).pay(from: account_id, to: account_id, amount: 2, unit: :raw,
                                                 id: '7081e2b8fec9146e')
-    expect(response).to eq block_id
+    expect(response).to eq Nanook.new.block(block_id)
   end
 
   it 'wallet account receive latest pending payment' do
@@ -398,7 +398,7 @@ RSpec.describe Nanook::Wallet do
     )
 
     response = Nanook.new.wallet(wallet_id).receive(into: account_id)
-    expect(response).to eq block_id
+    expect(response).to eq Nanook.new.block(block_id)
   end
 
   it 'wallet account receive latest pending payment when no payment is pending' do
@@ -429,7 +429,7 @@ RSpec.describe Nanook::Wallet do
     )
 
     response = Nanook.new.wallet(wallet_id).receive(block_id, into: account_id)
-    expect(response).to eq block_id
+    expect(response).to eq Nanook.new.block(block_id)
   end
 
   it 'wallet balance with account break down' do
@@ -584,16 +584,23 @@ RSpec.describe Nanook::Wallet do
     ).to_return(
       status: 200,
       body: "{\"blocks\" : {
-        \"nano_1111111111111111111111111111111111111111111111111117353trpda\": [\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\",\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\"],
+        \"nano_1111111111111111111111111111111111111111111111111117353trpda\": [\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\",\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB19\"],
         \"nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3\": [\"4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74\"]
       }}",
       headers: {}
     )
 
     response = Nanook.new.wallet(wallet_id).pending
-    expect(response.keys).to have(2).items
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda']).to have(2).items
-    expect(response['nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3']).to have(1).item
+
+    expect(response).to eq(
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => [
+        Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
+        Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB19')
+      ],
+      Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3') => [
+        Nanook.new.block('4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74')
+      ]
+    )
   end
 
   it 'wallet pending with limit' do
@@ -603,14 +610,19 @@ RSpec.describe Nanook::Wallet do
     ).to_return(
       status: 200,
       body: "{\"blocks\": {
-        \"nano_1111111111111111111111111111111111111111111111111117353trpda\": [\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\",\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\"]
+        \"nano_1111111111111111111111111111111111111111111111111117353trpda\": [\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\",\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB19\"]
       }}",
       headers: {}
     )
 
     response = Nanook.new.wallet(wallet_id).pending(limit: 1)
-    expect(response.keys).to have(1).items
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda']).to have(2).items
+
+    expect(response).to eq(
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => [
+        Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
+        Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB19')
+      ]
+    )
   end
 
   it 'wallet pending with detailed' do
@@ -641,11 +653,27 @@ RSpec.describe Nanook::Wallet do
     )
 
     response = Nanook.new.wallet(wallet_id).pending(detailed: true)
-    expect(response.keys).to have(2).items
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda']).to have(2).items
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda'][0][:amount]).to eq 6
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda'][0][:source]).to eq 'nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda'][0][:block]).to eq '142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'
+
+    expect(response.keys).to eq(
+      [
+        Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda'),
+        Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3'),
+      ]
+    )
+    expect(response[Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda')]).to eq(
+      [
+        {
+          block: Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
+          source: Nanook.new.account('nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'),
+          amount: 6
+        },
+        {
+          block: Nanook.new.block('242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
+          source: Nanook.new.account('nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'),
+          amount: 12
+        }
+      ]
+    )
   end
 
   it 'wallet pending with detailed and unit raw' do
@@ -676,11 +704,27 @@ RSpec.describe Nanook::Wallet do
     )
 
     response = Nanook.new.wallet(wallet_id).pending(detailed: true, unit: :raw)
-    expect(response.keys).to have(2).items
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda']).to have(2).items
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda'][0][:amount]).to eq 6_000_000_000_000_000_000_000_000_000_000
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda'][0][:source]).to eq 'nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'
-    expect(response['nano_1111111111111111111111111111111111111111111111111117353trpda'][0][:block]).to eq '142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'
+
+    expect(response.keys).to eq(
+      [
+        Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda'),
+        Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3'),
+      ]
+    )
+    expect(response[Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda')]).to eq(
+      [
+        {
+          block: Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
+          source: Nanook.new.account('nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'),
+          amount: 6000000000000000000000000000000
+        },
+        {
+          block: Nanook.new.block('242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
+          source: Nanook.new.account('nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'),
+          amount: 12000000000000000000000000000000
+        }
+      ]
+    )
   end
 
   it 'wallet default_representative' do
@@ -695,8 +739,7 @@ RSpec.describe Nanook::Wallet do
 
     response = Nanook.new.wallet(wallet_id).default_representative
 
-    expect(response).to be_kind_of(Nanook::Account)
-    expect(response.id).to eq 'nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'
+    expect(response).to eq(Nanook.new.account('nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5'))
   end
 
   it 'wallet change_default_representative' do
@@ -725,8 +768,7 @@ RSpec.describe Nanook::Wallet do
 
     response = Nanook.new.wallet(wallet_id).change_default_representative(account_id)
 
-    expect(response).to be_kind_of(Nanook::Account)
-    expect(response.id).to be account_id
+    expect(response).to eq(Nanook.new.account(account_id))
   end
 
   it 'wallet info' do

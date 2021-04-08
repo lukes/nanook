@@ -129,8 +129,7 @@ class Nanook
     #
     # @return [Boolean] true when the move was successful
     def move_accounts(wallet, accounts)
-      response = rpc(:account_move, source: wallet, accounts: accounts)
-      response[:moved] == 1
+      rpc(:account_move, source: wallet, accounts: accounts, _access: :moved) == 1
     end
 
     # Remove an {Nanook::Account} from this {Nanook::Wallet}.
@@ -141,8 +140,7 @@ class Nanook
     #
     # @return [Boolean] true when the remove was successful
     def remove_account(account)
-      response = rpc(:account_remove, account: account)
-      response[:removed] == 1
+      rpc(:account_remove, account: account, _access: :removed) == 1
     end
 
     # Balance of all accounts in the wallet, optionally breaking the balances down by account.
@@ -253,7 +251,7 @@ class Nanook
     # @return [Nanook::Wallet]
     def create
       skip_wallet_required!
-      @wallet = rpc(:wallet_create)[:wallet]
+      @wallet = rpc(:wallet_create, _access: :wallet)
       self
     end
 
@@ -265,7 +263,7 @@ class Nanook
     #
     # @return [Boolean] indicating success of the action
     def destroy
-      rpc(:wallet_destroy)[:destroyed] == 1
+      rpc(:wallet_destroy, _access: :destroyed) == 1
     end
 
     # Generates a String containing a JSON representation of your wallet.
@@ -275,7 +273,7 @@ class Nanook
     #   wallet.export
     #     # => "{\n    \"0000000000000000000000000000000000000000000000000000000000000000\": \"0000000000000000000000000000000000000000000000000000000000000003\",\n    \"0000000000000000000000000000000000000000000000000000000000000001\": \"C3A176FC3B90113277BFC91F55128FC9A1F1B6166A73E7446927CFFCA4C2C9D9\",\n    \"0000000000000000000000000000000000000000000000000000000000000002\": \"3E58EC805B99C52B4715598BD332C234A1FBF1780577137E18F53B9B7F85F04B\",\n    \"0000000000000000000000000000000000000000000000000000000000000003\": \"5FF8021122F3DEE0E4EC4241D35A3F41DEF63CCF6ADA66AF235DE857718498CD\",\n    \"0000000000000000000000000000000000000000000000000000000000000004\": \"A30E0A32ED41C8607AA9212843392E853FCBCB4E7CB194E35C94F07F91DE59EF\",\n    \"0000000000000000000000000000000000000000000000000000000000000005\": \"E707002E84143AA5F030A6DB8DD0C0480F2FFA75AB1FFD657EC22B5AA8E395D5\",\n    \"0000000000000000000000000000000000000000000000000000000000000006\": \"0000000000000000000000000000000000000000000000000000000000000001\",\n    \"8646C0423160DEAEAA64034F9C6858F7A5C8A329E73E825A5B16814F6CCAFFE3\": \"0000000000000000000000000000000000000000000000000000000100000000\"\n}\n"
     def export
-      rpc(:wallet_export)[:json]
+      rpc(:wallet_export, _access: :json)
     end
 
     # Will return +true+ if the account exists in the wallet.
@@ -286,7 +284,7 @@ class Nanook
     # @param account [String] id (will start with <tt>"nano_..."</tt>)
     # @return [Boolean] indicating if the wallet contains the given account
     def contains?(account)
-      rpc(:wallet_contains, account: account)[:exists] == 1
+      rpc(:wallet_contains, account: account, _access: :exists) == 1
     end
 
     # @return [String]
@@ -339,12 +337,12 @@ class Nanook
     # Example response:
     #
     #   {
-    #     :nano_1111111111111111111111111111111111111111111111111117353trpda=>[
-    #       "142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D",
-    #       "718CC2121C3E641059BC1C2CFC45666C99E8AE922F7A807B7D07B62C995D79E2"
+    #     Nanook::Account=>[
+    #       Nanook::Block,
+    #       Nanook::Block"
     #     ],
-    #     :nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3=>[
-    #       "4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"
+    #     Nanook::Account=>[
+    #       Nanook::Block
     #     ]
     #   }
     #
@@ -355,30 +353,30 @@ class Nanook
     # Example response:
     #
     #   {
-    #     :nano_1111111111111111111111111111111111111111111111111117353trpda=>[
+    #     Nanook::Account=>[
     #       {
     #         :amount=>6.0,
-    #         :source=>"nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr",
-    #         :block=>:"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D"
+    #         :source=>Nanook::Account,
+    #         :block=>Nanook::Block
     #       },
     #       {
     #         :amount=>12.0,
-    #         :source=>"nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr",
-    #         :block=>:"242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D"
+    #         :source=>Nanook::Account,
+    #         :block=>Nanook::Block
     #       }
     #     ],
-    #     :nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3=>[
+    #     Nanook::Account=>[
     #       {
     #         :amount=>106.370018,
-    #         :source=>"nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo",
-    #         :block=>:"4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74"
+    #         :source=>Nanook::Account,
+    #         :block=>Nanook::Block
     #       }
     #     ]
     #   }
     #
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
-      Nanook.validate_unit!(unit)
+      validate_unit!(unit)
 
       params = {
         count: limit,
@@ -390,22 +388,34 @@ class Nanook
 
       response = rpc(:wallet_pending, params)
 
-      return response unless detailed
+      unless detailed
+
+        x = response.map do |account, block_ids|
+          blocks = block_ids.map { |block_id| as_block(block_id) }
+          [as_account(account), blocks]
+        end
+
+        return Hash[x]
+      end
 
       # Map the RPC response, which is:
       # account=>block=>[amount|source] into
       # account=>[block|amount|source]
       x = response.map do |account, data|
         new_data = data.map do |block, amount_and_source|
-          d = amount_and_source.merge(block: block.to_s)
+          d = {
+            block: as_block(block),
+            source: as_account(amount_and_source[:source]),
+            amount: amount_and_source[:amount]
+          }
           d[:amount] = raw_to_NANO(d[:amount]) if unit == :nano
           d
         end
 
-        [account, new_data]
+        [as_account(account), new_data]
       end
 
-      Hash[x].to_symbolized_hash
+      Hash[x]
     end
 
     # Receives a pending payment into an account in the wallet.
@@ -443,9 +453,9 @@ class Nanook
     #
     #   wallet.default_representative # => "nano_3pc..."
     #
-    # @return [Nanook::Account] Representative account
+    # @return [Nanook::Account] Representative account. Can be nil.
     def default_representative
-      representative = rpc(:wallet_representative)[:representative]
+      representative = rpc(:wallet_representative, _access: :representative)
       as_account(representative) if representative
     end
     alias representative default_representative
@@ -470,7 +480,7 @@ class Nanook
       end
 
       raise Nanook::Error, 'Setting the representative failed' \
-        unless rpc(:wallet_representative_set, representative: representative)[:set] == 1
+        unless rpc(:wallet_representative_set, representative: representative, _access: :set) == 1
 
       as_account(representative)
     end
@@ -594,8 +604,7 @@ class Nanook
     #
     # @return [Boolean] indicates if the wallet was successfully locked
     def lock
-      response = rpc(:wallet_lock)
-      !response.empty? && response[:locked] == 1
+      rpc(:wallet_lock, _access: :locked) == 1
     end
 
     # Returns +true+ if the wallet is locked.
@@ -606,8 +615,7 @@ class Nanook
     #
     # @return [Boolean] indicates if the wallet is locked
     def locked?
-      response = rpc(:wallet_locked)
-      !response.empty? && response[:locked] != 0
+      rpc(:wallet_locked, _access: :locked) == 1
     end
 
     # Unlocks a previously locked wallet.
@@ -618,7 +626,7 @@ class Nanook
     #
     # @return [Boolean] indicates if the unlocking action was successful
     def unlock(password = nil)
-      rpc(:password_enter, password: password)[:valid] == 1
+      rpc(:password_enter, password: password, _access: :valid) == 1
     end
 
     # Changes the password for a wallet.
@@ -628,7 +636,7 @@ class Nanook
     #   wallet.change_password("new_pass") #=> true
     # @return [Boolean] indicates if the action was successful
     def change_password(password)
-      rpc(:password_change, password: password)[:changed] == 1
+      rpc(:password_change, password: password, _access: :changed) == 1
     end
 
     # Tells the node to look for pending blocks for any account in the wallet.
@@ -638,7 +646,7 @@ class Nanook
     #   wallet.search_pending #=> true
     # @return [Boolean] indicates if the action was successful
     def search_pending
-      rpc(:search_pending)[:started] == 1
+      rpc(:search_pending, _access: :started) == 1
     end
 
     private

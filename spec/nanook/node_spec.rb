@@ -148,8 +148,12 @@ RSpec.describe Nanook::Node do
     )
 
     response = Nanook.new.node.representatives
-    expect(response).to have_key(:nano_1111111111111111111111111111111111111111111111111117353trpda)
-    expect(response[:nano_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3_822_372.32706017)
+
+    expect(response).to eq(
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => 3822372.32706017,
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111awsq94gtecn') => 31.0,
+      Nanook.new.account('nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi') => 0.0
+    )
   end
 
   it 'should request representatives with unit correctly' do
@@ -163,8 +167,12 @@ RSpec.describe Nanook::Node do
     )
 
     response = Nanook.new.node.representatives(unit: :raw)
-    expect(response).to have_key(:nano_1111111111111111111111111111111111111111111111111117353trpda)
-    expect(response[:nano_1111111111111111111111111111111111111111111111111117353trpda]).to eq(3_822_372_327_060_170_000_000_000_000_000_000_000)
+
+    expect(response).to eq(
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => 3822372327060170000000000000000000000,
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111awsq94gtecn') => 30999999999999999999999999000000,
+      Nanook.new.account('nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi') => 0
+    )
   end
 
   it 'should request representatives_online correctly' do
@@ -178,8 +186,14 @@ RSpec.describe Nanook::Node do
     )
 
     response = Nanook.new.node.representatives_online
-    expect(response).to have(3).items
-    expect(response.first).to eq('nano_1111111111111111111111111111111111111111111111111117353trpda')
+
+    expect(response).to eq(
+      [
+       Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda'),
+       Nanook.new.account('nano_1111111111111111111111111111111111111111111111111awsq94gtecn'),
+       Nanook.new.account('nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi')
+      ]
+    )
   end
 
   it 'should request difficulty correctly' do
