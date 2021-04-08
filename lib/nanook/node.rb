@@ -178,19 +178,22 @@ class Nanook
       "#{self.class.name}(object_id: \"#{format('0x00%x', (object_id << 1))}\")"
     end
 
-    # Returns a list of pairs of online peer IPv6:port and its node protocol
-    # network version.
+    # Returns peers information.
     #
     # Example response:
     #
     #   {
-    #     :"[::ffff:104.131.102.132]:7075"=>18,
-    #     :"[::ffff:104.131.114.102]:7075"=>18
+    #     :"[::ffff:104.131.102.132]:7075" => {
+    #       protocol_version: 20,
+    #       node_id: "node_1y7j5rdqhg99uyab1145gu3yur1ax35a3b6qr417yt8cd6n86uiw3d4whty3",
+    #       type: "udp"
+    #     },
+    #     :"[::ffff:104.131.114.102]:7075" => { ... }
     #   }
     #
-    # @return [Hash{String=>Integer}]
+    # @return [Hash{Symbol=>Hash{Symbol=>Integer|String}}]
     def peers
-      rpc(:peers)[:peers]
+      rpc(:peers, peer_details: true)[:peers]
     end
 
     # All representatives and their voting weight.

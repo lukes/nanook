@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Account#delegators_count`.
 - Added `Nanook::Node#confirmation_quorum`.
 - Added `Nanook::Node#keepalive`.
+- Added `Nanook::Wallet#move_accounts`.
 - Added `Nanook::Block#account`.
 - Added `Nanook::Block#amount`.
 - Added `Nanook::Block#balance`.
@@ -51,6 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - `Nanook::PublicKey`
     - `Nanook::Wallet`
     - `Nanook::WalletAccount`
+
 ### Changed
 
 - New error classes: `Nanook::ConnectionError`, `NanoUnitError`, `NodeRpcError` and `NodeRpcConfigurationError`.
@@ -64,10 +66,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Block#info`:
   - returns balances in nano, and can optionally be passed `unit: :raw` argument.
   - returns account values as `Nanook::Account` and block values as `Nanook::Block`.
+- `Nanook::Node#peers` returns details as a `Hash` keyed by `Nanook::Account`.
 - `Nanook::Account#pending` returns source as `Nanook::Account` and block as `Nanook::Block` when `detailed: true`.
 - `Nanook::Account#representative` returns a `Nanook::Account`.
-- `Nanook::Account#delegators` returns keys as `Nanook::Account`s.
-- `Nanook::Account#history` returns account as `Nanook::Account` and block as `Nanook::Block`.
+- `Nanook::Account#delegators` returns accounts as `Nanook::Account`s.
+- `Nanook::Account#history` returns accounts as `Nanook::Account` and blocks as `Nanook::Block`.
+- `Nanook::Account#ledger` returns accounts as `Nanook::Account` and blocks as `Nanook::Block`.
 - `Nanook::Account#public_key` returns a `Nanook::PublicKey`.
 - `Nanook::Account#weight` accepts an optional `unit:` argment.
 - `Nanook::Account#info`:

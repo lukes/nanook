@@ -340,41 +340,51 @@ class Nanook
     # Example response:
     #
     #   {
-    #    :nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=>{
-    #      :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
-    #      :open_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #      :representative_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #      :balance=>11439597000000000000000000000000,
-    #      :modified_timestamp=>1520500357,
-    #      :block_count=>4
+    #    Nanook::Account => {
+    #      :frontier => Nanook::Block,
+    #      :open_block => Nanook::Block,
+    #      :representative_block => Nanook::Block,
+    #      :representative => Nanook::Account,
+    #      :balance => 1143.7,
+    #      :last_modified_at => Time,
+    #      :block_count => 4
+    #      :weight => 5
+    #      :pending => 2.0
     #    },
-    #    :nano_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=>{ ... }
+    #    Nanook::Account => { ... }
     #  }
     #
     # @param limit [Integer] number of accounts to return in the ledger (default is 1)
-    # @param modified_since [Time] return only accounts modified in the local database after this time
+    # @param modified_since [Time] optional. Return only accounts modified in the local database after this time (default is from the unix epoch)
     # @param unit (see #balance)
-    # @return [Hash{Symbol=>String|Integer}]
+    # @return [Hash{Nanook::Account=>String|Integer}]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def ledger(limit: 1, modified_since: nil, unit: Nanook.default_unit)
+    def ledger(limit: 1, modified_since: 0, unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
       params = { count: limit }
-
-      params[:modified_since] = modified_since.to_i unless modified_since.nil?
+      params[:modified_since] = modified_since.to_i
 
       response = rpc(:ledger, params)[:accounts]
       response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
 
-      return response if unit == :raw
+      r = response.map do |account_id, ledger|
+        if unit == :nano
+          ledger[:balance] = Nanook::Util.raw_to_NANO(ledger[:balance])
+          ledger[:pending] = Nanook::Util.raw_to_NANO(ledger[:pending])
+          ledger[:weight] = Nanook::Util.raw_to_NANO(ledger[:weight])
+        end
 
-      r = response.map do |account_id, l|
-        l[:balance] = Nanook::Util.raw_to_NANO(l[:balance])
+        ledger[:last_modified_at] = Time.at(ledger.delete(:modified_timestamp)).utc
+        ledger[:representative] = Nanook::Account.new(@rpc, ledger[:representative]) if ledger[:representative]
+        ledger[:representative_block] = Nanook::Block.new(@rpc, ledger[:representative_block]) if ledger[:representative_block]
+        ledger[:open_block] = Nanook::Block.new(@rpc, ledger[:open_block]) if ledger[:open_block]
+        ledger[:frontier] = Nanook::Block.new(@rpc, ledger[:frontier]) if ledger[:frontier]
 
-        [account_id, l]
+        [Nanook::Account.new(@rpc, account_id), ledger]
       end
 
-      Hash[r].to_symbolized_hash
+      Hash[r]
     end
 
     # Information about pending blocks (payments) that are

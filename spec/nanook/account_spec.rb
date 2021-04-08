@@ -375,26 +375,45 @@ RSpec.describe Nanook::Account do
 
   it 'account ledger' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\",\"modified_since\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"accounts\": {
-        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
-          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
-          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"balance\": \"100000000000000000000000000000000\",
-          \"modified_timestamp\": \"1511476234\",
-          \"block_count\": \"2\"
+      body: <<~BODY,
+        {
+          "accounts": {
+            "nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n": {
+              "frontier": "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+              "open_block": "543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "representative_block": "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "balance": "100000000000000000000000000000000",
+              "modified_timestamp": "1511476234",
+              "block_count": "2",
+              "representative": "nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs",
+              "weight": "2100000000000000000000000000000000",
+              "pending": "3100000000000000000000000000000000"
+            }
+          }
         }
-      } }",
+      BODY
       headers: {}
     )
 
     response = Nanook.new.account(account_id).ledger
-    expect(response).to have_key(:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
-    expect(response[:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
+
+    expect(response).to eq(
+      Nanook.new.account('nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n') => {
+        frontier: Nanook.new.block('E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321'),
+        open_block: Nanook.new.block('543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
+        representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
+        representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
+        balance: 100.0,
+        last_modified_at: Time.at(1511476234),
+        block_count: 2,
+        weight: 2100.0,
+        pending: 3100.0,
+      }
+    )
   end
 
   it 'account ledger with modified_since' do
@@ -405,69 +424,127 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"accounts\": {
-        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
-          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
-          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"balance\": \"100000000000000000000000000000000\",
-          \"modified_timestamp\": \"1511476234\",
-          \"block_count\": \"2\"
+      body: <<~BODY,
+        {
+          "accounts": {
+            "nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n": {
+              "frontier": "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+              "open_block": "543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "representative_block": "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "balance": "100000000000000000000000000000000",
+              "modified_timestamp": "1511476234",
+              "block_count": "2",
+              "representative": "nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs",
+              "weight": "2100000000000000000000000000000000",
+              "pending": "3100000000000000000000000000000000"
+            }
+          }
         }
-      } }",
+      BODY
       headers: {}
     )
 
     response = Nanook.new.account(account_id).ledger(modified_since: t)
-    expect(response).to have_key(:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
-    expect(response[:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq(100)
+
+    expect(response).to eq(
+      Nanook.new.account('nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n') => {
+        frontier: Nanook.new.block('E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321'),
+        open_block: Nanook.new.block('543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
+        representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
+        representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
+        balance: 100.0,
+        last_modified_at: Time.at(1511476234),
+        block_count: 2,
+        weight: 2100.0,
+        pending: 3100.0,
+      }
+    )
   end
 
   it 'account ledger with limit' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"10\"}",
+      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"10\",\"modified_since\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"accounts\": {
-        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
-          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
-          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"balance\": \"100000000000000000000000000000000\",
-          \"modified_timestamp\": \"1511476234\",
-          \"block_count\": \"2\"
+      body: <<~BODY,
+        {
+          "accounts": {
+            "nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n": {
+              "frontier": "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+              "open_block": "543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "representative_block": "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "balance": "100000000000000000000000000000000",
+              "modified_timestamp": "1511476234",
+              "block_count": "2",
+              "representative": "nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs",
+              "weight": "2100000000000000000000000000000000",
+              "pending": "3100000000000000000000000000000000"
+            }
+          }
         }
-      } }",
+      BODY
       headers: {}
     )
 
     response = Nanook.new.account(account_id).ledger(limit: 10)
-    expect(response).to have_key(:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
+
+    expect(response).to eq(
+      Nanook.new.account('nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n') => {
+        frontier: Nanook.new.block('E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321'),
+        open_block: Nanook.new.block('543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
+        representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
+        representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
+        balance: 100.0,
+        last_modified_at: Time.at(1511476234),
+        block_count: 2,
+        weight: 2100.0,
+        pending: 3100.0,
+      }
+    )
   end
 
   it 'account ledger with raw unit' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\",\"modified_since\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"accounts\": {
-        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
-          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
-          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"balance\": \"100000000000000000000000000000000\",
-          \"modified_timestamp\": \"1511476234\",
-          \"block_count\": \"2\"
+      body: <<~BODY,
+        {
+          "accounts": {
+            "nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n": {
+              "frontier": "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+              "open_block": "543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "representative_block": "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "balance": "100000000000000000000000000000000",
+              "modified_timestamp": "1511476234",
+              "block_count": "2",
+              "representative": "nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs",
+              "weight": "2100000000000000000000000000000000",
+              "pending": "3100000000000000000000000000000000"
+            }
+          }
         }
-      } }",
+      BODY
       headers: {}
     )
 
     response = Nanook.new.account(account_id).ledger(unit: :raw)
-    expect(response).to have_key(:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n)
-    expect(response[:nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n][:balance]).to eq 100_000_000_000_000_000_000_000_000_000_000
+
+    expect(response).to eq(
+      Nanook.new.account('nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n') => {
+        frontier: Nanook.new.block('E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321'),
+        open_block: Nanook.new.block('543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
+        representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
+        representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
+        balance: 100000000000000000000000000000000,
+        last_modified_at: Time.at(1511476234),
+        block_count: 2,
+        weight: 2100000000000000000000000000000000,
+        pending: 3100000000000000000000000000000000,
+      }
+    )
   end
 
   it 'account exists? when exists' do

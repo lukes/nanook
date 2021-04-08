@@ -120,6 +120,18 @@ class Nanook
       end
     end
 
+    # Move accounts from another {Nanook::Wallet} on the node to this {Nanook::Wallet}.
+    #
+    # ==== Example:
+    #
+    #   wallet.move_accounts(wallet, [account1, account2]) # => true
+    #
+    # @return [Boolean] true when the move was successful
+    def move_accounts(wallet, accounts)
+      response = rpc(:account_move, source: wallet.id, accounts: accounts.map(&:id))
+      response[:moved] == 1
+    end
+
     # Balance of all accounts in the wallet, optionally breaking the balances down by account.
     #
     # ==== Examples:

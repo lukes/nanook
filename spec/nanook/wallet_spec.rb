@@ -101,6 +101,27 @@ RSpec.describe Nanook::Wallet do
     expect(Nanook.new.wallet(wallet_id).destroy).to be true
   end
 
+  it 'account move' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_move\",\"wallet\":\"#{wallet_id}\",\"source\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"accounts\":[\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",\"nano_5e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"]}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"moved": "1"}',
+      headers: {}
+    )
+
+    wallet = Nanook.new.wallet('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    accounts = [
+      'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000',
+      'nano_5e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
+    ].map do |account|
+      Nanook.new.account(account)
+    end
+
+    expect(Nanook.new.wallet(wallet_id).move_accounts(wallet, accounts)).to be true
+  end
+
   it 'wallet export' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_export\",\"wallet\":\"#{wallet_id}\"}",

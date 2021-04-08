@@ -44,7 +44,10 @@ class Nanook
     # @return [Hash] the response from the RPC
     def call(action, params = {})
       # Stringify param values
-      params = params.transform_values(&:to_s)
+      params = params.transform_values do |v|
+        next v if v.is_a?(Array)
+        v.to_s
+      end
 
       @request.body = { action: action }.merge(params).to_json
 

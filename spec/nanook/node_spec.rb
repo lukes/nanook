@@ -224,7 +224,7 @@ RSpec.describe Nanook::Node do
 
   it 'should request peers correctly' do
     stub_request(:post, uri).with(
-      body: '{"action":"peers"}',
+      body: '{"action":"peers","peer_details":"true"}',
       headers: headers
     ).to_return(
       status: 200,

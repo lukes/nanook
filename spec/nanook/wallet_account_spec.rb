@@ -488,48 +488,62 @@ RSpec.describe Nanook::WalletAccount do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"1\",\"modified_since\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"accounts\": {
-        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
-          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
-          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"balance\": \"0\",
-          \"modified_timestamp\": \"1511476234\",
-          \"block_count\": \"2\"
+      body: <<~BODY,
+        {
+          "accounts": {
+            "nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n": {
+              "frontier": "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+              "open_block": "543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "representative_block": "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "balance": "100000000000000000000000000000000",
+              "modified_timestamp": "1511476234",
+              "block_count": "2",
+              "representative": "nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs",
+              "weight": "2100000000000000000000000000000000",
+              "pending": "3100000000000000000000000000000000"
+            }
+          }
         }
-      } }",
+      BODY
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).ledger).to have_key :nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n
+    expect(Nanook.new.wallet(wallet_id).account(account_id).ledger).to have_key Nanook.new.account('nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n')
   end
 
   it 'wallet account ledger with limit' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"10\"}",
+      body: "{\"action\":\"ledger\",\"account\":\"#{account_id}\",\"count\":\"10\",\"modified_since\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"accounts\": {
-        \"nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n\": {
-          \"frontier\": \"E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321\",
-          \"open_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"representative_block\": \"643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F\",
-          \"balance\": \"0\",
-          \"modified_timestamp\": \"1511476234\",
-          \"block_count\": \"2\"
+      body: <<~BODY,
+        {
+          "accounts": {
+            "nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n": {
+              "frontier": "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+              "open_block": "543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "representative_block": "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+              "balance": "100000000000000000000000000000000",
+              "modified_timestamp": "1511476234",
+              "block_count": "2",
+              "representative": "nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs",
+              "weight": "2100000000000000000000000000000000",
+              "pending": "3100000000000000000000000000000000"
+            }
+          }
         }
-      } }",
+      BODY
       headers: {}
     )
 
-    expect(Nanook.new.wallet(wallet_id).account(account_id).ledger(limit: 10)).to have_key :nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n
+    expect(Nanook.new.wallet(wallet_id).account(account_id).ledger(limit: 10)).to have_key Nanook.new.account('nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n')
   end
 
   it 'wallet account exists? when exists' do
