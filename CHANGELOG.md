@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Node#receive_minimum`.
 - Added `Nanook::Node#search_pending`.
 - Added `Nanook::Wallet#history`.
+- Added `Nanook::Wallet#ledger`.
 - Added `Nanook::Wallet#move_accounts`.
 - Added `Nanook::Wallet#remove_account`.
 - Added `Nanook::Wallet#search_pending`.
@@ -66,6 +67,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Nanook::Wallet#default_representative` returns a `Nanook::Account`.
 - `Nanook::Wallet#change_representative` returns a `Nanook::Account`.
 - `Nanook::Wallet#unlock` can be passed no argument (`password` will be `nil`).
+- `Nanook::Wallet#info` returns data from `wallet_info` RPC.
 - `Nanook::Block#is_valid_work?` renamed to `#valid_work?`.
 - `Nanook::Block#republish` returns an Array of `Nanook::Block`s.
 - `Nanook::Block#chain` returns an Array of `Nanook::Block`s.

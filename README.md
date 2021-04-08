@@ -173,6 +173,8 @@ wallet.history(unit: :raw)
 wallet.info
 wallet.info(unit: :raw)
 wallet.export
+wallet.ledger
+wallet.ledger(unit: :raw)
 wallet.lock
 wallet.locked?
 wallet.unlock(password)

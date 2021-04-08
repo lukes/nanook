@@ -151,10 +151,7 @@ class Nanook
     # Example response:
     #
     #   {
-    #     "accounts_count"=>1,
     #     "balance"=>5,
-    #     "deterministic_count"=>1,
-    #     "deterministic_index"=>1,
     #     "pending"=>0.001
     #   }
     #
@@ -165,10 +162,7 @@ class Nanook
     # Example response:
     #
     #   {
-    #     "accounts_count"=>1,
     #     "balance"=>5000000000000000000000000000000,
-    #     "deterministic_count"=>1,
-    #     "deterministic_index"=>1,
     #     "pending"=>1000000000000000000000000000
     #   }
     #
@@ -511,7 +505,56 @@ class Nanook
       self
     end
 
-    # Information about this wallet and all of its accounts.
+    # Information ledger information about this wallet's accounts.
+    #
+    # This call may return results that include unconfirmed blocks, so it should not be
+    # used in any processes or integrations requiring only details from blocks confirmed
+    # by the network.
+    #
+    # ==== Examples:
+    #
+    #   wallet.ledger
+    #
+    # Example response:
+    #
+    #    {
+    #      Nanook::Account => {
+    #        frontier: "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
+    #        open_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+    #        representative_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
+    #        balance: 1.45,
+    #        modified_timestamp: 1511476234,
+    #        block_count: 2
+    #      },
+    #      Nanook::Account => { ... }
+    #    }
+    #
+    # @param unit (see Nanook::Account#balance)
+    # @return [Hash{Nanook::Account=>Hash{Symbol=>Nanook::Block|Integer|Float|Time}}] ledger.
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def ledger(unit: Nanook.default_unit)
+      validate_unit!(unit)
+
+      response = rpc(:wallet_ledger, _access: :accounts, _coerce: Hash)
+
+      accounts = response.map do |account_id, data|
+        data[:frontier] = as_block(data[:frontier]) if data[:frontier]
+        data[:open_block] = as_block(data[:open_block]) if data[:open_block]
+        data[:representative_block] = as_block(data[:representative_block]) if data[:representative_block]
+        data[:balance] = raw_to_NANO(data[:balance]) if unit == :nano && data[:balance]
+        data[:last_modified_at] = Time.at(data.delete(:modified_timestamp)).utc if data[:modified_timestamp]
+
+        [as_account(account_id), data]
+      end
+
+      Hash[accounts]
+    end
+
+    # Information about this wallet.
+    #
+    # This call may return results that include unconfirmed blocks, so it should not be
+    # used in any processes or integrations requiring only details from blocks confirmed
+    # by the network.
     #
     # ==== Examples:
     #
@@ -520,40 +563,28 @@ class Nanook
     # Example response:
     #
     #   {
-    #     id: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
-    #     accounts: [
-    #       {
-    #         id: "nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n"
-    #         frontier: "E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321",
-    #         open_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
-    #         representative_block: "643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F",
-    #         balance: 1.45,
-    #         modified_timestamp: 1511476234,
-    #         block_count: 2
-    #       },
-    #       { ... }
-    #     ]
-    #   }
+    #     balance: 1.0,
+    #     pending: 2.3
+    #     accounts_count: 3,
+    #     adhoc_count: 1,
+    #     deterministic_count: 2,
+    #     deterministic_index: 2
+    # }
     #
-    # @param unit (see #balance)
-    # @return [Hash{Symbol=>String|Array<Hash{Symbol=>String|Integer|Float}>}] information about the wallet.
-    #   See {Nanook::Account#info} for details of what is returned for each account.
+    # @param unit (see Nanook::Account#balance)
+    # @return [Hash{Symbol=>Integer|Float}] information about the wallet.
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def info(unit: Nanook.default_unit)
       validate_unit!(unit)
 
-      response = rpc(:wallet_ledger, _access: :accounts, _coerce: Hash)
+      response = rpc(:wallet_info, _coerce: Hash)
 
-      accounts = response.map do |account_id, payload|
-        payload[:id] = account_id
-        payload[:balance] = raw_to_NANO(payload[:balance]) if unit == :nano
-        payload
+      if unit == :nano
+        response[:balance] = raw_to_NANO(response[:balance])
+        response[:pending] = raw_to_NANO(response[:pending])
       end
 
-      {
-        id: @wallet,
-        accounts: accounts
-      }.to_symbolized_hash
+      response
     end
 
     # Reports send/receive information for accounts in wallet. Change blocks are skipped,
