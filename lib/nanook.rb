@@ -6,6 +6,8 @@ require 'forwardable'
 
 Dir["#{File.dirname(__FILE__)}/nanook/*.rb"].sort.each { |file| require file }
 
+require_relative 'nanook/util'
+
 # ==== Initializing
 #
 # Connect to the default RPC host at http://localhost:7076 and with a timeout of 500 seconds:
@@ -21,6 +23,8 @@ Dir["#{File.dirname(__FILE__)}/nanook/*.rb"].sort.each { |file| require file }
 #   Nanook.new(timeout: 600)
 #   Nanook.new("http://ip6-localhost.com:7076", timeout: 600)
 class Nanook
+  include Util
+
   UNITS = %i[raw nano].freeze
   DEFAULT_UNIT = :nano
 
@@ -70,7 +74,7 @@ class Nanook
   # @param account [String] the id of the account you want to work with
   # @return [Nanook::Account]
   def account(account)
-    Nanook::Account.new(@rpc, account)
+    as_account(account)
   end
 
   # Returns a new instance of {Nanook::Block}.
@@ -81,7 +85,7 @@ class Nanook
   # @param block [String] the id/hash of the block you want to work with
   # @return [Nanook::Block]
   def block(block)
-    Nanook::Block.new(@rpc, block)
+    as_block(block)
   end
 
   # @return [String]
@@ -108,7 +112,7 @@ class Nanook
   # @param key [String] a public key
   # @return [Nanook::PublicKey]
   def public_key(key)
-    Nanook::PublicKey.new(@rpc, key)
+    as_public_key(key)
   end
 
   # Returns a new instance of {Nanook::Node}.

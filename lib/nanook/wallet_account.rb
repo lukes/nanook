@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::WalletAccount</tt> class lets you manage your nano accounts
   # that are on your node, including paying and receiving payment.
@@ -15,6 +17,7 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   account = Nanook::WalletAccount.new(rpc_conn, wallet_id, account_id)
   class WalletAccount
+    include Nanook::Util
     extend Forwardable
     # @!method ==
     #   (see Nanook::Account#==)
@@ -69,7 +72,7 @@ class Nanook
         raise ArgumentError, "Account does not exist in wallet. Account: #{@account}, wallet: #{@wallet}"
       end
 
-      @nanook_account_instance = Nanook::Account.new(@rpc, @account)
+      @nanook_account_instance = as_account(@account)
     end
 
     # @param account [Nanook::WalletAccount] wallaccountet to compare
@@ -107,10 +110,10 @@ class Nanook
       raise ArgumentError, 'number of accounts must be greater than 0' if n_accounts < 1
 
       if n_accounts == 1
-        Nanook::WalletAccount.new(@rpc, @wallet, rpc(:account_create)[:account])
+        as_wallet_account(rpc(:account_create)[:account])
       else
         Array(rpc(:accounts_create, count: n_accounts)[:accounts]).map do |account|
-          Nanook::WalletAccount.new(@rpc, @wallet, account)
+          as_wallet_account(account)
         end
       end
     end
@@ -165,7 +168,7 @@ class Nanook
 
       # Determine amount in raw
       raw = if unit.to_sym.eql?(:nano)
-              Nanook::Util.NANO_to_raw(amount)
+              NANO_to_raw(amount)
             else
               amount
             end
@@ -233,12 +236,12 @@ class Nanook
     # @return [Nanook::Block] <i>change</i> block created
     # @raise [Nanook::Error] if setting the representative account fails
     def change_representative(representative)
-      unless Nanook::Account.new(@rpc, representative).exists?
+      unless as_account(representative).exists?
         raise Nanook::Error, "Representative account does not exist: #{representative}"
       end
 
       block = rpc(:account_representative_set, representative: representative)[:block]
-      Nanook::Block.new(@rpc, block)
+      as_block(block)
     end
 
     private

@@ -476,7 +476,7 @@ RSpec.describe Nanook::Wallet do
 
   it 'wallet balance with no account break down' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_balance_total\",\"wallet\":\"#{wallet_id}\"}",
+      body: "{\"action\":\"wallet_info\",\"wallet\":\"#{wallet_id}\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -491,7 +491,7 @@ RSpec.describe Nanook::Wallet do
 
   it 'wallet balance with no account break down in raw' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_balance_total\",\"wallet\":\"#{wallet_id}\"}",
+      body: "{\"action\":\"wallet_info\",\"wallet\":\"#{wallet_id}\"}",
       headers: headers
     ).to_return(
       status: 200,

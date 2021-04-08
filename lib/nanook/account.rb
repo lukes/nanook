@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::Account</tt> class contains methods to discover
   # publicly-available information about accounts on the nano network.
@@ -16,6 +18,8 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   account = Nanook::Account.new(rpc_conn, "nano_...")
   class Account
+    include Nanook::Util
+
     def initialize(rpc, account)
       @rpc = rpc
       @account = account.to_s
@@ -67,13 +71,12 @@ class Nanook
     def delegators(unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      response = rpc(:delegators)[:delegators]
-      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
+      response = rpc(:delegators, _access: :delegators, _coerce: Hash)
 
       r = response.map do |account_id, balance|
-        balance = Nanook::Util.raw_to_NANO(balance) if unit == :nano
+        balance = raw_to_NANO(balance) if unit == :nano
 
-        [Nanook::Account.new(@rpc, account_id), balance]
+        [as_account(account_id), balance]
       end
 
       Hash[r]
@@ -146,15 +149,14 @@ class Nanook
     def history(limit: 1000, unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      response = rpc(:account_history, count: limit)[:history]
-      response = Nanook::Util.coerce_empty_string_to_type(response, Array)
+      response = rpc(:account_history, count: limit, _access: :history, _coerce: Array)
 
       return response if unit == :raw
 
       response.map! do |history|
-        history[:amount] = Nanook::Util.raw_to_NANO(history[:amount])
-        history[:account] = Nanook::Account.new(@rpc, history[:account])
-        history[:block] = Nanook::Block.new(@rpc, history.delete(:hash)) # We rename the key from `hash` to `block` here
+        history[:amount] = raw_to_NANO(history[:amount])
+        history[:account] = as_account(history[:account])
+        history[:block] = as_block(history.delete(:hash)) # We rename the key from `hash` to `block` here
 
         history
       end
@@ -180,7 +182,7 @@ class Nanook
     #
     # @return [Nanook::PublicKey] public key of the account
     def public_key
-      Nanook::PublicKey.new(@rpc, rpc(:account_key)[:key])
+      as_public_key(rpc(:account_key)[:key])
     end
 
     # The representative for the account.
@@ -192,7 +194,7 @@ class Nanook
     # @return [Nanook::Account] Representative of the account. Can be nil.
     def representative
       representative = rpc(:account_representative)[:representative]
-      Nanook::Account.new(@rpc, representative) if representative
+      as_account(representative) if representative
     end
 
     # The account's balance, including pending (unreceived payments).
@@ -238,8 +240,8 @@ class Nanook
 
       rpc(:account_balance).tap do |r|
         if unit == :nano
-          r[:balance] = Nanook::Util.raw_to_NANO(r[:balance])
-          r[:pending] = Nanook::Util.raw_to_NANO(r[:pending])
+          r[:balance] = raw_to_NANO(r[:balance])
+          r[:pending] = raw_to_NANO(r[:pending])
         end
       end
     end
@@ -307,18 +309,18 @@ class Nanook
 
       response = rpc(:account_info, representative: true, weight: true, pending: true)
       response.merge!(id: @account)
-      response[:frontier] = Nanook::Block.new(@rpc, response[:frontier]) if response[:frontier]
-      response[:open_block] = Nanook::Block.new(@rpc, response[:open_block]) if response[:open_block]
-      response[:representative_block] = Nanook::Block.new(@rpc, response[:representative_block]) if response[:representative_block]
-      response[:representative] = Nanook::Account.new(@rpc, response[:representative]) if response[:representative]
-      response[:confirmation_height_frontier] = Nanook::Block.new(@rpc, response[:confirmation_height_frontier]) if response[:confirmation_height_frontier]
+      response[:frontier] = as_block(response[:frontier]) if response[:frontier]
+      response[:open_block] = as_block(response[:open_block]) if response[:open_block]
+      response[:representative_block] = as_block(response[:representative_block]) if response[:representative_block]
+      response[:representative] = as_account(response[:representative]) if response[:representative]
+      response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier]) if response[:confirmation_height_frontier]
       response[:last_modified_at] = Time.at(response.delete(:modified_timestamp)).utc
 
       if unit == :nano
         response.merge!(
-          balance: Nanook::Util.raw_to_NANO(response[:balance]),
-          pending: Nanook::Util.raw_to_NANO(response[:pending]),
-          weight: Nanook::Util.raw_to_NANO(response[:weight])
+          balance: raw_to_NANO(response[:balance]),
+          pending: raw_to_NANO(response[:pending]),
+          weight: raw_to_NANO(response[:weight])
         )
       end
 
@@ -362,26 +364,29 @@ class Nanook
     def ledger(limit: 1, modified_since: 0, unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      params = { count: limit }
-      params[:modified_since] = modified_since.to_i
+      params = {
+        count: limit,
+        modified_since: modified_since.to_i,
+        _access: :accounts,
+        _coerce: Hash
+      }
 
-      response = rpc(:ledger, params)[:accounts]
-      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
+      response = rpc(:ledger, params)
 
       r = response.map do |account_id, ledger|
         if unit == :nano
-          ledger[:balance] = Nanook::Util.raw_to_NANO(ledger[:balance])
-          ledger[:pending] = Nanook::Util.raw_to_NANO(ledger[:pending])
-          ledger[:weight] = Nanook::Util.raw_to_NANO(ledger[:weight])
+          ledger[:balance] = raw_to_NANO(ledger[:balance])
+          ledger[:pending] = raw_to_NANO(ledger[:pending])
+          ledger[:weight] = raw_to_NANO(ledger[:weight])
         end
 
         ledger[:last_modified_at] = Time.at(ledger.delete(:modified_timestamp)).utc
-        ledger[:representative] = Nanook::Account.new(@rpc, ledger[:representative]) if ledger[:representative]
-        ledger[:representative_block] = Nanook::Block.new(@rpc, ledger[:representative_block]) if ledger[:representative_block]
-        ledger[:open_block] = Nanook::Block.new(@rpc, ledger[:open_block]) if ledger[:open_block]
-        ledger[:frontier] = Nanook::Block.new(@rpc, ledger[:frontier]) if ledger[:frontier]
+        ledger[:representative] = as_account(ledger[:representative]) if ledger[:representative]
+        ledger[:representative_block] = as_block(ledger[:representative_block]) if ledger[:representative_block]
+        ledger[:open_block] = as_block(ledger[:open_block]) if ledger[:open_block]
+        ledger[:frontier] = as_block(ledger[:frontier]) if ledger[:frontier]
 
-        [Nanook::Account.new(@rpc, account_id), ledger]
+        [as_account(account_id), ledger]
       end
 
       Hash[r]
@@ -427,25 +432,28 @@ class Nanook
     def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      params = { count: limit }
+      params = {
+        count: limit,
+        _access: :blocks,
+        _coerce: (detailed ? Hash : Array)
+      }
       params[:source] = true if detailed
 
-      response = rpc(:pending, params)[:blocks]
-      response = Nanook::Util.coerce_empty_string_to_type(response, (detailed ? Hash : Array))
+      response = rpc(:pending, params)
 
       unless detailed
         return response.map do |block|
-          Nanook::Block.new(@rpc, block)
+          as_block(block)
         end
       end
 
       response.map do |key, val|
         p = val.merge(
-          block: Nanook::Block.new(@rpc, key.to_s),
-          source: Nanook::Account.new(@rpc, val[:source])
+          block: as_block(key.to_s),
+          source: as_account(val[:source])
         )
 
-        p[:amount] = Nanook::Util.raw_to_NANO(p[:amount]) if unit == :nano
+        p[:amount] = raw_to_NANO(p[:amount]) if unit == :nano
         p
       end
     end
@@ -470,7 +478,7 @@ class Nanook
 
       return weight unless unit == :nano
 
-      Nanook::Util.raw_to_NANO(weight)
+      raw_to_NANO(weight)
     end
 
     private

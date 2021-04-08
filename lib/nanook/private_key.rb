@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::PrivateKey</tt> class lets you manage your node's keys.
   class PrivateKey
+    include Nanook::Util
+
     def initialize(rpc, key = nil)
       @rpc = rpc
       @key = key.to_s if key
@@ -61,14 +65,14 @@ class Nanook
     #
     # @return Nanook::Account
     def account
-      Nanook::Account.new(@rpc, memoized_key_expand[:account])
+      as_account(memoized_key_expand[:account])
     end
 
     # Returns the {Nanook::PublicKey} pair for this private key.
     #
     # @return Nanook::PublicKey
     def public_key
-      Nanook::PublicKey.new(@rpc, memoized_key_expand[:public])
+      as_public_key(memoized_key_expand[:public])
     end
 
     def inspect

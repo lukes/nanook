@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::Block</tt> class contains methods to discover
   # publicly-available information about blocks on the nano network.
@@ -18,6 +20,8 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   block = Nanook::Block.new(rpc_conn, "FBF8B0E...")
   class Block
+    include Nanook::Util
+
     def initialize(rpc, block)
       @rpc = rpc
       @block = block.to_s
@@ -80,10 +84,15 @@ class Nanook
     # @param limit [Integer] maximum number of block hashes to return (default is 1000)
     # @param offset [Integer] return the account chain block hashes offset by the specified number of blocks (default is 0)
     def chain(limit: 1000, offset: 0)
-      response = rpc(:chain, :block, count: limit, offset: offset)[:blocks]
+      params = {
+        count: limit,
+        offset: offset,
+        _access: :blocks,
+        _coerce: Array
+      }
 
-      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |block|
-        Nanook::Block.new(@rpc, block)
+      rpc(:chain, :block, params).map do |block|
+        as_block(block)
       end
     end
     alias ancestors chain
@@ -146,16 +155,22 @@ class Nanook
     def info(allow_unchecked: false, unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
+      # Params for both `unchecked_get` and `block_info` calls
+      params = {
+        json_block: true,
+        _coerce: Hash
+      }
+
       if allow_unchecked
         begin
-          response = rpc(:unchecked_get, :hash, json_block: true)
+          response = rpc(:unchecked_get, :hash, params)
           return parse_info_response(response, unit).merge(confirmed: false)
         rescue Nanook::Error
           # If unchecked not found, continue to checked block
         end
       end
 
-      response = rpc(:block_info, :hash, json_block: true)
+      response = rpc(:block_info, :hash, params)
       parse_info_response(response, unit)
     end
 
@@ -185,16 +200,17 @@ class Nanook
         raise ArgumentError, 'You must provide either destinations or sources but not both'
       end
 
-      # Add in optional arguments
-      params = {}
+      params = {
+        _access: :blocks,
+        _coerce: Array
+      }
+
       params[:destinations] = destinations unless destinations.nil?
       params[:sources] = sources unless sources.nil?
-      params[:count] = 1 unless params.empty?
+      params[:count] = 1 if destinations || sources
 
-      response = rpc(:republish, :hash, params)[:blocks]
-
-      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |block|
-        Nanook::Block.new(@rpc, block)
+      rpc(:republish, :hash, params).map do |block|
+        as_block(block)
       end
     end
 
@@ -223,9 +239,15 @@ class Nanook
     #   by the specified number of blocks (default is 0)
     # @return [Array<Nanook::Block>] blocks in the account chain ending at this block
     def successors(limit: 1000, offset: 0)
-      response = rpc(:successors, :block, count: limit, offset: offset)[:blocks]
-      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |block|
-        Nanook::Block.new(@rpc, block)
+      params = {
+        count: limit,
+        offset: offset,
+        _access: :blocks,
+        _coerce: Array
+      }
+
+      rpc(:successors, :block, params).map do |block|
+        as_block(block)
       end
     end
 
@@ -263,7 +285,7 @@ class Nanook
       amount = memoized_info[:amount]
       return amount unless unit == :nano
 
-      Nanook::Util.raw_to_NANO(amount)
+      raw_to_NANO(amount)
     end
 
     # Returns the balance of the account at the time the block was created.
@@ -280,7 +302,7 @@ class Nanook
       balance = memoized_info[:balance]
       return balance unless unit == :nano
 
-      Nanook::Util.raw_to_NANO(balance)
+      raw_to_NANO(balance)
     end
 
     # Returns true if block is confirmed.
@@ -457,8 +479,6 @@ class Nanook
     end
 
     def parse_info_response(response, unit)
-      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
-
       response.merge!(id: id)
       contents = response.delete(:contents)
       response.merge!(contents) if contents
@@ -467,17 +487,17 @@ class Nanook
       response[:type] = response.delete(:subtype) # rename key
       response[:last_modified_at] = response.delete(:modified_timestamp) # rename key
 
-      response[:account] = Nanook::Account.new(@rpc, response[:account]) if response[:account]
-      response[:representative] = Nanook::Account.new(@rpc, response[:representative]) if response[:representative]
-      response[:previous] = Nanook::Block.new(@rpc, response[:previous]) if response[:previous]
-      response[:link] = Nanook::Block.new(@rpc, response[:link]) if response[:link]
-      response[:link_as_account] = Nanook::Account.new(@rpc, response[:link_as_account]) if response[:link_as_account]
+      response[:account] = as_account(response[:account]) if response[:account]
+      response[:representative] = as_account(response[:representative]) if response[:representative]
+      response[:previous] = as_block(response[:previous]) if response[:previous]
+      response[:link] = as_block(response[:link]) if response[:link]
+      response[:link_as_account] = as_account(response[:link_as_account]) if response[:link_as_account]
       response[:local_timestamp] = Time.at(response[:local_timestamp]).utc if response[:local_timestamp]
       response[:last_modified_at] = Time.at(response[:last_modified_at]).utc if response[:last_modified_at]
 
       if unit == :nano
-        response[:amount] = Nanook::Util.raw_to_NANO(response[:amount])
-        response[:balance] = Nanook::Util.raw_to_NANO(response[:balance])
+        response[:amount] = raw_to_NANO(response[:amount])
+        response[:balance] = raw_to_NANO(response[:balance])
       end
 
       response.compact

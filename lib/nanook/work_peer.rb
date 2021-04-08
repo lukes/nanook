@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::WorkPeer</tt> class lets you manage your node's work peers.
   class WorkPeer
+    include Nanook::Util
+
     def initialize(rpc)
       @rpc = rpc
     end
@@ -20,8 +24,7 @@ class Nanook
     end
 
     def list
-      response = rpc(:work_peers)[:work_peers]
-      Nanook::Util.coerce_empty_string_to_type(response, Array)
+      rpc(:work_peers, _access: :work_peers, _coerce: Array)
     end
 
     private

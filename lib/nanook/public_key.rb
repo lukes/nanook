@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::PublicKey</tt> class lets you manage your node's keys.
   class PublicKey
+    include Nanook::Util
+
     def initialize(rpc, key)
       @rpc = rpc
       @key = key.to_s
@@ -33,7 +37,7 @@ class Nanook
     # @return [Nanook::Account] account for the public key
     def account
       account = rpc(:account_get)[:account]
-      Nanook::Account.new(@rpc, account)
+      as_account(account)
     end
 
     def inspect

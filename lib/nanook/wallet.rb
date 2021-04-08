@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::Wallet</tt> class lets you manage your nano wallets.
   # Your node will need the <tt>enable_control</tt> setting enabled.
@@ -48,6 +50,8 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   wallet = Nanook::Wallet.new(rpc_conn, wallet_id)
   class Wallet
+    include Nanook::Util
+
     def initialize(rpc, wallet = nil)
       @rpc = rpc
       @wallet = wallet.to_s if wallet
@@ -98,7 +102,7 @@ class Nanook
     # @return [Nanook::WalletAccount]
     def account(account = nil)
       check_wallet_required!
-      Nanook::WalletAccount.new(@rpc, @wallet, account)
+      as_wallet_account(account)
     end
 
     # Array of {Nanook::WalletAccount} instances of accounts in the wallet.
@@ -112,9 +116,8 @@ class Nanook
     #
     # @return [Array<Nanook::WalletAccount>] all accounts in the wallet
     def accounts
-      response = rpc(:account_list)[:accounts]
-      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |account|
-        Nanook::WalletAccount.new(@rpc, @wallet, account)
+      rpc(:account_list, _access: :accounts, _coerce: Array).map do |account|
+        as_wallet_account(account)
       end
     end
 
@@ -198,22 +201,23 @@ class Nanook
       Nanook.validate_unit!(unit)
 
       if account_break_down
-        return Nanook::Util.coerce_empty_string_to_type(rpc(:wallet_balances)[:balances], Hash).tap do |r|
+        return rpc(:wallet_balances, _access: :balances, _coerce: Hash).tap do |r|
           if unit == :nano
             r.each do |account, _balances|
-              r[account][:balance] = Nanook::Util.raw_to_NANO(r[account][:balance])
-              r[account][:pending] = Nanook::Util.raw_to_NANO(r[account][:pending])
+              r[account][:balance] = raw_to_NANO(r[account][:balance])
+              r[account][:pending] = raw_to_NANO(r[account][:pending])
             end
           end
         end
       end
 
-      rpc(:wallet_balance_total).tap do |r|
-        if unit == :nano
-          r[:balance] = Nanook::Util.raw_to_NANO(r[:balance])
-          r[:pending] = Nanook::Util.raw_to_NANO(r[:pending])
-        end
-      end
+      response = rpc(:wallet_info, _coerce: Hash).slice(:balance, :pending)
+      return response unless unit == :nano
+
+      {
+        balance: raw_to_NANO(response[:balance]),
+        pending: raw_to_NANO(response[:pending])
+      }
     end
 
     # Changes a wallet's seed.
@@ -376,11 +380,15 @@ class Nanook
     def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      params = { count: limit }
+      params = {
+        count: limit,
+        _access: :blocks,
+        _coerce: Hash
+      }
+
       params[:source] = true if detailed
 
-      response = rpc(:wallet_pending, params)[:blocks]
-      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
+      response = rpc(:wallet_pending, params)
 
       return response unless detailed
 
@@ -390,7 +398,7 @@ class Nanook
       x = response.map do |account, data|
         new_data = data.map do |block, amount_and_source|
           d = amount_and_source.merge(block: block.to_s)
-          d[:amount] = Nanook::Util.raw_to_NANO(d[:amount]) if unit == :nano
+          d[:amount] = raw_to_NANO(d[:amount]) if unit == :nano
           d
         end
 
@@ -438,7 +446,7 @@ class Nanook
     # @return [Nanook::Account] Representative account
     def default_representative
       representative = rpc(:wallet_representative)[:representative]
-      Nanook::Account.new(@rpc, representative) if representative
+      as_account(representative) if representative
     end
     alias representative default_representative
 
@@ -457,14 +465,14 @@ class Nanook
     # @return [Nanook::Account] the representative account
     # @raise [Nanook::Error] if setting the representative fails
     def change_default_representative(representative)
-      unless Nanook::Account.new(@rpc, representative).exists?
+      unless as_account(representative).exists?
         raise Nanook::Error, "Representative account does not exist: #{representative}"
       end
 
       raise Nanook::Error, 'Setting the representative failed' \
         unless rpc(:wallet_representative_set, representative: representative)[:set] == 1
 
-      Nanook::Account.new(@rpc, representative)
+      as_account(representative)
     end
     alias change_representative change_default_representative
 
@@ -524,11 +532,11 @@ class Nanook
     def info(unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      response = rpc(:wallet_ledger)[:accounts]
+      response = rpc(:wallet_ledger, _access: :accounts, _coerce: Hash)
 
-      accounts = Nanook::Util.coerce_empty_string_to_type(response, Hash).map do |account_id, payload|
+      accounts = response.map do |account_id, payload|
         payload[:id] = account_id
-        payload[:balance] = Nanook::Util.raw_to_NANO(payload[:balance]) if unit == :nano
+        payload[:balance] = raw_to_NANO(payload[:balance]) if unit == :nano
         payload
       end
 
@@ -568,13 +576,11 @@ class Nanook
     def history(unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      response = rpc(:wallet_history)[:history]
-
-      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |h|
+      rpc(:wallet_history, _access: :history, _coerce: Array).map do |h|
         h[:account] = account(h[:account])
-        h[:block_account] = Nanook::Account.new(@rpc, h[:block_account])
-        h[:amount] = Nanook::Util.raw_to_NANO(h[:amount]) if unit == :nano
-        h[:block] = Nanook::Block.new(@rpc, h.delete(:hash))
+        h[:block_account] = as_account(h[:block_account])
+        h[:amount] = raw_to_NANO(h[:amount]) if unit == :nano
+        h[:block] = as_block(h.delete(:hash))
         h[:local_timestamp] = Time.at(h[:local_timestamp]).utc if h[:local_timestamp]
         h
       end

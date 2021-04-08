@@ -43,8 +43,32 @@ class Nanook
     # @param params [Hash] all other params to pass to the RPC
     # @return [Hash] the response from the RPC
     def call(action, params = {})
+      coerce_to = params.delete(:_coerce)
+      access_as = params.delete(:_access)
+
+      raw_hash = make_call(action, params)
+
+      check_for_errors!(raw_hash)
+
+      hash = parse_values(raw_hash)
+
+      hash = hash[access_as] if access_as
+      hash = coerce_empty_string_to_type(hash, coerce_to) if coerce_to
+
+      hash
+    end
+
+    # @return [String]
+    def inspect
+      "#{self.class.name}(host: \"#{@rpc_server}\", timeout: #{@http.read_timeout} object_id: \"#{format('0x00%x',
+                                                                                                         (object_id << 1))}\")"
+    end
+
+    private
+
+    def make_call(action, params)
       # Stringify param values
-      params = params.transform_values do |v|
+      params = params.dup.transform_values do |v|
         next v if v.is_a?(Array)
         v.to_s
       end
@@ -56,20 +80,8 @@ class Nanook
       raise Nanook::ConnectionError, "Encountered net/http error #{response.code}: #{response.class.name}" \
         unless response.is_a?(Net::HTTPSuccess)
 
-      hash = JSON.parse(response.body)
-
-      check_for_errors!(hash)
-
-      process_hash!(hash)
+      JSON.parse(response.body)
     end
-
-    # @return [String]
-    def inspect
-      "#{self.class.name}(host: \"#{@rpc_server}\", timeout: #{@http.read_timeout} object_id: \"#{format('0x00%x',
-                                                                                                         (object_id << 1))}\")"
-    end
-
-    private
 
     # Raises a {Nanook::NodeRpcConfigurationError} or {Nanook::NodeRpcError} if the RPC
     # response contains an `:error` key.
@@ -85,17 +97,17 @@ class Nanook
     end
 
     # Recursively parses the RPC response, sending values to #parse_value
-    def process_hash!(hash)
+    def parse_values(hash)
       new_hash = hash.map do |k, val|
         new_val = case val
                   when Array
                     if val[0].is_a?(Hash)
-                      val.map { |v| process_hash!(v) }
+                      val.map { |v| parse_values(v) }
                     else
                       val.map { |v| parse_value(v) }
                     end
                   when Hash
-                    process_hash!(val)
+                    parse_values(val)
                   else
                     parse_value(val)
                   end
@@ -113,6 +125,20 @@ class Nanook
       return false if value == 'false'
 
       value
+    end
+
+    # Converts an empty String value into an empty version of another type.
+    #
+    # The RPC often returns an empty String as a value to signal
+    # emptiness, rather than consistent types like an empty Array,
+    # or empty Hash.
+    #
+    # @param response the value returned from the RPC server
+    # @param type the type to return an empty of
+    def coerce_empty_string_to_type(response, type)
+      return type.new if response == '' || response.nil?
+
+      response
     end
   end
 end

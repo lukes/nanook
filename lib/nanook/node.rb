@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::Node</tt> class contains methods to manage your nano
   # node and query its data of the nano network.
@@ -26,6 +28,8 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   node = Nanook::Node.new(rpc_conn)
   class Node
+    include Nanook::Util
+
     def initialize(rpc)
       @rpc = rpc
     end
@@ -119,16 +123,15 @@ class Nanook
     def confirmation_quorum(unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      response = rpc(:confirmation_quorum)
-      response = Nanook::Util.coerce_empty_string_to_type(response, Hash)
+      response = rpc(:confirmation_quorum, _coerce: Hash)
 
       return response unless unit == :nano
 
-      response[:quorum_delta] = Nanook::Util.raw_to_NANO(response[:quorum_delta])
-      response[:online_weight_minimum] = Nanook::Util.raw_to_NANO(response[:online_weight_minimum])
-      response[:online_stake_total] = Nanook::Util.raw_to_NANO(response[:online_stake_total])
-      response[:peers_stake_total] = Nanook::Util.raw_to_NANO(response[:peers_stake_total])
-      response[:peers_stake_required] = Nanook::Util.raw_to_NANO(response[:peers_stake_required])
+      response[:quorum_delta] = raw_to_NANO(response[:quorum_delta])
+      response[:online_weight_minimum] = raw_to_NANO(response[:online_weight_minimum])
+      response[:online_stake_total] = raw_to_NANO(response[:online_stake_total])
+      response[:peers_stake_total] = raw_to_NANO(response[:peers_stake_total])
+      response[:peers_stake_required] = raw_to_NANO(response[:peers_stake_required])
 
       response.compact
     end
@@ -219,7 +222,7 @@ class Nanook
       return response if unit == :raw
 
       r = response.map do |account_id, weight|
-        weight = Nanook::Util.raw_to_NANO(weight)
+        weight = raw_to_NANO(weight)
 
         [account_id, weight]
       end
@@ -305,7 +308,7 @@ class Nanook
     def change_receive_minimum(minimum, unit: Nanook.default_unit)
       Nanook.validate_unit!(unit)
 
-      minimum = Nanook::Util.NANO_to_raw(minimum) if unit == :nano
+      minimum = NANO_to_raw(minimum) if unit == :nano
 
       rpc(:receive_minimum_set, amount: minimum).key?(:success)
     end
@@ -326,7 +329,7 @@ class Nanook
 
       return amount unless unit == :nano
 
-      Nanook::Util.raw_to_NANO(amount)
+      raw_to_NANO(amount)
     end
 
     # @return [Hash{Symbol=>Integer|String}] version information for this node
