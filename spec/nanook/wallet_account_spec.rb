@@ -31,6 +31,44 @@ RSpec.describe Nanook::WalletAccount do
     )
   end
 
+  it 'can compare equality' do
+    stub_request(:post, 'http://localhost:7076/')
+      .with(
+        body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"foo\"}",
+        headers: headers
+      )
+      .to_return(status: 200, body: '{"exists":"1"}', headers: {})
+
+    stub_request(:post, 'http://localhost:7076/')
+      .with(
+        body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"bar\"}",
+        headers: headers
+      )
+      .to_return(status: 200, body: '{"exists":"1"}', headers: {})
+
+    account_1 = Nanook.new.wallet(wallet_id).account("foo")
+    account_2 = Nanook.new.wallet(wallet_id).account("foo")
+    account_3 = Nanook.new.wallet(wallet_id).account("bar")
+
+    expect(account_1).to eq(account_2)
+    expect(account_1).not_to eq(account_3)
+  end
+
+  it 'can be used as a hash key lookup' do
+    stub_request(:post, 'http://localhost:7076/')
+      .with(
+        body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"foo\"}",
+        headers: headers
+      )
+      .to_return(status: 200, body: '{"exists":"1"}', headers: {})
+
+    hash = {
+      Nanook.new.wallet(wallet_id).account("foo") => "found"
+    }
+
+    expect(hash[Nanook.new.wallet(wallet_id).account("foo")]).to eq("found")
+  end
+
   it 'wallet account create' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_create\",\"wallet\":\"#{wallet_id}\"}",

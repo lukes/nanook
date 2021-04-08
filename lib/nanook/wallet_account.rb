@@ -72,6 +72,22 @@ class Nanook
       @nanook_account_instance = Nanook::Account.new(@rpc, @account)
     end
 
+    # @param account [Nanook::WalletAccount] wallaccountet to compare
+    # @return [Boolean] true if accounts are equal
+    def ==(account)
+      account.class == account.class &&
+        account.id == @account
+    end
+    alias eql? ==
+
+    # The hash value is used along with #eql? by the Hash class to determine if two objects
+    # reference the same hash key.
+    #
+    # @return [Integer]
+    def hash
+      [@wallet, @account].join('+').hash
+    end
+
     # Creates a new account, or multiple new accounts, in this wallet.
     #
     # ==== Examples:

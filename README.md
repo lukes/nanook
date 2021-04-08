@@ -168,6 +168,8 @@ wallet.remove_account(account_id)
 
 wallet.default_representative
 wallet.change_default_representative(representative_account_id)
+wallet.history
+wallet.history(unit: :raw)
 wallet.info
 wallet.info(unit: :raw)
 wallet.export
