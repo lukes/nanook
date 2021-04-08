@@ -235,6 +235,58 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.peers).to have_key('[::ffff:172.17.0.1]:32841')
   end
 
+  it 'change receive minimum' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"receive_minimum_set\",\"amount\":\"1000000001000000000000000000000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"success": ""}',
+      headers: {}
+    )
+
+    expect(Nanook.new.node.change_receive_minimum(1.000000001)).to be true
+  end
+
+  it 'change receive minimum in raw' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"receive_minimum_set\",\"amount\":\"1000000001000000000000000000000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"success": ""}',
+      headers: {}
+    )
+
+    expect(Nanook.new.node.change_receive_minimum(1000000001000000000000000000000, unit: :raw)).to be true
+  end
+
+  it 'receive minimum' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"receive_minimum\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"amount": "10000000000000000000000000000000"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.node.receive_minimum).to eq(10.0)
+  end
+
+  it 'receive minimum' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"receive_minimum\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"amount": "1000000000000000000000000"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.node.receive_minimum(unit: :raw)).to eq(1000000000000000000000000)
+  end
+
   it 'should request confirmation_quorum correctly' do
     stub_request(:post, uri).with(
       body: '{"action":"confirmation_quorum"}',
@@ -407,31 +459,5 @@ RSpec.describe Nanook::Node do
     expect(block[:source]).to eq 'FA5B51D063BADDF345EFD7EF0D3C5FB115C85B1EF4CDE89D8B7DF3EAF60A04A4'
     expect(block[:work]).to eq '0000000000000000'
     expect(block[:signature]).to eq '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
-  end
-
-  it 'should synced? when true' do
-    stub_request(:post, uri).with(
-      body: '{"action":"block_count"}',
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"count":"1000","unchecked":"0"}',
-      headers: {}
-    )
-
-    expect(Nanook.new.node.synced?).to be true
-  end
-
-  it 'should synced? when false' do
-    stub_request(:post, uri).with(
-      body: '{"action":"block_count"}',
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"count":"1000","unchecked":"5"}',
-      headers: {}
-    )
-
-    expect(Nanook.new.node.synced?).to be false
   end
 end

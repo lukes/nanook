@@ -281,13 +281,42 @@ class Nanook
       rpc(:uptime)['seconds']
     end
 
-    # This method is deprecated and will be removed in 3.0, as a node never
-    # reaches 100% synchronization.
+    # Sets the receive minimum for wallets on the node. The value is in +Nano+ by default.
+    # To specify an amount in +raw+, pass the argument +unit: :raw+.
     #
-    # @return [Boolean] signalling if this node ever reaches 100% synchronized
-    def synced?
-      warn '[DEPRECATION] `synced?` is deprecated and will be removed in 3.0'
-      (rpc(:block_count)[:unchecked]).zero?
+    # ==== Example:
+    #
+    #   account.change_receive_minimum(0.01) # true
+    #
+    # @return [Boolean] true if the action was successful
+    # @param minimum Amount to set as the receive minimum
+    # @param unit optional. Specify +raw+ if you want to set the amount in +raw+. (See Nanook::Account#balance)
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def change_receive_minimum(minimum, unit: Nanook.default_unit)
+      Nanook.validate_unit!(unit)
+
+      minimum = Nanook::Util.NANO_to_raw(minimum) if unit == :nano
+
+      rpc(:receive_minimum_set, amount: minimum).key?(:success)
+    end
+
+    # Returns receive minimum for wallets on the node.
+    #
+    # ==== Example:
+    #
+    #   account.receive_minimum # => 0.01
+    #
+    # @return [Integer|Float] the receive minimum
+    # @param unit (see Nanook::Account#balance)
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def receive_minimum(unit: Nanook.default_unit)
+      Nanook.validate_unit!(unit)
+
+      amount = rpc(:receive_minimum)[:amount]
+
+      return amount unless unit == :nano
+
+      Nanook::Util.raw_to_NANO(amount)
     end
 
     # @return [Hash{Symbol=>Integer|String}] version information for this node

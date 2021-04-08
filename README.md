@@ -319,6 +319,8 @@ node.difficulty
 node.difficulty(include_trend: true)
 node.keepalive
 node.peers
+node.receive_minimum
+node.change_receive_minimum(amount)
 node.representatives
 node.representatives(unit: :raw)
 node.representatives_online

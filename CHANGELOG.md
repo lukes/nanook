@@ -17,13 +17,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `Nanook::Node#confirmed_recently?`.
 - `Nanook::Key` Replaced by `Nanook::PrivateKey`.
 - `Nanook::Account#info` No longer accepts `detailed:` argument.
+- `Nanook::Node#synced?` As this was deprecated for removal in v3.0.
 
 ### Added
 
 - Added missing `Nanook::WalletAccount#block_count` delegate.
 - Added `Nanook::Account#delegators_count`.
+- Added `Nanook::Node#change_receive_minimum`.
 - Added `Nanook::Node#confirmation_quorum`.
 - Added `Nanook::Node#keepalive`.
+- Added `Nanook::Node#receive_minimum`.
 - Added `Nanook::Wallet#move_accounts`.
 - Added `Nanook::Wallet#remove_account`.
 - Added `Nanook::Block#account`.
