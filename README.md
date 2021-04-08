@@ -312,8 +312,10 @@ node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
 node.bootstrap_any
 node.bootstrap_lazy(block_id)
 node.bootstrap_lazy(block_id, force: true)
+node.confirmation_quorum
 node.difficulty
 node.difficulty(include_trend: true)
+node.keepalive
 node.peers
 node.representatives
 node.representatives(unit: :raw)

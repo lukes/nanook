@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added missing `Nanook::WalletAccount#block_count` delegate.
 - Added `Nanook::Account#delegators_count`.
 - Added `Nanook::Node#confirmation_quorum`.
+- Added `Nanook::Node#keepalive`.
 - Added `Nanook::Block#account`.
 - Added `Nanook::Block#amount`.
 - Added `Nanook::Block#balance`.

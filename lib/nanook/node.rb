@@ -59,6 +59,13 @@ class Nanook
       rpc(:block_count)
     end
 
+    # Tells the node to send a keepalive packet to a specific IP address and port.
+    #
+    # @return [Boolean] indicating if the action was successful
+    def keepalive(address:, port:)
+      rpc(:keepalive, address: address, port: port).key?(:started)
+    end
+
     # Initialize bootstrap to a specific IP address and port.
     #
     # @return [Boolean] indicating if the action was successful

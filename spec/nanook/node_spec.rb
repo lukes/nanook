@@ -29,6 +29,19 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.block_count).to have_key(:count)
   end
 
+  it 'should request keepalive correctly' do
+    stub_request(:post, uri).with(
+      body: '{"action":"keepalive","address":"::ffff:138.201.94.249","port":"7075"}',
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"started":"1"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.node.keepalive(address: '::ffff:138.201.94.249', port: '7075')).to be true
+  end
+
   it 'should request bootstrap correctly' do
     stub_request(:post, uri).with(
       body: '{"action":"bootstrap","address":"::ffff:138.201.94.249","port":"7075"}',
