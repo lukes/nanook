@@ -219,11 +219,13 @@ class Nanook
     # Changes a wallet's seed.
     #
     # It's recommended to only change the seed of a wallet that contains
-    # no accounts.
+    # no accounts. This will clear all deterministic accounts in the wallet.
+    # To restore accounts after changing the seed, see Nanook::WalletAccount#create.
     #
     # ==== Example:
     #
     #   wallet.change_seed("000D1BA...") # => true
+    #   wallet.account.create(5) # Restores first 5 accounts for wallet with new seed
     #
     # @param seed [String] the seed to change to.
     # @return [Boolean] indicating whether the change was successful.
@@ -534,6 +536,48 @@ class Nanook
         id: @wallet,
         accounts: accounts
       }.to_symbolized_hash
+    end
+
+    # Reports send/receive information for accounts in wallet. Change blocks are skipped,
+    # open blocks will appear as receive. Response will start with most recent blocks
+    # according to local ledger.
+    #
+    # ==== Example:
+    #
+    #   wallet.history
+    #
+    # Example response:
+    #
+    #   [
+    #     {
+    #       "type": "send",
+    #       "account": Nanook::Account,
+    #       "amount": 3.2,
+    #       "block_account": Nanook::Account,
+    #       "hash": Nanook::Block,
+    #       "local_timestamp": Time
+    #     },
+    #     {
+    #       ...
+    #     }
+    #   ]
+    #
+    # @param unit (see #balance)
+    # @return [Array<Hash{Symbol=>String|Nanook::Account|Nanook::WalletAccount|Nanook::Block|Integer|Float|Time}>]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def history(unit: Nanook.default_unit)
+      Nanook.validate_unit!(unit)
+
+      response = rpc(:wallet_history)[:history]
+
+      Nanook::Util.coerce_empty_string_to_type(response, Array).map do |h|
+        h[:account] = account(h[:account])
+        h[:block_account] = Nanook::Account.new(@rpc, h[:block_account])
+        h[:amount] = Nanook::Util.raw_to_NANO(h[:amount]) if unit == :nano
+        h[:block] = Nanook::Block.new(@rpc, h.delete(:hash))
+        h[:local_timestamp] = Time.at(h[:local_timestamp]).utc if h[:local_timestamp]
+        h
+      end
     end
 
     # Locks the wallet. A locked wallet cannot pocket pending transactions or make payments. See {#unlock}.
