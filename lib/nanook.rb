@@ -101,7 +101,7 @@ class Nanook
   # @param key [String] a private key
   # @return [Nanook::PrivateKey]
   def private_key(key = nil)
-    Nanook::PrivateKey.new(@rpc, key)
+    as_private_key(@rpc, key)
   end
 
   # Returns a new instance of {Nanook::PublicKey}.
