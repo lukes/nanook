@@ -308,7 +308,7 @@ block.work
 block.generate_work
 block.generate_work(use_peers: true)
 block.cancel_work
-block.valid_work?(work_id)
+block.valid_work?(work)
 ```
 
 ### Managing your nano node
