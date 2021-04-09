@@ -48,14 +48,17 @@ class Nanook
     def create(seed: nil, index: nil)
       skip_key_required!
 
-      response = if seed.nil?
-        rpc(:key_create, _coerce: Hash)
+      params = {
+        _access: :private,
+        _coerce: Hash
+      }
+
+      @key = if seed.nil?
+        rpc(:key_create, params)
       else
         raise ArgumentError, "index argument is required when seed is given" if index.nil?
-        rpc(:deterministic_key, seed: seed, index: index, _coerce: Hash)
+        rpc(:deterministic_key, params.merge(seed: seed, index: index))
       end
-
-      @key = response[:private]
 
       self
     end
@@ -90,7 +93,7 @@ class Nanook
     def rpc(action, params = {})
       check_key_required!
 
-      p = @key.nil? ? {} : { key: @key }
+      p = { key: @key }.compact
       @rpc.call(action, p.merge(params)).tap { reset_skip_key_required! }
     end
 

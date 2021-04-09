@@ -503,7 +503,7 @@ class Nanook
     private
 
     def rpc(action, params = {})
-      p = @account.nil? ? {} : { account: @account }
+      p = { account: @account }.compact
       @rpc.call(action, p.merge(params))
     end
   end

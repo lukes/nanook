@@ -287,9 +287,7 @@ class Nanook
     def rpc(action, params = {})
       check_account_required!
 
-      p = { wallet: @wallet }
-      p[:account] = @account unless @account.nil?
-
+      p = { wallet: @wallet, account: @account }.compact
       @rpc.call(action, p.merge(params)).tap { reset_skip_account_required! }
     end
 
