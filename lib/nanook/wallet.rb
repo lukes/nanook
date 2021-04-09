@@ -299,7 +299,7 @@ class Nanook
 
     # @return [String]
     def to_s
-      "#{self.class.name}(id: \"#{id}\")"
+      "#{self.class.name}(id: \"#{short_id}\")"
     end
     alias inspect to_s
 

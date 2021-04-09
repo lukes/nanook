@@ -131,7 +131,7 @@ class Nanook
 
     # @return [String]
     def to_s
-      "#{self.class.name}(wallet_id: \"#{@wallet}\", account_id: \"#{id})\""
+      "#{self.class.name}(wallet_id: \"#{shorten_id(@wallet)}\", account_id: \"#{short_id})\""
     end
     alias inspect to_s
 

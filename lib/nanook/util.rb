@@ -38,6 +38,16 @@ class Nanook
       true
     end
 
+    def short_id
+      shorten_id(id)
+    end
+
+    def shorten_id(long_id)
+      return unless long_id
+
+      [long_id.sub('nano_', '')[0..6], long_id[-4, 4]].join('...')
+    end
+
     def as_account(account_id)
       Nanook::Account.new(@rpc, account_id)
     end
