@@ -402,7 +402,7 @@ class Nanook
     # ==== Example:
     #   block.type # => "open"
     #
-    # @return [String] type of block.
+    # @return [String] type of block. Returns nil for unconfirmed blocks.
     def type
       memoized_info[:type]
     end
@@ -490,8 +490,8 @@ class Nanook
       response[:previous] = as_block(response[:previous]) if response[:previous]
       response[:link] = as_block(response[:link]) if response[:link]
       response[:link_as_account] = as_account(response[:link_as_account]) if response[:link_as_account]
-      response[:local_timestamp] = Time.at(response[:local_timestamp]).utc if response[:local_timestamp]
-      response[:last_modified_at] = Time.at(response[:last_modified_at]).utc if response[:last_modified_at]
+      response[:local_timestamp] = as_time(response[:local_timestamp])
+      response[:last_modified_at] = as_time(response[:last_modified_at])
 
       if unit == :nano
         response[:amount] = raw_to_NANO(response[:amount])

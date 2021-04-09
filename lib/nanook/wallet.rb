@@ -557,7 +557,7 @@ class Nanook
         data[:open_block] = as_block(data[:open_block]) if data[:open_block]
         data[:representative_block] = as_block(data[:representative_block]) if data[:representative_block]
         data[:balance] = raw_to_NANO(data[:balance]) if unit == :nano && data[:balance]
-        data[:last_modified_at] = Time.at(data.delete(:modified_timestamp)).utc if data[:modified_timestamp]
+        data[:last_modified_at] = as_time(data.delete(:modified_timestamp))
 
         [as_account(account_id), data]
       end
@@ -637,7 +637,7 @@ class Nanook
         h[:block_account] = as_account(h[:block_account])
         h[:amount] = raw_to_NANO(h[:amount]) if unit == :nano
         h[:block] = as_block(h.delete(:hash))
-        h[:local_timestamp] = Time.at(h[:local_timestamp]).utc if h[:local_timestamp]
+        h[:local_timestamp] = as_time(h[:local_timestamp])
         h
       end
     end

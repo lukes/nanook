@@ -170,8 +170,7 @@ class Nanook
     #
     # @return [Time] last modified time of the account in UTC. Can be nil
     def last_modified_at
-      timestamp = rpc(:account_info)[:modified_timestamp]
-      Time.at(timestamp).utc if timestamp
+      as_time(rpc(:account_info)[:modified_timestamp])
     end
 
     # The public key of the account.
@@ -314,7 +313,7 @@ class Nanook
       response[:representative_block] = as_block(response[:representative_block]) if response[:representative_block]
       response[:representative] = as_account(response[:representative]) if response[:representative]
       response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier]) if response[:confirmation_height_frontier]
-      response[:last_modified_at] = Time.at(response.delete(:modified_timestamp)).utc
+      response[:last_modified_at] = as_time(response.delete(:modified_timestamp))
 
       if unit == :nano
         response.merge!(
@@ -380,7 +379,7 @@ class Nanook
           ledger[:weight] = raw_to_NANO(ledger[:weight])
         end
 
-        ledger[:last_modified_at] = Time.at(ledger.delete(:modified_timestamp)).utc
+        ledger[:last_modified_at] = as_time(ledger.delete(:modified_timestamp))
         ledger[:representative] = as_account(ledger[:representative]) if ledger[:representative]
         ledger[:representative_block] = as_block(ledger[:representative_block]) if ledger[:representative_block]
         ledger[:open_block] = as_block(ledger[:open_block]) if ledger[:open_block]

@@ -57,5 +57,9 @@ class Nanook
     def as_public_key(key)
       Nanook::PublicKey.new(@rpc, key)
     end
+
+    def as_time(time)
+      Time.at(time).utc if time
+    end
   end
 end

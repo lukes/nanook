@@ -327,10 +327,12 @@ node.bootstrap_lazy(block_id, force: true)
 node.confirmation_quorum
 node.difficulty
 node.difficulty(include_trend: true)
-node.keepalive
+node.keepalive(address: "::ffff:138.201.94.249", port: 7075)
 node.peers
 node.receive_minimum
+node.receive_minimum(unit: :raw)
 node.change_receive_minimum(amount)
+node.change_receive_minimum(amount, unit: :raw)
 node.representatives
 node.representatives(unit: :raw)
 node.representatives_online
@@ -378,6 +380,14 @@ key.public_key
 key = nanook.public_key(public_key)
 
 key.account
+```
+
+### Network
+
+See an overview of the Nano network, summarized from metrics received from other nodes:
+
+```ruby
+nanook.network_telemetry
 ```
 
 ## Nanook Metal

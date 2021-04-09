@@ -135,4 +135,43 @@ class Nanook
   def work_peers
     Nanook::WorkPeer.new(@rpc)
   end
+
+  # Return summarized metrics received from other nodes of the whole network.
+  #
+  # ==== Example:
+  #   Nanook.new.network_telemetry
+  #
+  # ==== Example response:
+  #   {
+  #     block_count: 5777903,
+  #     cemented_count: 688819,
+  #     unchecked_count: 443468,
+  #     account_count: 620750,
+  #     bandwidth_cap: 1572864,
+  #     peer_count: 32,
+  #     protocol_version: 18,
+  #     uptime: 556896,
+  #     genesis_block: Nanook::Block,
+  #     major_version: 21,
+  #     minor_version: 0,
+  #     patch_version: 0,
+  #     pre_release_version: 0,
+  #     maker: 0,
+  #     timestamp: Time,
+  #     active_difficulty: "ffffffcdbf40aa45"
+  # }
+  #
+  # @return [Nanook::WorkPeer]
+  def network_telemetry
+    response = call_rpc(:telemetry, _coerce: Hash)
+    response[:genesis_block] = as_block(response[:genesis_block]) if response[:genesis_block]
+    response[:timestamp] = as_time(response[:timestamp]) if response[:timestamp]
+    response
+  end
+
+  private
+
+  def call_rpc(action, params = {})
+    @rpc.call(action, params)
+  end
 end

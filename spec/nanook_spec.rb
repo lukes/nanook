@@ -2,14 +2,6 @@
 
 RSpec.describe Nanook do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
-  let(:headers) do
-    {
-      'Accept' => '*/*',
-      'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type' => 'application/json',
-      'User-Agent' => 'Ruby nanook gem'
-    }
-  end
 
   it 'default_unit class method should return :nano by default' do
     expect(Nanook.default_unit).to eq(:nano)
@@ -53,5 +45,54 @@ RSpec.describe Nanook do
 
   it 'should have a rpc accessor' do
     expect(Nanook.new.rpc).to be_kind_of(Nanook::Rpc)
+  end
+
+  it 'should request network_telemetry correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"telemetry\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_count": "5777903",
+          "cemented_count": "688819",
+          "unchecked_count": "443468",
+          "account_count": "620750",
+          "bandwidth_cap": "1572864",
+          "peer_count": "32",
+          "protocol_version": "18",
+          "uptime": "556896",
+          "genesis_block": "F824C697633FAB78B703D75189B7A7E18DA438A2ED5FFE7495F02F681CD56D41",
+          "major_version": "21",
+          "minor_version": "0",
+          "patch_version": "1",
+          "pre_release_version": "2",
+          "maker": "3",
+          "timestamp": "1587055945990",
+          "active_difficulty": "ffffffcdbf40aa45"
+      }
+    BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.network_telemetry).to eq(
+      block_count: 5777903,
+      cemented_count: 688819,
+      unchecked_count: 443468,
+      account_count: 620750,
+      bandwidth_cap: 1572864,
+      peer_count: 32,
+      protocol_version: 18,
+      uptime: 556896,
+      genesis_block: Nanook.new.block('F824C697633FAB78B703D75189B7A7E18DA438A2ED5FFE7495F02F681CD56D41'),
+      major_version: 21,
+      minor_version: 0,
+      patch_version: 1,
+      pre_release_version: 2,
+      maker: 3,
+      timestamp: Time.at(1587055945990),
+      active_difficulty: 'ffffffcdbf40aa45'
+    )
   end
 end
