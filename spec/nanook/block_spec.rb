@@ -258,7 +258,20 @@ RSpec.describe Nanook::Block do
     expect { Nanook.new.block(block).info } .to raise_error(Nanook::NodeRpcError)
   end
 
-  it 'should request info allowing_unchecked when block is unchecked correctly' do
+  it 'should request info allow_unchecked when block is unchecked correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "error":  "Block not found"
+        }
+      BODY
+      headers: {}
+    )
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers
@@ -876,16 +889,7 @@ RSpec.describe Nanook::Block do
     expect(representative.id).to eq("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou")
   end
 
-  it 'should request checked? correctly' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"error":"Block not found"}',
-      headers: {}
-    )
-
+  it 'should request checked? correctly when block is checked' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers
@@ -919,7 +923,46 @@ RSpec.describe Nanook::Block do
     expect(Nanook.new.block(block)).to be_checked
   end
 
+  it 'should request checked? correctly when block is unchecked' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "error": "Block not found"
+        }
+      BODY
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"block_account":"nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).not_to be_checked
+  end
+
   it 'should request unchecked? correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "error": "Block not found"
+        }
+      BODY
+      headers: {}
+    )
+
     stub_request(:post, uri).with(
       body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers

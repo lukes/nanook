@@ -152,6 +152,7 @@ class Nanook
     # @param allow_unchecked [Boolean] (default is +false+). If +true+,
     #   information can be returned about blocks that are unchecked (unverified).
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    # @raise [Nanook::NodeRpcError] if block is not found on the node.
     def info(allow_unchecked: false, unit: Nanook.default_unit)
       validate_unit!(unit)
 
@@ -161,16 +162,16 @@ class Nanook
         _coerce: Hash
       }
 
-      if allow_unchecked
-        begin
-          response = rpc(:unchecked_get, :hash, params)
-          return parse_info_response(response, unit).merge(confirmed: false)
-        rescue Nanook::Error
-          # If unchecked not found, continue to checked block
-        end
+      begin
+        response = rpc(:block_info, :hash, params)
+        response.merge!(confirmed: true)
+      rescue Nanook::NodeRpcError => e
+        raise e unless allow_unchecked
+
+        response = rpc(:unchecked_get, :hash, params)
+        response.merge!(confirmed: false)
       end
 
-      response = rpc(:block_info, :hash, params)
       parse_info_response(response, unit)
     end
 
