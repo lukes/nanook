@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class Nanook
-  VERSION = '2.5.1'
+  VERSION = '3.0.0'
 end
