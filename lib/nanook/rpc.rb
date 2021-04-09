@@ -59,9 +59,8 @@ class Nanook
     end
 
     # @return [String]
-    def inspect
-      "#{self.class.name}(host: \"#{@rpc_server}\", timeout: #{@http.read_timeout} object_id: \"#{format('0x00%x',
-                                                                                                         (object_id << 1))}\")"
+    def to_s
+      "#{self.class.name}(host: \"#{@rpc_server}\", timeout: #{@http.read_timeout})"
     end
 
     private

@@ -282,8 +282,8 @@ class Nanook
     end
 
     # @return [String]
-    def inspect
-      "#{self.class.name}(id: \"#{id}\", object_id: \"#{format('0x00%x', (object_id << 1))}\")"
+    def to_s
+      "#{self.class.name}(id: \"#{id}\")"
     end
 
     # Makes a payment from an account in your wallet to another account

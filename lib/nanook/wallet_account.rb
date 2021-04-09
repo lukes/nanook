@@ -130,9 +130,8 @@ class Nanook
     end
 
     # @return [String]
-    def inspect
-      "#{self.class.name}(wallet_id: #{@wallet}, account_id: #{id}, object_id: \"#{format('0x00%x',
-                                                                                          (object_id << 1))}\")"
+    def to_s
+      "#{self.class.name}(wallet_id: \"#{@wallet}\", account_id: \"#{id})\""
     end
 
     # Makes a payment from this account to another account

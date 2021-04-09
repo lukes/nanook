@@ -177,8 +177,8 @@ class Nanook
     end
 
     # @return [String]
-    def inspect
-      "#{self.class.name}(object_id: \"#{format('0x00%x', (object_id << 1))}\")"
+    def to_s
+      self.class.name
     end
 
     # Returns peers information.

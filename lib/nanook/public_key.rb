@@ -40,8 +40,8 @@ class Nanook
       as_account(account)
     end
 
-    def inspect
-      "#{self.class.name}(id: \"#{id}\", object_id: \"#{format('0x00%x', (object_id << 1))}\")"
+    def to_s
+      "#{self.class.name}(id: \"#{id}\")"
     end
 
     private

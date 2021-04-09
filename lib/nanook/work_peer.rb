@@ -19,8 +19,8 @@ class Nanook
       rpc(:work_peers_clear).key?(:success)
     end
 
-    def inspect
-      "#{self.class.name}(object_id: \"#{format('0x00%x', (object_id << 1))}\")"
+    def to_s
+      self.class.name
     end
 
     def list
