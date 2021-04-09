@@ -75,9 +75,11 @@ class Nanook
       as_public_key(memoized_key_expand[:public])
     end
 
+    # @return [String]
     def to_s
       "#{self.class.name}(id: \"#{id}\")"
     end
+    alias inspect to_s
 
     private
 

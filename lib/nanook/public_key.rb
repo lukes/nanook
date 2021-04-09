@@ -40,9 +40,11 @@ class Nanook
       as_account(account)
     end
 
+    # @return [String]
     def to_s
       "#{self.class.name}(id: \"#{id}\")"
     end
+    alias inspect to_s
 
     private
 

@@ -82,6 +82,7 @@ class Nanook
   def to_s
     "#{self.class.name}(rpc: #{@rpc})"
   end
+  alias inspect to_s
 
   # Returns a new instance of {Nanook::PrivateKey}.
   #

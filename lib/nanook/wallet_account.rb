@@ -133,6 +133,7 @@ class Nanook
     def to_s
       "#{self.class.name}(wallet_id: \"#{@wallet}\", account_id: \"#{id})\""
     end
+    alias inspect to_s
 
     # Makes a payment from this account to another account
     # on the nano network. Returns a <i>send</i> block hash

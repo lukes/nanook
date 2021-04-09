@@ -62,6 +62,7 @@ class Nanook
     def to_s
       "#{self.class.name}(host: \"#{@rpc_server}\", timeout: #{@http.read_timeout})"
     end
+    alias inspect to_s
 
     private
 

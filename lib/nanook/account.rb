@@ -326,9 +326,11 @@ class Nanook
       response
     end
 
+    # @return [String]
     def to_s
       "#{self.class.name}(id: \"#{id}\")"
     end
+    alias inspect to_s
 
     # Information about the given account as well as other
     # accounts up the ledger. The number of accounts returned is determined

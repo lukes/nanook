@@ -180,6 +180,7 @@ class Nanook
     def to_s
       self.class.name
     end
+    alias inspect to_s
 
     # Returns peers information.
     #

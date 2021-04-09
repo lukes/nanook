@@ -301,6 +301,7 @@ class Nanook
     def to_s
       "#{self.class.name}(id: \"#{id}\")"
     end
+    alias inspect to_s
 
     # Makes a payment from an account in your wallet to another account
     # on the nano network.
