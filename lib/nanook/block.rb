@@ -476,7 +476,7 @@ class Nanook
 
     # Memoize the `#info` response as we can refer to it for other methods (`type`, `#open?`, `#send?` etc.)
     def memoized_info
-      @memoized_info ||= info(allow_unchecked: true)
+      @memoized_info ||= info(allow_unchecked: true, unit: :raw)
     end
 
     def parse_info_response(response, unit)

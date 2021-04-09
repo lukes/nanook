@@ -981,7 +981,7 @@ RSpec.describe Nanook::Block do
             "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
             "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
             "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
-            "balance": "5606157000000000000000000000000000000",
+            "balance": "14360938463463374607431768211455",
             "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
             "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
             "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
@@ -998,15 +998,6 @@ RSpec.describe Nanook::Block do
 
   it 'should request amount correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"error":"Block not found"}',
-      headers: {}
-    )
-
-    stub_request(:post, uri).with(
       body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers
     ).to_return(
@@ -1014,8 +1005,8 @@ RSpec.describe Nanook::Block do
       body: <<~BODY,
         {
           "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
-          "amount": "3100000000000000000000000000000000010000000000000000000000000",
-          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "amount": "340366928463463374607431768211455",
+          "balance": "14360938463463374607431768211455",
           "height": "58",
           "local_timestamp": "0",
           "confirmed": "true",
@@ -1024,7 +1015,7 @@ RSpec.describe Nanook::Block do
             "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
             "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
             "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
-            "balance": "3000000000000000000000000000000000010000000000000000000000000",
+            "balance": "14360938463463374607431768211455",
             "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
             "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
             "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
@@ -1036,7 +1027,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).amount).to eq(3.1)
+    expect(Nanook.new.block(block).amount).to eq(340.3669284634633)
   end
 
   it 'should request amount correctly as raw' do
@@ -1057,8 +1048,8 @@ RSpec.describe Nanook::Block do
       body: <<~BODY,
         {
           "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
-          "amount": "3100000000000000000000000000000000010000000000000000000000000",
-          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "amount": "340366928463463374607431768211455",
+          "balance": "14360938463463374607431768211455",
           "height": "58",
           "local_timestamp": "0",
           "confirmed": "true",
@@ -1067,7 +1058,7 @@ RSpec.describe Nanook::Block do
             "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
             "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
             "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
-            "balance": "3000000000000000000000000000000000010000000000000000000000000",
+            "balance": "14360938463463374607431768211455",
             "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
             "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
             "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
@@ -1079,7 +1070,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).amount(unit: :raw)).to eq(3.1e+30)
+    expect(Nanook.new.block(block).amount(unit: :raw)).to eq(340366928463463374607431768211455)
   end
 
   it 'should request balance correctly' do
@@ -1100,8 +1091,8 @@ RSpec.describe Nanook::Block do
       body: <<~BODY,
         {
           "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
-          "amount": "1100000000000000000000000000000000010000000000000000000000000",
-          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "amount": "340366928463463374607431768211455",
+          "balance": "14360938463463374607431768211455",
           "height": "58",
           "local_timestamp": "0",
           "confirmed": "true",
@@ -1110,7 +1101,7 @@ RSpec.describe Nanook::Block do
             "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
             "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
             "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
-            "balance": "3100000000000000000000000000000000010000000000000000000000000",
+            "balance": "14360938463463374607431768211455",
             "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
             "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
             "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
@@ -1122,7 +1113,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).balance).to eq(3.1)
+    expect(Nanook.new.block(block).balance).to eq(14.36093846346337)
   end
 
   it 'should request balance correctly as raw' do
@@ -1143,8 +1134,8 @@ RSpec.describe Nanook::Block do
       body: <<~BODY,
         {
           "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
-          "amount": "1100000000000000000000000000000000010000000000000000000000000",
-          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "amount": "340366928463463374607431768211455",
+          "balance": "14360938463463374607431768211455",
           "height": "58",
           "local_timestamp": "0",
           "confirmed": "true",
@@ -1153,7 +1144,7 @@ RSpec.describe Nanook::Block do
             "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
             "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
             "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
-            "balance": "3100000000000000000000000000000000010000000000000000000000000",
+            "balance": "14360938463463374607431768211455",
             "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
             "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
             "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
@@ -1165,7 +1156,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).balance(unit: :raw)).to eq(3.1e+30)
+    expect(Nanook.new.block(block).balance(unit: :raw)).to eq(14360938463463374607431768211455)
   end
 
   it 'should request height correctly' do
