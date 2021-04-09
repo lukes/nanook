@@ -90,7 +90,7 @@ class Nanook
     #
     # @return [Integer]
     def delegators_count
-      rpc(:delegators_count)[:count]
+      rpc(:delegators_count, _access: :count)
     end
 
     # Returns true if the account has an <i>open</i> block.
@@ -152,15 +152,17 @@ class Nanook
 
       response = rpc(:account_history, count: limit, reverse: (sort == :desc), _access: :history, _coerce: Array)
 
-      response.map! do |history|
+      response.map do |history|
         history[:amount] = raw_to_NANO(history[:amount]) if unit == :nano
         history[:account] = as_account(history[:account])
-        history[:block] = as_block(history.delete(:hash)) # Rename the key from `hash` to `block` here
+        history[:block] = as_block(history.delete(:hash)) # Rename the key from `hash` to `block`
 
         history
       end
     end
 
+    # Return blocks for the account.
+    #
     # @param limit [Integer] maximum number of history items to return. Defaults to 1000
     # @param sort [Symbol] default +:asc+. When set to +:desc+ the blocks will be returned oldest to newest.
     # @return [Array<Nanook::Block>]
@@ -168,12 +170,15 @@ class Nanook
       history(limit: limit, sort: sort).map { |i| i[:block] }
     end
 
+    # Returns the open block for the account if it exists on the node.
+    #
     # @return [Nanook::Block]
     def open_block
       blocks(limit: 1, sort: :desc).first
     end
 
-    # The last modified time of the account in UTC.
+    # The last modified time of the account in UTC. For many accounts on the node
+    # this will be the timestamp of when the node bootstrapped.
     #
     # ==== Example:
     #
@@ -181,7 +186,7 @@ class Nanook
     #
     # @return [Time] last modified time of the account in UTC. Can be nil
     def last_modified_at
-      as_time(rpc(:account_info)[:modified_timestamp])
+      as_time(rpc(:account_info, _access: :modified_timestamp))
     end
 
     # The public key of the account.
@@ -192,7 +197,7 @@ class Nanook
     #
     # @return [Nanook::PublicKey] public key of the account
     def public_key
-      as_public_key(rpc(:account_key)[:key])
+      as_public_key(rpc(:account_key, _access: :key))
     end
 
     # The representative for the account.
@@ -203,7 +208,7 @@ class Nanook
     #
     # @return [Nanook::Account] Representative of the account. Can be nil.
     def representative
-      representative = rpc(:account_representative)[:representative]
+      representative = rpc(:account_representative, _access: :representative)
       as_account(representative) if representative
     end
 
@@ -258,7 +263,7 @@ class Nanook
 
     # @return [Integer] number of blocks for this account
     def block_count
-      rpc(:account_block_count)[:block_count]
+      rpc(:account_block_count, _access: :block_count)
     end
 
     # Information about the account.
@@ -488,7 +493,7 @@ class Nanook
     def weight(unit: Nanook.default_unit)
       validate_unit!(unit)
 
-      weight = rpc(:account_weight)[:weight]
+      weight = rpc(:account_weight, _access: :weight)
 
       return weight unless unit == :nano
 
