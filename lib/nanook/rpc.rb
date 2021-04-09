@@ -36,6 +36,16 @@ class Nanook
       @request.content_type = 'application/json'
     end
 
+    # Tests the RPC connection. Returns +true+ if connection is successful,
+    # otherwise raises an exception.
+    #
+    # @raise [Errno::ECONNREFUSED] if connection is unsuccessful
+    # @return [Boolean] true if connection is successful
+    def test
+      call(:telemetry)
+      true
+    end
+
     # Calls the RPC server and returns the response.
     #
     # @param action [Symbol] the "action" of the RPC to call. The RPC always
