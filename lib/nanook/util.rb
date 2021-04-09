@@ -33,7 +33,9 @@ class Nanook
     # @return [TrueClass] if unit is valid.
     # @raise [Nanook::NanoUnitError] if `unit` is invalid.
     def validate_unit!(unit)
-      raise Nanook::NanoUnitError, "Unit #{unit} must be one of #{Nanook::UNITS}" unless Nanook::UNITS.include?(unit.to_sym)
+      unless Nanook::UNITS.include?(unit.to_sym)
+        raise Nanook::NanoUnitError, "Unit #{unit} must be one of #{Nanook::UNITS}"
+      end
 
       true
     end

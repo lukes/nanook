@@ -77,9 +77,9 @@ class Nanook
 
     # @param account [Nanook::WalletAccount] wallaccountet to compare
     # @return [Boolean] true if accounts are equal
-    def ==(account)
-      account.class == account.class &&
-        account.id == @account
+    def ==(other)
+      other.class == self.class &&
+        other.id == @account
     end
     alias eql? ==
 

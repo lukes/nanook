@@ -38,9 +38,9 @@ class Nanook
 
     # @param account [Nanook::Account] account to compare
     # @return [Boolean] true if accounts are equal
-    def ==(account)
-      account.class == self.class &&
-        account.id == id
+    def ==(other)
+      other.class == self.class &&
+        other.id == id
     end
     alias eql? ==
 

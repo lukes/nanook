@@ -40,9 +40,9 @@ class Nanook
 
     # @param block [Nanook::Block] block to compare
     # @return [Boolean] true if blocks are equal
-    def ==(block)
-      block.class == self.class &&
-        block.id == id
+    def ==(other)
+      other.class == self.class &&
+        other.id == id
     end
     alias eql? ==
 
@@ -387,7 +387,6 @@ class Nanook
       memoized_info[:local_timestamp]
     end
 
-
     # Returns the {Nanook::Block} of the previous block in the chain.
     #
     # ==== Example:
@@ -415,7 +414,7 @@ class Nanook
     #
     # @return [Boolean]
     def send?
-      type == "send"
+      type == 'send'
     end
 
     # Returns true if block is type "open".
@@ -425,7 +424,7 @@ class Nanook
     #
     # @return [Boolean]
     def open?
-      type == "open"
+      type == 'open'
     end
 
     # Returns true if block is type "receive".
@@ -435,7 +434,7 @@ class Nanook
     #
     # @return [Boolean]
     def receive?
-      type == "receive"
+      type == 'receive'
     end
 
     # Returns true if block is type "change" (change of representative).
@@ -445,7 +444,7 @@ class Nanook
     #
     # @return [Boolean]
     def change?
-      type == "change"
+      type == 'change'
     end
 
     # Returns true if block is type "epoch".
@@ -455,7 +454,7 @@ class Nanook
     #
     # @return [Boolean]
     def epoch?
-      type == "epoch"
+      type == 'epoch'
     end
 
     # @return [String]
@@ -476,7 +475,7 @@ class Nanook
 
     # Memoize the `#info` response as we can refer to it for other methods (`type`, `#open?`, `#send?` etc.)
     def memoized_info
-      @_memoized_info ||= info(allow_unchecked: true)
+      @memoized_info ||= info(allow_unchecked: true)
     end
 
     def parse_info_response(response, unit)

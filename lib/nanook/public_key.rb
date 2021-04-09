@@ -18,9 +18,9 @@ class Nanook
 
     # @param key [Nanook::PublicKey] public key to compare
     # @return [Boolean] true if keys are equal
-    def ==(key)
-      key.class == self.class &&
-        key.id == id
+    def ==(other)
+      other.class == self.class &&
+        other.id == id
     end
     alias eql? ==
 

@@ -64,9 +64,9 @@ class Nanook
 
     # @param wallet [Nanook::Wallet] wallet to compare
     # @return [Boolean] true if wallets are equal
-    def ==(wallet)
-      wallet.class == self.class &&
-        wallet.id == id
+    def ==(other)
+      other.class == self.class &&
+        other.id == id
     end
     alias eql? ==
 
@@ -464,7 +464,7 @@ class Nanook
     # @param limit [Integer] limit of blocks to publish. Default is 1000.
     # @return [Array<Nanook::Block>] republished blocks
     def republish_blocks(limit: 1000)
-      rpc(:wallet_republish,count: limit, _access: :blocks, _coerce: Array).map do |block|
+      rpc(:wallet_republish, count: limit, _access: :blocks, _coerce: Array).map do |block|
         as_block(block)
       end
     end

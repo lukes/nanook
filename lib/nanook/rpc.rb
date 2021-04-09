@@ -80,6 +80,7 @@ class Nanook
       # Stringify param values
       params = params.dup.transform_values do |v|
         next v if v.is_a?(Array)
+
         v.to_s
       end
 

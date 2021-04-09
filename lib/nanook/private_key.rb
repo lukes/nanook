@@ -18,9 +18,9 @@ class Nanook
 
     # @param key [Nanook::PrivateKey] private key to compare
     # @return [Boolean] true if keys are equal
-    def ==(key)
-      key.class == self.class &&
-        key.id == id
+    def ==(other)
+      other.class == self.class &&
+        other.id == id
     end
     alias eql? ==
 
@@ -54,11 +54,12 @@ class Nanook
       }
 
       @key = if seed.nil?
-        rpc(:key_create, params)
-      else
-        raise ArgumentError, "index argument is required when seed is given" if index.nil?
-        rpc(:deterministic_key, params.merge(seed: seed, index: index))
-      end
+               rpc(:key_create, params)
+             else
+               raise ArgumentError, 'index argument is required when seed is given' if index.nil?
+
+               rpc(:deterministic_key, params.merge(seed: seed, index: index))
+             end
 
       self
     end
@@ -87,7 +88,7 @@ class Nanook
     private
 
     def memoized_key_expand
-      @_memoized_key_expand = rpc(:key_expand, _coerce: Hash)
+      @memoized_key_expand ||= rpc(:key_expand, _coerce: Hash)
     end
 
     def rpc(action, params = {})
