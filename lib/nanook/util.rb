@@ -41,7 +41,7 @@ class Nanook
     end
 
     # Returns the +id+ of the object as a short id.
-    # See #shorten_id
+    # See #shorten_id.
     #
     # @return [String]
     def short_id
@@ -49,12 +49,15 @@ class Nanook
     end
 
     # Returns an id string (hash or nano account) truncated with an ellipsis.
-    # The first 7 and last 4 characters are retain for easy identification.
+    # The first 7 and last 4 characters are retained for easy identification.
     #
-    # ==== Example:
+    # ==== Examples:
     #
     #   shorten_id('nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5')
     #     # => "16u1uuf...r8u5"
+    #
+    #   shorten_id('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')
+    #     # => "A170D51...D293"
     #
     # @return [String]
     def shorten_id(long_id)

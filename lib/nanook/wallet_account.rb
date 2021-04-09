@@ -25,8 +25,12 @@ class Nanook
     #   (see Nanook::Account#balance)
     # @!method block_count
     #   (see Nanook::Account#block_count)
+    # @!method blocks
+    #   (see Nanook::Account#blocks)
     # @!method delegators(unit: Nanook.default_unit)
     #   (see Nanook::Account#delegators)
+    # @!method delegators_count
+    #   (see Nanook::Account#delegators_count)
     # @!method eql?
     #   (see Nanook::Account#eql?)
     # @!method exists?
@@ -43,6 +47,8 @@ class Nanook
     #   (see Nanook::Account#last_modified_at)
     # @!method ledger(limit: 1, modified_since: nil, unit: Nanook.default_unit)
     #   (see Nanook::Account#ledger)
+    # @!method open_block
+    #   (see Nanook::Account#open_block)
     # @!method pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
     #   (see Nanook::Account#pending)
     # @!method public_key
@@ -52,8 +58,9 @@ class Nanook
     # @!method weight
     #   (see Nanook::Account#weight)
     def_delegators :@nanook_account_instance,
-                   :==, :balance, :block_count, :delegators, :eql?, :exists?, :hash, :history, :id,
-                   :info, :last_modified_at, :ledger, :pending, :public_key, :representative, :weight
+                   :==, :balance, :block_count, :blocks, :delegators, :delegators_count,
+                   :eql?, :exists?, :hash, :history, :id, :info, :last_modified_at, :ledger,
+                   :open_block, :pending, :public_key, :representative, :weight
     alias open? exists?
 
     def initialize(rpc, wallet, account = nil)
@@ -75,7 +82,7 @@ class Nanook
       @nanook_account_instance = as_account(@account)
     end
 
-    # @param account [Nanook::WalletAccount] wallaccountet to compare
+    # @param account [Nanook::WalletAccount] wallet account to compare
     # @return [Boolean] true if accounts are equal
     def ==(other)
       other.class == self.class &&
@@ -239,8 +246,12 @@ class Nanook
         raise Nanook::Error, "Representative account does not exist: #{representative}"
       end
 
-      block = rpc(:account_representative_set, representative: representative, _access: :block)
-      as_block(block)
+      params = {
+        representative: representative,
+        _access: :block
+      }
+
+      as_block(rpc(:account_representative_set, params))
     end
 
     # Returns the work for the account.
@@ -269,12 +280,11 @@ class Nanook
 
     def receive_without_block
       # Discover the first pending block
-      pending_blocks = @rpc.call(:pending, { account: @account, count: 1, _access: :blocks, _coerce: Array })
+      block = @rpc.call(:pending, { account: @account, count: 1, _access: :blocks, _coerce: Array }).first
 
-      return false if pending_blocks.empty?
+      return false unless block
 
       # Then call receive_with_block as normal
-      block = pending_blocks[0]
       receive_with_block(block)
     end
 
