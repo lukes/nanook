@@ -13,4 +13,5 @@ YARD::Rake::YardocTask.new do |t|
   t.files = ['lib/**/*.rb']
   t.options += ['--title', "Nanook #{Nanook::VERSION} Documentation"]
   t.options += ['--output-dir', "docs/#{Nanook::VERSION}"]
+  t.options += ['--output-dir', "docs"]
 end
