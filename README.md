@@ -384,7 +384,7 @@ key.account
 
 ### Network
 
-See an overview of the Nano network, summarized from metrics received from other nodes:
+A summarized overview of the Nano network:
 
 ```ruby
 nanook.network_telemetry

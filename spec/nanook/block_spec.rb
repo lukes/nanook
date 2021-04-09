@@ -517,7 +517,14 @@ RSpec.describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"valid":"1"}',
+      body: <<~BODY,
+        {
+          "valid_all": "0",
+          "valid_receive": "1",
+          "difficulty": "fffffff93c41ec94",
+          "multiplier": "1.182623871097636" // calculated from the default base difficulty
+        }
+      BODY
       headers: {}
     )
 
@@ -532,7 +539,14 @@ RSpec.describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"valid":"0"}',
+      body: <<~BODY,
+        {
+          "valid_all": "0",
+          "valid_receive": "0",
+          "difficulty": "fffffff93c41ec94",
+          "multiplier": "1.182623871097636" // calculated from the default base difficulty
+        }
+      BODY
       headers: {}
     )
 

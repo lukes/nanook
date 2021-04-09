@@ -181,7 +181,8 @@ class Nanook
     # @param work [String] the work id to check is valid
     # @return [Boolean] signalling if work is valid for the block
     def valid_work?(work)
-      rpc(:work_validate, :hash, work: work, _access: :valid) == 1
+      response = rpc(:work_validate, :hash, work: work)
+      response[:valid_all] == 1 || response[:valid_receive] == 1
     end
 
     # Republish blocks starting at this block up the account chain
