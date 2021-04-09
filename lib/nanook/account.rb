@@ -162,6 +162,18 @@ class Nanook
       end
     end
 
+    # @param limit [Integer] maximum number of history items to return. Defaults to 1000
+    # @param sort [Symbol] default +:asc+. When set to +:desc+ the blocks will be returned oldest to newest.
+    # @return [Array<Nanook::Block>]
+    def blocks(limit: 1000, sort: :asc)
+      history(limit: limit, sort: sort).map { |i| i[:block] }
+    end
+
+    # @return [Nanook::Block]
+    def open_block
+      blocks(limit: 1, sort: :desc).first
+    end
+
     # The last modified time of the account in UTC.
     #
     # ==== Example:

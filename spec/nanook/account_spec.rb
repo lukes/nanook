@@ -21,6 +21,94 @@ RSpec.describe Nanook::Account do
     expect(hash[Nanook.new.account("foo")]).to eq("found")
   end
 
+  it 'account blocks' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"reverse\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"history\": [{
+                \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
+                \"type\": \"receive\",
+                \"account\": \"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"amount\": \"100000000000000000000000000000000\"
+        }]
+    }",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).blocks).to eq([
+      Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    ])
+  end
+
+  it 'account blocks with limit' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1\",\"reverse\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"history\": [{
+                \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
+                \"type\": \"receive\",
+                \"account\": \"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"amount\": \"100000000000000000000000000000000\"
+        }]
+    }",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).blocks(limit: 1)).to eq([
+      Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    ])
+  end
+
+  it 'account blocks with sorting' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"reverse\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"history\": [{
+                \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
+                \"type\": \"receive\",
+                \"account\": \"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"amount\": \"100000000000000000000000000000000\"
+        }]
+    }",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).blocks(sort: :desc)).to eq([
+      Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    ])
+  end
+
+  it 'open block' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1\",\"reverse\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{
+        \"history\": [{
+                \"hash\": \"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
+                \"type\": \"receive\",
+                \"account\": \"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
+                \"amount\": \"100000000000000000000000000000000\"
+        }]
+    }",
+      headers: {}
+    )
+
+    expect(Nanook.new.account(account_id).open_block).to eq(
+      Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    )
+  end
+
   it 'account history' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"account_history\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",

@@ -222,6 +222,9 @@ account.pending(limit: 1)
 account.pending(detailed: true)
 account.pending(unit: :raw)
 
+account.blocks
+account.blocks(limit: 1)
+account.blocks(sort: :desc)
 account.delegators
 account.delegators(unit: :raw)
 account.delegators_count
@@ -236,6 +239,7 @@ account.ledger
 account.ledger(limit: 10)
 account.ledger(modified_since: Time.now)
 account.ledger(unit: :raw)
+account.open_block
 account.public_key
 account.representative
 account.weight

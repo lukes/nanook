@@ -26,7 +26,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Rpc#test`.
 - Added `Nanook::WalletAccount#work`.
 - Added `Nanook::WalletAccount#set_work`.
+- Added `Nanook::Account#blocks`.
 - Added `Nanook::Account#delegators_count`.
+- Added `Nanook::Account#open_block`.
 - Added `Nanook::Node#change_receive_minimum`.
 - Added `Nanook::Node#confirmation_quorum`.
 - Added `Nanook::Node#keepalive`.
