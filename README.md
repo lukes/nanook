@@ -124,7 +124,7 @@ Read the [Using Nanook](https://github.com/lukes/nanook/wiki/Using-nanook) page 
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.5.1/) for a searchable detailed description of every class and method, what the arguments mean, and example responses (Tip: the classes are listed under the "**Nanook** < Object" item in the sidebar).
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/2.5.1/) for a searchable detailed description of every class and method, what the arguments mean, and example responses.
 
 ### Wallets
 
