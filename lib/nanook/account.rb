@@ -142,21 +142,20 @@ class Nanook
     #     }
     #   ]
     #
-    # @param limit [Integer] maximum number of history items to return
+    # @param limit [Integer] maximum number of history items to return. Defaults to 1000
+    # @param sort [Symbol] default +:asc+. When set to +:desc+ the history will be returned oldest to newest.
     # @param unit (see #balance)
     # @return [Array<Hash{Symbol=>String|Float|Integer|Nanook::Account|NanookBlock}>] the history of send and receive payments for this account
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def history(limit: 1000, unit: Nanook.default_unit)
+    def history(limit: 1000, unit: Nanook.default_unit, sort: :asc)
       validate_unit!(unit)
 
-      response = rpc(:account_history, count: limit, _access: :history, _coerce: Array)
-
-      return response if unit == :raw
+      response = rpc(:account_history, count: limit, reverse: (sort == :desc), _access: :history, _coerce: Array)
 
       response.map! do |history|
-        history[:amount] = raw_to_NANO(history[:amount])
+        history[:amount] = raw_to_NANO(history[:amount]) if unit == :nano
         history[:account] = as_account(history[:account])
-        history[:block] = as_block(history.delete(:hash)) # We rename the key from `hash` to `block` here
+        history[:block] = as_block(history.delete(:hash)) # Rename the key from `hash` to `block` here
 
         history
       end
@@ -369,16 +368,18 @@ class Nanook
     #    Nanook::Account => { ... }
     #  }
     #
-    # @param limit [Integer] number of accounts to return in the ledger (default is 1)
+    # @param limit [Integer] number of accounts to return in the ledger (default is 1000)
     # @param modified_since [Time] optional. Return only accounts modified in the local database after this time (default is from the unix epoch)
     # @param unit (see #balance)
+    # @param sort [Symbol] default +:asc+. When set to +:desc+ the ledger will be returned oldest to newest.
     # @return [Hash{Nanook::Account=>String|Integer}]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def ledger(limit: 1, modified_since: 0, unit: Nanook.default_unit)
+    def ledger(limit: 1000, modified_since: 0, unit: Nanook.default_unit, sort: :asc)
       validate_unit!(unit)
 
       params = {
         count: limit,
+        sorting: (sort == :desc),
         modified_since: modified_since.to_i,
         _access: :accounts,
         _coerce: Hash
