@@ -417,7 +417,7 @@ class Nanook
     # When called with no +block+ argument, the latest pending payment
     # for the account will be received.
     #
-    # Returns a <i>receive</i> block hash id if a receive was successful,
+    # Returns a <i>receive</i> block if a receive was successful,
     # or +false+ if there were no pending payments to receive.
     #
     # You can receive a specific pending block if you know it by
@@ -425,8 +425,8 @@ class Nanook
     #
     # ==== Examples:
     #
-    #   wallet.receive(into: "xrb...")               # => "9AE2311..."
-    #   wallet.receive("718CC21...", into: "xrb...") # => "9AE2311..."
+    #   wallet.receive(into: "xrb...")               # => Nanook::Block
+    #   wallet.receive("718CC21...", into: "xrb...") # => Nanook::Block
     #
     # @param block (see Nanook::WalletAccount#receive)
     # @param into [String] account id of account in your wallet to receive the
@@ -435,6 +435,21 @@ class Nanook
     def receive(block = nil, into:)
       validate_wallet_contains_account!(into)
       account(into).receive(block)
+    end
+
+    # Rebroadcast blocks for accounts from wallet starting at frontier down to count to the network.
+    #
+    # ==== Examples:
+    #
+    #   wallet.republish_blocks             # => [Nanook::Block, ...]
+    #   wallet.republish_blocks(limit: 10)  # => [Nanook::Block, ...
+    #
+    # @param limit [Integer] limit of blocks to publish. Default is 1000.
+    # @return [Array<Nanook::Block>] republished blocks
+    def republish_blocks(limit: 1000)
+      rpc(:wallet_republish,count: limit, _access: :blocks, _coerce: Array).map do |block|
+        as_block(block)
+      end
     end
 
     # The default representative account id for the wallet. This is the

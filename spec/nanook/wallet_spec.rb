@@ -906,4 +906,58 @@ RSpec.describe Nanook::Wallet do
       deterministic_index: 2
     )
   end
+
+  it 'republish blocks' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_republish\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "blocks": [
+            "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
+            "A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293",
+            "90D0C16AC92DD35814E84BFBCC739A039615D0A42A76EF44ADAEF1D99E9F8A35"
+          ]
+        }
+      BODY
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).republish_blocks
+
+    expect(response).to eq(
+      [
+        '991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948',
+        'A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293',
+        '90D0C16AC92DD35814E84BFBCC739A039615D0A42A76EF44ADAEF1D99E9F8A35'
+      ].map do |block_id|
+        Nanook.new.block(block_id)
+      end
+    )
+  end
+
+  it 'republish blocks with limit' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_republish\",\"wallet\":\"#{wallet_id}\",\"count\":\"1\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "blocks": [
+            "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948"
+          ]
+        }
+      BODY
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).republish_blocks(limit: 1)
+
+    expect(response).to eq(
+      [Nanook.new.block('991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948')]
+    )
+  end
 end

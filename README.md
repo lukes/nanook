@@ -168,6 +168,7 @@ wallet.remove_account(account_id)
 
 wallet.default_representative
 wallet.change_default_representative(representative_account_id)
+wallet.change_password(password)
 wallet.history
 wallet.history(unit: :raw)
 wallet.info
@@ -177,8 +178,9 @@ wallet.ledger
 wallet.ledger(unit: :raw)
 wallet.lock
 wallet.locked?
+wallet.republish_blocks
+wallet.republish_blocks(limit: 5)
 wallet.unlock(password)
-wallet.change_password(password)
 
 wallet.destroy
 ```

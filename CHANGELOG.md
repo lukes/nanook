@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Wallet#ledger`.
 - Added `Nanook::Wallet#move_accounts`.
 - Added `Nanook::Wallet#remove_account`.
+- Added `Nanook::Wallet#republish_blocks`.
 - Added `Nanook::Wallet#search_pending`.
 - Added `Nanook::Block#account`.
 - Added `Nanook::Block#amount`.
