@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Nanook::Node#receive_minimum`.
 - Added `Nanook::Node#search_pending`.
 - Added `Nanook::Wallet#history`.
+- Added `Nanook::Wallet#exists?`.
 - Added `Nanook::Wallet#ledger`.
 - Added `Nanook::Wallet#move_accounts`.
 - Added `Nanook::Wallet#remove_account`.

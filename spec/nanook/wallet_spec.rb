@@ -148,6 +148,32 @@ RSpec.describe Nanook::Wallet do
     expect(Nanook.new.wallet(wallet_id).export).to eq '{"0000000000000000000000000000000000000000000000000000000000000000": "0000000000000000000000000000000000000000000000000000000000000001"}'
   end
 
+  it 'wallet exists?' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_export\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"json":"{\\"0000000000000000000000000000000000000000000000000000000000000000\\": \\"0000000000000000000000000000000000000000000000000000000000000001\\"}"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).exists?).to eq(true)
+  end
+
+  it 'wallet exists? when it does not exist' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_export\",\"wallet\":\"#{wallet_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Wallet not found"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).exists?).to eq(false)
+  end
+
   it 'wallet history' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"wallet_history\",\"wallet\":\"#{wallet_id}\"}",
