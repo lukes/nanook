@@ -254,6 +254,17 @@ class Nanook
       rpc(:work_get, _access: :work)
     end
 
+    # Set work for account.
+    #
+    # ==== Example:
+    #
+    #   account.set_work("432e5cf728c90f4f") # => true
+    #
+    # @return [Boolean] true if action was successful
+    def set_work(work)
+      rpc(:work_set, work: work).key?(:success)
+    end
+
     private
 
     def receive_without_block

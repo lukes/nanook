@@ -257,6 +257,7 @@ account.pay(to: recipient_account_id, amount: 2, id: unique_id, unit: :raw)
 account.receive
 account.receive(pending_block_id)
 account.change_representative(new_representative)
+account.set_work(work)
 account.work
 account.destroy
 ```
