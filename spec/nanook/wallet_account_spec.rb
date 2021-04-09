@@ -629,4 +629,19 @@ RSpec.describe Nanook::WalletAccount do
       Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961647.97082073
     )
   end
+
+  it 'wallet account work' do
+    stub_valid_account_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"work_get\",\"wallet\":\"#{wallet_id}\",\"account\":\"#{account_id}\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"work\":\"432e5cf728c90f4f\"}",
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).account(account_id).work).to eq('432e5cf728c90f4f')
+  end
 end

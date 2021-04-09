@@ -243,6 +243,17 @@ class Nanook
       as_block(block)
     end
 
+    # Returns the work for the account.
+    #
+    # ==== Example:
+    #
+    #   account.work # => "432e5cf728c90f4f"
+    #
+    # @return [String] work
+    def work
+      rpc(:work_get, _access: :work)
+    end
+
     private
 
     def receive_without_block
