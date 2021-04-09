@@ -49,7 +49,7 @@ class Nanook
     private
 
     def rpc(action, params = {})
-      @rpc.call(action, params.merge(key: @key))
+      @rpc.call(action, { key: @key }.merge(params))
     end
   end
 end

@@ -469,7 +469,7 @@ class Nanook
     # "hash", and others "block".
     # The param_name argument allows us to specify which it should be for this call.
     def rpc(action, param_name, params = {})
-      p = { param_name.to_sym => @block }.compact
+      p = { param_name.to_sym => @block }
       @rpc.call(action, p.merge(params))
     end
 
