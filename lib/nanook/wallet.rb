@@ -695,6 +695,27 @@ class Nanook
       rpc(:search_pending, _access: :started) == 1
     end
 
+    # Returns a list of pairs of {Nanook::WalletAccount} and work for wallet.
+    #
+    # ==== Example:
+    #
+    #   wallet.work
+    #
+    # ==== Example response:
+    #
+    #   {
+    #     Nanook::WalletAccount: "432e5cf728c90f4f",
+    #     Nanook::WalletAccount: "4efec5f63fc902cf"
+    #   }
+    # @return [Boolean] indicates if the action was successful
+    def work
+      hash = rpc(:wallet_work_get, _access: :works, _coerce: Hash).map do |account_id, work|
+        [as_wallet_account(account_id), work]
+      end
+
+      Hash[hash]
+    end
+
     private
 
     def rpc(action, params = {})

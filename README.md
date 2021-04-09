@@ -181,6 +181,7 @@ wallet.locked?
 wallet.republish_blocks
 wallet.republish_blocks(limit: 5)
 wallet.unlock(password)
+wallet.work
 
 wallet.destroy
 ```
