@@ -32,7 +32,7 @@ class Nanook
 
       @http = Net::HTTP.new(@rpc_server.hostname, @rpc_server.port)
       @http.read_timeout = timeout
-      @request = Net::HTTP::Post.new(@rpc_server.request_uri, { 'user-agent' => 'Ruby nanook gem' })
+      @request = Net::HTTP::Post.new(@rpc_server.request_uri, { 'user-agent' => "Ruby nanook gem v#{Nanook::VERSION}" })
       @request.content_type = 'application/json'
     end
 
