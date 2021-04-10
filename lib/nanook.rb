@@ -10,7 +10,7 @@ require_relative 'nanook/util'
 
 # ==== Initializing
 #
-# Connect to the default RPC host at http://localhost:7076 and with a timeout of 500 seconds:
+# Connect to the default RPC host at http://[::1]:7076 and with a timeout of 60 seconds:
 #
 #    nanook = Nanook.new
 #
@@ -43,12 +43,17 @@ class Nanook
   # Returns a new instance of {Nanook}.
   #
   # ==== Examples:
-  # Connecting to http://localhost:7076 with the default timeout of 10s:
+  # Connecting to http://[::1]:7076 with the default timeout of 60s:
+  #
   #   Nanook.new
+  #
   # Setting a custom timeout:
+  #
   #   Nanook.new(timeout: 10)
+  #
   # Connecting to a custom RPC host and setting a timeout:
-  #   Nanook.new("http://ip6-localhost.com:7076", timeout: 10)
+  #
+  #   Nanook.new("http://ip6-localhost:7076", timeout: 10)
   #
   # @param uri [String] default is {Nanook::Rpc::DEFAULT_URI}. The RPC host to connect to
   # @param timeout [Integer] default is {Nanook::Rpc::DEFAULT_TIMEOUT}. Connection timeout in number of seconds

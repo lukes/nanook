@@ -7,7 +7,7 @@ RSpec.describe Nanook::Wallet do
   let(:block_id) { '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F' }
 
   def stub_valid_account_check
-    stub_request(:post, 'http://localhost:7076/')
+    stub_request(:post, uri)
       .with(
         body: '{"action":"wallet_contains","wallet":"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F","account":"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"}',
         headers: headers
@@ -581,7 +581,7 @@ RSpec.describe Nanook::Wallet do
       headers: {}
     )
 
-    stub_request(:post, 'http://localhost:7076/')
+    stub_request(:post, uri)
       .with(
         body: '{"action":"wallet_contains","wallet":"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F","account":"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"}',
         headers: headers

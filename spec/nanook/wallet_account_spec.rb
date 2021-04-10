@@ -7,7 +7,7 @@ RSpec.describe Nanook::WalletAccount do
   let(:block_id) { '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F' }
 
   def stub_valid_account_check
-    stub_request(:post, 'http://localhost:7076/')
+    stub_request(:post, uri)
       .with(
         body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\"}",
         headers: headers
@@ -32,14 +32,14 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it 'can compare equality' do
-    stub_request(:post, 'http://localhost:7076/')
+    stub_request(:post, uri)
       .with(
         body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"foo\"}",
         headers: headers
       )
       .to_return(status: 200, body: '{"exists":"1"}', headers: {})
 
-    stub_request(:post, 'http://localhost:7076/')
+    stub_request(:post, uri)
       .with(
         body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"bar\"}",
         headers: headers
@@ -55,7 +55,7 @@ RSpec.describe Nanook::WalletAccount do
   end
 
   it 'can be used as a hash key lookup' do
-    stub_request(:post, 'http://localhost:7076/')
+    stub_request(:post, uri)
       .with(
         body: "{\"action\":\"wallet_contains\",\"wallet\":\"#{wallet_id}\",\"account\":\"foo\"}",
         headers: headers
@@ -79,7 +79,7 @@ RSpec.describe Nanook::WalletAccount do
       headers: {}
     )
 
-    stub_request(:post, 'http://localhost:7076/')
+    stub_request(:post, uri)
       .with(
         body: '{"action":"wallet_contains","wallet":"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F","account":"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"}',
         headers: headers
@@ -114,7 +114,7 @@ RSpec.describe Nanook::WalletAccount do
     )
 
     accounts.each do |account|
-      stub_request(:post, 'http://localhost:7076/')
+      stub_request(:post, uri)
         .with(
           body: "{\"action\":\"wallet_contains\",\"wallet\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",\"account\":\"#{account}\"}",
           headers: headers

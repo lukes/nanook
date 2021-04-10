@@ -26,7 +26,7 @@ Or install it yourself as:
 
 ## Initializing
 
-Nanook will by default connect to `http://localhost:7076`.
+Nanook will by default connect to `http://[::1]:7076`.
 
 ```ruby
 nanook = Nanook.new
@@ -35,7 +35,7 @@ nanook = Nanook.new
 To connect to another host instead:
 
 ```ruby
-nanook = Nanook.new("http://ip6-localhost:7076")
+nanook = Nanook.new("http://localhost:7076")
 ```
 
 ## Basics
