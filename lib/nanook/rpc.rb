@@ -15,9 +15,9 @@ class Nanook
   #   nanook = Nanook.new
   #   nanook.rpc(:accounts_create, wallet: wallet_id, count: 2)
   class Rpc
-    # Default RPC server and port to connect to
-    DEFAULT_URI = 'http://localhost:7076'
-    # Default request timeout in seconds
+    # Default RPC server and port to connect to.
+    DEFAULT_URI = 'http://[::1]:7076'
+    # Default request timeout in seconds.
     DEFAULT_TIMEOUT = 60
     # Error expected to be returned when the RPC makes a call that requires the
     # `enable_control` setting to be enabled when it is disabled.
@@ -30,7 +30,7 @@ class Nanook
         raise ArgumentError, "URI must have http or https in it. Was given: #{uri}"
       end
 
-      @http = Net::HTTP.new(@rpc_server.host, @rpc_server.port)
+      @http = Net::HTTP.new(@rpc_server.hostname, @rpc_server.port)
       @http.read_timeout = timeout
       @request = Net::HTTP::Post.new(@rpc_server.request_uri, { 'user-agent' => 'Ruby nanook gem' })
       @request.content_type = 'application/json'
