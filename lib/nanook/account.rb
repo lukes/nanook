@@ -36,7 +36,7 @@ class Nanook
       @account
     end
 
-    # @param account [Nanook::Account] account to compare
+    # @param other [Nanook::Account] account to compare
     # @return [Boolean] true if accounts are equal
     def ==(other)
       other.class == self.class &&
@@ -313,7 +313,7 @@ class Nanook
     #   [+open_block+] The first {Nanook::Block} in every account's blockchain. When this block was published the account was officially open
     #   [+representative_block+] The {Nanook::Block} that named the representative for the account
     #   [+balance+] Balance in either NANO or raw (depending on the <tt>unit:</tt> argument)
-    #   [+last_modified_at+] {Time} of when the account was last modified in UTC
+    #   [+last_modified_at+] Time of when the account was last modified in UTC
     #   [+representative+] Representative {Nanook::Account}
     #   [+block_count+] Number of blocks in the account's blockchain
     #   [+weight+] See {#weight}

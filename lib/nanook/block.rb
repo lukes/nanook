@@ -38,7 +38,7 @@ class Nanook
       @block
     end
 
-    # @param block [Nanook::Block] block to compare
+    # @param other [Nanook::Block] block to compare
     # @return [Boolean] true if blocks are equal
     def ==(other)
       other.class == self.class &&
@@ -194,8 +194,6 @@ class Nanook
     # ==== Example:
     #
     #   block.republish # => [Nanook::Block, ...]
-    #
-    # @param limit [Integer] maximum number of history items to return
     def republish(destinations: nil, sources: nil)
       if !destinations.nil? && !sources.nil?
         raise ArgumentError, 'You must provide either destinations or sources but not both'

@@ -25,7 +25,7 @@ class Nanook
     #   (see Nanook::Account#balance)
     # @!method block_count
     #   (see Nanook::Account#block_count)
-    # @!method blocks
+    # @!method blocks(limit: 1000, sort: :desc)
     #   (see Nanook::Account#blocks)
     # @!method delegators(unit: Nanook.default_unit)
     #   (see Nanook::Account#delegators)
@@ -37,7 +37,7 @@ class Nanook
     #   (see Nanook::Account#exists?)
     # @!method hash
     #   (see Nanook::Account#hash)
-    # @!method history(limit: 1000, unit: Nanook.default_unit)
+    # @!method history(limit: 1000, unit: Nanook.default_unit, sort: :desc)
     #   (see Nanook::Account#history)
     # @!method id
     #   (see Nanook::Account#id)
@@ -45,7 +45,7 @@ class Nanook
     #   (see Nanook::Account#info)
     # @!method last_modified_at
     #   (see Nanook::Account#last_modified_at)
-    # @!method ledger(limit: 1, modified_since: nil, unit: Nanook.default_unit)
+    # @!method ledger(limit: 1, modified_since: nil, unit: Nanook.default_unit, sort: :desc)
     #   (see Nanook::Account#ledger)
     # @!method open_block
     #   (see Nanook::Account#open_block)
@@ -82,7 +82,7 @@ class Nanook
       @nanook_account_instance = as_account(@account)
     end
 
-    # @param account [Nanook::WalletAccount] wallet account to compare
+    # @param other [Nanook::WalletAccount] wallet account to compare
     # @return [Boolean] true if accounts are equal
     def ==(other)
       other.class == self.class &&

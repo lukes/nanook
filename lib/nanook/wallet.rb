@@ -62,7 +62,7 @@ class Nanook
       @wallet
     end
 
-    # @param wallet [Nanook::Wallet] wallet to compare
+    # @param other [Nanook::Wallet] wallet to compare
     # @return [Boolean] true if wallets are equal
     def ==(other)
       other.class == self.class &&

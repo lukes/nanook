@@ -16,7 +16,7 @@ class Nanook
       @key
     end
 
-    # @param key [Nanook::PublicKey] public key to compare
+    # @param other [Nanook::PublicKey] public key to compare
     # @return [Boolean] true if keys are equal
     def ==(other)
       other.class == self.class &&
