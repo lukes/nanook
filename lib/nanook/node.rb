@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::Node</tt> class contains methods to manage your nano
   # node and query its data of the nano network.
@@ -26,6 +28,8 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   node = Nanook::Node.new(rpc_conn)
   class Node
+    include Nanook::Util
+
     def initialize(rpc)
       @rpc = rpc
     end
@@ -38,7 +42,7 @@ class Nanook
     #
     # @return [Integer] number of accounts with _open_ blocks.
     def account_count
-      rpc(:frontier_count)[:count]
+      rpc(:frontier_count, _access: :count)
     end
     alias frontier_count account_count
 
@@ -47,34 +51,24 @@ class Nanook
     #
     # ==== Example:
     #
-    #
+    #   {
+    #     count: 100,
+    #     unchecked: 10,
+    #     cemented: 25
+    #   }
     #
     # @return [Hash{Symbol=>Integer}] number of blocks and unchecked
     #   synchronizing blocks
     def block_count
-      rpc(:block_count)
+      rpc(:block_count, _coerce: Hash)
     end
 
-    # The count of all known blocks by their type.
+    # Tells the node to send a keepalive packet to a specific IP address and port.
     #
-    # ==== Example:
-    #
-    #   node.block_count_by_type
-    #
-    # Example response:
-    #
-    #   {
-    #     send: 1000,
-    #     receive: 900,
-    #     open: 900,
-    #     change: 50
-    #   }
-    #
-    # @return [Hash{Symbol=>Integer}] number of blocks by type
-    def block_count_by_type
-      rpc(:block_count_type)
+    # @return [Boolean] indicating if the action was successful
+    def keepalive(address:, port:)
+      rpc(:keepalive, address: address, port: port).key?(:started)
     end
-    alias block_count_type block_count_by_type
 
     # Initialize bootstrap to a specific IP address and port.
     #
@@ -97,79 +91,49 @@ class Nanook
     #   of all current bootstraps
     # @return [Boolean] indicating if the action was successful
     def bootstrap_lazy(hash, force: false)
-      rpc(:bootstrap_lazy, hash: hash, force: force)[:started] == 1
+      rpc(:bootstrap_lazy, hash: hash, force: force, _access: :started) == 1
     end
 
-    # Returning status of current bootstrap attempt for debug purposes only.
-    # This call is for internal diagnostics/debug purposes only.
-    # Do not rely on this interface being stable and do not use in a
-    # production system.
+    # Returns information about node elections settings and observed network state:
+    #
+    # - `quorum_delta`: delta tally required to rollback block
+    # - `online_weight_quorum_percent`: percentage of online weight for delta
+    # - `online_weight_minimum`: minimum online weight to confirm block
+    # - `online_stake_total`: currently observed online total weight
+    # - `peers_stake_total`: known peers total weight
+    # - `peers_stake_required`: effective stake needed from directly connected peers for quorum
     #
     # ==== Example:
     #
-    #   node.bootstrap_status
+    #   node.confirmation_quorum
     #
     # Example response:
     #
     #   {
-    #     clients: 5790,
-    #     pulls: 141065,
-    #     pulling: 3,
-    #     connections: 16,
-    #     idle: 0,
-    #     target_connections: 64,
-    #     total_blocks: 536820,
-    #     lazy_mode: true,
-    #     lazy_blocks: 423388,
-    #     lazy_state_unknown: 2,
-    #     lazy_balances: 0,
-    #     lazy_pulls: 0,
-    #     lazy_stopped: 644,
-    #     lazy_keys: 449,
-    #     lazy_key_1: "A86EB2B479AAF3CD531C8356A1FBE3CB500DFBF5BF292E5E6B8D1048DE199C32"
+    #     "quorum_delta": 43216377.43025059,
+    #     "online_weight_quorum_percent": 50,
+    #     "online_weight_minimum": 60000000.0",
+    #     "online_stake_total": 86432754.86050119,
+    #     "peers_stake_total": 84672338.52479072,
+    #     "peers_stake_required": 60000000.0"
     #   }
     #
-    # @return [Hash{Symbol=>String|Integer|Boolean}]
-    def bootstrap_status
-      rpc(:bootstrap_status)
-    end
-
-    # This call is for internal diagnostics/debug purposes only.
-    # Do not rely on this interface being stable and do not use in a
-    # production system.
-    #
-    # Returns block and tally weight (in raw) election duration (in
-    # milliseconds), election confirmation timestamp for recent elections
-    # winners.
-    #
-    # ==== Example:
-    #
-    #   node.confirmation_history
-    #
-    # Example response:
-    #
-    #   [
-    #     {
-    #       block: "EA70B32C55C193345D625F766EEA2FCA52D3F2CCE0B3A30838CC543026BB0FEA",
-    #       tally: 80394786589602980996311817874549318248,
-    #       duration: 4000,
-    #       time: 1544819986,
-    #     },
-    #     {
-    #       block: "F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667",
-    #       tally: 68921714529890443063672782079965877749,
-    #       duration: 6000,
-    #       time: 1544819988,
-    #     }
-    #   ]
-    #
     # @return [Hash{Symbol=>String|Integer}]
-    def confirmation_history
-      rpc(:confirmation_history)[:confirmations].map do |history|
-        # Rename hash key to block
-        block = history.delete(:hash)
-        { block: block }.merge(history)
-      end
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def confirmation_quorum(unit: Nanook.default_unit)
+      validate_unit!(unit)
+
+      response = rpc(:confirmation_quorum, _coerce: Hash)
+
+      return response unless unit == :nano
+
+      response[:quorum_delta] = raw_to_NANO(response[:quorum_delta])
+      response[:online_weight_minimum] = raw_to_NANO(response[:online_weight_minimum])
+      response[:online_stake_total] = raw_to_NANO(response[:online_stake_total])
+      response[:peers_stake_total] = raw_to_NANO(response[:peers_stake_total])
+      response[:peers_stake_required] = raw_to_NANO(response[:peers_stake_required])
+
+      response.compact
     end
 
     # Returns the difficulty values (16 hexadecimal digits string, 64 bit)
@@ -205,7 +169,7 @@ class Nanook
     #   that the first value is the most recent sample.
     # @return [Hash{Symbol=>String|Float|Array}]
     def difficulty(include_trend: false)
-      rpc(:active_difficulty, include_trend: include_trend).tap do |response|
+      rpc(:active_difficulty, include_trend: include_trend, _coerce: Hash).tap do |response|
         response[:multiplier] = response[:multiplier].to_f
 
         response[:difficulty_trend].map!(&:to_f) if response.key?(:difficulty_trend)
@@ -213,12 +177,27 @@ class Nanook
     end
 
     # @return [String]
-    def inspect
-      "#{self.class.name}(object_id: \"#{format('0x00%x', (object_id << 1))}\")"
+    def to_s
+      self.class.name
     end
+    alias inspect to_s
 
+    # Returns peers information.
+    #
+    # Example response:
+    #
+    #   {
+    #     :"[::ffff:104.131.102.132]:7075" => {
+    #       protocol_version: 20,
+    #       node_id: "node_1y7j5rdqhg99uyab1145gu3yur1ax35a3b6qr417yt8cd6n86uiw3d4whty3",
+    #       type: "udp"
+    #     },
+    #     :"[::ffff:104.131.114.102]:7075" => { ... }
+    #   }
+    #
+    # @return [Hash{Symbol=>Hash{Symbol=>Integer|String}}]
     def peers
-      rpc(:peers)[:peers]
+      rpc(:peers, peer_details: true, _access: :peers, _coerce: Hash)
     end
 
     # All representatives and their voting weight.
@@ -230,38 +209,48 @@ class Nanook
     # Example response:
     #
     #   {
-    #     nano_1111111111111111111111111111111111111111111111111117353trpda: 3822372327060170000000000000000000000,
-    #     nano_1111111111111111111111111111111111111111111111111awsq94gtecn: 30999999999999999999999999000000,
-    #     nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi: 0
+    #     Nanook::Account: 3822372327060170000000000000000000000,
+    #     Nanook::Account: 30999999999999999999999999000000,
+    #     Nanook::Account: 0
     #   }
     #
-    # @return [Hash{Symbol=>Integer}] known representatives and their voting weight
+    # @return [Hash{Nanook::Account=>Float|Integer}] known representatives and their voting weight
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def representatives(unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      validate_unit!(unit)
 
-      response = rpc(:representatives)[:representatives]
-      return response if unit == :raw
+      response = rpc(:representatives, _access: :representatives, _coerce: Hash)
 
-      r = response.map do |account_id, balance|
-        balance = Nanook::Util.raw_to_NANO(balance)
+      r = response.map do |account_id, weight|
+        weight = raw_to_NANO(weight) if unit == :nano
 
-        [account_id, balance]
+        [as_account(account_id), weight]
       end
 
-      Hash[r].to_symbolized_hash
+      Hash[r]
     end
 
-    # All online representatives that have voted recently. Note, due to the
-    # design of the nano RPC, this method cannot return the voting weight
-    # of the representatives.
+    # All online representatives that have voted recently and their weight.
     #
     # ==== Example:
     #
-    #   node.representatives_online # => ["nano_111...", "nano_222"]
+    #   node.representatives_online # => [Nanook::Account, ...]
     #
-    # @return [Array<String>] array of representative account ids
+    # @return [Nanook::Account] array of representative accounts
     def representatives_online
-      rpc(:representatives_online)[:representatives].keys.map(&:to_s)
+      rpc(:representatives_online, _access: :representatives, _coerce: Array).map do |representative|
+        as_account(representative)
+      end
+    end
+
+    # Tells the node to look for any account in all available wallets.
+    #
+    # ==== Example:
+    #
+    #   node.search_pending #=> true
+    # @return [Boolean] indicates if the action was successful
+    def search_pending
+      rpc(:search_pending_all).key?(:success)
     end
 
     # Safely shuts down the node.
@@ -272,13 +261,32 @@ class Nanook
     end
 
     # @param limit [Integer] number of synchronizing blocks to return
+    # @param unit (see Nanook::Account#balance)
+    #
     # @return [Hash{Symbol=>String}] information about the synchronizing blocks for this node
-    def synchronizing_blocks(limit: 1000)
-      response = rpc(:unchecked, count: limit)[:blocks]
-      response = response.map do |block, info|
-        [block, JSON.parse(info).to_symbolized_hash]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def synchronizing_blocks(limit: 1000, unit: Nanook.default_unit)
+      validate_unit!(unit)
+
+      params = {
+        count: limit,
+        json_block: true,
+        _access: :blocks,
+        _coerce: Hash
+      }
+
+      response = rpc(:unchecked, params).map do |block, info|
+        info[:account] = as_account(info[:account]) if info[:account]
+        info[:link_as_account] = as_account(info[:link_as_account]) if info[:link_as_account]
+        info[:representative] = as_account(info[:representative]) if info[:representative]
+        info[:previous] = as_block(info[:previous]) if info[:previous]
+        info[:link] = as_block(info[:link]) if info[:link]
+        info[:balance] = raw_to_NANO(info[:balance]) if unit == :nano && info[:balance]
+
+        [as_block(block), info]
       end
-      Hash[response.sort].to_symbolized_hash
+
+      Hash[response]
     end
     alias unchecked synchronizing_blocks
 
@@ -291,7 +299,7 @@ class Nanook
     # @return [Float] the percentage completeness of the synchronization
     #   process for your node
     def sync_progress
-      response = rpc(:block_count)
+      response = rpc(:block_count, _coerce: Hash)
 
       count = response[:count]
       unchecked = response[:unchecked]
@@ -304,21 +312,50 @@ class Nanook
     #
     # @return [Integer] seconds of uptime
     def uptime
-      rpc(:uptime)['seconds']
+      rpc(:uptime, _access: :seconds, _coerce: Hash)
     end
 
-    # This method is deprecated and will be removed in 3.0, as a node never
-    # reaches 100% synchronization.
+    # Sets the receive minimum for wallets on the node. The value is in +Nano+ by default.
+    # To specify an amount in +raw+, pass the argument +unit: :raw+.
     #
-    # @return [Boolean] signalling if this node ever reaches 100% synchronized
-    def synced?
-      warn '[DEPRECATION] `synced?` is deprecated and will be removed in 3.0'
-      (rpc(:block_count)[:unchecked]).zero?
+    # ==== Example:
+    #
+    #   account.change_receive_minimum(0.01) # true
+    #
+    # @return [Boolean] true if the action was successful
+    # @param minimum Amount to set as the receive minimum
+    # @param unit optional. Specify +raw+ if you want to set the amount in +raw+. (See Nanook::Account#balance)
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def change_receive_minimum(minimum, unit: Nanook.default_unit)
+      validate_unit!(unit)
+
+      minimum = NANO_to_raw(minimum) if unit == :nano
+
+      rpc(:receive_minimum_set, amount: minimum).key?(:success)
+    end
+
+    # Returns receive minimum for wallets on the node.
+    #
+    # ==== Example:
+    #
+    #   account.receive_minimum # => 0.01
+    #
+    # @return [Integer|Float] the receive minimum
+    # @param unit (see Nanook::Account#balance)
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def receive_minimum(unit: Nanook.default_unit)
+      validate_unit!(unit)
+
+      amount = rpc(:receive_minimum, _access: :amount)
+
+      return amount unless unit == :nano
+
+      raw_to_NANO(amount)
     end
 
     # @return [Hash{Symbol=>Integer|String}] version information for this node
     def version
-      rpc(:version)
+      rpc(:version, _coerce: Hash)
     end
     alias info version
 

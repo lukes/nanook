@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::Account</tt> class contains methods to discover
   # publicly-available information about accounts on the nano network.
@@ -16,9 +18,38 @@ class Nanook
   #   rpc_conn = Nanook::Rpc.new
   #   account = Nanook::Account.new(rpc_conn, "nano_...")
   class Account
+    include Nanook::Util
+
     def initialize(rpc, account)
       @rpc = rpc
-      @account = account
+      @account = account.to_s
+    end
+
+    # The id of the account.
+    #
+    # ==== Example:
+    #
+    #   account.id # => "nano_16u..."
+    #
+    # @return [String] the id of the account
+    def id
+      @account
+    end
+
+    # @param other [Nanook::Account] account to compare
+    # @return [Boolean] true if accounts are equal
+    def ==(other)
+      other.class == self.class &&
+        other.id == id
+    end
+    alias eql? ==
+
+    # The hash value is used along with #eql? by the Hash class to determine if two objects
+    # reference the same hash key.
+    #
+    # @return [Integer]
+    def hash
+      id.hash
     end
 
     # Information about this accounts that have set this account as their representative.
@@ -30,26 +61,36 @@ class Nanook
     # Example response:
     #
     #   {
-    #     :nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd=>500000000000000000000000000000000000,
-    #     :nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn=>961647970820730000000000000000000000
+    #     Nanook::Account=>50.0,
+    #     Nanook::Account=>961.64
     #   }
     #
     # @param unit (see #balance)
-    # @return [Hash{Symbol=>Integer}] account ids which delegate to this account, and their account balance
+    # @return [Hash{Nanook::Account=>Integer|Float}] {Nanook::Account} accounts which delegate to this account, and their account balance
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def delegators(unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      validate_unit!(unit)
 
-      response = rpc(:delegators)[:delegators]
-
-      return response if unit == :raw
+      response = rpc(:delegators, _access: :delegators, _coerce: Hash)
 
       r = response.map do |account_id, balance|
-        balance = Nanook::Util.raw_to_NANO(balance)
+        balance = raw_to_NANO(balance) if unit == :nano
 
-        [account_id, balance]
+        [as_account(account_id), balance]
       end
 
-      Hash[r].to_symbolized_hash
+      Hash[r]
+    end
+
+    # Number of accounts that have set this account as their representative.
+    #
+    # === Example:
+    #
+    #   account.delegators_count # => 2
+    #
+    # @return [Integer]
+    def delegators_count
+      rpc(:delegators_count, _access: :count)
     end
 
     # Returns true if the account has an <i>open</i> block.
@@ -71,12 +112,20 @@ class Nanook
     #
     # @return [Boolean] Indicates if this account has an open block
     def exists?
-      response = rpc(:account_info)
+      begin
+        response = rpc(:account_info)
+      rescue Nanook::Error
+        return false
+      end
+
       !response.empty? && !response[:open_block].nil?
     end
     alias open? exists?
 
     # An account's history of send and receive payments.
+    #
+    # This call may return results that include unconfirmed blocks, so it should not be used in
+    # any processes or integrations requiring only details from blocks confirmed by the network.
     #
     # ==== Example:
     #
@@ -87,68 +136,89 @@ class Nanook
     #   [
     #     {
     #      type: "send",
-    #      account: "nano_1kdc5u48j3hr5r7eof9iao47szqh81ndqgq5e5hrsn1g9a3sa4hkkcotn3uq",
+    #      account: Nanook::Account,
     #      amount: 2,
-    #      hash: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570"
+    #      block: Nanook::Block
     #     }
     #   ]
     #
-    # @param limit [Integer] maximum number of history items to return
+    # @param limit [Integer] maximum number of history items to return. Defaults to 1000
+    # @param sort [Symbol] default +:asc+. When set to +:desc+ the history will be returned oldest to newest.
     # @param unit (see #balance)
-    # @return [Array<Hash{Symbol=>String}>] the history of send and receive payments for this account
-    def history(limit: 1000, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+    # @return [Array<Hash{Symbol=>String|Float|Integer|Nanook::Account|NanookBlock}>] the history of send and receive payments for this account
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def history(limit: 1000, unit: Nanook.default_unit, sort: :asc)
+      validate_unit!(unit)
 
-      response = rpc(:account_history, count: limit)[:history]
+      response = rpc(:account_history, count: limit, reverse: (sort == :desc), _access: :history, _coerce: Array)
 
-      return response if unit == :raw
+      response.map do |history|
+        history[:amount] = raw_to_NANO(history[:amount]) if unit == :nano
+        history[:account] = as_account(history[:account])
+        history[:block] = as_block(history.delete(:hash)) # Rename the key from `hash` to `block`
 
-      response.map! do |history|
-        history[:amount] = Nanook::Util.raw_to_NANO(history[:amount])
         history
       end
     end
 
-    # The last modified time of the account in the time zone of
-    # your nano node (usually UTC).
+    # Return blocks for the account.
+    #
+    # @param limit [Integer] maximum number of history items to return. Defaults to 1000
+    # @param sort [Symbol] default +:asc+. When set to +:desc+ the blocks will be returned oldest to newest.
+    # @return [Array<Nanook::Block>]
+    def blocks(limit: 1000, sort: :asc)
+      history(limit: limit, sort: sort).map { |i| i[:block] }
+    end
+
+    # Returns the open block for the account if it exists on the node.
+    #
+    # @return [Nanook::Block]
+    def open_block
+      blocks(limit: 1, sort: :desc).first
+    end
+
+    # The last modified time of the account in UTC. For many accounts on the node
+    # this will be the timestamp of when the node bootstrapped.
     #
     # ==== Example:
     #
     #   account.last_modified_at # => Time
     #
-    # @return [Time] last modified time of the account in the time zone of
-    #   your nano node (usually UTC).
+    # @return [Time] last modified time of the account in UTC. Can be nil
     def last_modified_at
-      response = rpc(:account_info)
-      Time.at(response[:modified_timestamp])
+      as_time(rpc(:account_info, _access: :modified_timestamp))
     end
 
     # The public key of the account.
     #
     # ==== Example:
     #
-    #   account.public_key # => "3068BB1..."
+    #   account.public_key # => Nanook::PublicKey
     #
-    # @return [String] public key of the account
+    # @return [Nanook::PublicKey] public key of the account
     def public_key
-      rpc(:account_key)[:key]
+      as_public_key(rpc(:account_key, _access: :key))
     end
 
-    # The representative account id for the account.
-    # Representatives are accounts that cast votes in the case of a
-    # fork in the network.
+    # The representative for the account.
     #
     # ==== Example:
     #
-    #   account.representative # => "nano_3pc..."
+    #   account.representative # => Nanook::Account
     #
-    # @return [String] Representative account of the account
+    # @return [Nanook::Account] Representative of the account. Can be nil.
     def representative
-      rpc(:account_representative)[:representative]
+      representative = rpc(:account_representative, _access: :representative)
+      as_account(representative) if representative
     end
 
     # The account's balance, including pending (unreceived payments).
     # To receive a pending amount see {WalletAccount#receive}.
+    #
+    # This call returns information that may be based on unconfirmed blocks.
+    # These details should not be relied on for any process or integration that
+    # requires confirmed blocks. The pending balance is calculated from
+    # potentially unconfirmed blocks.
     #
     # ==== Examples:
     #
@@ -177,35 +247,23 @@ class Nanook
     #   Represents the unit that the balances will be returned in.
     #   Note: this method interprets
     #   +:nano+ as NANO, which is technically Mnano.
-    #   See {https://nano.org/en/faq#what-are-nano-units- What are Nano's Units}
-    #
-    # @raise ArgumentError if an invalid +unit+ was given.
+    #   See {https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers What are Nano's Units}
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     # @return [Hash{Symbol=>Integer|Float}]
     def balance(unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      validate_unit!(unit)
 
       rpc(:account_balance).tap do |r|
         if unit == :nano
-          r[:balance] = Nanook::Util.raw_to_NANO(r[:balance])
-          r[:pending] = Nanook::Util.raw_to_NANO(r[:pending])
+          r[:balance] = raw_to_NANO(r[:balance])
+          r[:pending] = raw_to_NANO(r[:pending])
         end
       end
     end
 
     # @return [Integer] number of blocks for this account
     def block_count
-      rpc(:account_block_count)[:block_count]
-    end
-
-    # The id of the account.
-    #
-    # ==== Example:
-    #
-    #   account.id # => "nano_16u..."
-    #
-    # @return [String] the id of the account
-    def id
-      @account
+      rpc(:account_block_count, _access: :block_count)
     end
 
     # Information about the account.
@@ -236,62 +294,59 @@ class Nanook
     #     id: "nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
     #     balance: 11.439597000000001,
     #     block_count: 4,
-    #     frontier: "2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
-    #     modified_timestamp: 1520500357,
-    #     open_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #     pending: 0,
-    #     public_key: "A82C906460046D230D7D37C6663723DC3EFCECC4B3254EBF45294B66746F4FEF",
-    #     representative: "nano_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh",
-    #     representative_block: "C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #     weight: 0
+    #     frontier: Nanook::Block,
+    #     last_modified_at: Time,
+    #     open_block: Nanook::Block,
+    #     pending: 1.0,
+    #     representative: Nanook::Account,
+    #     representative_block: Nanook::Block,
+    #     weight: 0.1
     #   }
     #
-    # @param detailed [Boolean] (default is false). When +true+, four
-    #   additional calls are made to the RPC to return more information
     # @param unit (see #balance)
-    # @return [Hash{Symbol=>String|Integer|Float}] information about the account containing:
+    # @return [Hash{Symbol=>String|Integer|Float|Nanook::Account|Nanook::Block|Time}] information about the account containing:
     #   [+id+] The account id
-    #   [+frontier+] The latest block hash
-    #   [+open_block+] The first block in every account's blockchain. When this block was published the account was officially open
-    #   [+representative_block+] The block that named the representative for the account
-    #   [+balance+] Amount in either NANO or raw (depending on the <tt>unit:</tt> argument)
-    #   [+last_modified+] Unix timestamp
+    #   [+frontier+] The latest {Nanook::Block}
+    #   [+confirmation_height+] Confirmation height
+    #   [+confirmation_height_frontier+] The {Nanook::Block} of the confirmation height
+    #   [+pending+] Pending balance in either NANO or raw (depending on the <tt>unit:</tt> argument)
+    #   [+open_block+] The first {Nanook::Block} in every account's blockchain. When this block was published the account was officially open
+    #   [+representative_block+] The {Nanook::Block} that named the representative for the account
+    #   [+balance+] Balance in either NANO or raw (depending on the <tt>unit:</tt> argument)
+    #   [+last_modified_at+] Time of when the account was last modified in UTC
+    #   [+representative+] Representative {Nanook::Account}
     #   [+block_count+] Number of blocks in the account's blockchain
-    #
-    #   When <tt>detailed: true</tt> is passed as an argument, this method
-    #   makes four additional calls to the RPC to return more information
-    #   about an account:
-    #
     #   [+weight+] See {#weight}
-    #   [+pending+] See {#balance}
-    #   [+representative+] See {#representative}
-    #   [+public_key+] See {#public_key}
-    def info(detailed: false, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+    #
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def info(unit: Nanook.default_unit)
+      validate_unit!(unit)
 
-      response = rpc(:account_info)
+      response = rpc(:account_info, representative: true, weight: true, pending: true)
       response.merge!(id: @account)
+      response[:frontier] = as_block(response[:frontier]) if response[:frontier]
+      response[:open_block] = as_block(response[:open_block]) if response[:open_block]
+      response[:representative_block] = as_block(response[:representative_block]) if response[:representative_block]
+      response[:representative] = as_account(response[:representative]) if response[:representative]
+      response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier]) if response[:confirmation_height_frontier]
+      response[:last_modified_at] = as_time(response.delete(:modified_timestamp))
 
-      response[:balance] = Nanook::Util.raw_to_NANO(response[:balance]) if unit == :nano
+      if unit == :nano
+        response.merge!(
+          balance: raw_to_NANO(response[:balance]),
+          pending: raw_to_NANO(response[:pending]),
+          weight: raw_to_NANO(response[:weight])
+        )
+      end
 
-      # Return the response if we don't need any more info
-      return response unless detailed
-
-      # Otherwise make additional calls
-      response.merge!({
-                        weight: weight,
-                        pending: balance(unit: unit)[:pending],
-                        representative: representative,
-                        public_key: public_key
-                      })
-
-      # Sort this new hash by keys
-      Hash[response.sort].to_symbolized_hash
+      response
     end
 
-    def inspect
-      "#{self.class.name}(id: \"#{id}\", object_id: \"#{format('0x00%x', (object_id << 1))}\")"
+    # @return [String]
+    def to_s
+      "#{self.class.name}(id: \"#{short_id}\")"
     end
+    alias inspect to_s
 
     # Information about the given account as well as other
     # accounts up the ledger. The number of accounts returned is determined
@@ -304,39 +359,56 @@ class Nanook
     # Example response:
     #
     #   {
-    #    :nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j=>{
-    #      :frontier=>"2C3C570EA8898443C0FD04A1C385A3E3A8C985AD792635FCDCEBB30ADF6A0570",
-    #      :open_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #      :representative_block=>"C82376314C387080A753871A32AD70F4168080C317C5E67356F0A62EB5F34FF9",
-    #      :balance=>11439597000000000000000000000000,
-    #      :modified_timestamp=>1520500357,
-    #      :block_count=>4
+    #    Nanook::Account => {
+    #      :frontier => Nanook::Block,
+    #      :open_block => Nanook::Block,
+    #      :representative_block => Nanook::Block,
+    #      :representative => Nanook::Account,
+    #      :balance => 1143.7,
+    #      :last_modified_at => Time,
+    #      :block_count => 4
+    #      :weight => 5
+    #      :pending => 2.0
     #    },
-    #    :nano_3c3ettq59kijuuad5fnaq35itc9schtr4r7r6rjhmwjbairowzq3wi5ap7h8=>{ ... }
+    #    Nanook::Account => { ... }
     #  }
     #
-    # @param [Integer] limit number of accounts to return in the ledger (default is 1)
-    # @param [Time] modified_since return only accounts modified in the local database after this time
+    # @param limit [Integer] number of accounts to return in the ledger (default is 1000)
+    # @param modified_since [Time] optional. Return only accounts modified in the local database after this time (default is from the unix epoch)
     # @param unit (see #balance)
-    # @return [Hash{Symbol=>String|Integer}]
-    def ledger(limit: 1, modified_since: nil, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+    # @param sort [Symbol] default +:asc+. When set to +:desc+ the ledger will be returned oldest to newest.
+    # @return [Hash{Nanook::Account=>String|Integer}]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def ledger(limit: 1000, modified_since: 0, unit: Nanook.default_unit, sort: :asc)
+      validate_unit!(unit)
 
-      params = { count: limit }
+      params = {
+        count: limit,
+        sorting: (sort == :desc),
+        modified_since: modified_since.to_i,
+        _access: :accounts,
+        _coerce: Hash
+      }
 
-      params[:modified_since] = modified_since.to_i unless modified_since.nil?
+      response = rpc(:ledger, params)
 
-      response = rpc(:ledger, params)[:accounts]
+      r = response.map do |account_id, ledger|
+        if unit == :nano
+          ledger[:balance] = raw_to_NANO(ledger[:balance])
+          ledger[:pending] = raw_to_NANO(ledger[:pending])
+          ledger[:weight] = raw_to_NANO(ledger[:weight])
+        end
 
-      return response if unit == :raw
+        ledger[:last_modified_at] = as_time(ledger.delete(:modified_timestamp))
+        ledger[:representative] = as_account(ledger[:representative]) if ledger[:representative]
+        ledger[:representative_block] = as_block(ledger[:representative_block]) if ledger[:representative_block]
+        ledger[:open_block] = as_block(ledger[:open_block]) if ledger[:open_block]
+        ledger[:frontier] = as_block(ledger[:frontier]) if ledger[:frontier]
 
-      r = response.map do |account_id, l|
-        l[:balance] = Nanook::Util.raw_to_NANO(l[:balance])
-
-        [account_id, l]
+        [as_account(account_id), ledger]
       end
 
-      Hash[r].to_symbolized_hash
+      Hash[r]
     end
 
     # Information about pending blocks (payments) that are
@@ -352,7 +424,7 @@ class Nanook
     #
     # ==== Examples:
     #
-    #   account.pending # => ["000D1BA..."]
+    #   account.pending # => [Nanook::Block, ..."]
     #
     # Asking for more detail to be returned:
     #
@@ -362,9 +434,9 @@ class Nanook
     #
     #   [
     #     {
-    #       block: "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
+    #       block: Nanook::Block,
     #       amount: 6,
-    #       source: "nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr"
+    #       source: Nanook::Account
     #     },
     #     { ... }
     #   ]
@@ -373,24 +445,34 @@ class Nanook
     # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
     # @param unit (see #balance)
     #
-    # @return [Array<String>]
-    # @return [Array<Hash{Symbol=>String|Integer}>]
+    # @return [Array<Nanook::Block>]
+    # @return [Array<Hash{Symbol=>Nanook::Block|Nanook::Account|Integer}>]
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
     def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
-      raise ArgumentError, "Unsupported unit: #{unit}" unless Nanook::UNITS.include?(unit)
+      validate_unit!(unit)
 
-      params = { count: limit }
+      params = {
+        count: limit,
+        _access: :blocks,
+        _coerce: (detailed ? Hash : Array)
+      }
       params[:source] = true if detailed
 
-      response = rpc(:pending, params)[:blocks]
-      response = Nanook::Util.coerce_empty_string_to_type(response, (detailed ? Hash : Array))
+      response = rpc(:pending, params)
 
-      return response unless detailed
+      unless detailed
+        return response.map do |block|
+          as_block(block)
+        end
+      end
 
       response.map do |key, val|
-        p = val.merge(block: key.to_s)
+        p = val.merge(
+          block: as_block(key.to_s),
+          source: as_account(val[:source])
+        )
 
-        p[:amount] = Nanook::Util.raw_to_NANO(p[:amount]) if unit == :nano
-
+        p[:amount] = raw_to_NANO(p[:amount]) if unit == :nano
         p
       end
     end
@@ -399,22 +481,29 @@ class Nanook
     #
     # Weight is determined by the account's balance, and represents
     # the voting weight that account has on the network. Only accounts
-    # with greater than 256 weight can vote.
+    # with greater than 0.1% of the online voting weight and are on a node
+    # configured to vote can vote.
     #
     # ==== Example:
     #
     #   account.weight # => 0
     #
-    # @return [Integer] the account's weight
-    def weight
-      rpc(:account_weight)[:weight]
+    # @return [Integer|Float] the account's weight
+    # @raise [Nanook::NanoUnitError] if `unit` is invalid
+    def weight(unit: Nanook.default_unit)
+      validate_unit!(unit)
+
+      weight = rpc(:account_weight, _access: :weight)
+
+      return weight unless unit == :nano
+
+      raw_to_NANO(weight)
     end
 
     private
 
     def rpc(action, params = {})
-      p = @account.nil? ? {} : { account: @account }
-      @rpc.call(action, p.merge(params))
+      @rpc.call(action, { account: @account }.merge(params))
     end
   end
 end

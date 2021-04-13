@@ -6,9 +6,11 @@ require 'forwardable'
 
 Dir["#{File.dirname(__FILE__)}/nanook/*.rb"].sort.each { |file| require file }
 
+require_relative 'nanook/util'
+
 # ==== Initializing
 #
-# Connect to the default RPC host at http://localhost:7076 and with a timeout of 500 seconds:
+# Connect to the default RPC host at http://[::1]:7076 and with a timeout of 60 seconds:
 #
 #    nanook = Nanook.new
 #
@@ -21,6 +23,8 @@ Dir["#{File.dirname(__FILE__)}/nanook/*.rb"].sort.each { |file| require file }
 #   Nanook.new(timeout: 600)
 #   Nanook.new("http://ip6-localhost.com:7076", timeout: 600)
 class Nanook
+  include Util
+
   UNITS = %i[raw nano].freeze
   DEFAULT_UNIT = :nano
 
@@ -33,20 +37,23 @@ class Nanook
   def self.default_unit
     return DEFAULT_UNIT unless defined?(UNIT)
 
-    raise Nanook::Error, "UNIT #{UNIT} must be one of #{UNITS}" unless UNITS.include?(UNIT.to_sym)
-
     UNIT.to_sym
   end
 
   # Returns a new instance of {Nanook}.
   #
   # ==== Examples:
-  # Connecting to http://localhost:7076 with the default timeout of 10s:
+  # Connecting to http://[::1]:7076 with the default timeout of 60s:
+  #
   #   Nanook.new
+  #
   # Setting a custom timeout:
+  #
   #   Nanook.new(timeout: 10)
+  #
   # Connecting to a custom RPC host and setting a timeout:
-  #   Nanook.new("http://ip6-localhost.com:7076", timeout: 10)
+  #
+  #   Nanook.new("http://ip6-localhost:7076", timeout: 10)
   #
   # @param uri [String] default is {Nanook::Rpc::DEFAULT_URI}. The RPC host to connect to
   # @param timeout [Integer] default is {Nanook::Rpc::DEFAULT_TIMEOUT}. Connection timeout in number of seconds
@@ -62,7 +69,7 @@ class Nanook
   # @param account [String] the id of the account you want to work with
   # @return [Nanook::Account]
   def account(account)
-    Nanook::Account.new(@rpc, account)
+    as_account(account)
   end
 
   # Returns a new instance of {Nanook::Block}.
@@ -73,23 +80,35 @@ class Nanook
   # @param block [String] the id/hash of the block you want to work with
   # @return [Nanook::Block]
   def block(block)
-    Nanook::Block.new(@rpc, block)
+    as_block(block)
   end
 
   # @return [String]
-  def inspect
-    "#{self.class.name}(rpc: #{@rpc.inspect}, object_id: \"#{format('0x00%x', (object_id << 1))}\")"
+  def to_s
+    "#{self.class.name}(rpc: #{@rpc})"
   end
+  alias inspect to_s
 
-  # Returns a new instance of {Nanook::Key}.
+  # Returns a new instance of {Nanook::PrivateKey}.
   #
   # ==== Example:
-  #   key = Nanook.new.key("3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039")
+  #   key = Nanook.new.private_key("3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039")
   #
   # @param key [String] a private key
-  # @return [Nanook::Key]
-  def key(key = nil)
-    Nanook::Key.new(@rpc, key)
+  # @return [Nanook::PrivateKey]
+  def private_key(key = nil)
+    as_private_key(key)
+  end
+
+  # Returns a new instance of {Nanook::PublicKey}.
+  #
+  # ==== Example:
+  #   key = Nanook.new.public_key("3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039")
+  #
+  # @param key [String] a public key
+  # @return [Nanook::PublicKey]
+  def public_key(key)
+    as_public_key(key)
   end
 
   # Returns a new instance of {Nanook::Node}.
@@ -121,5 +140,44 @@ class Nanook
   # @return [Nanook::WorkPeer]
   def work_peers
     Nanook::WorkPeer.new(@rpc)
+  end
+
+  # Return summarized metrics received from other nodes of the whole network.
+  #
+  # ==== Example:
+  #   Nanook.new.network_telemetry
+  #
+  # ==== Example response:
+  #   {
+  #     block_count: 5777903,
+  #     cemented_count: 688819,
+  #     unchecked_count: 443468,
+  #     account_count: 620750,
+  #     bandwidth_cap: 1572864,
+  #     peer_count: 32,
+  #     protocol_version: 18,
+  #     uptime: 556896,
+  #     genesis_block: Nanook::Block,
+  #     major_version: 21,
+  #     minor_version: 0,
+  #     patch_version: 0,
+  #     pre_release_version: 0,
+  #     maker: 0,
+  #     timestamp: Time,
+  #     active_difficulty: "ffffffcdbf40aa45"
+  # }
+  #
+  # @return [Nanook::WorkPeer]
+  def network_telemetry
+    response = call_rpc(:telemetry, _coerce: Hash)
+    response[:genesis_block] = as_block(response[:genesis_block]) if response[:genesis_block]
+    response[:timestamp] = as_time(response[:timestamp]) if response[:timestamp]
+    response
+  end
+
+  private
+
+  def call_rpc(action, params = {})
+    @rpc.call(action, params)
   end
 end

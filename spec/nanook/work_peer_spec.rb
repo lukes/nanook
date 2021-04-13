@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Nanook::Key do
+RSpec.describe Nanook::WorkPeer do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
 
   it 'should add a work peer correctly' do

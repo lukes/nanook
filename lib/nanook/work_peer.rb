@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'util'
+
 class Nanook
   # The <tt>Nanook::WorkPeer</tt> class lets you manage your node's work peers.
   class WorkPeer
+    include Nanook::Util
+
     def initialize(rpc)
       @rpc = rpc
     end
@@ -15,12 +19,14 @@ class Nanook
       rpc(:work_peers_clear).key?(:success)
     end
 
-    def inspect
-      "#{self.class.name}(object_id: \"#{format('0x00%x', (object_id << 1))}\")"
+    # @return [String]
+    def to_s
+      self.class.name
     end
+    alias inspect to_s
 
     def list
-      rpc(:work_peers)[:work_peers]
+      rpc(:work_peers, _access: :work_peers, _coerce: Array)
     end
 
     private

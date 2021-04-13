@@ -4,6 +4,105 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 3.0.0
+
+### Removed
+
+- `Nanook::Block#block_count_by_type` Removed, as the RPC no longer supports this command.
+- `Nanook::Block#history` Removed, as the RPC command is deprecated.
+- `Nanook::Block#publish` Removed, as the RPC command expects more data than what we instantiate within `Nanook::Block`.
+- Removed all RPC calls that are not recommended for production:
+  - `Nanook::Node#bootstrap_status`.
+  - `Nanook::Node#confirmation_history`.
+  - `Nanook::Node#confirmed_recently?`.
+- `Nanook::Key` Replaced by `Nanook::PrivateKey`.
+- `Nanook::Account#info` No longer accepts `detailed:` argument.
+- `Nanook::Node#synced?` As this was deprecated for removal in v3.0.
+
+### Added
+
+- Added missing `Nanook::WalletAccount#block_count` delegate.
+- Added `Nanook#network_telemetry`.
+- Added `Nanook::Rpc#test`.
+- Added `Nanook::WalletAccount#work`.
+- Added `Nanook::WalletAccount#set_work`.
+- Added `Nanook::Account#blocks`.
+- Added `Nanook::Account#delegators_count`.
+- Added `Nanook::Account#open_block`.
+- Added `Nanook::Node#change_receive_minimum`.
+- Added `Nanook::Node#confirmation_quorum`.
+- Added `Nanook::Node#keepalive`.
+- Added `Nanook::Node#receive_minimum`.
+- Added `Nanook::Node#search_pending`.
+- Added `Nanook::Wallet#history`.
+- Added `Nanook::Wallet#exists?`.
+- Added `Nanook::Wallet#ledger`.
+- Added `Nanook::Wallet#move_accounts`.
+- Added `Nanook::Wallet#remove_account`.
+- Added `Nanook::Wallet#republish_blocks`.
+- Added `Nanook::Wallet#search_pending`.
+- Added `Nanook::Wallet#work`.
+- Added `Nanook::Block#account`.
+- Added `Nanook::Block#amount`.
+- Added `Nanook::Block#balance`.
+- Added `Nanook::Block#change?`.
+- Added `Nanook::Block#confirmed?`.
+- Added `Nanook::Block#epoch?`.
+- Added `Nanook::Block#exists?`.
+- Added `Nanook::Block#height`.
+- Added `Nanook::Block#open?`.
+- Added `Nanook::Block#previous`.
+- Added `Nanook::Block#receive?`.
+- Added `Nanook::Block#representative`.
+- Added `Nanook::Block#send?`.
+- Added `Nanook::Block#signature`.
+- Added `Nanook::Block#timestamp`.
+- Added `Nanook::Block#type`.
+- Added `Nanook::Block#unconfirmed?`.
+- Added `Nanook::Block#work`.
+- Added `Nanook::PrivateKey` with methods `#create`, `#account` and `#public_key`.
+- Added `Nanook::PublicKey` with method `#account`.
+- Added equality testing methods `#==`, `#eql?` and `#hash` for:
+    - `Nanook::Account`
+    - `Nanook::Block`
+    - `Nanook::PrivateKey`
+    - `Nanook::PublicKey`
+    - `Nanook::Wallet`
+    - `Nanook::WalletAccount`
+
+### Changed
+
+- New error classes: `Nanook::ConnectionError`, `NanoUnitError`, `NodeRpcError` and `NodeRpcConfigurationError`.
+- `Nanook::Wallet#default_representative` returns a `Nanook::Account`.
+- `Nanook::Wallet#change_representative` returns a `Nanook::Account`.
+- `Nanook::Wallet#unlock` can be passed no argument (`password` will be `nil`).
+- `Nanook::Wallet#info` returns data from `wallet_info` RPC.
+- `Nanook::Block#is_valid_work?` renamed to `#valid_work?`.
+- `Nanook::Block#republish` returns an Array of `Nanook::Block`s.
+- `Nanook::Block#chain` returns an Array of `Nanook::Block`s.
+- `Nanook::Block#successors` returns an Array of `Nanook::Block`s.
+- `Nanook::Block#info`:
+  - returns balances in nano, and can optionally be passed `unit: :raw` argument.
+  - returns account values as `Nanook::Account` and block values as `Nanook::Block`.
+- `Nanook::Node#peers` returns details as a `Hash` keyed by `Nanook::Account`.
+- `Nanook::Account#pending` returns source as `Nanook::Account` and block as `Nanook::Block` when `detailed: true`.
+- `Nanook::Account#representative` returns a `Nanook::Account`.
+- `Nanook::Account#delegators` returns accounts as `Nanook::Account`s.
+- `Nanook::Account#history` returns accounts as `Nanook::Account` and blocks as `Nanook::Block`.
+- `Nanook::Account#ledger` returns accounts as `Nanook::Account` and blocks as `Nanook::Block`.
+- `Nanook::Account#public_key` returns a `Nanook::PublicKey`.
+- `Nanook::Account#weight` accepts an optional `unit:` argment.
+- `Nanook::Account#info`:
+     - returns the `frontier`, `open_block`, `representative_block` values as `Nanook::Block`s.
+     - returns the `representative` as a `Nanook::Account`.
+     - `modified_timestamp` key renamed to `last_modified_at` and value is a `Time` in UTC.
+- `Nanook::Key` has become `Nanook::PrivateKey`, `#generate` has been renamed `#create` and returns a `Nanook::PrivateKey`.
+
+### Fixed
+
+- A number of errors when node is still bootstrapping and is missing accounts from the ledger.
+- `Nanook::Node#representatives_online` accessing representative list as a `Hash` after RPC change.
+
 ## 2.5.1
 
 ### Fixed

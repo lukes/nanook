@@ -4,19 +4,21 @@ RSpec.describe Nanook::Block do
   let(:uri) { Nanook::Rpc::DEFAULT_URI }
   let(:block) { '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F' }
 
-  it 'should request account correctly' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"block_account\",\"hash\":\"#{block}\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"account":"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"}',
-      headers: {}
-    )
+  it 'can compare equality' do
+    block_1 = Nanook.new.block("foo")
+    block_2 = Nanook.new.block("foo")
+    block_3 = Nanook.new.block("bar")
 
-    response = Nanook.new.block(block).account
-    expect(response).to be_kind_of Nanook::Account
-    expect(response.id).to eq 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
+    expect(block_1).to eq(block_2)
+    expect(block_1).not_to eq(block_3)
+  end
+
+  it 'can be used as a hash key lookup' do
+    hash = {
+      Nanook.new.block("foo") => "found"
+    }
+
+    expect(hash[Nanook.new.block("foo")]).to eq("found")
   end
 
   it 'should request cancel_work correctly' do
@@ -42,7 +44,8 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).chain).to have(1).item
+    expect(Nanook.new.block(block).chain.first).to be_kind_of(Nanook::Block)
+    expect(Nanook.new.block(block).chain.first.id).to eq("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
   end
 
   it 'should request chain and when no blocks (empty string response) return an array' do
@@ -136,113 +139,115 @@ RSpec.describe Nanook::Block do
     expect(Nanook.new.block(block).confirm).to eq true
   end
 
-  it 'should request confirmed_recently? correctly when hash is in confirmation history' do
-    stub_request(:post, uri).with(
-      body: '{"action":"confirmation_history"}',
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{
-        \"confirmations\": [
-          {
-            \"hash\": \"#{block}\",
-            \"tally\": \"80394786589602980996311817874549318248\"
-          },
-          {
-            \"hash\": \"F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667\",
-            \"tally\": \"68921714529890443063672782079965877749\"
-          }
-        ]
-      }",
-      headers: {}
-    )
-
-    expect(Nanook.new.block(block).confirmed_recently?).to eq true
-  end
-
-  it 'should request confirmed_recently? correctly when hash is not in confirmation history' do
-    stub_request(:post, uri).with(
-      body: '{"action":"confirmation_history"}',
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{
-        \"confirmations\": [
-          {
-            \"hash\": \"EA70B32C55C193345D625F766EEA2FCA52D3F2CCE0B3A30838CC543026BB0FEA\",
-            \"tally\": \"80394786589602980996311817874549318248\"
-          },
-          {
-            \"hash\": \"F2F8DA6D2CA0A4D78EB043A7A29E12BDE5B4CE7DE1B99A93A5210428EE5B8667\",
-            \"tally\": \"68921714529890443063672782079965877749\"
-          }
-        ]
-      }",
-      headers: {}
-    )
-
-    expect(Nanook.new.block(block).confirmed_recently?).to eq false
-  end
-
-  it 'should request history correctly' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"history\",\"hash\":\"#{block}\",\"count\":\"1000\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"history\":[{
-        \"hash\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
-        \"type\":\"receive\",
-        \"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"amount\":\"100000000000000000000000000000000\"
-      }]}",
-      headers: {}
-    )
-
-    expect(Nanook.new.block(block).history).to have(1).item
-  end
-
-  it 'should request history with a limit correctly' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"history\",\"hash\":\"#{block}\",\"count\":\"1\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: "{\"history\":[{
-        \"hash\":\"000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F\",
-        \"type\":\"receive\",
-        \"account\":\"nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000\",
-        \"amount\":\"100000000000000000000000000000000\"
-      }]}",
-      headers: {}
-    )
-
-    expect(Nanook.new.block(block).history(limit: 1)).to have(1).item
-  end
-
   it 'should request info correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"block\",\"hash\":\"#{block}\"}",
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"contents":"{\\n    \\"type\\": \\"receive\\",\\n    \\"previous\\": \\"1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688\\",\\n    \\"source\\": \\"F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C\\",\\n    \\"work\\": \\"633cdda00b9f7265\\",\\n    \\"signature\\": \\"4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06\\"\\n}\\n"}',
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "1617855149",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "send"
+        }
+      BODY
       headers: {}
     )
 
     response = Nanook.new.block(block).info
 
-    expect(response[:id]).to eq block
-    expect(response[:type]).to eq 'receive'
-    expect(response[:previous]).to eq '1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688'
-    expect(response[:source]).to eq 'F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C'
-    expect(response[:work]).to eq '633cdda00b9f7265'
-    expect(response[:signature]).to eq '4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06'
+    expect(response).to eq(
+      {
+        "amount": 30000.0,
+        "balance": 5606157.0,
+        "height": 58,
+        "local_timestamp": Time.at(1617855149),
+        "confirmed": true,
+        "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
+        "type": "send",
+        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
+        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
+        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
+        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
+        "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+        "work": "8a142e07a10996d5"
+      }
+    )
+  end
+
+  it 'should request info correctly with unit as raw' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "1617855149",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "send"
+        }
+      BODY
+      headers: {}
+    )
+
+    response = Nanook.new.block(block).info(unit: :raw)
+
+    expect(response).to eq(
+      {
+        "amount": 30000000000000000000000000000000000,
+        "balance": 5606157000000000000000000000000000000,
+        "height": 58,
+        "local_timestamp": Time.at(1617855149),
+        "confirmed": true,
+        "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
+        "type": "send",
+        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
+        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
+        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
+        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
+        "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+        "work": "8a142e07a10996d5"
+      }
+    )
   end
 
   it 'should return block not found correctly on info' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"block\",\"hash\":\"#{block}\"}",
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -250,32 +255,69 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).info).to have_key(:error)
+    expect { Nanook.new.block(block).info } .to raise_error(Nanook::NodeRpcError)
   end
 
-  it 'should request info allowing_unchecked when block is unchecked correctly' do
+  it 'should request info allow_unchecked when block is unchecked correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\"}",
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"contents":"{\\n    \\"type\\": \\"receive\\",\\n    \\"previous\\": \\"1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688\\",\\n    \\"source\\": \\"F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C\\",\\n    \\"work\\": \\"633cdda00b9f7265\\",\\n    \\"signature\\": \\"4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06\\"\\n}\\n"}',
+      body: <<~BODY,
+        {
+          "error":  "Block not found"
+        }
+      BODY
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "modified_timestamp": "1565856525",
+          "contents": {
+            "type": "state",
+            "account": "nano_1hmqzugsmsn4jxtzo5yrm4rsysftkh9343363hctgrjch1984d8ey9zoyqex",
+            "previous": "009C587914611E83EE7F75BD9C000C430C720D0364D032E84F37678D7D012911",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "189012679592109992600249228",
+            "link": "0000000000000000000000000000000000000000000000000000000000000000",
+            "link_as_account": "nano_1111111111111111111111111111111111111111111111111111hifc8npp",
+            "signature": "845C8660750895843C013CE33E31B80EF0A7A69E52DDAF74A5F1BDFAA9A52E4D9EA2C3BE1AB0BD5790FCC1AD9B7A3D2F4B44EECE4279A8184D414A30A1B4620F",
+            "work": "0dfb32653e189699"
+          }
+        }
+      BODY
       headers: {}
     )
 
     response = Nanook.new.block(block).info(allow_unchecked: true)
 
-    expect(response[:id]).to eq block
-    expect(response[:type]).to eq 'receive'
-    expect(response[:previous]).to eq '1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688'
-    expect(response[:source]).to eq 'F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C'
-    expect(response[:work]).to eq '633cdda00b9f7265'
-    expect(response[:signature]).to eq '4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06'
+    expect(response).to eq(
+      {
+        "balance": 0.00018901267959211,
+        "last_modified_at": Time.at(1565856525),
+        "confirmed": false,
+        "id": block,
+        "account": Nanook.new.account("nano_1hmqzugsmsn4jxtzo5yrm4rsysftkh9343363hctgrjch1984d8ey9zoyqex"),
+        "previous": Nanook.new.block("009C587914611E83EE7F75BD9C000C430C720D0364D032E84F37678D7D012911"),
+        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "link": Nanook.new.block(0),
+        "link_as_account": Nanook.new.account("nano_1111111111111111111111111111111111111111111111111111hifc8npp"),
+        "signature": "845C8660750895843C013CE33E31B80EF0A7A69E52DDAF74A5F1BDFAA9A52E4D9EA2C3BE1AB0BD5790FCC1AD9B7A3D2F4B44EECE4279A8184D414A30A1B4620F",
+        "work": "0dfb32653e189699"
+      }
+    )
   end
 
-  it 'should request info allowing_unchecked when block is not unchecked correctly' do
+  it 'should request info allowing_unchecked when block is checked correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\"}",
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -284,22 +326,55 @@ RSpec.describe Nanook::Block do
     )
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"block\",\"hash\":\"#{block}\"}",
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"contents":"{\\n    \\"type\\": \\"receive\\",\\n    \\"previous\\": \\"1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688\\",\\n    \\"source\\": \\"F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C\\",\\n    \\"work\\": \\"633cdda00b9f7265\\",\\n    \\"signature\\": \\"4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06\\"\\n}\\n"}',
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "send"
+        }
+      BODY
       headers: {}
     )
 
     response = Nanook.new.block(block).info(allow_unchecked: true)
 
-    expect(response[:id]).to eq block
-    expect(response[:type]).to eq 'receive'
-    expect(response[:previous]).to eq '1B5D8610485FE5E764EA08D4C745B244D9C173647FBFA79C26D3902A439C9688'
-    expect(response[:source]).to eq 'F8D4214945C23CB8BD69230A16C85C3ED831CE17107B5C4CC5AA1F68B10EC72C'
-    expect(response[:work]).to eq '633cdda00b9f7265'
-    expect(response[:signature]).to eq '4E5CAAE4556FB2417DE1788B3A5A12B6EFD1811B00A69F4761F0FFD5F9C88FBD653563BDA206753AE3915CA1A4EC804C923DAA3C33580224F138E62805528B06'
+    expect(response).to eq(
+      {
+        "amount": 30000.0,
+        "balance": 5606157.0,
+        "height": 58,
+        "local_timestamp": Time.at(0),
+        "confirmed": true,
+        "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
+        "type": "send",
+        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
+        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
+        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
+        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
+        "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+        "work": "8a142e07a10996d5",
+      }
+    )
   end
 
   it 'should request republish correctly' do
@@ -315,7 +390,13 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).republish).to have(2).items
+    expect(Nanook.new.block(block).republish.first).to be_kind_of(Nanook::Block)
+    expect(Nanook.new.block(block).republish.map(&:id)).to eq(
+      [
+        "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
+        "A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"
+      ]
+    )
   end
 
   it 'should raise execption if both sources and destinations arguments passed to republish' do
@@ -380,19 +461,6 @@ RSpec.describe Nanook::Block do
     expect(Nanook.new.block(block).pending?).to be false
   end
 
-  it 'should request process correctly' do
-    stub_request(:post, uri).with(
-      body: "{\"action\":\"process\",\"block\":\"#{block}\"}",
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"hash":"42A723D2B60462BF7C9A003FE9A70057D3A6355CA5F1D0A57581000000000000"}',
-      headers: {}
-    )
-
-    Nanook.new.block(block).publish
-  end
-
   it 'should request successors correctly' do
     stub_request(:post, uri).with(
       body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
@@ -403,7 +471,10 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).successors).to have(1).item
+    successors = Nanook.new.block(block).successors
+
+    expect(successors.first).to be_kind_of(Nanook::Block)
+    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
   end
 
   it 'should request successors with limit correctly' do
@@ -416,7 +487,10 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).successors(limit: 1)).to have(1).item
+    successors = Nanook.new.block(block).successors(limit: 1)
+
+    expect(successors.first).to be_kind_of(Nanook::Block)
+    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
   end
 
   it 'should request successors with offset correctly' do
@@ -429,7 +503,10 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).successors(offset: 1)).to have(1).item
+    successors = Nanook.new.block(block).successors(offset: 1)
+
+    expect(successors.first).to be_kind_of(Nanook::Block)
+    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
   end
 
   it 'should request successors when there are none (empty string response) and return blank array' do
@@ -445,7 +522,7 @@ RSpec.describe Nanook::Block do
     expect(Nanook.new.block(block).successors(limit: 1000)).to be_empty
   end
 
-  it 'should request is_valid_work? correctly when valid' do
+  it 'should request valid_work? correctly when valid' do
     work = '2bf29ef00786a6bc'
 
     stub_request(:post, uri).with(
@@ -453,14 +530,21 @@ RSpec.describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"valid":"1"}',
+      body: <<~BODY,
+        {
+          "valid_all": "0",
+          "valid_receive": "1",
+          "difficulty": "fffffff93c41ec94",
+          "multiplier": "1.182623871097636" // calculated from the default base difficulty
+        }
+      BODY
       headers: {}
     )
 
-    expect(Nanook.new.block(block).is_valid_work?(work)).to be true
+    expect(Nanook.new.block(block).valid_work?(work)).to be true
   end
 
-  it 'should request is_valid_work? correctly when not valid' do
+  it 'should request valid_work? correctly when not valid' do
     work = '2bf29ef00786a6bc'
 
     stub_request(:post, uri).with(
@@ -468,10 +552,874 @@ RSpec.describe Nanook::Block do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"valid":"0"}',
+      body: <<~BODY,
+        {
+          "valid_all": "0",
+          "valid_receive": "0",
+          "difficulty": "fffffff93c41ec94",
+          "multiplier": "1.182623871097636" // calculated from the default base difficulty
+        }
+      BODY
       headers: {}
     )
 
-    expect(Nanook.new.block(block).is_valid_work?(work)).to be false
+    expect(Nanook.new.block(block).valid_work?(work)).to be false
+  end
+
+  it 'should request type correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "send"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).type).to eq("send")
+  end
+
+  it 'should request send? correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "send"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).to be_send
+    expect(Nanook.new.block(block)).not_to be_open
+    expect(Nanook.new.block(block)).not_to be_epoch
+    expect(Nanook.new.block(block)).not_to be_change
+    expect(Nanook.new.block(block)).not_to be_receive
+  end
+
+  it 'should request open? correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "open"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).to be_open
+    expect(Nanook.new.block(block)).not_to be_send
+    expect(Nanook.new.block(block)).not_to be_epoch
+    expect(Nanook.new.block(block)).not_to be_change
+    expect(Nanook.new.block(block)).not_to be_receive
+  end
+
+  it 'should request epoch? correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "epoch"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).to be_epoch
+    expect(Nanook.new.block(block)).not_to be_send
+    expect(Nanook.new.block(block)).not_to be_open
+    expect(Nanook.new.block(block)).not_to be_change
+    expect(Nanook.new.block(block)).not_to be_receive
+  end
+
+  it 'should request change? correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "change"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).to be_change
+    expect(Nanook.new.block(block)).not_to be_send
+    expect(Nanook.new.block(block)).not_to be_open
+    expect(Nanook.new.block(block)).not_to be_epoch
+    expect(Nanook.new.block(block)).not_to be_receive
+  end
+
+  it 'should request receive? correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).to be_receive
+    expect(Nanook.new.block(block)).not_to be_send
+    expect(Nanook.new.block(block)).not_to be_open
+    expect(Nanook.new.block(block)).not_to be_epoch
+    expect(Nanook.new.block(block)).not_to be_change
+  end
+
+  it 'should request representative correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    representative = Nanook.new.block(block).representative
+    expect(representative).to be_kind_of(Nanook::Account)
+    expect(representative.id).to eq("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou")
+  end
+
+  it 'should request checked? correctly when block is checked' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).to be_checked
+  end
+
+  it 'should request checked? correctly when block is unchecked' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "error": "Block not found"
+        }
+      BODY
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"block_account":"nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).not_to be_checked
+  end
+
+  it 'should request unchecked? correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "error": "Block not found"
+        }
+      BODY
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "14360938463463374607431768211455",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).to be_unchecked
+  end
+
+  it 'should request amount correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "340366928463463374607431768211455",
+          "balance": "14360938463463374607431768211455",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "14360938463463374607431768211455",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).amount).to eq(340.3669284634633)
+  end
+
+  it 'should request amount correctly as raw' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "340366928463463374607431768211455",
+          "balance": "14360938463463374607431768211455",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "14360938463463374607431768211455",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).amount(unit: :raw)).to eq(340366928463463374607431768211455)
+  end
+
+  it 'should request balance correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "340366928463463374607431768211455",
+          "balance": "14360938463463374607431768211455",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "14360938463463374607431768211455",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).balance).to eq(14.36093846346337)
+  end
+
+  it 'should request balance correctly as raw' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "340366928463463374607431768211455",
+          "balance": "14360938463463374607431768211455",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "14360938463463374607431768211455",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).balance(unit: :raw)).to eq(14360938463463374607431768211455)
+  end
+
+  it 'should request height correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "3100000000000000000000000000000000010000000000000000000000000",
+          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "3000000000000000000000000000000000010000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).height).to eq(58)
+  end
+
+  it 'should request confirmed? correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "3100000000000000000000000000000000010000000000000000000000000",
+          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "3000000000000000000000000000000000010000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block)).to be_confirmed
+  end
+
+  it 'should request previous correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "3100000000000000000000000000000000010000000000000000000000000",
+          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "3000000000000000000000000000000000010000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    previous = Nanook.new.block(block).previous
+
+    expect(previous).to be_kind_of(Nanook::Block)
+    expect(previous.id).to eq("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E")
+  end
+
+  it 'should request work correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "3100000000000000000000000000000000010000000000000000000000000",
+          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "3000000000000000000000000000000000010000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).work).to eq("8a142e07a10996d5")
+  end
+
+  it 'should request signature correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "3100000000000000000000000000000000010000000000000000000000000",
+          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "0",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "3000000000000000000000000000000000010000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).signature).to eq("82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501")
+  end
+
+  it 'should request timestamp correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"unchecked_get\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"error":"Block not found"}',
+      headers: {}
+    )
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "3100000000000000000000000000000000010000000000000000000000000",
+          "balance": "3100000000000000000000000000000000010000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "1527698508",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "3000000000000000000000000000000000010000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          },
+          "subtype": "receive"
+        }
+      BODY
+      headers: {}
+    )
+
+    timestamp = Nanook.new.block(block).timestamp
+
+    expect(timestamp).to eq(Time.at(1527698508))
+    expect(timestamp.zone).to eq("UTC")
   end
 end
