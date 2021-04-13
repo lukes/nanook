@@ -611,7 +611,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<h4 id="label-Example-3A.">Example:.</h4>
+<p>Returns true if block is a pending block.</p>
 </div></span>
   
 </li>
@@ -901,7 +901,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<h4 id="label-Example-3A.">Example:.</h4>
+<p>Returns true if work is valid for the block.</p>
 </div></span>
   
 </li>
@@ -1127,12 +1127,12 @@
       <pre class="lines">
 
 
-268
-269
-270</pre>
+272
+273
+274</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 268</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 272</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_account'>account</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:account</span><span class='rbracket'>]</span>
@@ -1226,17 +1226,17 @@
       <pre class="lines">
 
 
-280
-281
-282
-283
 284
 285
 286
-287</pre>
+287
+288
+289
+290
+291</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 280</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 284</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_amount'>amount</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_validate_unit!'>validate_unit!</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
@@ -1335,17 +1335,17 @@
       <pre class="lines">
 
 
-297
-298
-299
-300
 301
 302
 303
-304</pre>
+304
+305
+306
+307
+308</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 297</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 301</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_balance'>balance</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_validate_unit!'>validate_unit!</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
@@ -1583,12 +1583,12 @@
       <pre class="lines">
 
 
-445
-446
-447</pre>
+449
+450
+451</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 445</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 449</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_change?'>change?</span>
   <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>change</span><span class='tstring_end'>&#39;</span></span>
@@ -1710,12 +1710,12 @@
       <pre class="lines">
 
 
-312
-313
-314</pre>
+316
+317
+318</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 312</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 316</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_confirmed?'>confirmed?</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:confirmed</span><span class='rbracket'>]</span>
@@ -1769,12 +1769,12 @@
       <pre class="lines">
 
 
-455
-456
-457</pre>
+459
+460
+461</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 455</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 459</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_epoch?'>epoch?</span>
   <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>epoch</span><span class='tstring_end'>&#39;</span></span>
@@ -1851,18 +1851,18 @@
       <pre class="lines">
 
 
-339
-340
-341
-342
 343
 344
 345
 346
-347</pre>
+347
+348
+349
+350
+351</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 339</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 343</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='label'>allow_unchecked:</span> <span class='kw'>false</span><span class='rparen'>)</span>
   <span class='kw'>begin</span>
@@ -2062,12 +2062,12 @@
       <pre class="lines">
 
 
-355
-356
-357</pre>
+359
+360
+361</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 355</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 359</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_height'>height</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:height</span><span class='rbracket'>]</span>
@@ -2342,12 +2342,12 @@
       <pre class="lines">
 
 
-425
-426
-427</pre>
+429
+430
+431</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 425</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 429</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_open?'>open?</span>
   <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>open</span><span class='tstring_end'>&#39;</span></span>
@@ -2369,6 +2369,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns true if block is a pending block.</p>
+
 <h4 id="label-Example-3A">Example:</h4>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_pending?'>pending?</span> <span class='comment'>#=&gt; false
@@ -2404,12 +2406,12 @@
       <pre class="lines">
 
 
-221
-222
-223</pre>
+225
+226
+227</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 221</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 225</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pending?'>pending?</span>
   <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:pending_exists</span><span class='comma'>,</span> <span class='symbol'>:hash</span><span class='comma'>,</span> <span class='label'>_access:</span> <span class='symbol'>:exists</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='int'>1</span>
@@ -2468,12 +2470,12 @@
       <pre class="lines">
 
 
-395
-396
-397</pre>
+399
+400
+401</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 395</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 399</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_previous'>previous</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:previous</span><span class='rbracket'>]</span>
@@ -2527,12 +2529,12 @@
       <pre class="lines">
 
 
-435
-436
-437</pre>
+439
+440
+441</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 435</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 439</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_receive?'>receive?</span>
   <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>receive</span><span class='tstring_end'>&#39;</span></span>
@@ -2591,12 +2593,12 @@
       <pre class="lines">
 
 
-258
-259
-260</pre>
+262
+263
+264</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 258</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 262</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_representative'>representative</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:representative</span><span class='rbracket'>]</span>
@@ -2655,8 +2657,6 @@
       <pre class="lines">
 
 
-197
-198
 199
 200
 201
@@ -2672,10 +2672,12 @@
 211
 212
 213
-214</pre>
+214
+215
+216</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 197</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 199</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_republish'>republish</span><span class='lparen'>(</span><span class='label'>destinations:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>sources:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_destinations'>destinations</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_sources'>sources</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -2744,12 +2746,12 @@
       <pre class="lines">
 
 
-415
-416
-417</pre>
+419
+420
+421</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 415</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 419</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_send?'>send?</span>
   <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>send</span><span class='tstring_end'>&#39;</span></span>
@@ -2803,12 +2805,12 @@
       <pre class="lines">
 
 
-375
-376
-377</pre>
+379
+380
+381</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 375</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 379</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_signature'>signature</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:signature</span><span class='rbracket'>]</span>
@@ -2909,10 +2911,6 @@
       <pre class="lines">
 
 
-239
-240
-241
-242
 243
 244
 245
@@ -2920,10 +2918,14 @@
 247
 248
 249
-250</pre>
+250
+251
+252
+253
+254</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 239</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 243</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_successors'>successors</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1000</span><span class='comma'>,</span> <span class='label'>offset:</span> <span class='int'>0</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_params'>params</span> <span class='op'>=</span> <span class='lbrace'>{</span>
@@ -2991,12 +2993,12 @@
       <pre class="lines">
 
 
-385
-386
-387</pre>
+389
+390
+391</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 385</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 389</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_timestamp'>timestamp</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:local_timestamp</span><span class='rbracket'>]</span>
@@ -3047,12 +3049,12 @@
       <pre class="lines">
 
 
-460
-461
-462</pre>
+464
+465
+466</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 460</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 464</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>(id: \&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_short_id'>short_id</span><span class='embexpr_end'>}</span><span class='tstring_content'>\&quot;)</span><span class='tstring_end'>&quot;</span></span>
@@ -3111,12 +3113,12 @@
       <pre class="lines">
 
 
-405
-406
-407</pre>
+409
+410
+411</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 405</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 409</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span>
@@ -3174,12 +3176,12 @@
       <pre class="lines">
 
 
-323
-324
-325</pre>
+327
+328
+329</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 323</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 327</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_unconfirmed?'>unconfirmed?</span>
   <span class='op'>!</span><span class='id identifier rubyid_confirmed?'>confirmed?</span>
@@ -3201,6 +3203,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Returns true if work is valid for the block.</p>
+
 <h4 id="label-Example-3A">Example:</h4>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_valid_work?'>valid_work?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>2bf29ef00786a6bc</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'># =&gt; true
@@ -3256,13 +3260,13 @@
       <pre class="lines">
 
 
-184
-185
 186
-187</pre>
+187
+188
+189</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 184</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 186</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_valid_work?'>valid_work?</span><span class='lparen'>(</span><span class='id identifier rubyid_work'>work</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:work_validate</span><span class='comma'>,</span> <span class='symbol'>:hash</span><span class='comma'>,</span> <span class='label'>work:</span> <span class='id identifier rubyid_work'>work</span><span class='rparen'>)</span>
@@ -3317,12 +3321,12 @@
       <pre class="lines">
 
 
-365
-366
-367</pre>
+369
+370
+371</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 365</span>
+      <pre class="code"><span class="info file"># File 'lib/nanook/block.rb', line 369</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_work'>work</span>
   <span class='id identifier rubyid_memoized_info'>memoized_info</span><span class='lbracket'>[</span><span class='symbol'>:work</span><span class='rbracket'>]</span>
@@ -3337,7 +3341,7 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Apr 13 18:53:30 2021 by
+  Generated on Tue Apr 13 19:09:58 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.26 (ruby-3.0.0).
 </div>

@@ -175,6 +175,8 @@ class Nanook
       parse_info_response(response, unit)
     end
 
+    # Returns true if work is valid for the block.
+    #
     # ==== Example:
     #
     #   block.valid_work?("2bf29ef00786a6bc") # => true
@@ -213,6 +215,8 @@ class Nanook
       end
     end
 
+    # Returns true if block is a pending block.
+    #
     # ==== Example:
     #
     #   block.pending? #=> false
