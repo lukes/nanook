@@ -150,7 +150,7 @@ RSpec.describe Nanook::Node do
     response = Nanook.new.node.representatives
 
     expect(response).to eq(
-      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => 3822372.32706017,
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => 3_822_372.32706017,
       Nanook.new.account('nano_1111111111111111111111111111111111111111111111111awsq94gtecn') => 31.0,
       Nanook.new.account('nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi') => 0.0
     )
@@ -169,8 +169,8 @@ RSpec.describe Nanook::Node do
     response = Nanook.new.node.representatives(unit: :raw)
 
     expect(response).to eq(
-      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => 3822372327060170000000000000000000000,
-      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111awsq94gtecn') => 30999999999999999999999999000000,
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => 3_822_372_327_060_170_000_000_000_000_000_000_000,
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111awsq94gtecn') => 30_999_999_999_999_999_999_999_999_000_000,
       Nanook.new.account('nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi') => 0
     )
   end
@@ -189,9 +189,9 @@ RSpec.describe Nanook::Node do
 
     expect(response).to eq(
       [
-       Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda'),
-       Nanook.new.account('nano_1111111111111111111111111111111111111111111111111awsq94gtecn'),
-       Nanook.new.account('nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi')
+        Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda'),
+        Nanook.new.account('nano_1111111111111111111111111111111111111111111111111awsq94gtecn'),
+        Nanook.new.account('nano_114nk4rwjctu6n6tr6g6ps61g1w3hdpjxfas4xj1tq6i8jyomc5d858xr1xi')
       ]
     )
   end
@@ -251,7 +251,7 @@ RSpec.describe Nanook::Node do
 
   it 'change receive minimum' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"receive_minimum_set\",\"amount\":\"1000000001000000000000000000000\"}",
+      body: '{"action":"receive_minimum_set","amount":"1000000001000000000000000000000"}',
       headers: headers
     ).to_return(
       status: 200,
@@ -264,7 +264,7 @@ RSpec.describe Nanook::Node do
 
   it 'change receive minimum in raw' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"receive_minimum_set\",\"amount\":\"1000000001000000000000000000000\"}",
+      body: '{"action":"receive_minimum_set","amount":"1000000001000000000000000000000"}',
       headers: headers
     ).to_return(
       status: 200,
@@ -272,12 +272,12 @@ RSpec.describe Nanook::Node do
       headers: {}
     )
 
-    expect(Nanook.new.node.change_receive_minimum(1000000001000000000000000000000, unit: :raw)).to be true
+    expect(Nanook.new.node.change_receive_minimum(1_000_000_001_000_000_000_000_000_000_000, unit: :raw)).to be true
   end
 
   it 'search pending' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"search_pending_all\"}",
+      body: '{"action":"search_pending_all"}',
       headers: headers
     ).to_return(
       status: 200,
@@ -290,7 +290,7 @@ RSpec.describe Nanook::Node do
 
   it 'receive minimum' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"receive_minimum\"}",
+      body: '{"action":"receive_minimum"}',
       headers: headers
     ).to_return(
       status: 200,
@@ -303,7 +303,7 @@ RSpec.describe Nanook::Node do
 
   it 'receive minimum unit raw' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"receive_minimum\"}",
+      body: '{"action":"receive_minimum"}',
       headers: headers
     ).to_return(
       status: 200,
@@ -311,7 +311,7 @@ RSpec.describe Nanook::Node do
       headers: {}
     )
 
-    expect(Nanook.new.node.receive_minimum(unit: :raw)).to eq(1000000000000000000000000)
+    expect(Nanook.new.node.receive_minimum(unit: :raw)).to eq(1_000_000_000_000_000_000_000_000)
   end
 
   it 'should request confirmation_quorum correctly' do
@@ -321,27 +321,27 @@ RSpec.describe Nanook::Node do
     ).to_return(
       status: 200,
       body: <<~BODY,
-      {
-        "quorum_delta": "41469707173777717318245825935516662250",
-        "online_weight_quorum_percent": "50",
-        "online_weight_minimum": "60000000000000000000000000000000000000",
-        "online_stake_total": "82939414347555434636491651871033324568",
-        "peers_stake_total": "69026910610720098597176027400951402360",
-        "peers_stake_required": "60000000000000000000000000000000000000"
-      }
+        {
+          "quorum_delta": "41469707173777717318245825935516662250",
+          "online_weight_quorum_percent": "50",
+          "online_weight_minimum": "60000000000000000000000000000000000000",
+          "online_stake_total": "82939414347555434636491651871033324568",
+          "peers_stake_total": "69026910610720098597176027400951402360",
+          "peers_stake_required": "60000000000000000000000000000000000000"
+        }
       BODY
       headers: {}
     )
 
     response = Nanook.new.node.confirmation_quorum
     expect(response).to eq({
-      "quorum_delta": 41469707.17377772,
-      "online_weight_quorum_percent": 50,
-      "online_weight_minimum": 60000000.0,
-      "online_stake_total": 82939414.34755543,
-      "peers_stake_total": 69026910.6107201,
-      "peers_stake_required": 60000000.0
-    })
+                             "quorum_delta": 41_469_707.17377772,
+                             "online_weight_quorum_percent": 50,
+                             "online_weight_minimum": 60_000_000.0,
+                             "online_stake_total": 82_939_414.34755543,
+                             "peers_stake_total": 69_026_910.6107201,
+                             "peers_stake_required": 60_000_000.0
+                           })
   end
 
   it 'should request confirmation_quorum correctly, unit: :raw' do
@@ -351,27 +351,27 @@ RSpec.describe Nanook::Node do
     ).to_return(
       status: 200,
       body: <<~BODY,
-      {
-        "quorum_delta": "41469707173777717318245825935516662250",
-        "online_weight_quorum_percent": "50",
-        "online_weight_minimum": "60000000000000000000000000000000000000",
-        "online_stake_total": "82939414347555434636491651871033324568",
-        "peers_stake_total": "69026910610720098597176027400951402360",
-        "peers_stake_required": "60000000000000000000000000000000000000"
-      }
+        {
+          "quorum_delta": "41469707173777717318245825935516662250",
+          "online_weight_quorum_percent": "50",
+          "online_weight_minimum": "60000000000000000000000000000000000000",
+          "online_stake_total": "82939414347555434636491651871033324568",
+          "peers_stake_total": "69026910610720098597176027400951402360",
+          "peers_stake_required": "60000000000000000000000000000000000000"
+        }
       BODY
       headers: {}
     )
 
     response = Nanook.new.node.confirmation_quorum(unit: :raw)
     expect(response).to eq({
-      "quorum_delta": 41469707173777717318245825935516662250,
-      "online_weight_quorum_percent": 50,
-      "online_weight_minimum": 60000000000000000000000000000000000000,
-      "online_stake_total": 82939414347555434636491651871033324568,
-      "peers_stake_total": 69026910610720098597176027400951402360,
-      "peers_stake_required": 60000000000000000000000000000000000000
-    })
+                             "quorum_delta": 41_469_707_173_777_717_318_245_825_935_516_662_250,
+                             "online_weight_quorum_percent": 50,
+                             "online_weight_minimum": 60_000_000_000_000_000_000_000_000_000_000_000_000,
+                             "online_stake_total": 82_939_414_347_555_434_636_491_651_871_033_324_568,
+                             "peers_stake_total": 69_026_910_610_720_098_597_176_027_400_951_402_360,
+                             "peers_stake_required": 60_000_000_000_000_000_000_000_000_000_000_000_000
+                           })
   end
 
   it 'should request stop correctly' do
@@ -469,18 +469,18 @@ RSpec.describe Nanook::Node do
     response = Nanook.new.node.synchronizing_blocks
 
     expect(response).to eq({
-      Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
-        type: 'state',
-        account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
-        representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
-        link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
-        previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
-        link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
-        signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
-        work: '8a142e07a10996d5',
-        balance: 5606157.0,
-      }
-    })
+                             Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
+                               type: 'state',
+                               account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+                               representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+                               link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+                               previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+                               link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+                               signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+                               work: '8a142e07a10996d5',
+                               balance: 5_606_157.0
+                             }
+                           })
   end
 
   it 'should show synchronizing_blocks with limit' do
@@ -512,18 +512,18 @@ RSpec.describe Nanook::Node do
     response = Nanook.new.node.synchronizing_blocks(limit: 1)
 
     expect(response).to eq({
-      Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
-        type: 'state',
-        account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
-        representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
-        link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
-        previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
-        link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
-        signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
-        work: '8a142e07a10996d5',
-        balance: 5606157.0,
-      }
-    })
+                             Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
+                               type: 'state',
+                               account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+                               representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+                               link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+                               previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+                               link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+                               signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+                               work: '8a142e07a10996d5',
+                               balance: 5_606_157.0
+                             }
+                           })
   end
 
   it 'should show synchronizing_blocks with unit raw' do
@@ -555,17 +555,17 @@ RSpec.describe Nanook::Node do
     response = Nanook.new.node.synchronizing_blocks(unit: :raw)
 
     expect(response).to eq({
-      Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
-        type: 'state',
-        account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
-        representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
-        link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
-        previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
-        link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
-        signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
-        work: '8a142e07a10996d5',
-        balance: 5606157000000000000000000000000000000,
-      }
-    })
+                             Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9') => {
+                               type: 'state',
+                               account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+                               representative: Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+                               link_as_account: Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+                               previous: Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+                               link: Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+                               signature: '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+                               work: '8a142e07a10996d5',
+                               balance: 5_606_157_000_000_000_000_000_000_000_000_000_000
+                             }
+                           })
   end
 end

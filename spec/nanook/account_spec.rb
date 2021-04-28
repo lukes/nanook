@@ -5,9 +5,9 @@ RSpec.describe Nanook::Account do
   let(:account_id) { 'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000' }
 
   it 'can compare equality' do
-    account_1 = Nanook.new.account("foo")
-    account_2 = Nanook.new.account("foo")
-    account_3 = Nanook.new.account("bar")
+    account_1 = Nanook.new.account('foo')
+    account_2 = Nanook.new.account('foo')
+    account_3 = Nanook.new.account('bar')
 
     expect(account_1).to eq(account_2)
     expect(account_1).not_to eq(account_3)
@@ -15,10 +15,10 @@ RSpec.describe Nanook::Account do
 
   it 'can be used as a hash key lookup' do
     hash = {
-      Nanook.new.account("foo") => "found"
+      Nanook.new.account('foo') => 'found'
     }
 
-    expect(hash[Nanook.new.account("foo")]).to eq("found")
+    expect(hash[Nanook.new.account('foo')]).to eq('found')
   end
 
   it 'account blocks' do
@@ -39,8 +39,8 @@ RSpec.describe Nanook::Account do
     )
 
     expect(Nanook.new.account(account_id).blocks).to eq([
-      Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
-    ])
+                                                          Nanook.new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+                                                        ])
   end
 
   it 'account blocks with limit' do
@@ -61,8 +61,8 @@ RSpec.describe Nanook::Account do
     )
 
     expect(Nanook.new.account(account_id).blocks(limit: 1)).to eq([
-      Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
-    ])
+                                                                    Nanook.new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+                                                                  ])
   end
 
   it 'account blocks with sorting' do
@@ -83,8 +83,8 @@ RSpec.describe Nanook::Account do
     )
 
     expect(Nanook.new.account(account_id).blocks(sort: :desc)).to eq([
-      Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
-    ])
+                                                                       Nanook.new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+                                                                     ])
   end
 
   it 'open block' do
@@ -105,7 +105,7 @@ RSpec.describe Nanook::Account do
     )
 
     expect(Nanook.new.account(account_id).open_block).to eq(
-      Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+      Nanook.new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
     )
   end
 
@@ -129,12 +129,12 @@ RSpec.describe Nanook::Account do
     response = Nanook.new.account(account_id).history
 
     expect(response).to have(1).item
-    expect(response.first).to eq ({
-      block: Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'),
-      account: Nanook::new.account('nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'),
-      amount: 100.0,
-      type: 'receive'
-    })
+    expect(response.first).to eq({
+                                   block: Nanook.new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'),
+                                   account: Nanook.new.account('nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'),
+                                   amount: 100.0,
+                                   type: 'receive'
+                                 })
   end
 
   it 'account history with sort' do
@@ -157,12 +157,12 @@ RSpec.describe Nanook::Account do
     response = Nanook.new.account(account_id).history(sort: :desc)
 
     expect(response).to have(1).item
-    expect(response.first).to eq ({
-      block: Nanook::new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'),
-      account: Nanook::new.account('nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'),
-      amount: 100.0,
-      type: 'receive'
-    })
+    expect(response.first).to eq({
+                                   block: Nanook.new.block('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'),
+                                   account: Nanook.new.account('nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'),
+                                   amount: 100.0,
+                                   type: 'receive'
+                                 })
   end
 
   it 'account history without default count' do
@@ -215,7 +215,7 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"history\": \"\"}",
+      body: '{"history": ""}',
       headers: {}
     )
 
@@ -282,7 +282,7 @@ RSpec.describe Nanook::Account do
     representative = Nanook.new.account(account_id).representative
 
     expect(representative).to be_kind_of(Nanook::Account)
-    expect(representative.id).to eq("nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5")
+    expect(representative.id).to eq('nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5')
   end
 
   it 'account info' do
@@ -310,17 +310,17 @@ RSpec.describe Nanook::Account do
     response = Nanook.new.account(account_id).info
 
     expect(response).to eq({
-      id: account_id,
-      frontier: Nanook.new.block('FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5'),
-      open_block: Nanook.new.block('191CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948'),
-      representative_block: Nanook.new.block('991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948'),
-      balance: 235580100.1760343,
-      last_modified_at: Time.at(1501793775),
-      block_count: 33,
-      representative: Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3'),
-      weight: 1105577.03093565,
-      pending: 2309.370929,
-    })
+                             id: account_id,
+                             frontier: Nanook.new.block('FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5'),
+                             open_block: Nanook.new.block('191CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948'),
+                             representative_block: Nanook.new.block('991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948'),
+                             balance: 235_580_100.1760343,
+                             last_modified_at: Time.at(1_501_793_775),
+                             block_count: 33,
+                             representative: Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3'),
+                             weight: 1_105_577.03093565,
+                             pending: 2309.370929
+                           })
     expect(response[:last_modified_at].zone).to eq('UTC')
   end
 
@@ -349,9 +349,9 @@ RSpec.describe Nanook::Account do
     response = Nanook.new.account(account_id).info(unit: :raw)
 
     expect(response).to include(
-      balance: 235580100176034320859259343606608761791,
-      pending: 2309370929000000000000000000000000,
-      weight: 1105577030935649664609129644855132177,
+      balance: 235_580_100_176_034_320_859_259_343_606_608_761_791,
+      pending: 2_309_370_929_000_000_000_000_000_000_000_000,
+      weight: 1_105_577_030_935_649_664_609_129_644_855_132_177
     )
   end
 
@@ -369,7 +369,7 @@ RSpec.describe Nanook::Account do
 
     expect(pending).to have(1).item
     expect(pending.first).to be_kind_of(Nanook::Block)
-    expect(pending.first.id).to eq("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
+    expect(pending.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
   end
 
   it 'account pending with no blocks (empty string response) to be empty' do
@@ -398,7 +398,7 @@ RSpec.describe Nanook::Account do
     pending = Nanook.new.account(account_id).pending(limit: 1)
 
     expect(pending.first).to be_kind_of(Nanook::Block)
-    expect(pending.first.id).to eq("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
+    expect(pending.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
   end
 
   it 'account pending detailed' do
@@ -485,7 +485,7 @@ RSpec.describe Nanook::Account do
       headers: {}
     )
 
-    expect(Nanook.new.account(account_id).weight(unit: :raw)).to eq 1334523434434545345345345345666660000000
+    expect(Nanook.new.account(account_id).weight(unit: :raw)).to eq 1_334_523_434_434_545_345_345_345_345_666_660_000_000
   end
 
   it 'account ledger' do
@@ -523,10 +523,10 @@ RSpec.describe Nanook::Account do
         representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
         representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
         balance: 100.0,
-        last_modified_at: Time.at(1511476234),
+        last_modified_at: Time.at(1_511_476_234),
         block_count: 2,
         weight: 2100.0,
-        pending: 3100.0,
+        pending: 3100.0
       }
     )
   end
@@ -568,10 +568,10 @@ RSpec.describe Nanook::Account do
         representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
         representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
         balance: 100.0,
-        last_modified_at: Time.at(1511476234),
+        last_modified_at: Time.at(1_511_476_234),
         block_count: 2,
         weight: 2100.0,
-        pending: 3100.0,
+        pending: 3100.0
       }
     )
   end
@@ -611,10 +611,10 @@ RSpec.describe Nanook::Account do
         representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
         representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
         balance: 100.0,
-        last_modified_at: Time.at(1511476234),
+        last_modified_at: Time.at(1_511_476_234),
         block_count: 2,
         weight: 2100.0,
-        pending: 3100.0,
+        pending: 3100.0
       }
     )
   end
@@ -654,10 +654,10 @@ RSpec.describe Nanook::Account do
         representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
         representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
         balance: 100.0,
-        last_modified_at: Time.at(1511476234),
+        last_modified_at: Time.at(1_511_476_234),
         block_count: 2,
         weight: 2100.0,
-        pending: 3100.0,
+        pending: 3100.0
       }
     )
   end
@@ -696,11 +696,11 @@ RSpec.describe Nanook::Account do
         open_block: Nanook.new.block('543B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
         representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
         representative: Nanook.new.account('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs'),
-        balance: 100000000000000000000000000000000,
-        last_modified_at: Time.at(1511476234),
+        balance: 100_000_000_000_000_000_000_000_000_000_000,
+        last_modified_at: Time.at(1_511_476_234),
         block_count: 2,
-        weight: 2100000000000000000000000000000000,
-        pending: 3100000000000000000000000000000000,
+        weight: 2_100_000_000_000_000_000_000_000_000_000_000,
+        pending: 3_100_000_000_000_000_000_000_000_000_000_000
       }
     )
   end
@@ -752,8 +752,8 @@ RSpec.describe Nanook::Account do
     response = Nanook.new.account(account_id).delegators
 
     expect(response).to eq(
-      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500000.0,
-      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961647.97082073
+      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500_000.0,
+      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961_647.97082073
     )
   end
 
@@ -773,8 +773,8 @@ RSpec.describe Nanook::Account do
     response = Nanook.new.account(account_id).delegators(unit: :raw)
 
     expect(response).to eq(
-      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500000000000000000000000000000000000,
-      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961647970820730000000000000000000000
+      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500_000_000_000_000_000_000_000_000_000_000_000,
+      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961_647_970_820_730_000_000_000_000_000_000_000
     )
   end
 
@@ -784,7 +784,7 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"delegators\": \"\"}",
+      body: '{"delegators": ""}',
       headers: {}
     )
 
@@ -816,7 +816,7 @@ RSpec.describe Nanook::Account do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"count\":\"2\"}",
+      body: '{"count":"2"}',
       headers: {}
     )
 

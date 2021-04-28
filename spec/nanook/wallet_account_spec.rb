@@ -46,9 +46,9 @@ RSpec.describe Nanook::WalletAccount do
       )
       .to_return(status: 200, body: '{"exists":"1"}', headers: {})
 
-    account_1 = Nanook.new.wallet(wallet_id).account("foo")
-    account_2 = Nanook.new.wallet(wallet_id).account("foo")
-    account_3 = Nanook.new.wallet(wallet_id).account("bar")
+    account_1 = Nanook.new.wallet(wallet_id).account('foo')
+    account_2 = Nanook.new.wallet(wallet_id).account('foo')
+    account_3 = Nanook.new.wallet(wallet_id).account('bar')
 
     expect(account_1).to eq(account_2)
     expect(account_1).not_to eq(account_3)
@@ -63,10 +63,10 @@ RSpec.describe Nanook::WalletAccount do
       .to_return(status: 200, body: '{"exists":"1"}', headers: {})
 
     hash = {
-      Nanook.new.wallet(wallet_id).account("foo") => "found"
+      Nanook.new.wallet(wallet_id).account('foo') => 'found'
     }
 
-    expect(hash[Nanook.new.wallet(wallet_id).account("foo")]).to eq("found")
+    expect(hash[Nanook.new.wallet(wallet_id).account('foo')]).to eq('found')
   end
 
   it 'wallet account create' do
@@ -668,8 +668,8 @@ RSpec.describe Nanook::WalletAccount do
     response = Nanook.new.wallet(wallet_id).account(account_id).delegators
 
     expect(response).to eq(
-      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500000.0,
-      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961647.97082073
+      Nanook.new.account('nano_13bqhi1cdqq8yb9szneoc38qk899d58i5rcrgdk5mkdm86hekpoez3zxw5sd') => 500_000.0,
+      Nanook.new.account('nano_17k6ug685154an8gri9whhe5kb5z1mf5w6y39gokc1657sh95fegm8ht1zpn') => 961_647.97082073
     )
   end
 
@@ -681,7 +681,7 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"work\":\"432e5cf728c90f4f\"}",
+      body: '{"work":"432e5cf728c90f4f"}',
       headers: {}
     )
 
@@ -696,7 +696,7 @@ RSpec.describe Nanook::WalletAccount do
       headers: headers
     ).to_return(
       status: 200,
-      body: "{\"success\":\"\"}",
+      body: '{"success":""}',
       headers: {}
     )
 
