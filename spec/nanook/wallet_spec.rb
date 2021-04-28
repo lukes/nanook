@@ -16,9 +16,9 @@ RSpec.describe Nanook::Wallet do
   end
 
   it 'can compare equality' do
-    wallet_1 = Nanook.new.wallet("foo")
-    wallet_2 = Nanook.new.wallet("foo")
-    wallet_3 = Nanook.new.wallet("bar")
+    wallet_1 = Nanook.new.wallet('foo')
+    wallet_2 = Nanook.new.wallet('foo')
+    wallet_3 = Nanook.new.wallet('bar')
 
     expect(wallet_1).to eq(wallet_2)
     expect(wallet_1).not_to eq(wallet_3)
@@ -26,12 +26,11 @@ RSpec.describe Nanook::Wallet do
 
   it 'can be used as a hash key lookup' do
     hash = {
-      Nanook.new.wallet("foo") => "found"
+      Nanook.new.wallet('foo') => 'found'
     }
 
-    expect(hash[Nanook.new.wallet("foo")]).to eq("found")
+    expect(hash[Nanook.new.wallet('foo')]).to eq('found')
   end
-
 
   it 'should have an account method' do
     expect(Nanook.new.wallet(wallet_id).account).to be_kind_of(Nanook::WalletAccount)
@@ -107,9 +106,9 @@ RSpec.describe Nanook::Wallet do
     )
 
     wallet = '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F'
-    accounts = [
-      'nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000',
-      'nano_5e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000'
+    accounts = %w[
+      nano_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
+      nano_5e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000
     ]
 
     expect(Nanook.new.wallet(wallet_id).move_accounts(wallet, accounts)).to be true
@@ -205,13 +204,13 @@ RSpec.describe Nanook::Wallet do
     response = Nanook.new.wallet(wallet_id).history
 
     expect(response.first).to eq({
-      type: "send",
-      account: Nanook.new.wallet(wallet_id).account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
-      amount: 30000.0,
-      block_account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
-      block: Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9'),
-      local_timestamp: Time.at(1527698508).utc
-    })
+                                   type: 'send',
+                                   account: Nanook.new.wallet(wallet_id).account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+                                   amount: 30_000.0,
+                                   block_account: Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+                                   block: Nanook.new.block('87434F8041869A01C8F6F263B87972D7BA443A72E0A97D7A3FD0CCC2358FD6F9'),
+                                   local_timestamp: Time.at(1_527_698_508).utc
+                                 })
   end
 
   it 'wallet search pending' do
@@ -673,7 +672,7 @@ RSpec.describe Nanook::Wallet do
     expect(response.keys).to eq(
       [
         Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda'),
-        Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3'),
+        Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3')
       ]
     )
     expect(response[Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda')]).to eq(
@@ -724,7 +723,7 @@ RSpec.describe Nanook::Wallet do
     expect(response.keys).to eq(
       [
         Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda'),
-        Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3'),
+        Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3')
       ]
     )
     expect(response[Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda')]).to eq(
@@ -732,12 +731,12 @@ RSpec.describe Nanook::Wallet do
         {
           block: Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
           source: Nanook.new.account('nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'),
-          amount: 6000000000000000000000000000000
+          amount: 6_000_000_000_000_000_000_000_000_000_000
         },
         {
           block: Nanook.new.block('242A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
           source: Nanook.new.account('nano_3dcfozsmekr1tr9skf1oa5wbgmxt81qepfdnt7zicq5x3hk65fg4fqj58mbr'),
-          amount: 12000000000000000000000000000000
+          amount: 12_000_000_000_000_000_000_000_000_000_000
         }
       ]
     )
@@ -818,7 +817,7 @@ RSpec.describe Nanook::Wallet do
         frontier: Nanook.new.block('E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321'),
         open_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
         representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B605'),
-        last_modified_at: Time.at(1511476234),
+        last_modified_at: Time.at(1_511_476_234),
         block_count: 2
       }
     )
@@ -851,11 +850,11 @@ RSpec.describe Nanook::Wallet do
 
     expect(response).to eq(
       Nanook.new.account('nano_11119gbh8hb4hj1duf7fdtfyf5s75okzxdgupgpgm1bj78ex3kgy7frt3s9n') => {
-        balance: 234375100000000000000000000000000,
+        balance: 234_375_100_000_000_000_000_000_000_000_000,
         frontier: Nanook.new.block('E71AF3E9DD86BBD8B4620EFA63E065B34D358CFC091ACB4E103B965F95783321'),
         open_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B60F'),
         representative_block: Nanook.new.block('643B77F1ECEFBDBE1CC909872964C1DBBE23A6149BD3CEF2B50B76044659B605'),
-        last_modified_at: Time.at(1511476234),
+        last_modified_at: Time.at(1_511_476_234),
         block_count: 2
       }
     )
@@ -914,8 +913,8 @@ RSpec.describe Nanook::Wallet do
     response = Nanook.new.wallet(wallet_id).info(unit: :raw)
 
     expect(response).to eq(
-      balance: 234375100000000000000000000000000,
-      pending: 134375100000000000000000000000000,
+      balance: 234_375_100_000_000_000_000_000_000_000_000,
+      pending: 134_375_100_000_000_000_000_000_000_000_000,
       accounts_count: 3,
       adhoc_count: 1,
       deterministic_count: 4,
@@ -944,10 +943,10 @@ RSpec.describe Nanook::Wallet do
     response = Nanook.new.wallet(wallet_id).republish_blocks
 
     expect(response).to eq(
-      [
-        '991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948',
-        'A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293',
-        '90D0C16AC92DD35814E84BFBCC739A039615D0A42A76EF44ADAEF1D99E9F8A35'
+      %w[
+        991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948
+        A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293
+        90D0C16AC92DD35814E84BFBCC739A039615D0A42A76EF44ADAEF1D99E9F8A35
       ].map do |block_id|
         Nanook.new.block(block_id)
       end

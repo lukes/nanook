@@ -5,9 +5,9 @@ RSpec.describe Nanook::PrivateKey do
   let(:key) { '781186FB9EF17DB6E3D1056550D9FAE5D5BBADA6A6BC370E4CBB938B1DC71DA3' }
 
   it 'can compare equality' do
-    key_1 = Nanook.new.private_key("foo")
-    key_2 = Nanook.new.private_key("foo")
-    key_3 = Nanook.new.private_key("bar")
+    key_1 = Nanook.new.private_key('foo')
+    key_2 = Nanook.new.private_key('foo')
+    key_3 = Nanook.new.private_key('bar')
 
     expect(key_1).to eq(key_2)
     expect(key_1).not_to eq(key_3)
@@ -15,10 +15,10 @@ RSpec.describe Nanook::PrivateKey do
 
   it 'can be used as a hash key lookup' do
     hash = {
-      Nanook.new.private_key("foo") => "found"
+      Nanook.new.private_key('foo') => 'found'
     }
 
-    expect(hash[Nanook.new.private_key("foo")]).to eq("found")
+    expect(hash[Nanook.new.private_key('foo')]).to eq('found')
   end
 
   it 'should request account correctly' do
@@ -36,7 +36,7 @@ RSpec.describe Nanook::PrivateKey do
     account = Nanook.new.private_key(key).account
 
     expect(account).to be_kind_of(Nanook::Account)
-    expect(account.id).to eq("nano_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx")
+    expect(account.id).to eq('nano_1e5aqegc1jb7qe964u4adzmcezyo6o146zb8hm6dft8tkp79za3sxwjym5rx')
   end
 
   it 'should request public_key correctly' do
@@ -54,7 +54,7 @@ RSpec.describe Nanook::PrivateKey do
     account = Nanook.new.private_key(key).public_key
 
     expect(account).to be_kind_of(Nanook::PublicKey)
-    expect(account.id).to eq("3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039")
+    expect(account.id).to eq('3068BB1CA04525BB0E416C485FE6A67FD52540227D267CC8B6E8DA958A7FA039')
   end
 
   it 'should create a key correctly' do

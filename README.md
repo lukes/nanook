@@ -124,11 +124,11 @@ Read the [Using Nanook](https://github.com/lukes/nanook/wiki/Using-nanook) page 
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/3.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses.
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/3.0.1/) for a searchable detailed description of every class and method, what the arguments mean, and example responses.
 
 ### Wallets
 
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/3.0.0/Nanook/Wallet.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/3.0.1/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 #### Create wallet:
 
@@ -212,7 +212,7 @@ Any account on the Nano network that is known by your node can be initialized th
 account = nanook.account(account_id)
 ```
 
-See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/3.0.0/Nanook/Account.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/3.0.1/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
 account.balance
@@ -260,7 +260,7 @@ account = wallet.account(account_id)
 
 As well as the following methods, all methods of [regular accounts](#working-with-any-account) can also be called.
 
-See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/3.0.0/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/3.0.1/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
 
 ```ruby
 account.pay(to: recipient_account_id, amount: 2, id: unique_id)
@@ -275,7 +275,7 @@ account.destroy
 
 ### Blocks
 
-See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/3.0.0/Nanook/Block.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/3.0.1/Nanook/Block.html) for a detailed description of each method and example responses.
 
 ```ruby
 block = nanook.block(block_id)
@@ -324,7 +324,7 @@ block.valid_work?(work)
 
 ### Managing your nano node
 
-See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/3.0.0/Nanook/Node.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/3.0.1/Nanook/Node.html) for a detailed description of each method and example responses.
 
 ```ruby
 node = nanook.node

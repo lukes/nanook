@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Nanook::Util do
   subject do
     Class.new do

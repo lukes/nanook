@@ -487,8 +487,15 @@ class Nanook
       response.merge!(contents) if contents
 
       response.delete(:block_account) # duplicate of contents.account
-      response[:type] = response.delete(:subtype) # rename key
       response[:last_modified_at] = response.delete(:modified_timestamp) # rename key
+
+      # `type` can be "open", "send", "receive", "change", "epoch" or "state".
+      # blocks with `type` == "state" may have a `subtype` that gives more information
+      # about the block ("send", "receive", "change", "epoch"), in which case replace
+      # the `type` with this value.
+      if response[:type] == 'state' && (subtype = response.delete(:subtype))
+        response[:type] = subtype
+      end
 
       response[:account] = as_account(response[:account]) if response[:account]
       response[:representative] = as_account(response[:representative]) if response[:representative]

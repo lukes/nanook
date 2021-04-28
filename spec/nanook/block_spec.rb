@@ -5,9 +5,9 @@ RSpec.describe Nanook::Block do
   let(:block) { '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F' }
 
   it 'can compare equality' do
-    block_1 = Nanook.new.block("foo")
-    block_2 = Nanook.new.block("foo")
-    block_3 = Nanook.new.block("bar")
+    block_1 = Nanook.new.block('foo')
+    block_2 = Nanook.new.block('foo')
+    block_3 = Nanook.new.block('bar')
 
     expect(block_1).to eq(block_2)
     expect(block_1).not_to eq(block_3)
@@ -15,10 +15,10 @@ RSpec.describe Nanook::Block do
 
   it 'can be used as a hash key lookup' do
     hash = {
-      Nanook.new.block("foo") => "found"
+      Nanook.new.block('foo') => 'found'
     }
 
-    expect(hash[Nanook.new.block("foo")]).to eq("found")
+    expect(hash[Nanook.new.block('foo')]).to eq('found')
   end
 
   it 'should request cancel_work correctly' do
@@ -45,7 +45,7 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).chain.first).to be_kind_of(Nanook::Block)
-    expect(Nanook.new.block(block).chain.first.id).to eq("000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F")
+    expect(Nanook.new.block(block).chain.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
   end
 
   it 'should request chain and when no blocks (empty string response) return an array' do
@@ -174,20 +174,72 @@ RSpec.describe Nanook::Block do
 
     expect(response).to eq(
       {
-        "amount": 30000.0,
-        "balance": 5606157.0,
+        "amount": 30_000.0,
+        "balance": 5_606_157.0,
         "height": 58,
-        "local_timestamp": Time.at(1617855149),
+        "local_timestamp": Time.at(1_617_855_149),
         "confirmed": true,
-        "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
-        "type": "send",
-        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
-        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
-        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
-        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
-        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
-        "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
-        "work": "8a142e07a10996d5"
+        "id": '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F',
+        "type": 'send',
+        "account": Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+        "previous": Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+        "representative": Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+        "link": Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+        "link_as_account": Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+        "signature": '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+        "work": '8a142e07a10996d5'
+      }
+    )
+  end
+
+  it 'should request info correctly when `type` is "state" and there is no `subtype`' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"block_info\",\"hash\":\"#{block}\",\"json_block\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "block_account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+          "amount": "30000000000000000000000000000000000",
+          "balance": "5606157000000000000000000000000000000",
+          "height": "58",
+          "local_timestamp": "1617855149",
+          "confirmed": "true",
+          "contents": {
+            "type": "state",
+            "account": "nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
+            "previous": "CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E",
+            "representative": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+            "balance": "5606157000000000000000000000000000000",
+            "link": "5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5",
+            "link_as_account": "nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z",
+            "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
+            "work": "8a142e07a10996d5"
+          }
+        }
+      BODY
+      headers: {}
+    )
+
+    response = Nanook.new.block(block).info
+
+    expect(response).to eq(
+      {
+        "amount": 30_000.0,
+        "balance": 5_606_157.0,
+        "height": 58,
+        "local_timestamp": Time.at(1_617_855_149),
+        "confirmed": true,
+        "id": '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F',
+        "type": 'state',
+        "account": Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+        "previous": Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+        "representative": Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+        "link": Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+        "link_as_account": Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+        "signature": '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+        "work": '8a142e07a10996d5'
       }
     )
   end
@@ -227,20 +279,20 @@ RSpec.describe Nanook::Block do
 
     expect(response).to eq(
       {
-        "amount": 30000000000000000000000000000000000,
-        "balance": 5606157000000000000000000000000000000,
+        "amount": 30_000_000_000_000_000_000_000_000_000_000_000,
+        "balance": 5_606_157_000_000_000_000_000_000_000_000_000_000,
         "height": 58,
-        "local_timestamp": Time.at(1617855149),
+        "local_timestamp": Time.at(1_617_855_149),
         "confirmed": true,
-        "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
-        "type": "send",
-        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
-        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
-        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
-        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
-        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
-        "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
-        "work": "8a142e07a10996d5"
+        "id": '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F',
+        "type": 'send',
+        "account": Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+        "previous": Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+        "representative": Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+        "link": Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+        "link_as_account": Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+        "signature": '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+        "work": '8a142e07a10996d5'
       }
     )
   end
@@ -255,7 +307,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect { Nanook.new.block(block).info } .to raise_error(Nanook::NodeRpcError)
+    expect { Nanook.new.block(block).info }.to raise_error(Nanook::NodeRpcError)
   end
 
   it 'should request info allow_unchecked when block is unchecked correctly' do
@@ -301,16 +353,17 @@ RSpec.describe Nanook::Block do
     expect(response).to eq(
       {
         "balance": 0.00018901267959211,
-        "last_modified_at": Time.at(1565856525),
+        "last_modified_at": Time.at(1_565_856_525),
         "confirmed": false,
         "id": block,
-        "account": Nanook.new.account("nano_1hmqzugsmsn4jxtzo5yrm4rsysftkh9343363hctgrjch1984d8ey9zoyqex"),
-        "previous": Nanook.new.block("009C587914611E83EE7F75BD9C000C430C720D0364D032E84F37678D7D012911"),
-        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
+        "account": Nanook.new.account('nano_1hmqzugsmsn4jxtzo5yrm4rsysftkh9343363hctgrjch1984d8ey9zoyqex'),
+        "previous": Nanook.new.block('009C587914611E83EE7F75BD9C000C430C720D0364D032E84F37678D7D012911'),
+        "representative": Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
         "link": Nanook.new.block(0),
-        "link_as_account": Nanook.new.account("nano_1111111111111111111111111111111111111111111111111111hifc8npp"),
-        "signature": "845C8660750895843C013CE33E31B80EF0A7A69E52DDAF74A5F1BDFAA9A52E4D9EA2C3BE1AB0BD5790FCC1AD9B7A3D2F4B44EECE4279A8184D414A30A1B4620F",
-        "work": "0dfb32653e189699"
+        "link_as_account": Nanook.new.account('nano_1111111111111111111111111111111111111111111111111111hifc8npp'),
+        "signature": '845C8660750895843C013CE33E31B80EF0A7A69E52DDAF74A5F1BDFAA9A52E4D9EA2C3BE1AB0BD5790FCC1AD9B7A3D2F4B44EECE4279A8184D414A30A1B4620F',
+        "type": 'state',
+        "work": '0dfb32653e189699'
       }
     )
   end
@@ -359,20 +412,20 @@ RSpec.describe Nanook::Block do
 
     expect(response).to eq(
       {
-        "amount": 30000.0,
-        "balance": 5606157.0,
+        "amount": 30_000.0,
+        "balance": 5_606_157.0,
         "height": 58,
         "local_timestamp": Time.at(0),
         "confirmed": true,
-        "id": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
-        "type": "send",
-        "account": Nanook.new.account("nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"),
-        "previous": Nanook.new.block("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E"),
-        "representative": Nanook.new.account("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou"),
-        "link": Nanook.new.block("5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5"),
-        "link_as_account": Nanook.new.account("nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"),
-        "signature": "82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501",
-        "work": "8a142e07a10996d5",
+        "id": '000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F',
+        "type": 'send',
+        "account": Nanook.new.account('nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'),
+        "previous": Nanook.new.block('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E'),
+        "representative": Nanook.new.account('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou'),
+        "link": Nanook.new.block('5D1AA8A45F8736519D707FCB375976A7F9AF795091021D7E9C7548D6F45DD8D5'),
+        "link_as_account": Nanook.new.account('nano_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'),
+        "signature": '82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501',
+        "work": '8a142e07a10996d5'
       }
     )
   end
@@ -392,9 +445,9 @@ RSpec.describe Nanook::Block do
 
     expect(Nanook.new.block(block).republish.first).to be_kind_of(Nanook::Block)
     expect(Nanook.new.block(block).republish.map(&:id)).to eq(
-      [
-        "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
-        "A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"
+      %w[
+        991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948
+        A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293
       ]
     )
   end
@@ -474,7 +527,7 @@ RSpec.describe Nanook::Block do
     successors = Nanook.new.block(block).successors
 
     expect(successors.first).to be_kind_of(Nanook::Block)
-    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
+    expect(successors.first.id).to eq('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')
   end
 
   it 'should request successors with limit correctly' do
@@ -490,7 +543,7 @@ RSpec.describe Nanook::Block do
     successors = Nanook.new.block(block).successors(limit: 1)
 
     expect(successors.first).to be_kind_of(Nanook::Block)
-    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
+    expect(successors.first.id).to eq('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')
   end
 
   it 'should request successors with offset correctly' do
@@ -506,7 +559,7 @@ RSpec.describe Nanook::Block do
     successors = Nanook.new.block(block).successors(offset: 1)
 
     expect(successors.first).to be_kind_of(Nanook::Block)
-    expect(successors.first.id).to eq("A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293")
+    expect(successors.first.id).to eq('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')
   end
 
   it 'should request successors when there are none (empty string response) and return blank array' do
@@ -606,7 +659,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).type).to eq("send")
+    expect(Nanook.new.block(block).type).to eq('send')
   end
 
   it 'should request send? correctly' do
@@ -886,7 +939,7 @@ RSpec.describe Nanook::Block do
 
     representative = Nanook.new.block(block).representative
     expect(representative).to be_kind_of(Nanook::Account)
-    expect(representative.id).to eq("nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou")
+    expect(representative.id).to eq('nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou')
   end
 
   it 'should request checked? correctly when block is checked' do
@@ -1070,7 +1123,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).amount(unit: :raw)).to eq(340366928463463374607431768211455)
+    expect(Nanook.new.block(block).amount(unit: :raw)).to eq(340_366_928_463_463_374_607_431_768_211_455)
   end
 
   it 'should request balance correctly' do
@@ -1156,7 +1209,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).balance(unit: :raw)).to eq(14360938463463374607431768211455)
+    expect(Nanook.new.block(block).balance(unit: :raw)).to eq(14_360_938_463_463_374_607_431_768_211_455)
   end
 
   it 'should request height correctly' do
@@ -1288,7 +1341,7 @@ RSpec.describe Nanook::Block do
     previous = Nanook.new.block(block).previous
 
     expect(previous).to be_kind_of(Nanook::Block)
-    expect(previous.id).to eq("CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E")
+    expect(previous.id).to eq('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E')
   end
 
   it 'should request work correctly' do
@@ -1331,7 +1384,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).work).to eq("8a142e07a10996d5")
+    expect(Nanook.new.block(block).work).to eq('8a142e07a10996d5')
   end
 
   it 'should request signature correctly' do
@@ -1374,7 +1427,7 @@ RSpec.describe Nanook::Block do
       headers: {}
     )
 
-    expect(Nanook.new.block(block).signature).to eq("82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501")
+    expect(Nanook.new.block(block).signature).to eq('82D41BC16F313E4B2243D14DFFA2FB04679C540C2095FEE7EAE0F2F26880AD56DD48D87A7CC5DD760C5B2D76EE2C205506AA557BF00B60D8DEE312EC7343A501')
   end
 
   it 'should request timestamp correctly' do
@@ -1419,7 +1472,7 @@ RSpec.describe Nanook::Block do
 
     timestamp = Nanook.new.block(block).timestamp
 
-    expect(timestamp).to eq(Time.at(1527698508))
-    expect(timestamp.zone).to eq("UTC")
+    expect(timestamp).to eq(Time.at(1_527_698_508))
+    expect(timestamp.zone).to eq('UTC')
   end
 end

@@ -328,7 +328,9 @@ class Nanook
       response[:open_block] = as_block(response[:open_block]) if response[:open_block]
       response[:representative_block] = as_block(response[:representative_block]) if response[:representative_block]
       response[:representative] = as_account(response[:representative]) if response[:representative]
-      response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier]) if response[:confirmation_height_frontier]
+      if response[:confirmation_height_frontier]
+        response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier])
+      end
       response[:last_modified_at] = as_time(response.delete(:modified_timestamp))
 
       if unit == :nano
