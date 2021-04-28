@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: Nanook::Node
+  
+    &mdash; Nanook 3.0.1 Documentation
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Nanook::Node";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (N)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span>
+     &raquo; 
+    <span class="title">Node</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: Nanook::Node
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Nanook::Node</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="Util.html" title="Nanook::Util (module)">Util</a></span></dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/nanook/node.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>The <code>Nanook::Node</code> class contains methods to manage your nano node and query its data of the nano network.</p>
+
+<p>Your node is constantly syncing data with other nodes on the network. When your node first starts up after being built, its database will be empty and it will begin synchronizing and downloading data of the nano ledger to its local database. The ledger is the central record of all accounts and transactions. Some of the methods in this class query your node&#39;s database formed from the nano ledger, and so the responses are determined by the completeness of your node&#39;s database.</p>
+
+<p>You can determine how synchronized your node is with the nano ledger with the <span class='object_link'><a href="#sync_progress-instance_method" title="Nanook::Node#sync_progress (method)">#sync_progress</a></span> method.</p>
+
+<h3 id="label-Initializing">Initializing</h3>
+
+<p>Initialize this class through the convenient <span class='object_link'><a href="../Nanook.html#node-instance_method" title="Nanook#node (method)">#node</a></span> method:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Nanook.html#initialize-instance_method" title="Nanook#initialize (method)">new</a></span></span><span class='period'>.</span><span class='id identifier rubyid_node'><span class='object_link'><a href="../Nanook.html#node-instance_method" title="Nanook#node (method)">node</a></span></span>
+</code></pre>
+
+<p>Or compose the longhand way like this:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_rpc_conn'>rpc_conn</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Rpc.html" title="Nanook::Rpc (class)">Rpc</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Rpc.html#initialize-instance_method" title="Nanook::Rpc#initialize (method)">new</a></span></span>
+<span class='id identifier rubyid_node'>node</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='op'>::</span><span class='const'>Node</span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="Nanook::Node#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_rpc_conn'>rpc_conn</span><span class='rparen'>)</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+  <h2>Constant Summary</h2>
+  
+  <h3 class="inherited">Constants included
+     from <span class='object_link'><a href="Util.html" title="Nanook::Util (module)">Util</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Util.html#STEP-constant" title="Nanook::Util::STEP (constant)">Util::STEP</a></span></p>
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#account_count-instance_method" title="#account_count (instance method)">#<strong>account_count</strong>  &#x21d2; Integer </a>
+    
+
+    
+      (also: #frontier_count)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The number of accounts in the nano ledger–essentially all accounts with <em>open</em> blocks.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#block_count-instance_method" title="#block_count (instance method)">#<strong>block_count</strong>  &#x21d2; Hash{Symbol=&gt;Integer} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The count of all blocks downloaded to the node, and blocks still to be synchronized by the node.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bootstrap-instance_method" title="#bootstrap (instance method)">#<strong>bootstrap</strong>(address:, port:)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initialize bootstrap to a specific IP address and port.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bootstrap_any-instance_method" title="#bootstrap_any (instance method)">#<strong>bootstrap_any</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initialize multi-connection bootstrap to random peers.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bootstrap_lazy-instance_method" title="#bootstrap_lazy (instance method)">#<strong>bootstrap_lazy</strong>(hash, force: false)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initialize lazy bootstrap with given block hash.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#change_receive_minimum-instance_method" title="#change_receive_minimum (instance method)">#<strong>change_receive_minimum</strong>(minimum, unit: Nanook.default_unit)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Sets the receive minimum for wallets on the node.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#confirmation_quorum-instance_method" title="#confirmation_quorum (instance method)">#<strong>confirmation_quorum</strong>(unit: Nanook.default_unit)  &#x21d2; Hash{Symbol=&gt;String|Integer} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns information about node elections settings and observed network state:.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#difficulty-instance_method" title="#difficulty (instance method)">#<strong>difficulty</strong>(include_trend: false)  &#x21d2; Hash{Symbol=&gt;String|Float|Array} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the difficulty values (16 hexadecimal digits string, 64 bit) for the minimum required on the network (network_minimum) as well as the current active difficulty seen on the network (network_current, 5 minute trended average of adjusted difficulty seen on confirmed transactions) which can be used to perform rework for better prioritization of transaction processing.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(rpc)  &#x21d2; Node </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Node.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#keepalive-instance_method" title="#keepalive (instance method)">#<strong>keepalive</strong>(address:, port:)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Tells the node to send a keepalive packet to a specific IP address and port.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#peers-instance_method" title="#peers (instance method)">#<strong>peers</strong>  &#x21d2; Hash{Symbol=&gt;Hash{Symbol=&gt;Integer|String}} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns peers information.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#receive_minimum-instance_method" title="#receive_minimum (instance method)">#<strong>receive_minimum</strong>(unit: Nanook.default_unit)  &#x21d2; Integer|Float </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns receive minimum for wallets on the node.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#representatives-instance_method" title="#representatives (instance method)">#<strong>representatives</strong>(unit: Nanook.default_unit)  &#x21d2; Hash{Nanook::Account=&gt;Float|Integer} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>All representatives and their voting weight.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#representatives_online-instance_method" title="#representatives_online (instance method)">#<strong>representatives_online</strong>  &#x21d2; Nanook::Account </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>All online representatives that have voted recently and their weight.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#search_pending-instance_method" title="#search_pending (instance method)">#<strong>search_pending</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Tells the node to look for any account in all available wallets.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#stop-instance_method" title="#stop (instance method)">#<strong>stop</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Safely shuts down the node.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sync_progress-instance_method" title="#sync_progress (instance method)">#<strong>sync_progress</strong>  &#x21d2; Float </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The percentage completeness of the synchronization process for your node as it downloads the nano ledger.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#synchronizing_blocks-instance_method" title="#synchronizing_blocks (instance method)">#<strong>synchronizing_blocks</strong>(limit: 1000, unit: Nanook.default_unit)  &#x21d2; Hash{Symbol=&gt;String} </a>
+    
+
+    
+      (also: #unchecked)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Information about the synchronizing blocks for this node.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_s-instance_method" title="#to_s (instance method)">#<strong>to_s</strong>  &#x21d2; String </a>
+    
+
+    
+      (also: #inspect)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#uptime-instance_method" title="#uptime (instance method)">#<strong>uptime</strong>  &#x21d2; Integer </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns node uptime in seconds.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#version-instance_method" title="#version (instance method)">#<strong>version</strong>  &#x21d2; Hash{Symbol=&gt;Integer|String} </a>
+    
+
+    
+      (also: #info)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Version information for this node.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(rpc)  &#x21d2; <tt><span class='object_link'><a href="" title="Nanook::Node (class)">Node</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of Node.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+33
+34
+35</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 33</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_rpc'>rpc</span><span class='rparen'>)</span>
+  <span class='ivar'>@rpc</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="account_count-instance_method">
+  
+    #<strong>account_count</strong>  &#x21d2; <tt>Integer</tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='frontier_count-instance_method'>frontier_count</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The number of accounts in the nano ledger–essentially all accounts with <em>open</em> blocks. An <em>open</em> block is the type of block written to the nano ledger when an account receives its first payment (see <span class='object_link'><a href="WalletAccount.html#receive-instance_method" title="Nanook::WalletAccount#receive (method)">WalletAccount#receive</a></span>). All accounts that respond <code>true</code> to <span class='object_link'><a href="Account.html#exists%3F-instance_method" title="Nanook::Account#exists? (method)">Account#exists?</a></span> have open blocks in the ledger.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number of accounts with <em>open</em> blocks.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+44
+45
+46</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 44</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_account_count'>account_count</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:frontier_count</span><span class='comma'>,</span> <span class='label'>_access:</span> <span class='symbol'>:count</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="block_count-instance_method">
+  
+    #<strong>block_count</strong>  &#x21d2; <tt>Hash{Symbol=&gt;Integer}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The count of all blocks downloaded to the node, and blocks still to be synchronized by the node.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='lbrace'>{</span>
+  <span class='label'>count:</span> <span class='int'>100</span><span class='comma'>,</span>
+  <span class='label'>unchecked:</span> <span class='int'>10</span><span class='comma'>,</span>
+  <span class='label'>cemented:</span> <span class='int'>25</span>
+<span class='rbrace'>}</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol=&gt;Integer}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number of blocks and unchecked synchronizing blocks</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_block_count'>block_count</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:block_count</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Hash</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="bootstrap-instance_method">
+  
+    #<strong>bootstrap</strong>(address:, port:)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initialize bootstrap to a specific IP address and port.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>indicating if the action was successful</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+76
+77
+78</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 76</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bootstrap'>bootstrap</span><span class='lparen'>(</span><span class='label'>address:</span><span class='comma'>,</span> <span class='label'>port:</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:bootstrap</span><span class='comma'>,</span> <span class='label'>address:</span> <span class='id identifier rubyid_address'>address</span><span class='comma'>,</span> <span class='label'>port:</span> <span class='id identifier rubyid_port'>port</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="bootstrap_any-instance_method">
+  
+    #<strong>bootstrap_any</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initialize multi-connection bootstrap to random peers</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>indicating if the action was successful</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+83
+84
+85</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 83</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bootstrap_any'>bootstrap_any</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:bootstrap_any</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="bootstrap_lazy-instance_method">
+  
+    #<strong>bootstrap_lazy</strong>(hash, force: false)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initialize lazy bootstrap with given block hash</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>hash</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>force</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>False by default. Manually force closing of all current bootstraps</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>indicating if the action was successful</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+93
+94
+95</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 93</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bootstrap_lazy'>bootstrap_lazy</span><span class='lparen'>(</span><span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='label'>force:</span> <span class='kw'>false</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:bootstrap_lazy</span><span class='comma'>,</span> <span class='label'>hash:</span> <span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='label'>force:</span> <span class='id identifier rubyid_force'>force</span><span class='comma'>,</span> <span class='label'>_access:</span> <span class='symbol'>:started</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='int'>1</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="change_receive_minimum-instance_method">
+  
+    #<strong>change_receive_minimum</strong>(minimum, unit: Nanook.default_unit)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Sets the receive minimum for wallets on the node. The value is in <code>Nano</code> by default. To specify an amount in <code>raw</code>, pass the argument <tt>unit: :raw</tt>.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_change_receive_minimum'>change_receive_minimum</span><span class='lparen'>(</span><span class='float'>0.01</span><span class='rparen'>)</span> <span class='comment'># true
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>minimum</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Amount to set as the receive minimum</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'></span>
+      
+      
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>optional. Specify <code>raw</code> if you want to set the amount in <code>raw</code>. (See Nanook::Account#balance)</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>true if the action was successful</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Nanook.html#NanoUnitError-constant" title="Nanook::NanoUnitError (constant)">Nanook::NanoUnitError</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if `unit` is invalid</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+329
+330
+331
+332
+333
+334
+335</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 329</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_change_receive_minimum'>change_receive_minimum</span><span class='lparen'>(</span><span class='id identifier rubyid_minimum'>minimum</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_unit!'>validate_unit!</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_minimum'>minimum</span> <span class='op'>=</span> <span class='const'>NANO_to_raw</span><span class='lparen'>(</span><span class='id identifier rubyid_minimum'>minimum</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_unit'>unit</span> <span class='op'>==</span> <span class='symbol'>:nano</span>
+
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:receive_minimum_set</span><span class='comma'>,</span> <span class='label'>amount:</span> <span class='id identifier rubyid_minimum'>minimum</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="confirmation_quorum-instance_method">
+  
+    #<strong>confirmation_quorum</strong>(unit: Nanook.default_unit)  &#x21d2; <tt>Hash{Symbol=&gt;String|Integer}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns information about node elections settings and observed network state:</p>
+<ul><li>
+<p>`quorum_delta`: delta tally required to rollback block</p>
+</li><li>
+<p>`online_weight_quorum_percent`: percentage of online weight for delta</p>
+</li><li>
+<p>`online_weight_minimum`: minimum online weight to confirm block</p>
+</li><li>
+<p>`online_stake_total`: currently observed online total weight</p>
+</li><li>
+<p>`peers_stake_total`: known peers total weight</p>
+</li><li>
+<p>`peers_stake_required`: effective stake needed from directly connected peers for quorum</p>
+</li></ul>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_confirmation_quorum'>confirmation_quorum</span>
+</code></pre>
+
+<p>Example response:</p>
+
+<pre class="code ruby"><code class="ruby">{
+  &quot;quorum_delta&quot;: 43216377.43025059,
+  &quot;online_weight_quorum_percent&quot;: 50,
+  &quot;online_weight_minimum&quot;: 60000000.0&quot;,
+  &quot;online_stake_total&quot;: 86432754.86050119,
+  &quot;peers_stake_total&quot;: 84672338.52479072,
+  &quot;peers_stake_required&quot;: 60000000.0&quot;
+}
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol=&gt;String|Integer}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Nanook.html#NanoUnitError-constant" title="Nanook::NanoUnitError (constant)">Nanook::NanoUnitError</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if `unit` is invalid</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 123</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_confirmation_quorum'>confirmation_quorum</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_unit!'>validate_unit!</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:confirmation_quorum</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Hash</span><span class='rparen'>)</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_response'>response</span> <span class='kw'>unless</span> <span class='id identifier rubyid_unit'>unit</span> <span class='op'>==</span> <span class='symbol'>:nano</span>
+
+  <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:quorum_delta</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_to_NANO'>raw_to_NANO</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:quorum_delta</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:online_weight_minimum</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_to_NANO'>raw_to_NANO</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:online_weight_minimum</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:online_stake_total</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_to_NANO'>raw_to_NANO</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:online_stake_total</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:peers_stake_total</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_to_NANO'>raw_to_NANO</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:peers_stake_total</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:peers_stake_required</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_to_NANO'>raw_to_NANO</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:peers_stake_required</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="difficulty-instance_method">
+  
+    #<strong>difficulty</strong>(include_trend: false)  &#x21d2; <tt>Hash{Symbol=&gt;String|Float|Array}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the difficulty values (16 hexadecimal digits string, 64 bit) for the minimum required on the network (network_minimum) as well as the current active difficulty seen on the network (network_current, 5 minute trended average of adjusted difficulty seen on confirmed transactions) which can be used to perform rework for better prioritization of transaction processing. A multiplier of the network_current from the base difficulty of network_minimum is also provided for comparison.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_difficulty'>difficulty</span><span class='lparen'>(</span><span class='label'>include_trend:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Example response:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='lbrace'>{</span>
+  <span class='label'>network_minimum:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ffffffc000000000</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='label'>network_current:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ffffffc1816766f2</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='label'>multiplier:</span> <span class='float'>1.024089858417128</span><span class='comma'>,</span>
+  <span class='label'>difficulty_trend:</span> <span class='lbracket'>[</span>
+    <span class='float'>1.156096135149775</span><span class='comma'>,</span>
+    <span class='float'>1.190133894573061</span><span class='comma'>,</span>
+    <span class='float'>1.135567138563921</span><span class='comma'>,</span>
+    <span class='float'>1.000000000000000</span><span class='comma'>,</span>
+  <span class='rbracket'>]</span>
+<span class='rbrace'>}</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>include_trend</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>false by default. Also returns the trend of difficulty seen on the network as a list of multipliers. Sampling occurs every 16 to 36 seconds. The list is ordered such that the first value is the most recent sample.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol=&gt;String|Float|Array}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+171
+172
+173
+174
+175
+176
+177</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 171</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_difficulty'>difficulty</span><span class='lparen'>(</span><span class='label'>include_trend:</span> <span class='kw'>false</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:active_difficulty</span><span class='comma'>,</span> <span class='label'>include_trend:</span> <span class='id identifier rubyid_include_trend'>include_trend</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Hash</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_response'>response</span><span class='op'>|</span>
+    <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:multiplier</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:multiplier</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
+
+    <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:difficulty_trend</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_map!'>map!</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_f</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:difficulty_trend</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="keepalive-instance_method">
+  
+    #<strong>keepalive</strong>(address:, port:)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Tells the node to send a keepalive packet to a specific IP address and port.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>indicating if the action was successful</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+69
+70
+71</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 69</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_keepalive'>keepalive</span><span class='lparen'>(</span><span class='label'>address:</span><span class='comma'>,</span> <span class='label'>port:</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:keepalive</span><span class='comma'>,</span> <span class='label'>address:</span> <span class='id identifier rubyid_address'>address</span><span class='comma'>,</span> <span class='label'>port:</span> <span class='id identifier rubyid_port'>port</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:started</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="peers-instance_method">
+  
+    #<strong>peers</strong>  &#x21d2; <tt>Hash{Symbol=&gt;Hash{Symbol=&gt;Integer|String}}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns peers information.</p>
+
+<p>Example response:</p>
+
+<pre class="code ruby"><code class="ruby">{
+  :&quot;[::ffff:104.131.102.132]:7075&quot; =&gt; {
+    protocol_version: 20,
+    node_id: &quot;node_1y7j5rdqhg99uyab1145gu3yur1ax35a3b6qr417yt8cd6n86uiw3d4whty3&quot;,
+    type: &quot;udp&quot;
+  },
+  :&quot;[::ffff:104.131.114.102]:7075&quot; =&gt; { ... }
+}
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol=&gt;Hash{Symbol=&gt;Integer|String}}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+199
+200
+201</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 199</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_peers'>peers</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:peers</span><span class='comma'>,</span> <span class='label'>peer_details:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>_access:</span> <span class='symbol'>:peers</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Hash</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="receive_minimum-instance_method">
+  
+    #<strong>receive_minimum</strong>(unit: Nanook.default_unit)  &#x21d2; <tt>Integer|Float</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns receive minimum for wallets on the node.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_account'>account</span><span class='period'>.</span><span class='id identifier rubyid_receive_minimum'>receive_minimum</span> <span class='comment'># =&gt; 0.01
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer|Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the receive minimum</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Nanook.html#NanoUnitError-constant" title="Nanook::NanoUnitError (constant)">Nanook::NanoUnitError</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if `unit` is invalid</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+346
+347
+348
+349
+350
+351
+352
+353
+354</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 346</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_receive_minimum'>receive_minimum</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_unit!'>validate_unit!</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_amount'>amount</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:receive_minimum</span><span class='comma'>,</span> <span class='label'>_access:</span> <span class='symbol'>:amount</span><span class='rparen'>)</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_amount'>amount</span> <span class='kw'>unless</span> <span class='id identifier rubyid_unit'>unit</span> <span class='op'>==</span> <span class='symbol'>:nano</span>
+
+  <span class='id identifier rubyid_raw_to_NANO'>raw_to_NANO</span><span class='lparen'>(</span><span class='id identifier rubyid_amount'>amount</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="representatives-instance_method">
+  
+    #<strong>representatives</strong>(unit: Nanook.default_unit)  &#x21d2; <tt>Hash{<span class='object_link'><a href="Account.html" title="Nanook::Account (class)">Nanook::Account</a></span>=&gt;Float|Integer}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>All representatives and their voting weight.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives'>representatives</span>
+</code></pre>
+
+<p>Example response:</p>
+
+<pre class="code ruby"><code class="ruby">{
+  Nanook::Account: 3822372327060170000000000000000000000,
+  Nanook::Account: 30999999999999999999999999000000,
+  Nanook::Account: 0
+}
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{<span class='object_link'><a href="Account.html" title="Nanook::Account (class)">Nanook::Account</a></span>=&gt;Float|Integer}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>known representatives and their voting weight</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Nanook.html#NanoUnitError-constant" title="Nanook::NanoUnitError (constant)">Nanook::NanoUnitError</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if `unit` is invalid</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 219</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_representatives'>representatives</span><span class='lparen'>(</span><span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_unit!'>validate_unit!</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:representatives</span><span class='comma'>,</span> <span class='label'>_access:</span> <span class='symbol'>:representatives</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Hash</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_account_id'>account_id</span><span class='comma'>,</span> <span class='id identifier rubyid_weight'>weight</span><span class='op'>|</span>
+    <span class='id identifier rubyid_weight'>weight</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_to_NANO'>raw_to_NANO</span><span class='lparen'>(</span><span class='id identifier rubyid_weight'>weight</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_unit'>unit</span> <span class='op'>==</span> <span class='symbol'>:nano</span>
+
+    <span class='lbracket'>[</span><span class='id identifier rubyid_as_account'>as_account</span><span class='lparen'>(</span><span class='id identifier rubyid_account_id'>account_id</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_weight'>weight</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+
+  <span class='const'>Hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_r'>r</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="representatives_online-instance_method">
+  
+    #<strong>representatives_online</strong>  &#x21d2; <tt><span class='object_link'><a href="Account.html" title="Nanook::Account (class)">Nanook::Account</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>All online representatives that have voted recently and their weight.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_representatives_online'>representatives_online</span> <span class='comment'># =&gt; [Nanook::Account, ...]
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Account.html" title="Nanook::Account (class)">Nanook::Account</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>array of representative accounts</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+240
+241
+242
+243
+244</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 240</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_representatives_online'>representatives_online</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:representatives_online</span><span class='comma'>,</span> <span class='label'>_access:</span> <span class='symbol'>:representatives</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Array</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_representative'>representative</span><span class='op'>|</span>
+    <span class='id identifier rubyid_as_account'>as_account</span><span class='lparen'>(</span><span class='id identifier rubyid_representative'>representative</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="search_pending-instance_method">
+  
+    #<strong>search_pending</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Tells the node to look for any account in all available wallets.</p>
+
+<h4 id="label-Example-3A">Example:</h4>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_search_pending'>search_pending</span> <span class='comment'>#=&gt; true
+</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>indicates if the action was successful</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+252
+253
+254</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 252</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_search_pending'>search_pending</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:search_pending_all</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="stop-instance_method">
+  
+    #<strong>stop</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Safely shuts down the node.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>indicating if action was successful</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+259
+260
+261</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 259</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_stop'>stop</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:stop</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='symbol'>:success</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sync_progress-instance_method">
+  
+    #<strong>sync_progress</strong>  &#x21d2; <tt>Float</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The percentage completeness of the synchronization process for your node as it downloads the nano ledger. Note, it&#39;s normal for your progress to not ever reach 100. The closer to 100, the more complete your node&#39;s data is, and so the query methods in this class become more reliable.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the percentage completeness of the synchronization process for your node</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+301
+302
+303
+304
+305
+306
+307
+308
+309</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 301</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sync_progress'>sync_progress</span>
+  <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:block_count</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Hash</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_count'>count</span> <span class='op'>=</span> <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:count</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_unchecked'>unchecked</span> <span class='op'>=</span> <span class='id identifier rubyid_response'>response</span><span class='lbracket'>[</span><span class='symbol'>:unchecked</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_total'>total</span> <span class='op'>=</span> <span class='id identifier rubyid_count'>count</span> <span class='op'>+</span> <span class='id identifier rubyid_unchecked'>unchecked</span>
+
+  <span class='id identifier rubyid_count'>count</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>*</span> <span class='int'>100</span> <span class='op'>/</span> <span class='id identifier rubyid_total'>total</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="synchronizing_blocks-instance_method">
+  
+    #<strong>synchronizing_blocks</strong>(limit: 1000, unit: Nanook.default_unit)  &#x21d2; <tt>Hash{Symbol=&gt;String}</tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='unchecked-instance_method'>unchecked</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns information about the synchronizing blocks for this node.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>limit</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1000</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number of synchronizing blocks to return</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unit</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>Nanook.default_unit</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default is <span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">Nanook.default_unit</a></span>. Must be one of <span class='object_link'><a href="../Nanook.html#UNITS-constant" title="Nanook::UNITS (constant)">UNITS</a></span>. Represents the unit that the balances will be returned in. Note: this method interprets <code>:nano</code> as NANO, which is technically Mnano. See <a href="https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers" target="_parent" title="What are Nano&amp;#39;s Units">What are Nano&#39;s Units</a></p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol=&gt;String}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>information about the synchronizing blocks for this node</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Nanook.html#NanoUnitError-constant" title="Nanook::NanoUnitError (constant)">Nanook::NanoUnitError</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if `unit` is invalid</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 268</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_synchronizing_blocks'>synchronizing_blocks</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>1000</span><span class='comma'>,</span> <span class='label'>unit:</span> <span class='const'><span class='object_link'><a href="../Nanook.html" title="Nanook (class)">Nanook</a></span></span><span class='period'>.</span><span class='id identifier rubyid_default_unit'><span class='object_link'><a href="../Nanook.html#default_unit-class_method" title="Nanook.default_unit (method)">default_unit</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_unit!'>validate_unit!</span><span class='lparen'>(</span><span class='id identifier rubyid_unit'>unit</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_params'>params</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+    <span class='label'>count:</span> <span class='id identifier rubyid_limit'>limit</span><span class='comma'>,</span>
+    <span class='label'>json_block:</span> <span class='kw'>true</span><span class='comma'>,</span>
+    <span class='label'>_access:</span> <span class='symbol'>:blocks</span><span class='comma'>,</span>
+    <span class='label'>_coerce:</span> <span class='const'>Hash</span>
+  <span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:unchecked</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_block'>block</span><span class='comma'>,</span> <span class='id identifier rubyid_info'>info</span><span class='op'>|</span>
+    <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:account</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_as_account'>as_account</span><span class='lparen'>(</span><span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:account</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:account</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:link_as_account</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_as_account'>as_account</span><span class='lparen'>(</span><span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:link_as_account</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:link_as_account</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:representative</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_as_account'>as_account</span><span class='lparen'>(</span><span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:representative</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:representative</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:previous</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_as_block'>as_block</span><span class='lparen'>(</span><span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:previous</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:previous</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:link</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_as_block'>as_block</span><span class='lparen'>(</span><span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:link</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:link</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:balance</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_to_NANO'>raw_to_NANO</span><span class='lparen'>(</span><span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:balance</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_unit'>unit</span> <span class='op'>==</span> <span class='symbol'>:nano</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_info'>info</span><span class='lbracket'>[</span><span class='symbol'>:balance</span><span class='rbracket'>]</span>
+
+    <span class='lbracket'>[</span><span class='id identifier rubyid_as_block'>as_block</span><span class='lparen'>(</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_info'>info</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+
+  <span class='const'>Hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_response'>response</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="to_s-instance_method">
+  
+    #<strong>to_s</strong>  &#x21d2; <tt>String</tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='inspect-instance_method'>inspect</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+180
+181
+182</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 180</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="uptime-instance_method">
+  
+    #<strong>uptime</strong>  &#x21d2; <tt>Integer</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns node uptime in seconds</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>seconds of uptime</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+314
+315
+316</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 314</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_uptime'>uptime</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:uptime</span><span class='comma'>,</span> <span class='label'>_access:</span> <span class='symbol'>:seconds</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Hash</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="version-instance_method">
+  
+    #<strong>version</strong>  &#x21d2; <tt>Hash{Symbol=&gt;Integer|String}</tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='info-instance_method'>info</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns version information for this node.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol=&gt;Integer|String}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>version information for this node</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+357
+358
+359</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/nanook/node.rb', line 357</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_version'>version</span>
+  <span class='id identifier rubyid_rpc'>rpc</span><span class='lparen'>(</span><span class='symbol'>:version</span><span class='comma'>,</span> <span class='label'>_coerce:</span> <span class='const'>Hash</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Wed Apr 28 18:52:26 2021 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.26 (ruby-3.0.0).
+</div>
+
+    </div>
+  </body>
+</html>
