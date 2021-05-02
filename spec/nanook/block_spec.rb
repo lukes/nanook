@@ -36,21 +36,22 @@ RSpec.describe Nanook::Block do
 
   it 'should request chain correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1001\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
       headers: {}
     )
 
-    expect(Nanook.new.block(block).chain.first).to be_kind_of(Nanook::Block)
-    expect(Nanook.new.block(block).chain.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    expect(Nanook.new.block(block).chain).to eq([
+      Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    ])
   end
 
   it 'should request chain and when no blocks (empty string response) return an array' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1001\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -63,41 +64,47 @@ RSpec.describe Nanook::Block do
 
   it 'should request chain with a limit correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1\",\"offset\":\"0\"}",
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"2\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
       headers: {}
     )
 
-    expect(Nanook.new.block(block).chain(limit: 1)).to have(1).item
+    expect(Nanook.new.block(block).chain(limit: 1)).to eq([
+      Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    ])
   end
 
   it 'should request chain with an offset correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"1\"}",
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1001\",\"offset\":\"1\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
       headers: {}
     )
 
-    expect(Nanook.new.block(block).chain(offset: 1)).to have(1).item
+    expect(Nanook.new.block(block).chain(offset: 1)).to eq([
+      Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    ])
   end
 
   it 'should alias ancestors to chain correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
+      body: "{\"action\":\"chain\",\"block\":\"#{block}\",\"count\":\"1001\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
       headers: {}
     )
 
-    expect(Nanook.new.block(block).ancestors).to have(1).item
+    expect(Nanook.new.block(block).chain).to eq([
+      Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+    ])
   end
 
   it 'should request generate_work correctly' do
@@ -516,55 +523,67 @@ RSpec.describe Nanook::Block do
 
   it 'should request successors correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1001\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks":["A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
       headers: {}
     )
 
     successors = Nanook.new.block(block).successors
 
-    expect(successors.first).to be_kind_of(Nanook::Block)
-    expect(successors.first.id).to eq('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')
+    expect(successors).to eq([Nanook.new.block('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')])
   end
 
   it 'should request successors with limit correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1\",\"offset\":\"0\"}",
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"2\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks":["A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
       headers: {}
     )
 
     successors = Nanook.new.block(block).successors(limit: 1)
 
-    expect(successors.first).to be_kind_of(Nanook::Block)
-    expect(successors.first.id).to eq('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')
+    expect(successors).to eq([Nanook.new.block('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')])
+  end
+
+  it 'should request successors with limit of -1 correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"-1\",\"offset\":\"0\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
+      headers: {}
+    )
+
+    successors = Nanook.new.block(block).successors(limit: -1)
+
+    expect(successors).to eq([Nanook.new.block('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')])
   end
 
   it 'should request successors with offset correctly' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"1\"}",
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1001\",\"offset\":\"1\"}",
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"blocks":["A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
       headers: {}
     )
 
     successors = Nanook.new.block(block).successors(offset: 1)
 
-    expect(successors.first).to be_kind_of(Nanook::Block)
-    expect(successors.first.id).to eq('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')
+    expect(successors).to eq([Nanook.new.block('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')])
   end
 
   it 'should request successors when there are none (empty string response) and return blank array' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1000\",\"offset\":\"0\"}",
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1001\",\"offset\":\"0\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -573,6 +592,21 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).successors(limit: 1000)).to be_empty
+  end
+
+  it 'should request successors correctly when aliased as descendants' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"1001\",\"offset\":\"0\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
+      headers: {}
+    )
+
+    successors = Nanook.new.block(block).descendants
+
+    expect(successors).to eq([Nanook.new.block('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')])
   end
 
   it 'should request valid_work? correctly when valid' do
@@ -1342,6 +1376,21 @@ RSpec.describe Nanook::Block do
 
     expect(previous).to be_kind_of(Nanook::Block)
     expect(previous.id).to eq('CE898C131AAEE25E05362F247760F8A3ACF34A9796A5AE0D9204E86B0637965E')
+  end
+
+  it 'should request next correctly' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"successors\",\"block\":\"#{block}\",\"count\":\"2\",\"offset\":\"0\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948","A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293"]}',
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).next).to eq(
+      Nanook.new.block('A170D51B94E00371ACE76E35AC81DC9405D5D04D4CEBC399AEACE07AE05DD293')
+    )
   end
 
   it 'should request work correctly' do

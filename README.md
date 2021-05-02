@@ -283,9 +283,16 @@ block = nanook.block(block_id)
 block.account
 block.amount
 block.amount(unit: :raw)
+block.ancestors
+block.ancestors(limit: 10)
+block.ancestors(offset: 10)
 block.balance
 block.change?
 block.checked?
+block.confirm
+block.descendants
+block.descendants(limit: 10)
+block.descendants(offset: 10)
 block.epoch?
 block.exists?
 block.exists?(allow_unchecked: true)
@@ -293,24 +300,17 @@ block.height
 block.info                        # Verified blocks in the ledger
 block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing blocks
 block.info(unit: :raw)
-block.account
-block.chain
-block.chain(limit: 10)
-block.chain(offset: 10)
-block.confirm
-block.republish
-block.republish(sources: 2)
-block.republish(destinations: 2)
+block.next
 block.open?
 block.pending?
 block.previous
 block.receive?
 block.representative
+block.republish
+block.republish(sources: 2)
+block.republish(destinations: 2)
 block.send?
 block.signature
-block.successors
-block.successors(limit: 10)
-block.successors(offset: 10)
 block.timestamp
 block.type
 block.unchecked?
