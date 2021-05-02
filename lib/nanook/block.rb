@@ -82,7 +82,7 @@ class Nanook
     #
     # @param limit [Integer] maximum number of block hashes to return (default is 1000)
     # @param offset [Integer] return the account chain block hashes offset by the specified number of blocks (default is 0)
-    def chain(limit: 1000, offset: 0)
+    def ancestors(limit: 1000, offset: 0)
       # The RPC includes this block in its response, and Nanook will remove it from the results.
       # Increment the limit by 1 to account for this (a limit of -1 is valid and means no limit).
       limit += 1 if limit > 0
@@ -96,7 +96,7 @@ class Nanook
       response = rpc(:chain, :block, params)[1..].to_a
       response.map { |block| as_block(block) }
     end
-    alias ancestors chain
+    alias chain ancestors # `chain` is the RPC command name
 
     # Request confirmation for a block from online representative nodes.
     # Will return immediately with a boolean to indicate if the request for
@@ -242,7 +242,7 @@ class Nanook
     # @param offset [Integer] return the account chain block hashes offset
     #   by the specified number of blocks (default is 0)
     # @return [Array<Nanook::Block>] blocks in the account chain ending at this block
-    def successors(limit: 1000, offset: 0)
+    def descendants(limit: 1000, offset: 0)
       # The RPC includes this block in its response, and Nanook will remove it from the results.
       # Increment the limit by 1 to account for this (a limit of -1 is valid and means no limit).
       limit += 1 if limit > 0
@@ -257,7 +257,7 @@ class Nanook
       response = rpc(:successors, :block, params)[1..].to_a
       response.map { |block| as_block(block) }
     end
-    alias descendants successors
+    alias successors descendants # `successors` is the RPC command name
 
     # Returns the {Nanook::Account} of the block representative.
     #
