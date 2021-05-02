@@ -45,8 +45,8 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).chain).to eq([
-      Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
-    ])
+                                                  Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+                                                ])
   end
 
   it 'should request chain and when no blocks (empty string response) return an array' do
@@ -73,8 +73,8 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).chain(limit: 1)).to eq([
-      Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
-    ])
+                                                            Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+                                                          ])
   end
 
   it 'should request chain with an offset correctly' do
@@ -88,8 +88,8 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).chain(offset: 1)).to eq([
-      Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
-    ])
+                                                             Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+                                                           ])
   end
 
   it 'should alias ancestors to chain correctly' do
@@ -103,8 +103,8 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).chain).to eq([
-      Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
-    ])
+                                                  Nanook.new.block('111D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+                                                ])
   end
 
   it 'should request generate_work correctly' do
