@@ -66,16 +66,15 @@ class Nanook
     end
 
     # Returns a consecutive list of block hashes in the account chain
-    # starting at block back to count (direction from frontier back to
+    # from (but not including) block back to +count+ (direction from frontier back to
     # open block, from newer blocks to older). Will list all blocks back
     # to the open block of this chain when count is set to "-1".
-    # The requested block hash is included in the answer.
     #
-    # See also #successors.
+    # See also #descendants.
     #
     # ==== Example:
     #
-    #   block.chain(limit: 2)
+    #   block.ancestors(limit: 2)
     #
     # ==== Example reponse:
     #
@@ -84,6 +83,9 @@ class Nanook
     # @param limit [Integer] maximum number of block hashes to return (default is 1000)
     # @param offset [Integer] return the account chain block hashes offset by the specified number of blocks (default is 0)
     def chain(limit: 1000, offset: 0)
+      # The RPC includes this block in its response, and Nanook will remove it from the results.
+      # Increment the limit by 1 to account for this (a limit of -1 is valid and means no limit).
+      limit += 1 if limit > 0
       params = {
         count: limit,
         offset: offset,
@@ -91,9 +93,8 @@ class Nanook
         _coerce: Array
       }
 
-      rpc(:chain, :block, params).map do |block|
-        as_block(block)
-      end
+      response = rpc(:chain, :block, params)[1..].to_a
+      response.map { |block| as_block(block) }
     end
     alias ancestors chain
 
@@ -226,14 +227,15 @@ class Nanook
       rpc(:pending_exists, :hash, _access: :exists) == 1
     end
 
-    # Returns an Array of block hashes in the account chain ending at
-    # this block.
+    # Returns an Array of block hashes in the account chain from (but not including) this block up to +count+
+    # (direction from open block up to frontier, from older blocks to newer). Will list all
+    # blocks up to frontier (latest block) of this chain when +count+ is set to +-1+.
     #
-    # See also #chain.
+    # See also #ancestors.
     #
     # ==== Example:
     #
-    #   block.successors # => [Nanook::Block, .. ]
+    #   block.descendants # => [Nanook::Block, .. ]
     #
     # @param limit [Integer] maximum number of send/receive block hashes
     #   to return in the chain (default is 1000)
@@ -241,6 +243,10 @@ class Nanook
     #   by the specified number of blocks (default is 0)
     # @return [Array<Nanook::Block>] blocks in the account chain ending at this block
     def successors(limit: 1000, offset: 0)
+      # The RPC includes this block in its response, and Nanook will remove it from the results.
+      # Increment the limit by 1 to account for this (a limit of -1 is valid and means no limit).
+      limit += 1 if limit > 0
+
       params = {
         count: limit,
         offset: offset,
@@ -248,10 +254,10 @@ class Nanook
         _coerce: Array
       }
 
-      rpc(:successors, :block, params).map do |block|
-        as_block(block)
-      end
+      response = rpc(:successors, :block, params)[1..].to_a
+      response.map { |block| as_block(block) }
     end
+    alias descendants successors
 
     # Returns the {Nanook::Account} of the block representative.
     #
@@ -350,6 +356,16 @@ class Nanook
       true
     end
 
+    # Returns the {Nanook::Block} of the next (newer) block in the account chain.
+    #
+    # ==== Example:
+    #   block.next # => Nanook::Block
+    #
+    # @return [Nanook::Block] next (newer) block in the account chain. Can be nil.
+    def next
+      successors(limit: 1).first
+    end
+
     # Returns the height of the block.
     #
     # ==== Example:
@@ -390,12 +406,12 @@ class Nanook
       memoized_info[:local_timestamp]
     end
 
-    # Returns the {Nanook::Block} of the previous block in the chain.
+    # Returns the {Nanook::Block} of the previous (older) block in the account chain.
     #
     # ==== Example:
     #   block.previous # => Nanook::Block
     #
-    # @return [Nanook::Block] previous block in the chain. Can be nil.
+    # @return [Nanook::Block] previous (older) block in the account chain. Can be nil.
     def previous
       memoized_info[:previous]
     end

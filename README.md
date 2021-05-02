@@ -124,11 +124,11 @@ Read the [Using Nanook](https://github.com/lukes/nanook/wiki/Using-nanook) page 
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/3.0.1/) for a searchable detailed description of every class and method, what the arguments mean, and example responses.
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/3.1.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses.
 
 ### Wallets
 
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/3.0.1/Nanook/Wallet.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/3.1.0/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 #### Create wallet:
 
@@ -212,7 +212,7 @@ Any account on the Nano network that is known by your node can be initialized th
 account = nanook.account(account_id)
 ```
 
-See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/3.0.1/Nanook/Account.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/3.1.0/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
 account.balance
@@ -260,7 +260,7 @@ account = wallet.account(account_id)
 
 As well as the following methods, all methods of [regular accounts](#working-with-any-account) can also be called.
 
-See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/3.0.1/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/3.1.0/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
 
 ```ruby
 account.pay(to: recipient_account_id, amount: 2, id: unique_id)
@@ -275,7 +275,7 @@ account.destroy
 
 ### Blocks
 
-See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/3.0.1/Nanook/Block.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/3.1.0/Nanook/Block.html) for a detailed description of each method and example responses.
 
 ```ruby
 block = nanook.block(block_id)
@@ -283,9 +283,16 @@ block = nanook.block(block_id)
 block.account
 block.amount
 block.amount(unit: :raw)
+block.ancestors
+block.ancestors(limit: 10)
+block.ancestors(offset: 10)
 block.balance
 block.change?
 block.checked?
+block.confirm
+block.descendants
+block.descendants(limit: 10)
+block.descendants(offset: 10)
 block.epoch?
 block.exists?
 block.exists?(allow_unchecked: true)
@@ -293,24 +300,17 @@ block.height
 block.info                        # Verified blocks in the ledger
 block.info(allow_unchecked: true) # Verified blocks AND unchecked synchronizing blocks
 block.info(unit: :raw)
-block.account
-block.chain
-block.chain(limit: 10)
-block.chain(offset: 10)
-block.confirm
-block.republish
-block.republish(sources: 2)
-block.republish(destinations: 2)
+block.next
 block.open?
 block.pending?
 block.previous
 block.receive?
 block.representative
+block.republish
+block.republish(sources: 2)
+block.republish(destinations: 2)
 block.send?
 block.signature
-block.successors
-block.successors(limit: 10)
-block.successors(offset: 10)
 block.timestamp
 block.type
 block.unchecked?
@@ -324,7 +324,7 @@ block.valid_work?(work)
 
 ### Managing your nano node
 
-See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/3.0.1/Nanook/Node.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/3.1.0/Nanook/Node.html) for a detailed description of each method and example responses.
 
 ```ruby
 node = nanook.node
