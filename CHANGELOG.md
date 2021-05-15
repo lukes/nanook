@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - `Node#bootstrap_lazy` now returns the v22 node response of a `Hash` of keys `started` and `key_inserted` with boolean values.
 - `Node#bootstrap_any` now optionally takes `account` argument.
+- `Account#pending` and `WalletAccount#pending`:
+  - now optionally takes `sorted` argument.
+  - now optionally takes `allow_unconfirmed` argument.
+- `Account#balance` and `WalletAccount#balance` now optionally takes `allow_unconfirmed` argument.
+
 ## 3.1.0
 
 ### Added

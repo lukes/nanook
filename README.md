@@ -216,10 +216,13 @@ See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/
 
 ```ruby
 account.balance
+account.balance(allow_unconfirmed: true)
 account.balance(unit: :raw)
 account.pending
 account.pending(limit: 1)
+account.pending(allow_unconfirmed: true)
 account.pending(detailed: true)
+account.pending(sorted: true)
 account.pending(unit: :raw)
 
 account.blocks

@@ -241,7 +241,7 @@ RSpec.describe Nanook::Account do
 
   it 'account balance' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -254,9 +254,24 @@ RSpec.describe Nanook::Account do
     expect(response[:pending]).to eq(21.439597)
   end
 
+  it 'account balance allow_unconfirmed' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"balance":"11439597000000000000000000000000","pending":"21439597000000000000000000000000"}',
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).balance(allow_unconfirmed: true)
+    expect(response[:balance]).to eq(11.439597)
+    expect(response[:pending]).to eq(21.439597)
+  end
+
   it 'account balance in raw' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -355,9 +370,9 @@ RSpec.describe Nanook::Account do
     )
   end
 
-  it 'account pending no limit' do
+  it 'account pending' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -374,7 +389,7 @@ RSpec.describe Nanook::Account do
 
   it 'account pending with no blocks (empty string response) to be empty' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -387,7 +402,7 @@ RSpec.describe Nanook::Account do
 
   it 'account pending with limit' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -401,9 +416,41 @@ RSpec.describe Nanook::Account do
     expect(pending.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
   end
 
+  it 'account pending sorted' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"true\",\"include_only_confirmed\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      headers: {}
+    )
+
+    pending = Nanook.new.account(account_id).pending(sorted: true)
+
+    expect(pending.first).to be_kind_of(Nanook::Block)
+    expect(pending.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+  end
+
+  it 'account pending allow_unconfirmed' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      headers: {}
+    )
+
+    pending = Nanook.new.account(account_id).pending(allow_unconfirmed: true)
+
+    expect(pending.first).to be_kind_of(Nanook::Block)
+    expect(pending.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+  end
+
   it 'account pending detailed' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\",\"source\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -427,7 +474,7 @@ RSpec.describe Nanook::Account do
 
   it 'account pending detailed with raw unit' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\",\"source\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -451,7 +498,7 @@ RSpec.describe Nanook::Account do
 
   it 'account pending detailed with no blocks (empty string response)' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\",\"source\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,

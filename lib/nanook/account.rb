@@ -241,7 +241,10 @@ class Nanook
     #     balance: 2000000000000000000000000000000,
     #     pending: 1100000000000000000000000000000
     #   }
-    #
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+, +balance+
+    #   will only include blocks on this account that have already been confirmed
+    #   and +pending+ will only include incoming send blocks that have already been
+    #   confirmed on the sending account.
     # @param unit [Symbol] default is {Nanook.default_unit}.
     #   Must be one of {Nanook::UNITS}.
     #   Represents the unit that the balances will be returned in.
@@ -250,10 +253,14 @@ class Nanook
     #   See {https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers What are Nano's Units}
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     # @return [Hash{Symbol=>Integer|Float}]
-    def balance(unit: Nanook.default_unit)
+    def balance(allow_unconfirmed: false, unit: Nanook.default_unit)
       validate_unit!(unit)
 
-      rpc(:account_balance).tap do |r|
+      params = {
+        include_only_confirmed: !allow_unconfirmed
+      }
+
+      rpc(:account_balance, params).tap do |r|
         if unit == :nano
           r[:balance] = raw_to_NANO(r[:balance])
           r[:pending] = raw_to_NANO(r[:pending])
@@ -444,17 +451,22 @@ class Nanook
     #   ]
     #
     # @param limit [Integer] number of pending blocks to return (default is 1000)
-    # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
+    # @param detailed [Boolean] return a more complex Hash of pending block information (default is +false+)
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+ only returns block which have their confirmation
+    #   height set or are undergoing confirmation height processing.
     # @param unit (see #balance)
+    # @param sorted [Boolean] false by default. Additionally sorts the blocks by their amounts in descending order.
     #
     # @return [Array<Nanook::Block>]
     # @return [Array<Hash{Symbol=>Nanook::Block|Nanook::Account|Integer}>]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
+    def pending(limit: 1000, detailed: false, allow_unconfirmed: false, unit: Nanook.default_unit, sorted: false)
       validate_unit!(unit)
 
       params = {
         count: limit,
+        sorting: sorted,
+        include_only_confirmed: !allow_unconfirmed,
         _access: :blocks,
         _coerce: (detailed ? Hash : Array)
       }
