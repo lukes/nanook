@@ -333,6 +333,7 @@ node.account_count
 node.block_count
 node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
 node.bootstrap_any
+node.bootstrap_any(account: account_id)
 node.bootstrap_lazy(block_id)
 node.bootstrap_lazy(block_id, force: true)
 node.confirmation_quorum

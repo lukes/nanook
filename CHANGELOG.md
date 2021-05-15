@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## 4.0.0
+
+### Changed
+
+- `Node#bootstrap_lazy` now returns the v22 node response of a `Hash` of keys `started` and `key_inserted` with boolean values.
+- `Node#bootstrap_any` now optionally takes `account` argument.
 ## 3.1.0
 
 ### Added
