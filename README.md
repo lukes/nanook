@@ -306,6 +306,7 @@ block.info(unit: :raw)
 block.next
 block.open?
 block.pending?
+block.pending?(allow_unconfirmed: true)
 block.previous
 block.receive?
 block.representative

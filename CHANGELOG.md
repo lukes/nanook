@@ -1,11 +1,11 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-
-## 4.0.0
+## 4.0.0 (v22 compatible)
 
 ### Changed
 
@@ -15,8 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - now optionally takes `sorted` argument.
   - now optionally takes `allow_unconfirmed` argument.
 - `Account#balance` and `WalletAccount#balance` now optionally takes `allow_unconfirmed` argument.
+- `Block#pending?` now optionally takes `allow_unconfirmed` argument.
 
-## 3.1.0
+## 3.1.0 (v21 compatible)
 
 ### Added
 
@@ -27,13 +28,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - `Block.chain` and `Block.successors` no longer return the Block itself in the response.
 
-## 3.0.1
+## 3.0.1 (v21 compatible)
 
 ### Fixed
 
 - Fix `Block#type` being `nil` when RPC doesn't return a `subtype`.
 
-## 3.0.0
+## 3.0.0 (v21 compatible)
 
 ### Removed
 

@@ -223,8 +223,13 @@ class Nanook
     #   block.pending? #=> false
     #
     # @return [Boolean] signalling if the block is a pending block.
-    def pending?
-      rpc(:pending_exists, :hash, _access: :exists) == 1
+    def pending?(allow_unconfirmed: false)
+      params = {
+        include_only_confirmed: !allow_unconfirmed,
+        _access: :exists
+      }
+
+      rpc(:pending_exists, :hash, params) == 1
     end
 
     # Returns an Array of block hashes in the account chain from (but not including) this block up to +count+
