@@ -222,6 +222,9 @@ class Nanook
     #
     #   block.pending? #=> false
     #
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+,
+    #   will only include blocks which have their confirmation height set
+    #   or are undergoing confirmation height processing.
     # @return [Boolean] signalling if the block is a pending block.
     def pending?(allow_unconfirmed: false)
       params = {

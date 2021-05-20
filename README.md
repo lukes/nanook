@@ -158,6 +158,7 @@ wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: uniqu
 wallet.pending
 wallet.pending(limit: 1)
 wallet.pending(detailed: true)
+wallet.pending(allow_unconfirmed: true)
 wallet.pending(unit: :raw)
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)

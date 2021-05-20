@@ -340,6 +340,8 @@ class Nanook
     # See also the {#receive} method of this class for how to receive a pending payment.
     #
     # @param limit [Integer] number of accounts with pending payments to return (default is 1000)
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+ only returns block which
+    #   have their confirmation height set or are undergoing confirmation height processing.
     # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
     # @param unit (see Nanook::Account#balance)
     #
@@ -388,11 +390,12 @@ class Nanook
     #   }
     #
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
+    def pending(limit: 1000, detailed: false, allow_unconfirmed: false, unit: Nanook.default_unit)
       validate_unit!(unit)
 
       params = {
         count: limit,
+        include_only_confirmed: !allow_unconfirmed,
         _access: :blocks,
         _coerce: Hash
       }
