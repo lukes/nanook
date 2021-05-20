@@ -209,7 +209,7 @@ class Nanook
     # @return [Nanook::Account] Representative of the account. Can be nil.
     def representative
       representative = rpc(:account_representative, _access: :representative)
-      as_account(representative) if representative
+      as_account(representative)
     end
 
     # The account's balance, including pending (unreceived payments).
@@ -331,10 +331,10 @@ class Nanook
 
       response = rpc(:account_info, representative: true, weight: true, pending: true)
       response.merge!(id: @account)
-      response[:frontier] = as_block(response[:frontier]) if response[:frontier]
-      response[:open_block] = as_block(response[:open_block]) if response[:open_block]
-      response[:representative_block] = as_block(response[:representative_block]) if response[:representative_block]
-      response[:representative] = as_account(response[:representative]) if response[:representative]
+      response[:frontier] = as_block(response[:frontier])
+      response[:open_block] = as_block(response[:open_block])
+      response[:representative_block] = as_block(response[:representative_block])
+      response[:representative] = as_account(response[:representative])
       if response[:confirmation_height_frontier]
         response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier])
       end
@@ -409,10 +409,10 @@ class Nanook
         end
 
         ledger[:last_modified_at] = as_time(ledger.delete(:modified_timestamp))
-        ledger[:representative] = as_account(ledger[:representative]) if ledger[:representative]
-        ledger[:representative_block] = as_block(ledger[:representative_block]) if ledger[:representative_block]
-        ledger[:open_block] = as_block(ledger[:open_block]) if ledger[:open_block]
-        ledger[:frontier] = as_block(ledger[:frontier]) if ledger[:frontier]
+        ledger[:representative] = as_account(ledger[:representative])
+        ledger[:representative_block] = as_block(ledger[:representative_block])
+        ledger[:open_block] = as_block(ledger[:open_block])
+        ledger[:frontier] = as_block(ledger[:frontier])
 
         [as_account(account_id), ledger]
       end

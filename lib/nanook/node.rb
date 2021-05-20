@@ -301,12 +301,12 @@ class Nanook
       }
 
       response = rpc(:unchecked, params).map do |block, info|
-        info[:account] = as_account(info[:account]) if info[:account]
-        info[:link_as_account] = as_account(info[:link_as_account]) if info[:link_as_account]
-        info[:representative] = as_account(info[:representative]) if info[:representative]
-        info[:previous] = as_block(info[:previous]) if info[:previous]
-        info[:link] = as_block(info[:link]) if info[:link]
-        info[:balance] = raw_to_NANO(info[:balance]) if unit == :nano && info[:balance]
+        info[:account] = as_account(info[:account])
+        info[:link_as_account] = as_account(info[:link_as_account])
+        info[:representative] = as_account(info[:representative])
+        info[:previous] = as_block(info[:previous])
+        info[:link] = as_block(info[:link])
+        info[:balance] = raw_to_NANO(info[:balance]) if unit == :nano
 
         [as_block(block), info]
       end
