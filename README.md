@@ -238,6 +238,7 @@ account.history(limit: 1)
 account.history(unit: :raw)
 account.history(sort: :desc)
 account.info
+account.info(allow_unconfirmed: true)
 account.info(unit: :raw)
 account.last_modified_at
 account.ledger

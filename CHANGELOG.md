@@ -15,9 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - now optionally takes `sorted` argument.
   - now optionally takes `allow_unconfirmed` argument.
 - `Account#balance` and `WalletAccount#balance` now optionally takes `allow_unconfirmed` argument.
+- `Account#info` and `WalletAccount#info` now optionally takes `allow_unconfirmed` argument.
 - `Block#pending?` now optionally takes `allow_unconfirmed` argument.
 - `Wallet#pending` now optionally takes `allow_unconfirmed` argument.
-
 ## 3.1.0 (v21 compatible)
 
 ### Added

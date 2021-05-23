@@ -311,6 +311,8 @@ class Nanook
     #   }
     #
     # @param unit (see #balance)
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+ only confirmed +balance+
+    #   +pending+, and +representative+ values are returned.
     # @return [Hash{Symbol=>String|Integer|Float|Nanook::Account|Nanook::Block|Time}] information about the account containing:
     #   [+id+] The account id
     #   [+frontier+] The latest {Nanook::Block}
@@ -326,19 +328,36 @@ class Nanook
     #   [+weight+] See {#weight}
     #
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def info(unit: Nanook.default_unit)
+    def info(allow_unconfirmed: false, unit: Nanook.default_unit)
       validate_unit!(unit)
 
-      response = rpc(:account_info, representative: true, weight: true, pending: true)
+      params = {
+        representative: true,
+        weight: true,
+        pending: true,
+        include_confirmed: !allow_unconfirmed
+      }
+
+      response = rpc(:account_info, params)
       response.merge!(id: @account)
+
+      # The RPC returned confirmed data when the `include_confirmed: true`
+      # has been passed. Normalize this data to the same keys as when
+      # unconfirmed data can be returned.
+      unless allow_unconfirmed
+        response[:balance] = response.delete(:confirmed_balance)
+        response[:pending] = response.delete(:confirmed_pending)
+        response[:representative] = response.delete(:confirmed_representative)
+        response[:frontier] = response.delete(:confirmed_frontier)
+        response[:confirmation_height] = response.delete(:confirmed_height)
+      end
+
       response[:frontier] = as_block(response[:frontier])
       response[:open_block] = as_block(response[:open_block])
       response[:representative_block] = as_block(response[:representative_block])
       response[:representative] = as_account(response[:representative])
-      if response[:confirmation_height_frontier]
-        response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier])
-      end
       response[:last_modified_at] = as_time(response.delete(:modified_timestamp))
+      response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier])
 
       if unit == :nano
         response.merge!(
@@ -348,7 +367,7 @@ class Nanook
         )
       end
 
-      response
+      response.compact
     end
 
     # @return [String]
