@@ -49,7 +49,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.2)
+  bundler (>= 2.2.10)
   nanook!
   pry (~> 0)
   rake (~> 12.3)
