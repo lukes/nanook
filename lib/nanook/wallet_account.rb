@@ -21,7 +21,7 @@ class Nanook
     extend Forwardable
     # @!method ==
     #   (see Nanook::Account#==)
-    # @!method balance(unit: Nanook.default_unit)
+    # @!method balance(allow_unconfirmed: false, unit: Nanook.default_unit)
     #   (see Nanook::Account#balance)
     # @!method block_count
     #   (see Nanook::Account#block_count)
@@ -41,7 +41,7 @@ class Nanook
     #   (see Nanook::Account#history)
     # @!method id
     #   (see Nanook::Account#id)
-    # @!method info((detailed: false, unit: Nanook.default_unit)
+    # @!method info(allow_unconfirmed: false, detailed: false, unit: Nanook.default_unit)
     #   (see Nanook::Account#info)
     # @!method last_modified_at
     #   (see Nanook::Account#last_modified_at)
@@ -49,7 +49,7 @@ class Nanook
     #   (see Nanook::Account#ledger)
     # @!method open_block
     #   (see Nanook::Account#open_block)
-    # @!method pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
+    # @!method pending(limit: 1000, detailed: false, allow_unconfirmed: false, unit: Nanook.default_unit, sorted: false)
     #   (see Nanook::Account#pending)
     # @!method public_key
     #   (see Nanook::Account#public_key)
