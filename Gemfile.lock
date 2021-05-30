@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nanook (3.1.0)
+    nanook (4.0.0)
       symbolized (= 0.0.1)
 
 GEM
@@ -49,7 +49,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.2)
+  bundler (>= 2.2.10)
   nanook!
   pry (~> 0)
   rake (~> 12.3)

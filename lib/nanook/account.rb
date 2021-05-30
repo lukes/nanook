@@ -209,7 +209,7 @@ class Nanook
     # @return [Nanook::Account] Representative of the account. Can be nil.
     def representative
       representative = rpc(:account_representative, _access: :representative)
-      as_account(representative) if representative
+      as_account(representative)
     end
 
     # The account's balance, including pending (unreceived payments).
@@ -241,7 +241,10 @@ class Nanook
     #     balance: 2000000000000000000000000000000,
     #     pending: 1100000000000000000000000000000
     #   }
-    #
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+, +balance+
+    #   will only include blocks on this account that have already been confirmed
+    #   and +pending+ will only include incoming send blocks that have already been
+    #   confirmed on the sending account.
     # @param unit [Symbol] default is {Nanook.default_unit}.
     #   Must be one of {Nanook::UNITS}.
     #   Represents the unit that the balances will be returned in.
@@ -250,10 +253,14 @@ class Nanook
     #   See {https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers What are Nano's Units}
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
     # @return [Hash{Symbol=>Integer|Float}]
-    def balance(unit: Nanook.default_unit)
+    def balance(allow_unconfirmed: false, unit: Nanook.default_unit)
       validate_unit!(unit)
 
-      rpc(:account_balance).tap do |r|
+      params = {
+        include_only_confirmed: !allow_unconfirmed
+      }
+
+      rpc(:account_balance, params).tap do |r|
         if unit == :nano
           r[:balance] = raw_to_NANO(r[:balance])
           r[:pending] = raw_to_NANO(r[:pending])
@@ -304,6 +311,8 @@ class Nanook
     #   }
     #
     # @param unit (see #balance)
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+ only confirmed +balance+
+    #   +pending+, and +representative+ values are returned.
     # @return [Hash{Symbol=>String|Integer|Float|Nanook::Account|Nanook::Block|Time}] information about the account containing:
     #   [+id+] The account id
     #   [+frontier+] The latest {Nanook::Block}
@@ -319,19 +328,36 @@ class Nanook
     #   [+weight+] See {#weight}
     #
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def info(unit: Nanook.default_unit)
+    def info(allow_unconfirmed: false, unit: Nanook.default_unit)
       validate_unit!(unit)
 
-      response = rpc(:account_info, representative: true, weight: true, pending: true)
+      params = {
+        representative: true,
+        weight: true,
+        pending: true,
+        include_confirmed: !allow_unconfirmed
+      }
+
+      response = rpc(:account_info, params)
       response.merge!(id: @account)
-      response[:frontier] = as_block(response[:frontier]) if response[:frontier]
-      response[:open_block] = as_block(response[:open_block]) if response[:open_block]
-      response[:representative_block] = as_block(response[:representative_block]) if response[:representative_block]
-      response[:representative] = as_account(response[:representative]) if response[:representative]
-      if response[:confirmation_height_frontier]
-        response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier])
+
+      # The RPC returned confirmed data when the `include_confirmed: true`
+      # has been passed. Normalize this data to the same keys as when
+      # unconfirmed data can be returned.
+      unless allow_unconfirmed
+        response[:balance] = response.delete(:confirmed_balance)
+        response[:pending] = response.delete(:confirmed_pending)
+        response[:representative] = response.delete(:confirmed_representative)
+        response[:frontier] = response.delete(:confirmed_frontier)
+        response[:confirmation_height] = response.delete(:confirmed_height)
       end
+
+      response[:frontier] = as_block(response[:frontier])
+      response[:open_block] = as_block(response[:open_block])
+      response[:representative_block] = as_block(response[:representative_block])
+      response[:representative] = as_account(response[:representative])
       response[:last_modified_at] = as_time(response.delete(:modified_timestamp))
+      response[:confirmation_height_frontier] = as_block(response[:confirmation_height_frontier])
 
       if unit == :nano
         response.merge!(
@@ -341,7 +367,7 @@ class Nanook
         )
       end
 
-      response
+      response.compact
     end
 
     # @return [String]
@@ -402,10 +428,10 @@ class Nanook
         end
 
         ledger[:last_modified_at] = as_time(ledger.delete(:modified_timestamp))
-        ledger[:representative] = as_account(ledger[:representative]) if ledger[:representative]
-        ledger[:representative_block] = as_block(ledger[:representative_block]) if ledger[:representative_block]
-        ledger[:open_block] = as_block(ledger[:open_block]) if ledger[:open_block]
-        ledger[:frontier] = as_block(ledger[:frontier]) if ledger[:frontier]
+        ledger[:representative] = as_account(ledger[:representative])
+        ledger[:representative_block] = as_block(ledger[:representative_block])
+        ledger[:open_block] = as_block(ledger[:open_block])
+        ledger[:frontier] = as_block(ledger[:frontier])
 
         [as_account(account_id), ledger]
       end
@@ -444,17 +470,22 @@ class Nanook
     #   ]
     #
     # @param limit [Integer] number of pending blocks to return (default is 1000)
-    # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
+    # @param detailed [Boolean] return a more complex Hash of pending block information (default is +false+)
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+ only returns block which have their confirmation
+    #   height set or are undergoing confirmation height processing.
     # @param unit (see #balance)
+    # @param sorted [Boolean] false by default. Additionally sorts the blocks by their amounts in descending order.
     #
     # @return [Array<Nanook::Block>]
     # @return [Array<Hash{Symbol=>Nanook::Block|Nanook::Account|Integer}>]
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
+    def pending(limit: 1000, detailed: false, allow_unconfirmed: false, unit: Nanook.default_unit, sorted: false)
       validate_unit!(unit)
 
       params = {
         count: limit,
+        sorting: sorted,
+        include_only_confirmed: !allow_unconfirmed,
         _access: :blocks,
         _coerce: (detailed ? Hash : Array)
       }

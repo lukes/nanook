@@ -97,7 +97,7 @@ class Nanook
   # @param key [String] a private key
   # @return [Nanook::PrivateKey]
   def private_key(key = nil)
-    as_private_key(key)
+    as_private_key(key, allow_blank: true)
   end
 
   # Returns a new instance of {Nanook::PublicKey}.
@@ -170,8 +170,8 @@ class Nanook
   # @return [Nanook::WorkPeer]
   def network_telemetry
     response = call_rpc(:telemetry, _coerce: Hash)
-    response[:genesis_block] = as_block(response[:genesis_block]) if response[:genesis_block]
-    response[:timestamp] = as_time(response[:timestamp]) if response[:timestamp]
+    response[:genesis_block] = as_block(response[:genesis_block])
+    response[:timestamp] = as_time(response[:timestamp])
     response
   end
 

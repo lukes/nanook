@@ -497,7 +497,7 @@ RSpec.describe Nanook::Block do
 
   it 'should request pending? correctly when block is pending' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending_exists\",\"hash\":\"#{block}\"}",
+      body: "{\"action\":\"pending_exists\",\"hash\":\"#{block}\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -510,7 +510,7 @@ RSpec.describe Nanook::Block do
 
   it 'should request pending? correctly when block is not pending' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending_exists\",\"hash\":\"#{block}\"}",
+      body: "{\"action\":\"pending_exists\",\"hash\":\"#{block}\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -519,6 +519,19 @@ RSpec.describe Nanook::Block do
     )
 
     expect(Nanook.new.block(block).pending?).to be false
+  end
+
+  it 'should request pending? with allow_unconfirmed' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending_exists\",\"hash\":\"#{block}\",\"include_only_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"exists":"1"}',
+      headers: {}
+    )
+
+    expect(Nanook.new.block(block).pending?(allow_unconfirmed: true)).to be true
   end
 
   it 'should request descendants correctly' do

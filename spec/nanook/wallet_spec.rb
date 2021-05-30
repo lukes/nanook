@@ -594,7 +594,7 @@ RSpec.describe Nanook::Wallet do
 
   it 'wallet pending with default limit' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -618,9 +618,35 @@ RSpec.describe Nanook::Wallet do
     )
   end
 
+  it 'wallet pending with allow_unconfirmed' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\",\"include_only_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: "{\"blocks\" : {
+        \"nano_1111111111111111111111111111111111111111111111111117353trpda\": [\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D\",\"142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB19\"],
+        \"nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3\": [\"4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74\"]
+      }}",
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).pending(allow_unconfirmed: true)
+
+    expect(response).to eq(
+      Nanook.new.account('nano_1111111111111111111111111111111111111111111111111117353trpda') => [
+        Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB1D'),
+        Nanook.new.block('142A538F36833D1CC78B94E11C766F75818F8B940771335C6C1B8AB880C5BB19')
+      ],
+      Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3') => [
+        Nanook.new.block('4C1FEEF0BEA7F50BE35489A1233FE002B212DEA554B55B1B470D78BD8F210C74')
+      ]
+    )
+  end
+
   it 'wallet pending with limit' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1\"}",
+      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -642,7 +668,7 @@ RSpec.describe Nanook::Wallet do
 
   it 'wallet pending with detailed' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\",\"include_only_confirmed\":\"true\",\"source\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -693,7 +719,7 @@ RSpec.describe Nanook::Wallet do
 
   it 'wallet pending with detailed and unit raw' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      body: "{\"action\":\"wallet_pending\",\"wallet\":\"#{wallet_id}\",\"count\":\"1000\",\"include_only_confirmed\":\"true\",\"source\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,

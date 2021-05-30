@@ -81,6 +81,19 @@ RSpec.describe Nanook::Node do
     expect(Nanook.new.node.bootstrap_any).to be true
   end
 
+  it 'should request bootstrap_any with account correctly' do
+    stub_request(:post, uri).with(
+      body: '{"action":"bootstrap_any","account":"foo"}',
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"success":""}',
+      headers: {}
+    )
+
+    expect(Nanook.new.node.bootstrap_any(account: 'foo')).to be true
+  end
+
   it 'should request bootstrap_any correctly when error' do
     stub_request(:post, uri).with(
       body: '{"action":"bootstrap_any"}',
@@ -100,26 +113,16 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"started":"1"}',
+      body: '{"started":"1","key_inserted":"0"}',
       headers: {}
     )
 
     response = Nanook.new.node.bootstrap_lazy('FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17')
-    expect(response).to eq(true)
-  end
 
-  it 'should request bootstrap_lazy correctly with error' do
-    stub_request(:post, uri).with(
-      body: '{"action":"bootstrap_lazy","hash":"FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17","force":"false"}',
-      headers: headers
-    ).to_return(
-      status: 200,
-      body: '{"started":"0"}',
-      headers: {}
-    )
-
-    response = Nanook.new.node.bootstrap_lazy('FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17')
-    expect(response).to eq(false)
+    expect(response).to eq({
+      started: true,
+      key_inserted: false
+    })
   end
 
   it 'should request bootstrap_lazy with force correctly' do
@@ -128,13 +131,16 @@ RSpec.describe Nanook::Node do
       headers: headers
     ).to_return(
       status: 200,
-      body: '{"started":"1"}',
+      body: '{"started":"1","key_inserted":"1"}',
       headers: {}
     )
 
     response = Nanook.new.node.bootstrap_lazy('FF0144381CFF0B2C079A115E7ADA7E96F43FD219446E7524C48D1CC9900C4F17',
                                               force: true)
-    expect(response).to eq(true)
+    expect(response).to eq({
+      started: true,
+      key_inserted: true
+    })
   end
 
   it 'should request representatives correctly' do

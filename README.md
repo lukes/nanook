@@ -124,11 +124,11 @@ Read the [Using Nanook](https://github.com/lukes/nanook/wiki/Using-nanook) page 
 
 ## All commands
 
-Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/3.1.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses.
+Below is a quick reference list of commands. See the [full Nanook documentation](https://lukes.github.io/nanook/4.0.0/) for a searchable detailed description of every class and method, what the arguments mean, and example responses.
 
 ### Wallets
 
-See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/3.1.0/Nanook/Wallet.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Wallet](https://lukes.github.io/nanook/4.0.0/Nanook/Wallet.html) for a detailed description of each method and example responses.
 
 #### Create wallet:
 
@@ -158,6 +158,7 @@ wallet.pay(from: your_account_id, to: recipient_account_id, amount: 2, id: uniqu
 wallet.pending
 wallet.pending(limit: 1)
 wallet.pending(detailed: true)
+wallet.pending(allow_unconfirmed: true)
 wallet.pending(unit: :raw)
 wallet.receive(into: account_id)
 wallet.receive(pending_block_id, into: account_id)
@@ -212,14 +213,17 @@ Any account on the Nano network that is known by your node can be initialized th
 account = nanook.account(account_id)
 ```
 
-See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/3.1.0/Nanook/Account.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Account](https://lukes.github.io/nanook/4.0.0/Nanook/Account.html) for a detailed description of each method and example responses.
 
 ```ruby
 account.balance
+account.balance(allow_unconfirmed: true)
 account.balance(unit: :raw)
 account.pending
 account.pending(limit: 1)
+account.pending(allow_unconfirmed: true)
 account.pending(detailed: true)
+account.pending(sorted: true)
 account.pending(unit: :raw)
 
 account.blocks
@@ -234,6 +238,7 @@ account.history(limit: 1)
 account.history(unit: :raw)
 account.history(sort: :desc)
 account.info
+account.info(allow_unconfirmed: true)
 account.info(unit: :raw)
 account.last_modified_at
 account.ledger
@@ -260,7 +265,7 @@ account = wallet.account(account_id)
 
 As well as the following methods, all methods of [regular accounts](#working-with-any-account) can also be called.
 
-See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/3.1.0/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::WalletAccount](https://lukes.github.io/nanook/4.0.0/Nanook/WalletAccount.html) for a detailed description of each method and example responses.
 
 ```ruby
 account.pay(to: recipient_account_id, amount: 2, id: unique_id)
@@ -275,7 +280,7 @@ account.destroy
 
 ### Blocks
 
-See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/3.1.0/Nanook/Block.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Block](https://lukes.github.io/nanook/4.0.0/Nanook/Block.html) for a detailed description of each method and example responses.
 
 ```ruby
 block = nanook.block(block_id)
@@ -303,6 +308,7 @@ block.info(unit: :raw)
 block.next
 block.open?
 block.pending?
+block.pending?(allow_unconfirmed: true)
 block.previous
 block.receive?
 block.representative
@@ -324,7 +330,7 @@ block.valid_work?(work)
 
 ### Managing your nano node
 
-See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/3.1.0/Nanook/Node.html) for a detailed description of each method and example responses.
+See the [full documentation for Nanook::Node](https://lukes.github.io/nanook/4.0.0/Nanook/Node.html) for a detailed description of each method and example responses.
 
 ```ruby
 node = nanook.node
@@ -333,6 +339,7 @@ node.account_count
 node.block_count
 node.bootstrap(address: "::ffff:138.201.94.249", port: 7075)
 node.bootstrap_any
+node.bootstrap_any(account: account_id)
 node.bootstrap_lazy(block_id)
 node.bootstrap_lazy(block_id, force: true)
 node.confirmation_quorum

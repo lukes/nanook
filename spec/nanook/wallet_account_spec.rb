@@ -274,7 +274,7 @@ RSpec.describe Nanook::WalletAccount do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -287,11 +287,28 @@ RSpec.describe Nanook::WalletAccount do
     expect(response[:pending]).to eq(0.001)
   end
 
+  it 'wallet account balance allow_unconfirmed' do
+    stub_valid_account_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"balance":"2000000000000000000000000000","pending":"1000000000000000000000000000"}',
+      headers: {}
+    )
+
+    response = Nanook.new.wallet(wallet_id).account(account_id).balance(allow_unconfirmed: true)
+    expect(response[:balance]).to eq(0.002)
+    expect(response[:pending]).to eq(0.001)
+  end
+
   it 'wallet account balance raw unit' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -309,21 +326,27 @@ RSpec.describe Nanook::WalletAccount do
     stub_account_exists_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\",\"representative\":\"true\",\"weight\":\"true\",\"pending\":\"true\"}",
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\",\"representative\":\"true\",\"weight\":\"true\",\"pending\":\"true\",\"include_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
       body: <<~BODY,
         {
-          "frontier": "FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5",
-          "open_block": "191CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
-          "representative_block": "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
-          "balance": "235580100176034320859259343606608761791",
-          "modified_timestamp": "1501793775",
-          "block_count": "33",
-          "representative": "nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3",
-          "weight": "1105577030935649664609129644855132177",
-          "pending": "2309370929000000000000000000000000"
+          "frontier": "80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "open_block": "0E3F07F7F2B8AEDEA4A984E29BFE1E3933BA473DD3E27C662EC041F6EA3917A0",
+          "representative_block": "80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "balance": "10999999999999999918751838129509869131",
+          "confirmed_balance": "11999999999999999918751838129509869131",
+          "modified_timestamp": "1606934662",
+          "block_count": "22966",
+          "account_version": "1",
+          "confirmed_height": "22956",
+          "confirmed_frontier": "10A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "representative": "nano_2gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5",
+          "confirmed_representative": "nano_1gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5",
+          "weight": "11999999999999999918751838129509869131",
+          "pending": "20000000000000000000000000000000",
+          "confirmed_pending": "10000000000000000000000000000000"
         }
       BODY
       headers: {}
@@ -476,11 +499,11 @@ RSpec.describe Nanook::WalletAccount do
     end.to raise_error(Nanook::Error)
   end
 
-  it 'wallet account pending no limit' do
+  it 'wallet account pending' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -495,7 +518,7 @@ RSpec.describe Nanook::WalletAccount do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -506,11 +529,27 @@ RSpec.describe Nanook::WalletAccount do
     expect(Nanook.new.wallet(wallet_id).account(account_id).pending).to eq []
   end
 
+  it 'wallet account pending allow_unconfirmed' do
+    stub_valid_account_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).account(account_id).pending(allow_unconfirmed: true)).to have(1).item
+  end
+
+
   it 'wallet account pending with limit' do
     stub_valid_account_check
 
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -519,6 +558,21 @@ RSpec.describe Nanook::WalletAccount do
     )
 
     expect(Nanook.new.wallet(wallet_id).account(account_id).pending(limit: 1)).to have(1).item
+  end
+
+  it 'wallet account pending sorted' do
+    stub_valid_account_check
+
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"true\",\"include_only_confirmed\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      headers: {}
+    )
+
+    expect(Nanook.new.wallet(wallet_id).account(account_id).pending(sorted: true)).to have(1).item
   end
 
   it 'wallet account weight' do

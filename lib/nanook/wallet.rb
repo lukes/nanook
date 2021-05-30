@@ -102,7 +102,9 @@ class Nanook
     # @return [Nanook::WalletAccount]
     def account(account = nil)
       check_wallet_required!
-      as_wallet_account(account)
+
+      # We `allow_blank` in order to support `WalletAccount#create`.
+      as_wallet_account(account, allow_blank: true)
     end
 
     # Array of {Nanook::WalletAccount} instances of accounts in the wallet.
@@ -338,6 +340,8 @@ class Nanook
     # See also the {#receive} method of this class for how to receive a pending payment.
     #
     # @param limit [Integer] number of accounts with pending payments to return (default is 1000)
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+ only returns block which
+    #   have their confirmation height set or are undergoing confirmation height processing.
     # @param detailed [Boolean]return a more complex Hash of pending block information (default is +false+)
     # @param unit (see Nanook::Account#balance)
     #
@@ -386,11 +390,12 @@ class Nanook
     #   }
     #
     # @raise [Nanook::NanoUnitError] if `unit` is invalid
-    def pending(limit: 1000, detailed: false, unit: Nanook.default_unit)
+    def pending(limit: 1000, detailed: false, allow_unconfirmed: false, unit: Nanook.default_unit)
       validate_unit!(unit)
 
       params = {
         count: limit,
+        include_only_confirmed: !allow_unconfirmed,
         _access: :blocks,
         _coerce: Hash
       }
@@ -482,7 +487,7 @@ class Nanook
     # @return [Nanook::Account] Representative account. Can be nil.
     def default_representative
       representative = rpc(:wallet_representative, _access: :representative)
-      as_account(representative) if representative
+      as_account(representative)
     end
     alias representative default_representative
 
@@ -570,10 +575,10 @@ class Nanook
       response = rpc(:wallet_ledger, _access: :accounts, _coerce: Hash)
 
       accounts = response.map do |account_id, data|
-        data[:frontier] = as_block(data[:frontier]) if data[:frontier]
-        data[:open_block] = as_block(data[:open_block]) if data[:open_block]
-        data[:representative_block] = as_block(data[:representative_block]) if data[:representative_block]
-        data[:balance] = raw_to_NANO(data[:balance]) if unit == :nano && data[:balance]
+        data[:frontier] = as_block(data[:frontier])
+        data[:open_block] = as_block(data[:open_block])
+        data[:representative_block] = as_block(data[:representative_block])
+        data[:balance] = raw_to_NANO(data[:balance]) if unit == :nano
         data[:last_modified_at] = as_time(data.delete(:modified_timestamp))
 
         [as_account(account_id), data]

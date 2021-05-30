@@ -222,9 +222,17 @@ class Nanook
     #
     #   block.pending? #=> false
     #
+    # @param allow_unconfirmed [Boolean] +false+ by default. When +false+,
+    #   will only include blocks which have their confirmation height set
+    #   or are undergoing confirmation height processing.
     # @return [Boolean] signalling if the block is a pending block.
-    def pending?
-      rpc(:pending_exists, :hash, _access: :exists) == 1
+    def pending?(allow_unconfirmed: false)
+      params = {
+        include_only_confirmed: !allow_unconfirmed,
+        _access: :exists
+      }
+
+      rpc(:pending_exists, :hash, params) == 1
     end
 
     # Returns an Array of block hashes in the account chain from (but not including) this block up to +count+
@@ -513,11 +521,11 @@ class Nanook
         response[:type] = subtype
       end
 
-      response[:account] = as_account(response[:account]) if response[:account]
-      response[:representative] = as_account(response[:representative]) if response[:representative]
-      response[:previous] = as_block(response[:previous]) if response[:previous]
-      response[:link] = as_block(response[:link]) if response[:link]
-      response[:link_as_account] = as_account(response[:link_as_account]) if response[:link_as_account]
+      response[:account] = as_account(response[:account])
+      response[:representative] = as_account(response[:representative])
+      response[:previous] = as_block(response[:previous])
+      response[:link] = as_block(response[:link])
+      response[:link_as_account] = as_account(response[:link_as_account])
       response[:local_timestamp] = as_time(response[:local_timestamp])
       response[:last_modified_at] = as_time(response[:last_modified_at])
 

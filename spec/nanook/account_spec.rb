@@ -241,7 +241,7 @@ RSpec.describe Nanook::Account do
 
   it 'account balance' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -254,9 +254,24 @@ RSpec.describe Nanook::Account do
     expect(response[:pending]).to eq(21.439597)
   end
 
+  it 'account balance allow_unconfirmed' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"balance":"11439597000000000000000000000000","pending":"21439597000000000000000000000000"}',
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).balance(allow_unconfirmed: true)
+    expect(response[:balance]).to eq(11.439597)
+    expect(response[:pending]).to eq(21.439597)
+  end
+
   it 'account balance in raw' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\"}",
+      body: "{\"action\":\"account_balance\",\"account\":\"#{account_id}\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -287,21 +302,27 @@ RSpec.describe Nanook::Account do
 
   it 'account info' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\",\"representative\":\"true\",\"weight\":\"true\",\"pending\":\"true\"}",
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\",\"representative\":\"true\",\"weight\":\"true\",\"pending\":\"true\",\"include_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
       body: <<~BODY,
         {
-          "frontier": "FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5",
-          "open_block": "191CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
-          "representative_block": "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
-          "balance": "235580100176034320859259343606608761791",
-          "modified_timestamp": "1501793775",
-          "block_count": "33",
-          "representative": "nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3",
-          "weight": "1105577030935649664609129644855132177",
-          "pending": "2309370929000000000000000000000000"
+          "frontier": "80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "open_block": "0E3F07F7F2B8AEDEA4A984E29BFE1E3933BA473DD3E27C662EC041F6EA3917A0",
+          "representative_block": "80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "balance": "10999999999999999918751838129509869131",
+          "confirmed_balance": "11999999999999999918751838129509869131",
+          "modified_timestamp": "1606934662",
+          "block_count": "22966",
+          "account_version": "1",
+          "confirmed_height": "22956",
+          "confirmed_frontier": "10A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "representative": "nano_2gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5",
+          "confirmed_representative": "nano_1gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5",
+          "weight": "11999999999999999918751838129509869131",
+          "pending": "20000000000000000000000000000000",
+          "confirmed_pending": "10000000000000000000000000000000"
         }
       BODY
       headers: {}
@@ -311,36 +332,89 @@ RSpec.describe Nanook::Account do
 
     expect(response).to eq({
                              id: account_id,
-                             frontier: Nanook.new.block('FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5'),
-                             open_block: Nanook.new.block('191CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948'),
-                             representative_block: Nanook.new.block('991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948'),
-                             balance: 235_580_100.1760343,
-                             last_modified_at: Time.at(1_501_793_775),
-                             block_count: 33,
-                             representative: Nanook.new.account('nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3'),
-                             weight: 1_105_577.03093565,
-                             pending: 2309.370929
+                             account_version: 1,
+                             frontier: Nanook.new.block('10A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F'),
+                             open_block: Nanook.new.block('0E3F07F7F2B8AEDEA4A984E29BFE1E3933BA473DD3E27C662EC041F6EA3917A0'),
+                             representative_block: Nanook.new.block('80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F'),
+                             confirmation_height: 22956,
+                             balance: 12000000.0,
+                             last_modified_at: Time.at(1606934662),
+                             block_count: 22966,
+                             representative: Nanook.new.account('nano_1gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5'),
+                             weight: 12000000.0,
+                             pending: 10.0
+                           })
+    expect(response[:last_modified_at].zone).to eq('UTC')
+  end
+
+  it 'account info allow_unconfirmed' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\",\"representative\":\"true\",\"weight\":\"true\",\"pending\":\"true\",\"include_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: <<~BODY,
+        {
+          "frontier": "80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "open_block": "0E3F07F7F2B8AEDEA4A984E29BFE1E3933BA473DD3E27C662EC041F6EA3917A0",
+          "representative_block": "80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "balance": "10999999999999999918751838129509869131",
+          "modified_timestamp": "1606934662",
+          "block_count": "22966",
+          "account_version": "1",
+          "representative": "nano_2gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5",
+          "weight": "11999999999999999918751838129509869131",
+          "pending": "20000000000000000000000000000000",
+          "confirmation_height": "28",
+          "confirmation_height_frontier": "34C70FCA0952E29ADC7BEE6F20381466AE42BD1CFBA4B7DFFE8BD69DF95449EB"
+        }
+      BODY
+      headers: {}
+    )
+
+    response = Nanook.new.account(account_id).info(allow_unconfirmed: true)
+
+    expect(response).to eq({
+                             id: account_id,
+                             account_version: 1,
+                             frontier: Nanook.new.block('80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F'),
+                             open_block: Nanook.new.block('0E3F07F7F2B8AEDEA4A984E29BFE1E3933BA473DD3E27C662EC041F6EA3917A0'),
+                             representative_block: Nanook.new.block('80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F'),
+                             confirmation_height: 28,
+                             confirmation_height_frontier: Nanook.new.block('34C70FCA0952E29ADC7BEE6F20381466AE42BD1CFBA4B7DFFE8BD69DF95449EB'),
+                             balance: 11000000.0,
+                             last_modified_at: Time.at(1606934662),
+                             block_count: 22966,
+                             representative: Nanook.new.account('nano_2gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5'),
+                             weight: 12000000.0,
+                             pending: 20.0
                            })
     expect(response[:last_modified_at].zone).to eq('UTC')
   end
 
   it 'account info with unit raw' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\",\"representative\":\"true\",\"weight\":\"true\",\"pending\":\"true\"}",
+      body: "{\"action\":\"account_info\",\"account\":\"#{account_id}\",\"representative\":\"true\",\"weight\":\"true\",\"pending\":\"true\",\"include_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
       body: <<~BODY,
         {
-          "frontier": "FF84533A571D953A596EA401FD41743AC85D04F406E76FDE4408EAED50B473C5",
-          "open_block": "191CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
-          "representative_block": "991CF190094C00F0B68E2E5F75F6BEE95A2E0BD93CEAA4A6734DB9F19B728948",
-          "balance": "235580100176034320859259343606608761791",
-          "modified_timestamp": "1501793775",
-          "block_count": "33",
-          "representative": "nano_3t6k35gi95xu6tergt6p69ck76ogmitsa8mnijtpxm9fkcm736xtoncuohr3",
-          "weight": "1105577030935649664609129644855132177",
-          "pending": "2309370929000000000000000000000000"
+          "frontier": "80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "open_block": "0E3F07F7F2B8AEDEA4A984E29BFE1E3933BA473DD3E27C662EC041F6EA3917A0",
+          "representative_block": "80A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "balance": "10999999999999999918751838129509869131",
+          "confirmed_balance": "11999999999999999918751838129509869131",
+          "modified_timestamp": "1606934662",
+          "block_count": "22966",
+          "account_version": "1",
+          "confirmed_height": "22956",
+          "confirmed_frontier": "10A6745762493FA21A22718ABFA4F635656A707B48B3324198AC7F3938DE6D4F",
+          "representative": "nano_2gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5",
+          "confirmed_representative": "nano_1gyeqc6u5j3oaxbe5qy1hyz3q745a318kh8h9ocnpan7fuxnq85cxqboapu5",
+          "weight": "11999999999999999918751838129509869131",
+          "pending": "20000000000000000000000000000000",
+          "confirmed_pending": "10000000000000000000000000000000"
         }
       BODY
       headers: {}
@@ -349,15 +423,15 @@ RSpec.describe Nanook::Account do
     response = Nanook.new.account(account_id).info(unit: :raw)
 
     expect(response).to include(
-      balance: 235_580_100_176_034_320_859_259_343_606_608_761_791,
-      pending: 2_309_370_929_000_000_000_000_000_000_000_000,
-      weight: 1_105_577_030_935_649_664_609_129_644_855_132_177
+      balance: 11999999999999999918751838129509869131,
+      pending: 10000000000000000000000000000000,
+      weight: 11999999999999999918751838129509869131
     )
   end
 
-  it 'account pending no limit' do
+  it 'account pending' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -374,7 +448,7 @@ RSpec.describe Nanook::Account do
 
   it 'account pending with no blocks (empty string response) to be empty' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -387,7 +461,7 @@ RSpec.describe Nanook::Account do
 
   it 'account pending with limit' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -401,9 +475,41 @@ RSpec.describe Nanook::Account do
     expect(pending.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
   end
 
+  it 'account pending sorted' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"true\",\"include_only_confirmed\":\"true\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      headers: {}
+    )
+
+    pending = Nanook.new.account(account_id).pending(sorted: true)
+
+    expect(pending.first).to be_kind_of(Nanook::Block)
+    expect(pending.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+  end
+
+  it 'account pending allow_unconfirmed' do
+    stub_request(:post, uri).with(
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"false\"}",
+      headers: headers
+    ).to_return(
+      status: 200,
+      body: '{"blocks":["000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F"]}',
+      headers: {}
+    )
+
+    pending = Nanook.new.account(account_id).pending(allow_unconfirmed: true)
+
+    expect(pending.first).to be_kind_of(Nanook::Block)
+    expect(pending.first.id).to eq('000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F')
+  end
+
   it 'account pending detailed' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\",\"source\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -427,7 +533,7 @@ RSpec.describe Nanook::Account do
 
   it 'account pending detailed with raw unit' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\",\"source\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,
@@ -451,7 +557,7 @@ RSpec.describe Nanook::Account do
 
   it 'account pending detailed with no blocks (empty string response)' do
     stub_request(:post, uri).with(
-      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"source\":\"true\"}",
+      body: "{\"action\":\"pending\",\"account\":\"#{account_id}\",\"count\":\"1000\",\"sorting\":\"false\",\"include_only_confirmed\":\"true\",\"source\":\"true\"}",
       headers: headers
     ).to_return(
       status: 200,

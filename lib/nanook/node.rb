@@ -79,19 +79,41 @@ class Nanook
 
     # Initialize multi-connection bootstrap to random peers
     #
+    # @param account [Nanook::Account] False by default. Manually force closing
+    #   of all current bootstraps
     # @return [Boolean] indicating if the action was successful
-    def bootstrap_any
-      rpc(:bootstrap_any).key?(:success)
+    def bootstrap_any(account: nil)
+      params = {
+        account: account
+      }.compact
+
+      rpc(:bootstrap_any, params).key?(:success)
     end
 
-    # Initialize lazy bootstrap with given block hash
+    # Initialize lazy bootstrap with given block hash.
+    # Response includes whether new election was started and whether a
+    # new lazy key_inserted was successful.
+    #
+    # ==== Example:
+    #
+    #   node.bootstrap_lazy
+    #
+    # Example response:
+    #
+    #   {
+    #     "started": true,
+    #     "key_inserted": false
+    #   }
     #
     # @param hash [String]
     # @param force [Boolean] False by default. Manually force closing
     #   of all current bootstraps
-    # @return [Boolean] indicating if the action was successful
+    # @return [Hash{Symbol=>Boolean}] indicating if the action was successful
     def bootstrap_lazy(hash, force: false)
-      rpc(:bootstrap_lazy, hash: hash, force: force, _access: :started) == 1
+      response = rpc(:bootstrap_lazy, hash: hash, force: force)
+      values = response.map { |k, v| [k, v == 1] }
+
+      Hash[values]
     end
 
     # Returns information about node elections settings and observed network state:
@@ -110,12 +132,12 @@ class Nanook
     # Example response:
     #
     #   {
-    #     "quorum_delta": 43216377.43025059,
-    #     "online_weight_quorum_percent": 50,
-    #     "online_weight_minimum": 60000000.0",
-    #     "online_stake_total": 86432754.86050119,
-    #     "peers_stake_total": 84672338.52479072,
-    #     "peers_stake_required": 60000000.0"
+    #     quorum_delta: 43216377.43025059,
+    #     online_weight_quorum_percent: 50,
+    #     online_weight_minimum: 60000000.0,
+    #     online_stake_total: 86432754.86050119,
+    #     peers_stake_total: 84672338.52479072,
+    #     peers_stake_required: 60000000.0
     #   }
     #
     # @return [Hash{Symbol=>String|Integer}]
@@ -136,6 +158,9 @@ class Nanook
       response.compact
     end
 
+    # Note: This RPC call is deprecated as of v22 of the node software.
+    # https://docs.nano.org/releases/release-v22-0/
+    #
     # Returns the difficulty values (16 hexadecimal digits string, 64 bit)
     # for the minimum required on the network (network_minimum) as well
     # as the current active difficulty seen on the network (network_current,
@@ -276,12 +301,12 @@ class Nanook
       }
 
       response = rpc(:unchecked, params).map do |block, info|
-        info[:account] = as_account(info[:account]) if info[:account]
-        info[:link_as_account] = as_account(info[:link_as_account]) if info[:link_as_account]
-        info[:representative] = as_account(info[:representative]) if info[:representative]
-        info[:previous] = as_block(info[:previous]) if info[:previous]
-        info[:link] = as_block(info[:link]) if info[:link]
-        info[:balance] = raw_to_NANO(info[:balance]) if unit == :nano && info[:balance]
+        info[:account] = as_account(info[:account])
+        info[:link_as_account] = as_account(info[:link_as_account])
+        info[:representative] = as_account(info[:representative])
+        info[:previous] = as_block(info[:previous])
+        info[:link] = as_block(info[:link])
+        info[:balance] = raw_to_NANO(info[:balance]) if unit == :nano
 
         [as_block(block), info]
       end

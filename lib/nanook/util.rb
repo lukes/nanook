@@ -67,23 +67,27 @@ class Nanook
     end
 
     def as_account(account_id)
-      Nanook::Account.new(@rpc, account_id)
+      Nanook::Account.new(@rpc, account_id) if account_id
     end
 
-    def as_wallet_account(account_id)
+    def as_wallet_account(account_id, allow_blank: false)
+      return unless account_id || allow_blank
+
       Nanook::WalletAccount.new(@rpc, @wallet, account_id)
     end
 
     def as_block(block_id)
-      Nanook::Block.new(@rpc, block_id)
+      Nanook::Block.new(@rpc, block_id) if block_id
     end
 
-    def as_private_key(key)
+    def as_private_key(key, allow_blank: false)
+      return unless key || allow_blank
+
       Nanook::PrivateKey.new(@rpc, key)
     end
 
     def as_public_key(key)
-      Nanook::PublicKey.new(@rpc, key)
+      Nanook::PublicKey.new(@rpc, key) if key
     end
 
     def as_time(time)
