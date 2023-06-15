@@ -436,7 +436,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Buy me a nano coffee
 
-This library is always free to use, but feel free to send some nano [my way](https://www.nanode.co/account/nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j) if you'd like to!
+This library is always free to use, but feel free to send some nano [my way](https://www.nanolooker.com/account/nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j) if you'd like to!
 
     nano_3c3ek3k8135f6e8qtfy8eruk9q3yzmpebes7btzncccdest8ymzhjmnr196j
 
